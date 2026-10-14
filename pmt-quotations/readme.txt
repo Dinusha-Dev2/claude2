@@ -1,7 +1,7 @@
 === PMT Quotations & Invoices ===
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.5.0
+Stable tag: 1.6.0
 License: GPLv2 or later
 
 Quotations, proforma invoices, tax invoices and delivery notes for PMT Asia, with saved customers, a WooCommerce product picker, custom items with images, payment tracking and a customisable template.
@@ -16,6 +16,11 @@ Quotations, proforma invoices, tax invoices and delivery notes for PMT Asia, wit
 * Prices are not converted between currencies. Store prices are only filled in when the quote currency matches the store currency.
 
 == Changelog ==
+= 1.6.0 =
+* New numbering, one series per type, each starting at 0001: QT-0001 (quotation), PI-0001 (proforma invoice), TXI-0001 (tax invoice), DN-0001 (delivery note). Existing documents keep their numbers; numbers already used are always skipped.
+* Separate pages for each type under Quotes & Invoices: Quotations, Proforma invoices, Tax invoices and Delivery notes. Each has its own title, status cards with totals, status filter and "New ..." button. All documents is still there.
+* The editor's back link returns to the type's own page.
+
 = 1.5.0 =
 * Four document types in one template: Quotation, Proforma invoice, Tax invoice and Delivery note (DN- numbers). Each shows its own details: valid until, due date, payments, or delivery method, vehicle and driver.
 * Show / hide: Settings > Show / hide sets what each type prints by default; every document can switch any part on or off in its own "Show on this document" box.

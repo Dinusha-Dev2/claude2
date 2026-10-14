@@ -257,9 +257,9 @@ function pq_default_settings() {
 			),
 		),
 		'numbering'  => array(
-			'quotation' => array( 'prefix' => 'PMT-', 'next' => 14617, 'pad' => 0 ),
-			'proforma'  => array( 'prefix' => 'PF-', 'next' => 1, 'pad' => 4 ),
-			'invoice'   => array( 'prefix' => 'INV-', 'next' => 1, 'pad' => 4 ),
+			'quotation' => array( 'prefix' => 'QT-', 'next' => 1, 'pad' => 4 ),
+			'proforma'  => array( 'prefix' => 'PI-', 'next' => 1, 'pad' => 4 ),
+			'invoice'   => array( 'prefix' => 'TXI-', 'next' => 1, 'pad' => 4 ),
 			'delivery'  => array( 'prefix' => 'DN-', 'next' => 1, 'pad' => 4 ),
 		),
 		'defaults'   => array(

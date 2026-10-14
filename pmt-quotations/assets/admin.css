@@ -242,3 +242,4 @@
 .pq-app .pq-preview-as select { width: auto; margin: 0; min-height: 26px; padding: 0 24px 0 8px; font-size: 12px; }
 #pq-convert-items a { display: block; }
 @media (max-width: 1000px) { .pq-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.pq-stats.pq-stats-type { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }

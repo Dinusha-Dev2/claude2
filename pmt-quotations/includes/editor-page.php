@@ -136,7 +136,12 @@ function pq_render_editor_page() {
 	<div id="pq-editor" class="pq-editor">
 		<header class="pq-bar">
 			<div class="pq-bar-title">
-				<a class="pq-back" href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . PQ_CPT ) ); ?>">All documents</a>
+				<?php
+				$back_id   = isset( $_GET['doc'] ) ? absint( $_GET['doc'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
+				$back_type = $back_id ? (string) get_post_meta( $back_id, '_pq_type', true ) : ( isset( $_GET['type'] ) ? sanitize_key( wp_unslash( $_GET['type'] ) ) : 'quotation' ); // phpcs:ignore
+				$back_type = isset( pq_types()[ $back_type ] ) ? $back_type : 'quotation';
+				?>
+				<a class="pq-back" href="<?php echo esc_url( admin_url( pq_list_url( $back_type ) ) ); ?>"><?php echo esc_html( pq_type_plural( $back_type ) ); ?></a>
 				<div class="pq-bar-line"><strong id="pq-title">New quotation</strong><span id="pq-badge" class="pq-badge"></span><span id="pq-dirty" class="pq-dirty" hidden>Unsaved changes</span></div>
 			</div>
 			<div class="pq-bar-actions">

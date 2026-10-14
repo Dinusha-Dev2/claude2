@@ -10,6 +10,9 @@ function pq_maybe_upgrade() {
 	if ( '' !== $from && version_compare( $from, '1.5.0', '<' ) ) {
 		pq_upgrade_to_150();
 	}
+	if ( '' !== $from && version_compare( $from, '1.6.0', '<' ) ) {
+		pq_upgrade_to_160();
+	}
 	if ( PQ_VERSION !== $from ) {
 		update_option( 'pq_version', PQ_VERSION, false );
 	}
@@ -71,6 +74,19 @@ function pq_upgrade_to_150() {
 		if ( ! $has_delivery ) { $raw['blocks'][] = pq_delivery_block(); }
 	}
 
+	update_option( 'pq_settings', $raw, false );
+	pq_settings( true );
+}
+
+/** 1.6.0: one numbering style, QT-0001, PI-0001, TXI-0001, DN-0001, each series starting at 0001. */
+function pq_upgrade_to_160() {
+	$raw = get_option( 'pq_settings', array() );
+	if ( ! is_array( $raw ) || ! $raw ) { return; }
+	$new = array( 'quotation' => 'QT-', 'proforma' => 'PI-', 'invoice' => 'TXI-', 'delivery' => 'DN-' );
+	foreach ( $new as $type => $prefix ) {
+		// Numbers already used are skipped when the next one is worked out, so restarting at 1 never clashes.
+		$raw['numbering'][ $type ] = array( 'prefix' => $prefix, 'next' => 1, 'pad' => 4 );
+	}
 	update_option( 'pq_settings', $raw, false );
 	pq_settings( true );
 }

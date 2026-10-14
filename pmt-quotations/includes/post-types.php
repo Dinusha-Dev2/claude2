@@ -23,7 +23,7 @@ add_action( 'init', function () {
 
 	register_post_type( PQ_CPT, array(
 		'labels'              => array(
-			'name' => 'Quotations', 'singular_name' => 'Document', 'menu_name' => 'Quotations',
+			'name' => 'All documents', 'singular_name' => 'Document', 'menu_name' => 'Quotes & Invoices',
 			'all_items' => 'All documents', 'search_items' => 'Search documents',
 			'not_found' => 'No documents yet', 'not_found_in_trash' => 'Nothing in the trash',
 		),
@@ -82,15 +82,18 @@ add_action( 'load-post.php', function () {
 /* ------------------------------------------------------------------ */
 
 add_filter( 'manage_' . PQ_CPT . '_posts_columns', function () {
-	return array(
+	$lt   = function_exists( 'pq_list_type' ) ? pq_list_type() : '';
+	$cols = array(
 		'cb'          => '<input type="checkbox">',
-		'title'       => 'Document',
+		'title'       => $lt ? pq_doc_label( $lt ) . ' no.' : 'Document',
 		'pq_type'     => 'Type',
 		'pq_customer' => 'Customer',
 		'pq_date'     => 'Date',
-		'pq_total'    => 'Total',
+		'pq_total'    => 'delivery' === $lt ? 'Items' : 'Total',
 		'pq_status'   => 'Status',
 	);
+	if ( $lt ) { unset( $cols['pq_type'] ); }
+	return $cols;
 } );
 
 add_filter( 'manage_edit-' . PQ_CPT . '_sortable_columns', function () {
@@ -156,12 +159,20 @@ add_filter( 'bulk_actions-edit-' . PQ_CUSTOMER, function ( $a ) { unset( $a['edi
 
 add_action( 'restrict_manage_posts', function ( $post_type ) {
 	if ( PQ_CPT !== $post_type ) { return; }
-	$type   = isset( $_GET['pq_type'] ) ? sanitize_key( wp_unslash( $_GET['pq_type'] ) ) : ''; // phpcs:ignore
+	$type   = pq_list_type();
 	$status = isset( $_GET['pq_status'] ) ? sanitize_key( wp_unslash( $_GET['pq_status'] ) ) : ''; // phpcs:ignore
-	echo '<select name="pq_type"><option value="">All types</option>';
-	foreach ( pq_types() as $k => $v ) { echo '<option value="' . esc_attr( $k ) . '"' . selected( $type, $k, false ) . '>' . esc_html( $v ) . '</option>'; }
-	echo '</select><select name="pq_status"><option value="">All statuses</option>';
-	foreach ( pq_all_statuses() as $k => $v ) { echo '<option value="' . esc_attr( $k ) . '"' . selected( $status, $k, false ) . '>' . esc_html( $v ) . '</option>'; }
+	if ( $type ) {
+		// On a type's own page the type is fixed; only its statuses are offered.
+		echo '<input type="hidden" name="pq_type" value="' . esc_attr( $type ) . '">';
+		$statuses = pq_statuses( $type );
+	} else {
+		echo '<select name="pq_type"><option value="">All types</option>';
+		foreach ( array_keys( pq_types() ) as $k ) { echo '<option value="' . esc_attr( $k ) . '"' . selected( $type, $k, false ) . '>' . esc_html( pq_doc_label( $k ) ) . '</option>'; }
+		echo '</select>';
+		$statuses = pq_all_statuses();
+	}
+	echo '<select name="pq_status"><option value="">All statuses</option>';
+	foreach ( $statuses as $k => $v ) { echo '<option value="' . esc_attr( $k ) . '"' . selected( $status, $k, false ) . '>' . esc_html( $v ) . '</option>'; }
 	echo '</select>';
 } );
 

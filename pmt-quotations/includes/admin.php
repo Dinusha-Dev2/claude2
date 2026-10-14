@@ -4,19 +4,49 @@
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+/** The document type a list page is showing (?pq_type=), or '' for all documents. */
+function pq_list_type() {
+	$t = isset( $_GET['pq_type'] ) ? sanitize_key( wp_unslash( $_GET['pq_type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+	return isset( pq_types()[ $t ] ) ? $t : '';
+}
+
+/** "Tax invoices", "Delivery notes"... */
+function pq_type_plural( $type, $s = null ) {
+	return pq_doc_label( $type, $s ) . 's';
+}
+
+/** Link to the list of one type, or of all documents. */
+function pq_list_url( $type = '' ) {
+	$url = 'edit.php?post_type=' . PQ_CPT;
+	return $type ? $url . '&pq_type=' . $type : $url;
+}
+
 add_action( 'admin_menu', function () {
-	$parent = 'edit.php?post_type=' . PQ_CPT;
+	$parent = pq_list_url();
 	$cap    = pq_cap();
-	add_submenu_page( $parent, 'New quotation', 'New quotation', $cap, 'pq-editor', 'pq_render_editor_page' );
+	// Each type has its own list, with its own numbers, totals and statuses.
+	foreach ( array_keys( pq_types() ) as $t ) {
+		add_submenu_page( $parent, pq_type_plural( $t ), pq_type_plural( $t ), $cap, pq_list_url( $t ) );
+	}
+	add_submenu_page( $parent, 'New document', 'New document', $cap, 'pq-editor', 'pq_render_editor_page' );
 	add_submenu_page( $parent, 'Quotation settings', 'Settings', $cap, 'pq-settings', 'pq_render_settings_page' );
 }, 20 );
 
-/* Menu order: All documents, New quotation, Customers, Settings. */
+/* Highlight the type's own menu item on its list page. */
+add_filter( 'submenu_file', function ( $file ) {
+	global $typenow, $pagenow;
+	if ( 'edit.php' === $pagenow && PQ_CPT === $typenow && pq_list_type() ) { return pq_list_url( pq_list_type() ); }
+	return $file;
+} );
+
+/* Menu order: All documents, one list per type, New document, Customers, Settings. */
 add_action( 'admin_menu', function () {
 	global $submenu;
-	$parent = 'edit.php?post_type=' . PQ_CPT;
+	$parent = pq_list_url();
 	if ( empty( $submenu[ $parent ] ) ) { return; }
-	$order = array( $parent, 'pq-editor', 'edit.php?post_type=' . PQ_CUSTOMER, 'pq-settings' );
+	$order = array( $parent );
+	foreach ( array_keys( pq_types() ) as $t ) { $order[] = pq_list_url( $t ); }
+	$order = array_merge( $order, array( 'pq-editor', 'edit.php?post_type=' . PQ_CUSTOMER, 'pq-settings' ) );
 	$items = array();
 	foreach ( $submenu[ $parent ] as $item ) { $items[ $item[2] ] = $item; }
 	$sorted = array();
@@ -66,7 +96,10 @@ add_action( 'admin_enqueue_scripts', function () {
 		) );
 	}
 	if ( 'list' === $where ) {
-		wp_add_inline_script( 'jquery-core', 'jQuery(function($){var t=$(".wrap .wp-heading-inline").first();if(t.length&&!$(".pq-newbtn").length){t.after(\' <a class="page-title-action pq-newbtn" href="' . esc_js( pq_editor_url() ) . '">New quotation</a>\');}});' );
+		$lt    = pq_list_type();
+		$label = $lt ? 'New ' . strtolower( pq_doc_label( $lt ) ) : 'New document';
+		$url   = pq_editor_url( 0, $lt ? array( 'type' => $lt ) : array() );
+		wp_add_inline_script( 'jquery-core', 'jQuery(function($){var t=$(".wrap .wp-heading-inline").first();if(t.length&&!$(".pq-newbtn").length){t.after(\' <a class="page-title-action pq-newbtn" href="' . esc_js( $url ) . '">' . esc_js( $label ) . '</a>\');}});' );
 	}
 } );
 
@@ -108,11 +141,45 @@ function pq_stats() {
 	return $cards;
 }
 
+/** Cards for one type's list: count and value per status. */
+function pq_type_stats( $type ) {
+	global $wpdb;
+	$rows = $wpdb->get_results( $wpdb->prepare(
+		"SELECT s.meta_value AS dstatus, c.meta_value AS cur, COUNT(*) AS n,
+		        SUM(CAST(tot.meta_value AS DECIMAL(20,4))) AS total, SUM(CAST(b.meta_value AS DECIMAL(20,4))) AS balance
+		 FROM {$wpdb->posts} p
+		 INNER JOIN {$wpdb->postmeta} t   ON t.post_id = p.ID   AND t.meta_key = '_pq_type' AND t.meta_value = %s
+		 INNER JOIN {$wpdb->postmeta} s   ON s.post_id = p.ID   AND s.meta_key = '_pq_status'
+		 INNER JOIN {$wpdb->postmeta} c   ON c.post_id = p.ID   AND c.meta_key = '_pq_currency'
+		 INNER JOIN {$wpdb->postmeta} tot ON tot.post_id = p.ID AND tot.meta_key = '_pq_total'
+		 INNER JOIN {$wpdb->postmeta} b   ON b.post_id = p.ID   AND b.meta_key = '_pq_balance'
+		 WHERE p.post_type = %s AND p.post_status = 'publish'
+		 GROUP BY s.meta_value, c.meta_value",
+		$type, PQ_CPT
+	) );
+	$cards = array();
+	foreach ( pq_statuses( $type ) as $k => $label ) {
+		$cards[ $k ] = array( 'label' => $label, 'n' => 0, 'sums' => array(), 'count_only' => 'delivery' === $type );
+	}
+	foreach ( (array) $rows as $r ) {
+		if ( ! isset( $cards[ $r->dstatus ] ) ) { continue; }
+		// What is still owed matters for unpaid invoices; the full value for everything else.
+		$val = ( pq_type_has_payments( $type ) && in_array( $r->dstatus, array( 'sent', 'partial' ), true ) ) ? (float) $r->balance : (float) $r->total;
+		$cards[ $r->dstatus ]['n'] += (int) $r->n;
+		$cards[ $r->dstatus ]['sums'][ $r->cur ] = ( isset( $cards[ $r->dstatus ]['sums'][ $r->cur ] ) ? $cards[ $r->dstatus ]['sums'][ $r->cur ] : 0 ) + $val;
+	}
+	if ( pq_type_has_payments( $type ) ) {
+		foreach ( array( 'sent', 'partial' ) as $k ) { $cards[ $k ]['label'] .= ' (due)'; }
+	}
+	return $cards;
+}
+
 add_action( 'admin_notices', function () {
 	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 	if ( ! $screen || 'edit-' . PQ_CPT !== $screen->id || ! pq_can() ) { return; }
-	echo '<div class="pq-app pq-stats">';
-	foreach ( pq_stats() as $card ) {
+	$lt = pq_list_type();
+	echo '<div class="pq-app pq-stats' . ( $lt ? ' pq-stats-type' : '' ) . '">';
+	foreach ( $lt ? pq_type_stats( $lt ) : pq_stats() as $card ) {
 		echo '<div class="pq-stat"><span class="pq-stat-label">' . esc_html( $card['label'] ) . '</span>';
 		if ( ! empty( $card['count_only'] ) ) {
 			echo '<strong' . ( $card['n'] ? '' : ' class="pq-zero"' ) . '>' . (int) $card['n'] . '</strong>';
@@ -122,8 +189,16 @@ add_action( 'admin_notices', function () {
 			echo '<strong class="pq-zero">0</strong>';
 		}
 		if ( empty( $card['count_only'] ) ) { echo '<span class="pq-stat-n">' . (int) $card['n'] . ' ' . ( 1 === (int) $card['n'] ? 'document' : 'documents' ) . '</span>'; }
-		else { echo '<span class="pq-stat-n">delivery notes dispatched</span>'; }
+		elseif ( ! $lt ) { echo '<span class="pq-stat-n">delivery notes dispatched</span>'; }
 		echo '</div>';
 	}
 	echo '</div>';
+} );
+
+/* A type's list page is titled after it ("Tax invoices") and shows only its own counts. */
+add_action( 'load-edit.php', function () {
+	global $typenow, $wp_post_types;
+	if ( PQ_CPT !== $typenow || ! pq_list_type() || ! isset( $wp_post_types[ PQ_CPT ] ) ) { return; }
+	$wp_post_types[ PQ_CPT ]->labels->name = pq_type_plural( pq_list_type() );
+	add_filter( 'views_edit-' . PQ_CPT, '__return_empty_array' );
 } );
