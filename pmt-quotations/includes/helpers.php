@@ -25,8 +25,41 @@ function pq_types() {
 	return array(
 		'quotation' => 'Quotation',
 		'proforma'  => 'Proforma invoice',
-		'invoice'   => 'Invoice',
+		'invoice'   => 'Tax invoice',
+		'delivery'  => 'Delivery note',
 	);
+}
+
+/** Types that take payments. */
+function pq_type_has_payments( $type ) {
+	return in_array( $type, array( 'proforma', 'invoice' ), true );
+}
+
+/** What the second date means for a type: valid (until), due, or nothing. */
+function pq_type_expiry( $type ) {
+	if ( 'invoice' === $type ) { return 'due'; }
+	if ( 'delivery' === $type ) { return ''; }
+	return 'valid';
+}
+
+/** Days from the issue date to the second date for a new document. */
+function pq_type_days( $type, $s = null ) {
+	$s = $s ? $s : pq_settings();
+	$k = pq_type_expiry( $type );
+	if ( 'due' === $k ) { return (int) $s['defaults']['due_days']; }
+	if ( 'valid' === $k ) { return (int) $s['defaults']['valid_days']; }
+	return 0;
+}
+
+/** Which documents each type can be turned into. */
+function pq_convert_targets( $type ) {
+	$map = array(
+		'quotation' => array( 'proforma', 'invoice', 'delivery' ),
+		'proforma'  => array( 'invoice', 'delivery' ),
+		'invoice'   => array( 'delivery' ),
+		'delivery'  => array( 'invoice' ),
+	);
+	return isset( $map[ $type ] ) ? $map[ $type ] : array();
 }
 
 function pq_statuses( $type = 'quotation' ) {
@@ -39,17 +72,118 @@ function pq_statuses( $type = 'quotation' ) {
 			'converted' => 'Converted',
 		);
 	}
-	return array(
+	if ( 'delivery' === $type ) {
+		return array(
+			'draft'     => 'Draft',
+			'sent'      => 'Dispatched',
+			'delivered' => 'Delivered',
+			'cancelled' => 'Cancelled',
+		);
+	}
+	$list = array(
 		'draft'     => 'Draft',
 		'sent'      => 'Sent',
 		'partial'   => 'Part paid',
 		'paid'      => 'Paid',
 		'cancelled' => 'Cancelled',
 	);
+	if ( 'proforma' === $type ) { $list['converted'] = 'Invoiced'; }
+	return $list;
 }
 
+/** Every status key once. The first label wins, so "sent" reads "Sent" in mixed lists. */
 function pq_all_statuses() {
-	return array_merge( pq_statuses( 'quotation' ), pq_statuses( 'invoice' ) );
+	return pq_statuses( 'quotation' ) + pq_statuses( 'invoice' ) + pq_statuses( 'delivery' );
+}
+
+/* ------------------------------------------------------------------ */
+/* Show / hide                                                         */
+/* ------------------------------------------------------------------ */
+
+/** Parts of the document that can be shown or hidden. key => array( label, group, types or null for all ). */
+function pq_display_fields() {
+	return array(
+		'logo'             => array( 'Logo', 'header', null ),
+		'company_address'  => array( 'Our address', 'header', null ),
+		'company_details'  => array( 'Our registration details (TIN, reg. no.)', 'header', null ),
+		'company_contact'  => array( 'Our phone, email and website', 'header', null ),
+		'customer_address' => array( 'Customer address', 'customer', null ),
+		'customer_contact' => array( 'Customer phone and email', 'customer', null ),
+		'customer_tax'     => array( 'Customer tax number', 'customer', null ),
+		'deliver_to'       => array( 'Delivery address', 'customer', null ),
+		'reference'        => array( 'Customer reference / PO no.', 'details', null ),
+		'source_ref'       => array( 'Linked document number', 'details', null ),
+		'expiry'           => array( 'Valid until / due date', 'details', array( 'quotation', 'proforma', 'invoice' ) ),
+		'delivery_info'    => array( 'Delivery method, vehicle and driver', 'details', array( 'delivery' ) ),
+		'extra'            => array( 'Extra details', 'details', null ),
+		'row_numbers'      => array( 'Row numbers', 'items', null ),
+		'images'           => array( 'Item images', 'items', null ),
+		'item_desc'        => array( 'Item descriptions', 'items', null ),
+		'sku'              => array( 'SKU', 'items', null ),
+		'unit'             => array( 'Unit beside quantity', 'items', null ),
+		'prices'           => array( 'Prices, amounts and totals', 'items', null ),
+		'line_discount'    => array( 'Line discount column (when used)', 'items', null ),
+		'amount_words'     => array( 'Amount in words', 'totals', null ),
+		'payments'         => array( 'Payments received', 'totals', array( 'proforma', 'invoice' ) ),
+		'terms'            => array( 'Terms and notes', 'end', null ),
+		'banks'            => array( 'Bank details', 'end', null ),
+		'signature'        => array( 'Signature lines', 'end', null ),
+		'footer'           => array( 'Footer text', 'end', null ),
+	);
+}
+
+function pq_display_groups() {
+	return array(
+		'header'   => 'Your business',
+		'customer' => 'Customer',
+		'details'  => 'Document details',
+		'items'    => 'Item table',
+		'totals'   => 'Totals',
+		'end'      => 'End of document',
+	);
+}
+
+function pq_display_applies( $key, $type ) {
+	$f = pq_display_fields();
+	return isset( $f[ $key ] ) && ( null === $f[ $key ][2] || in_array( $type, $f[ $key ][2], true ) );
+}
+
+/** Built-in starting point for each type. */
+function pq_display_factory() {
+	$out = array();
+	foreach ( array_keys( pq_types() ) as $t ) {
+		foreach ( array_keys( pq_display_fields() ) as $k ) { $out[ $t ][ $k ] = 1; }
+	}
+	$out['quotation']['amount_words'] = 0;
+	$out['quotation']['signature']    = 0;
+	$out['proforma']['signature']     = 0;
+	foreach ( array( 'prices', 'line_discount', 'amount_words', 'banks' ) as $k ) { $out['delivery'][ $k ] = 0; }
+	return $out;
+}
+
+/** What a document shows: settings defaults for its type, overridden by its own choices. */
+function pq_doc_show( $doc, $s = null ) {
+	$s    = $s ? $s : pq_settings();
+	$type = isset( $doc['type'] ) ? $doc['type'] : 'quotation';
+	$def  = isset( $s['display'][ $type ] ) ? $s['display'][ $type ] : array();
+	$own  = isset( $doc['show'] ) && is_array( $doc['show'] ) ? $doc['show'] : array();
+	$out  = array();
+	foreach ( array_keys( pq_display_fields() ) as $k ) {
+		$v = array_key_exists( $k, $own ) ? $own[ $k ] : ( isset( $def[ $k ] ) ? $def[ $k ] : 1 );
+		$out[ $k ] = pq_display_applies( $k, $type ) && ! empty( $v );
+	}
+	if ( ! $out['prices'] ) { $out['line_discount'] = false; $out['amount_words'] = false; }
+	return $out;
+}
+
+/** Default show / hide choices for a new document of a type. */
+function pq_display_for_type( $type, $s = null ) {
+	$s   = $s ? $s : pq_settings();
+	$out = array();
+	foreach ( array_keys( pq_display_fields() ) as $k ) {
+		$out[ $k ] = empty( $s['display'][ $type ][ $k ] ) ? 0 : 1;
+	}
+	return $out;
 }
 
 /* ------------------------------------------------------------------ */
@@ -60,13 +194,17 @@ function pq_default_labels() {
 	return array(
 		'doc_quotation'      => 'Quotation',
 		'doc_proforma'       => 'Proforma invoice',
-		'doc_invoice'        => 'Invoice',
+		'doc_invoice'        => 'Tax invoice',
+		'doc_delivery'       => 'Delivery note',
 		'number'             => 'No.',
 		'date'               => 'Date',
 		'valid_until'        => 'Valid until',
 		'due_date'           => 'Due date',
 		'reference'          => 'Your reference',
-		'source'             => 'Quotation ref.',
+		'source'             => '{type} ref.',
+		'delivery_method'    => 'Delivery method',
+		'vehicle'            => 'Vehicle no.',
+		'driver'             => 'Delivered by',
 		'from'               => 'From',
 		'bill_to'            => 'Billed to',
 		'deliver_to'         => 'Deliver to',
@@ -90,9 +228,15 @@ function pq_default_labels() {
 		'total'              => 'Total',
 		'paid'               => 'Paid',
 		'balance'            => 'Balance due',
+		'amount_words'       => 'Amount in words',
+		'payments'           => 'Payments received',
 		'bank'               => 'Bank details',
 		'signature_company'  => 'Authorised signature',
 		'signature_customer' => 'Customer acceptance',
+		'signature_buyer'    => 'Customer signature',
+		'signature_delivered' => 'Delivered by',
+		'signature_received' => 'Received in good condition by',
+		'signature_hint'     => 'Name, signature and date',
 		'paid_stamp'         => 'Paid in full',
 	);
 }
@@ -116,6 +260,7 @@ function pq_default_settings() {
 			'quotation' => array( 'prefix' => 'PMT-', 'next' => 14617, 'pad' => 0 ),
 			'proforma'  => array( 'prefix' => 'PF-', 'next' => 1, 'pad' => 4 ),
 			'invoice'   => array( 'prefix' => 'INV-', 'next' => 1, 'pad' => 4 ),
+			'delivery'  => array( 'prefix' => 'DN-', 'next' => 1, 'pad' => 4 ),
 		),
 		'defaults'   => array(
 			'valid_days' => 14,
@@ -131,11 +276,11 @@ function pq_default_settings() {
 		),
 		'currency'   => 'USD',
 		'currencies' => array(
-			array( 'code' => 'USD', 'symbol' => '$', 'position' => 'before', 'space' => 0, 'decimals' => '' ),
-			array( 'code' => 'MVR', 'symbol' => 'MVR', 'position' => 'before', 'space' => 1, 'decimals' => '' ),
-			array( 'code' => 'LKR', 'symbol' => 'Rs.', 'position' => 'before', 'space' => 1, 'decimals' => '' ),
-			array( 'code' => 'EUR', 'symbol' => '€', 'position' => 'before', 'space' => 0, 'decimals' => '' ),
-			array( 'code' => 'GBP', 'symbol' => '£', 'position' => 'before', 'space' => 0, 'decimals' => '' ),
+			pq_currency_row( 'USD', '$', 0 ),
+			pq_currency_row( 'MVR', 'MVR', 1 ),
+			pq_currency_row( 'LKR', 'Rs.', 1 ),
+			pq_currency_row( 'EUR', '€', 0 ),
+			pq_currency_row( 'GBP', '£', 0 ),
 		),
 		'tax'        => array(
 			'label'        => 'GST',
@@ -159,6 +304,7 @@ function pq_default_settings() {
 				'body'  => 'Partial or split deliveries are not accepted. Orders will be processed as a complete lot.',
 				'style' => 'highlight',
 			),
+			pq_delivery_block(),
 		),
 		'banks'      => array(
 			array(
@@ -185,19 +331,15 @@ function pq_default_settings() {
 			'quotation' => 'This quotation is valid for {days} days only.',
 			'proforma'  => 'This proforma invoice is valid until {valid_until}.',
 			'invoice'   => 'Thank you for your business.',
+			'delivery'  => 'Goods remain the property of {company} until paid in full.',
 		),
+		'display'    => pq_display_factory(),
 		'template'   => array(
 			'accent'         => '#1a1a1a',
 			'font'           => 'arial',
 			'size'           => 'regular',
 			'logo_height'    => 90,
 			'img_size'       => 48,
-			'show_numbers'   => 1,
-			'show_image'     => 1,
-			'show_sku'       => 1,
-			'show_unit'      => 1,
-			'show_discount'  => 'auto',
-			'show_signature' => 0,
 			'custom_css'     => '',
 		),
 		'email'      => array(
@@ -207,6 +349,31 @@ function pq_default_settings() {
 		'general'    => array(
 			'delete_on_uninstall' => 0,
 		),
+	);
+}
+
+/** Known currencies: symbol, tax and the words used for "amount in words". */
+function pq_currency_row( $code, $symbol, $space ) {
+	$known = array(
+		'USD' => array( 'GST', '8', 'US Dollars', 'Cents' ),
+		'LKR' => array( 'VAT', '18', 'Sri Lankan Rupees', 'Cents' ),
+		'MVR' => array( '', '', 'Maldivian Rufiyaa', 'Laari' ),
+		'EUR' => array( '', '', 'Euros', 'Cents' ),
+		'GBP' => array( '', '', 'Pounds Sterling', 'Pence' ),
+	);
+	$k = isset( $known[ $code ] ) ? $known[ $code ] : array( '', '', '', '' );
+	return array(
+		'code' => $code, 'symbol' => $symbol, 'position' => 'before', 'space' => $space, 'decimals' => '',
+		'tax_label' => $k[0], 'tax_rate' => $k[1], 'word' => $k[2], 'subword' => $k[3],
+	);
+}
+
+function pq_delivery_block() {
+	return array(
+		'title' => 'Goods received',
+		'body'  => 'Please check all goods on delivery. Any shortage or damage must be reported within 24 hours.',
+		'style' => '',
+		'on'    => 'delivery',
 	);
 }
 
@@ -240,7 +407,9 @@ function pq_settings( $reset = false ) {
 /** Older saved lists may lack decimals or carry an unused rate. Tidy them without touching what the user set. */
 function pq_fix_currencies( $list ) {
 	foreach ( $list as $i => $c ) {
-		if ( ! isset( $c['decimals'] ) ) { $list[ $i ]['decimals'] = ''; }
+		foreach ( array( 'decimals', 'tax_label', 'tax_rate', 'word', 'subword' ) as $k ) {
+			if ( ! isset( $c[ $k ] ) ) { $list[ $i ][ $k ] = ''; }
+		}
 		unset( $list[ $i ]['rate'] );
 	}
 	return $list;
@@ -370,6 +539,10 @@ function pq_sanitize_settings( $in ) {
 				'position' => pq_s_enum( isset( $r['position'] ) ? $r['position'] : 'before', array( 'before', 'after' ), 'before' ),
 				'space'    => pq_s_bool( isset( $r['space'] ) ? $r['space'] : 0 ),
 				'decimals' => ( isset( $r['decimals'] ) && '' !== (string) $r['decimals'] ) ? min( 4, absint( $r['decimals'] ) ) : '',
+				'tax_label' => pq_s_line( isset( $r['tax_label'] ) ? $r['tax_label'] : '', 30 ),
+				'tax_rate'  => ( isset( $r['tax_rate'] ) && '' !== trim( (string) $r['tax_rate'] ) ) ? (string) min( 100, max( 0, pq_num( $r['tax_rate'] ) ) ) : '',
+				'word'      => pq_s_line( isset( $r['word'] ) ? $r['word'] : '', 40 ),
+				'subword'   => pq_s_line( isset( $r['subword'] ) ? $r['subword'] : '', 30 ),
 			);
 		}
 	}
@@ -386,8 +559,17 @@ function pq_sanitize_settings( $in ) {
 		'tax_shipping' => pq_s_bool( isset( $t['tax_shipping'] ) ? $t['tax_shipping'] : 0 ),
 	);
 
-	// Default terms blocks.
-	$out['blocks'] = pq_sanitize_blocks( isset( $in['blocks'] ) ? $in['blocks'] : array() );
+	// Default terms blocks, each with the document types it starts on.
+	$out['blocks'] = pq_sanitize_blocks( isset( $in['blocks'] ) ? $in['blocks'] : array(), true );
+
+	// Show / hide defaults per type. Unticked boxes are not posted, so a missing key means hidden.
+	$out['display'] = array();
+	$disp = isset( $in['display'] ) && is_array( $in['display'] ) ? $in['display'] : array();
+	foreach ( array_keys( pq_types() ) as $ty ) {
+		foreach ( array_keys( pq_display_fields() ) as $k ) {
+			$out['display'][ $ty ][ $k ] = pq_s_bool( isset( $disp[ $ty ][ $k ] ) ? $disp[ $ty ][ $k ] : 0 );
+		}
+	}
 
 	// Bank accounts.
 	$banks = array();
@@ -429,14 +611,8 @@ function pq_sanitize_settings( $in ) {
 		'accent'         => pq_s_color( isset( $tp['accent'] ) ? $tp['accent'] : '', $d['template']['accent'] ),
 		'font'           => pq_s_enum( isset( $tp['font'] ) ? $tp['font'] : 'arial', array_keys( pq_fonts() ), 'arial' ),
 		'size'           => pq_s_enum( isset( $tp['size'] ) ? $tp['size'] : 'regular', array( 'compact', 'regular', 'large' ), 'regular' ),
-		'logo_height'    => min( 140, max( 20, isset( $tp['logo_height'] ) ? absint( $tp['logo_height'] ) : 54 ) ),
+		'logo_height'    => min( 160, max( 20, isset( $tp['logo_height'] ) ? absint( $tp['logo_height'] ) : 90 ) ),
 		'img_size'       => min( 120, max( 24, isset( $tp['img_size'] ) ? absint( $tp['img_size'] ) : 48 ) ),
-		'show_numbers'   => pq_s_bool( isset( $tp['show_numbers'] ) ? $tp['show_numbers'] : 0 ),
-		'show_image'     => pq_s_bool( isset( $tp['show_image'] ) ? $tp['show_image'] : 0 ),
-		'show_sku'       => pq_s_bool( isset( $tp['show_sku'] ) ? $tp['show_sku'] : 0 ),
-		'show_unit'      => pq_s_bool( isset( $tp['show_unit'] ) ? $tp['show_unit'] : 0 ),
-		'show_discount'  => pq_s_enum( isset( $tp['show_discount'] ) ? $tp['show_discount'] : 'auto', array( 'auto', 'always', 'never' ), 'auto' ),
-		'show_signature' => pq_s_bool( isset( $tp['show_signature'] ) ? $tp['show_signature'] : 0 ),
 		'custom_css'     => pq_clean_css( isset( $tp['custom_css'] ) ? $tp['custom_css'] : '' ),
 	);
 
@@ -461,7 +637,8 @@ function pq_clean_css( $css ) {
 	return trim( substr( $css, 0, 8000 ) );
 }
 
-function pq_sanitize_blocks( $blocks ) {
+/** Terms blocks. With $with_on, keep which document types each block starts on (settings only). */
+function pq_sanitize_blocks( $blocks, $with_on = false ) {
 	$out = array();
 	if ( is_array( $blocks ) ) {
 		foreach ( array_slice( array_values( $blocks ), 0, 12 ) as $b ) {
@@ -469,11 +646,35 @@ function pq_sanitize_blocks( $blocks ) {
 			$title = pq_s_line( isset( $b['title'] ) ? $b['title'] : '', 120 );
 			$body  = pq_s_text( isset( $b['body'] ) ? $b['body'] : '', 3000 );
 			if ( '' === $title && '' === $body ) { continue; }
-			$out[] = array(
+			$row = array(
 				'title' => $title,
 				'body'  => $body,
 				'style' => pq_s_enum( isset( $b['style'] ) ? $b['style'] : '', array( '', 'highlight' ), '' ),
 			);
+			if ( $with_on ) {
+				$row['on'] = pq_s_enum( isset( $b['on'] ) ? $b['on'] : '', array_merge( array( '', 'all' ), array_keys( pq_types() ) ), '' );
+			}
+			$out[] = $row;
+		}
+	}
+	return $out;
+}
+
+/** Where a terms block can start. '' means every type except delivery notes. */
+function pq_block_on_options() {
+	$o = array( '' => 'Quotations and invoices', 'all' => 'Every document' );
+	foreach ( pq_types() as $k => $v ) { $o[ $k ] = $v . ' only'; }
+	return $o;
+}
+
+/** The default terms a new document of this type starts with. */
+function pq_blocks_for_type( $type, $s = null ) {
+	$s   = $s ? $s : pq_settings();
+	$out = array();
+	foreach ( $s['blocks'] as $b ) {
+		$on = isset( $b['on'] ) ? $b['on'] : '';
+		if ( 'all' === $on || $type === $on || ( '' === $on && 'delivery' !== $type ) ) {
+			$out[] = array( 'title' => $b['title'], 'body' => $b['body'], 'style' => $b['style'] );
 		}
 	}
 	return $out;
@@ -508,6 +709,55 @@ function pq_decimals( $code, $s = null ) {
 		if ( strtoupper( (string) $code ) === $c['code'] && isset( $c['decimals'] ) && '' !== (string) $c['decimals'] ) { return (int) $c['decimals']; }
 	}
 	return (int) $s['format']['decimals'];
+}
+
+/** Tax for a currency: its own name and rate if set, else the general tax. */
+function pq_tax_for_currency( $code, $s = null ) {
+	$s   = $s ? $s : pq_settings();
+	$tax = array( 'label' => $s['tax']['label'], 'rate' => (float) $s['tax']['rate'], 'mode' => $s['tax']['mode'] );
+	foreach ( $s['currencies'] as $c ) {
+		if ( strtoupper( (string) $code ) !== $c['code'] ) { continue; }
+		if ( isset( $c['tax_rate'] ) && '' !== (string) $c['tax_rate'] ) { $tax['rate'] = (float) $c['tax_rate']; }
+		if ( isset( $c['tax_label'] ) && '' !== (string) $c['tax_label'] ) { $tax['label'] = $c['tax_label']; }
+	}
+	return $tax;
+}
+
+/** 0 to 999 999 999 999 in English words. */
+function pq_words( $n ) {
+	$n     = (int) $n;
+	$ones  = array( '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen' );
+	$tens  = array( '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety' );
+	if ( 0 === $n ) { return 'Zero'; }
+	$chunk = function ( $x ) use ( $ones, $tens ) {
+		$w = array();
+		if ( $x >= 100 ) { $w[] = $ones[ intdiv( $x, 100 ) ] . ' Hundred'; $x %= 100; }
+		if ( $x >= 20 ) { $w[] = $tens[ intdiv( $x, 10 ) ] . ( $x % 10 ? '-' . $ones[ $x % 10 ] : '' ); }
+		elseif ( $x > 0 ) { $w[] = $ones[ $x ]; }
+		return implode( ' ', $w );
+	};
+	$out = array();
+	foreach ( array( 1000000000 => 'Billion', 1000000 => 'Million', 1000 => 'Thousand' ) as $size => $name ) {
+		if ( $n >= $size ) { $out[] = $chunk( intdiv( $n, $size ) ) . ' ' . $name; $n %= $size; }
+	}
+	if ( $n > 0 ) { $out[] = $chunk( $n ); }
+	return implode( ' ', $out );
+}
+
+/** "US Dollars One Thousand Two Hundred and Cents Fifty Only". */
+function pq_amount_in_words( $amount, $code, $s = null ) {
+	$s     = $s ? $s : pq_settings();
+	$dec   = pq_decimals( $code, $s );
+	$cur   = pq_currency( $code, $s );
+	$amt   = round( abs( (float) $amount ), $dec );
+	$whole = (int) floor( $amt );
+	$frac  = $dec > 0 ? (int) round( ( $amt - $whole ) * pow( 10, $dec ) ) : 0;
+	$word  = ! empty( $cur['word'] ) ? $cur['word'] : $cur['code'];
+	$out   = $word . ' ' . pq_words( $whole );
+	if ( $frac > 0 ) {
+		$out .= ' and ' . ( ! empty( $cur['subword'] ) ? $cur['subword'] . ' ' : '' ) . pq_words( $frac );
+	}
+	return $out . ' Only';
 }
 
 function pq_number_format( $n, $s = null, $dec = null ) {
@@ -619,8 +869,12 @@ function pq_calculate( $doc, $s = null ) {
 	foreach ( $doc['items'] as $i => $it ) {
 		$qty   = max( 0, pq_num( $it['qty'] ) );
 		$price = max( 0, pq_num( $it['price'] ) );
-		$disc  = min( 100, max( 0, pq_num( $it['discount'] ) ) );
-		$line  = round( $qty * $price * ( 1 - $disc / 100 ), $dec );
+		$gross = $qty * $price;
+		if ( isset( $it['disc_type'] ) && 'fixed' === $it['disc_type'] ) {
+			$line = round( $gross - min( $gross, max( 0, pq_num( $it['discount'] ) ) ), $dec );
+		} else {
+			$line = round( $gross * ( 1 - min( 100, max( 0, pq_num( $it['discount'] ) ) ) / 100 ), $dec );
+		}
 		$lines[ $i ] = $line;
 		$sub += $line;
 	}

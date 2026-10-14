@@ -79,7 +79,7 @@
 	function refresh() {
 		if (req && req.abort) { req.abort(); }
 		var frame = document.getElementById('pq-frame');
-		req = $.post(P.ajax, { action: 'pq_preview', nonce: P.nonce, sample: 1, form: $form.serialize() }).done(function (res) {
+		req = $.post(P.ajax, { action: 'pq_preview', nonce: P.nonce, sample: 1, sample_type: $('#pq-set-type').val(), form: $form.serialize() }).done(function (res) {
 			if (!res || !res.success) { return; }
 			frame.onload = fit;
 			frame.srcdoc = res.data.html;
@@ -91,6 +91,11 @@
 	}
 	$form.on('input change', 'input, select, textarea', schedule);
 	$('#pq-set-refresh').on('click', refresh);
+	$('#pq-set-type').on('change', function () {
+		try { window.sessionStorage.setItem('pqPreviewType', this.value); } catch (e) { /* ignore */ }
+		refresh();
+	});
+	try { var pt = window.sessionStorage.getItem('pqPreviewType'); if (pt) { $('#pq-set-type').val(pt); } } catch (e) { /* ignore */ }
 	$(window).on('resize', fit);
 
 	var start = 'business';

@@ -110,8 +110,13 @@ add_action( 'manage_' . PQ_CPT . '_posts_custom_column', function ( $col, $id ) 
 	} elseif ( 'pq_date' === $col ) {
 		echo esc_html( pq_fmt_date( $doc['issue_date'] ) );
 	} elseif ( 'pq_total' === $col ) {
+		if ( 'delivery' === $doc['type'] && ! pq_doc_show( $doc )['prices'] ) {
+			$n = count( $doc['items'] );
+			echo esc_html( $n . ( 1 === $n ? ' item' : ' items' ) );
+			return;
+		}
 		echo '<strong>' . esc_html( pq_money( $doc['calc']['total'], $doc['currency'] ) ) . '</strong>';
-		if ( 'quotation' !== $doc['type'] && $doc['calc']['balance'] > 0 && $doc['calc']['paid'] > 0 ) {
+		if ( pq_type_has_payments( $doc['type'] ) && 'converted' !== $doc['status'] && $doc['calc']['balance'] > 0 && $doc['calc']['paid'] > 0 ) {
 			echo '<br><span class="description">Due ' . esc_html( pq_money( $doc['calc']['balance'], $doc['currency'] ) ) . '</span>';
 		}
 	} elseif ( 'pq_status' === $col ) {
@@ -129,8 +134,10 @@ add_filter( 'post_row_actions', function ( $actions, $post ) {
 		$url = pq_public_url( $post->ID );
 		if ( $url ) { $new['pq_view'] = '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">View / print</a>'; }
 		$new['pq_dup'] = '<a href="' . esc_url( pq_action_url( 'pq_duplicate_doc', $post->ID ) ) . '">Duplicate</a>';
-		if ( 'quotation' === get_post_meta( $post->ID, '_pq_type', true ) ) {
-			$new['pq_inv'] = '<a href="' . esc_url( pq_action_url( 'pq_convert_doc', $post->ID, array( 'to' => 'invoice' ) ) ) . '">Create invoice</a>';
+		$ptype = (string) get_post_meta( $post->ID, '_pq_type', true );
+		$next  = array( 'quotation' => 'invoice', 'proforma' => 'invoice', 'invoice' => 'delivery' );
+		if ( isset( $next[ $ptype ] ) ) {
+			$new['pq_inv'] = '<a href="' . esc_url( pq_action_url( 'pq_convert_doc', $post->ID, array( 'to' => $next[ $ptype ] ) ) ) . '">Create ' . esc_html( strtolower( pq_doc_label( $next[ $ptype ] ) ) ) . '</a>';
 		}
 		if ( isset( $actions['trash'] ) ) { $new['trash'] = $actions['trash']; }
 		return $new;

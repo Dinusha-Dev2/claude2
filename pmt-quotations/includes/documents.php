@@ -108,7 +108,6 @@ function pq_blank_doc( $type = 'quotation', $s = null, $numbered = true ) {
 	$type = isset( pq_types()[ $type ] ) ? $type : 'quotation';
 	$number = '';
 	if ( $numbered ) { list( $number ) = pq_next_number( $type, $s ); }
-	$days = 'quotation' === $type ? (int) $s['defaults']['valid_days'] : (int) $s['defaults']['due_days'];
 	$today = pq_today();
 	return array(
 		'id'            => 0,
@@ -117,24 +116,32 @@ function pq_blank_doc( $type = 'quotation', $s = null, $numbered = true ) {
 		'number_auto'   => true,
 		'status'        => 'draft',
 		'issue_date'    => $today,
-		'expiry_date'   => pq_date_plus( $days, $today ),
+		'expiry_date'   => pq_type_expiry( $type ) ? pq_date_plus( pq_type_days( $type, $s ), $today ) : '',
 		'reference'     => '',
 		'currency'      => $s['currency'],
 		'customer'      => pq_blank_customer(),
 		'save_customer' => true,
 		'delivery'      => '',
+		'delivery_info' => pq_blank_delivery_info(),
 		'items'         => array(),
-		'discount'      => array( 'type' => 'percent', 'value' => 0 ),
+		'discount'      => array( 'type' => 'percent', 'value' => 0, 'label' => '' ),
 		'shipping'      => array( 'amount' => 0 ),
-		'tax'           => array( 'label' => $s['tax']['label'], 'rate' => $s['tax']['rate'], 'mode' => $s['tax']['mode'] ),
-		'blocks'        => $s['blocks'],
+		'tax'           => pq_tax_for_currency( $s['currency'], $s ),
+		'blocks'        => pq_blocks_for_type( $type, $s ),
 		'banks'         => pq_default_bank_ids( $s ),
 		'payments'      => array(),
+		'extra'         => array(),
+		'show'          => pq_display_for_type( $type, $s ),
 		'internal'      => '',
 		'rfq_id'        => 0,
 		'source_id'     => 0,
 		'source_number' => '',
+		'source_type'   => '',
 	);
+}
+
+function pq_blank_delivery_info() {
+	return array( 'method' => '', 'vehicle' => '', 'driver' => '' );
 }
 
 function pq_blank_item() {
@@ -146,8 +153,9 @@ function pq_blank_item() {
 		'img_id'   => 0,
 		'qty'      => 1,
 		'unit'     => '',
-		'price'    => '',
-		'discount' => 0,
+		'price'     => '',
+		'discount'  => 0,
+		'disc_type' => 'percent',
 	);
 }
 
@@ -163,7 +171,11 @@ function pq_normalize_doc( $raw, $s = null ) {
 	$d['number']      = pq_s_line( isset( $raw['number'] ) ? $raw['number'] : '', 40 );
 	$d['number_auto'] = ! empty( $raw['number_auto'] );
 	$d['issue_date']  = pq_s_date( isset( $raw['issue_date'] ) ? $raw['issue_date'] : '', pq_today() );
-	$d['expiry_date'] = pq_s_date( isset( $raw['expiry_date'] ) ? $raw['expiry_date'] : '', '' );
+	$d['expiry_date'] = '';
+	if ( pq_type_expiry( $d['type'] ) ) {
+		// Not sent at all (for example a document made in code): use the default for the type.
+		$d['expiry_date'] = array_key_exists( 'expiry_date', $raw ) ? pq_s_date( $raw['expiry_date'], '' ) : pq_date_plus( pq_type_days( $d['type'], $s ), $d['issue_date'] );
+	}
 	$d['reference']   = pq_s_line( isset( $raw['reference'] ) ? $raw['reference'] : '', 120 );
 
 	$codes = wp_list_pluck( $s['currencies'], 'code' );
@@ -173,6 +185,12 @@ function pq_normalize_doc( $raw, $s = null ) {
 	$d['customer']      = pq_clean_customer( isset( $raw['customer'] ) ? $raw['customer'] : array() );
 	$d['save_customer'] = ! empty( $raw['save_customer'] );
 	$d['delivery']      = pq_s_text( isset( $raw['delivery'] ) ? $raw['delivery'] : '', 500 );
+	$di                 = isset( $raw['delivery_info'] ) && is_array( $raw['delivery_info'] ) ? $raw['delivery_info'] : array();
+	$d['delivery_info'] = array(
+		'method'  => pq_s_line( isset( $di['method'] ) ? $di['method'] : '', 80 ),
+		'vehicle' => pq_s_line( isset( $di['vehicle'] ) ? $di['vehicle'] : '', 40 ),
+		'driver'  => pq_s_line( isset( $di['driver'] ) ? $di['driver'] : '', 80 ),
+	);
 
 	$items = array();
 	if ( isset( $raw['items'] ) && is_array( $raw['items'] ) ) {
@@ -190,7 +208,9 @@ function pq_normalize_doc( $raw, $s = null ) {
 			$it['qty']      = max( 0, $qty );
 			$it['unit']     = pq_s_line( isset( $r['unit'] ) ? $r['unit'] : '', 24 );
 			$it['price']    = isset( $r['price'] ) && '' !== trim( (string) $r['price'] ) ? max( 0, pq_num( $r['price'] ) ) : '';
-			$it['discount'] = (float) min( 100, max( 0, pq_num( isset( $r['discount'] ) ? $r['discount'] : 0 ) ) );
+			$it['disc_type'] = pq_s_enum( isset( $r['disc_type'] ) ? $r['disc_type'] : 'percent', array( 'percent', 'fixed' ), 'percent' );
+			$disc            = max( 0, pq_num( isset( $r['discount'] ) ? $r['discount'] : 0 ) );
+			$it['discount']  = (float) ( 'percent' === $it['disc_type'] ? min( 100, $disc ) : $disc );
 			if ( '' === $it['name'] && '' === $it['desc'] && ! $it['pid'] && '' === $it['price'] && ! $it['img_id'] ) { continue; }
 			$items[] = $it;
 		}
@@ -201,7 +221,9 @@ function pq_normalize_doc( $raw, $s = null ) {
 	$d['discount'] = array(
 		'type'  => pq_s_enum( isset( $dd['type'] ) ? $dd['type'] : 'percent', array( 'percent', 'fixed' ), 'percent' ),
 		'value' => max( 0, pq_num( isset( $dd['value'] ) ? $dd['value'] : 0 ) ),
+		'label' => pq_s_line( isset( $dd['label'] ) ? $dd['label'] : '', 60 ),
 	);
+	if ( 'percent' === $d['discount']['type'] ) { $d['discount']['value'] = min( 100, $d['discount']['value'] ); }
 	$d['shipping'] = array( 'amount' => max( 0, pq_num( isset( $raw['shipping']['amount'] ) ? $raw['shipping']['amount'] : 0 ) ) );
 
 	$tx = isset( $raw['tax'] ) && is_array( $raw['tax'] ) ? $raw['tax'] : array();
@@ -237,12 +259,32 @@ function pq_normalize_doc( $raw, $s = null ) {
 			);
 		}
 	}
-	$d['payments'] = ( 'quotation' === $d['type'] ) ? array() : $pays;
+	$d['payments'] = pq_type_has_payments( $d['type'] ) ? $pays : array();
+
+	$extra = array();
+	if ( isset( $raw['extra'] ) && is_array( $raw['extra'] ) ) {
+		foreach ( array_slice( array_values( $raw['extra'] ), 0, 12 ) as $x ) {
+			if ( ! is_array( $x ) ) { continue; }
+			$label = pq_s_line( isset( $x['label'] ) ? $x['label'] : '', 60 );
+			$value = pq_s_line( isset( $x['value'] ) ? $x['value'] : '', 200 );
+			if ( '' !== $label || '' !== $value ) { $extra[] = array( 'label' => $label, 'value' => $value ); }
+		}
+	}
+	$d['extra'] = $extra;
+
+	$own  = isset( $raw['show'] ) && is_array( $raw['show'] ) ? $raw['show'] : array();
+	$def  = pq_display_for_type( $d['type'], $s );
+	$show = array();
+	foreach ( array_keys( pq_display_fields() ) as $k ) {
+		$show[ $k ] = array_key_exists( $k, $own ) ? pq_s_bool( $own[ $k ] ) : $def[ $k ];
+	}
+	$d['show'] = $show;
 
 	$d['internal']      = pq_s_text( isset( $raw['internal'] ) ? $raw['internal'] : '', 3000 );
 	$d['rfq_id']        = isset( $raw['rfq_id'] ) ? absint( $raw['rfq_id'] ) : 0;
 	$d['source_id']     = isset( $raw['source_id'] ) ? absint( $raw['source_id'] ) : 0;
 	$d['source_number'] = pq_s_line( isset( $raw['source_number'] ) ? $raw['source_number'] : '', 40 );
+	$d['source_type']   = pq_s_enum( isset( $raw['source_type'] ) ? $raw['source_type'] : '', array_merge( array( '' ), array_keys( pq_types() ) ), '' );
 
 	return $d;
 }
@@ -269,6 +311,15 @@ function pq_get_doc( $id ) {
 	$doc['id']          = $id;
 	$doc['number_auto'] = false;
 	$doc['number']      = (string) get_post_meta( $id, '_pq_number', true );
+	foreach ( $doc['items'] as $i => $it ) {
+		$doc['items'][ $i ] = array_merge( pq_blank_item(), is_array( $it ) ? $it : array() );
+	}
+	$doc['discount']      = array_merge( array( 'type' => 'percent', 'value' => 0, 'label' => '' ), (array) $doc['discount'] );
+	$doc['delivery_info'] = array_merge( pq_blank_delivery_info(), (array) $doc['delivery_info'] );
+	if ( '' === $doc['source_type'] && ! empty( $doc['source_id'] ) ) {
+		$st = (string) get_post_meta( (int) $doc['source_id'], '_pq_type', true );
+		$doc['source_type'] = isset( pq_types()[ $st ] ) ? $st : 'quotation';
+	}
 	return $doc;
 }
 
@@ -282,19 +333,19 @@ function pq_doc_for_editor( $doc ) {
 
 /** Status shown to people: adds computed Expired and Overdue. */
 function pq_display_status( $doc, $s = null ) {
-	$s    = $s ? $s : pq_settings();
-	$all  = pq_all_statuses();
-	$st   = isset( $doc['status'] ) ? $doc['status'] : 'draft';
-	$key  = $st;
+	$s     = $s ? $s : pq_settings();
+	$list  = pq_statuses( $doc['type'] );
+	$st    = isset( $doc['status'] ) ? $doc['status'] : 'draft';
 	$today = pq_today();
-	if ( 'quotation' === $doc['type'] && 'sent' === $st && $doc['expiry_date'] && $doc['expiry_date'] < $today ) {
+	$past  = $doc['expiry_date'] && $doc['expiry_date'] < $today;
+	if ( 'valid' === pq_type_expiry( $doc['type'] ) && 'sent' === $st && $past ) {
 		return array( 'expired', 'Expired' );
 	}
-	if ( 'quotation' !== $doc['type'] && in_array( $st, array( 'sent', 'partial' ), true ) && $doc['expiry_date'] && $doc['expiry_date'] < $today ) {
+	if ( 'due' === pq_type_expiry( $doc['type'] ) && in_array( $st, array( 'sent', 'partial' ), true ) && $past ) {
 		$calc = isset( $doc['calc'] ) ? $doc['calc'] : pq_calculate( $doc, $s );
 		if ( $calc['balance'] > 0 ) { return array( 'overdue', 'Overdue' ); }
 	}
-	return array( $key, isset( $all[ $st ] ) ? $all[ $st ] : ucfirst( $st ) );
+	return array( $st, isset( $list[ $st ] ) ? $list[ $st ] : ucfirst( $st ) );
 }
 
 /* ------------------------------------------------------------------ */
@@ -345,7 +396,7 @@ function pq_save_document( $raw, $id = 0 ) {
 
 	// Payment status follows the payments recorded.
 	$calc = pq_calculate( $d, $s );
-	if ( 'quotation' !== $d['type'] && 'cancelled' !== $d['status'] ) {
+	if ( pq_type_has_payments( $d['type'] ) && ! in_array( $d['status'], array( 'cancelled', 'converted' ), true ) ) {
 		if ( $calc['total'] > 0 && $calc['paid'] >= $calc['total'] ) {
 			$d['status'] = 'paid';
 		} elseif ( $calc['paid'] > 0 ) {
@@ -399,8 +450,8 @@ function pq_save_document( $raw, $id = 0 ) {
 function pq_convert_document( $id, $target ) {
 	$src = pq_get_doc( $id );
 	if ( ! $src ) { return new WP_Error( 'pq_missing', 'Document not found.' ); }
-	if ( ! in_array( $target, array( 'proforma', 'invoice' ), true ) ) {
-		return new WP_Error( 'pq_type', 'Choose proforma invoice or invoice.' );
+	if ( ! in_array( $target, pq_convert_targets( $src['type'] ), true ) ) {
+		return new WP_Error( 'pq_type', 'This document cannot be turned into that type.' );
 	}
 	$s   = pq_settings();
 	$new = $src;
@@ -410,14 +461,19 @@ function pq_convert_document( $id, $target ) {
 	$new['number']        = '';
 	$new['number_auto']   = true;
 	$new['issue_date']    = pq_today();
-	$new['expiry_date']   = pq_date_plus( (int) $s['defaults']['due_days'] );
-	$new['payments']      = array();
+	$new['expiry_date']   = pq_type_expiry( $target ) ? pq_date_plus( pq_type_days( $target, $s ) ) : '';
+	// Advance payments on a proforma carry over to the tax invoice.
+	$new['payments']      = ( 'proforma' === $src['type'] && 'invoice' === $target ) ? $src['payments'] : array();
+	$new['show']          = pq_display_for_type( $target, $s );
 	$new['source_id']     = $src['id'];
 	$new['source_number'] = $src['number'];
+	$new['source_type']   = $src['type'];
 	$new['save_customer'] = false;
+	if ( 'delivery' === $target || 'delivery' === $src['type'] ) { $new['blocks'] = pq_blocks_for_type( $target, $s ); }
 	$res = pq_save_document( $new, 0 );
 	if ( is_wp_error( $res ) ) { return $res; }
-	if ( 'quotation' === $src['type'] ) {
+	// A quotation is done once converted; a proforma is done once it becomes the tax invoice.
+	if ( 'quotation' === $src['type'] || ( 'proforma' === $src['type'] && 'invoice' === $target ) ) {
 		$src['status'] = 'converted';
 		update_post_meta( $id, '_pq_status', 'converted' );
 		$stored = get_post_meta( $id, '_pq_data', true );
@@ -435,16 +491,16 @@ function pq_duplicate_document( $id ) {
 	if ( ! $src ) { return new WP_Error( 'pq_missing', 'Document not found.' ); }
 	$s   = pq_settings();
 	$new = $src;
-	$days = 'quotation' === $src['type'] ? (int) $s['defaults']['valid_days'] : (int) $s['defaults']['due_days'];
 	$new['id']            = 0;
 	$new['status']        = 'draft';
 	$new['number']        = '';
 	$new['number_auto']   = true;
 	$new['issue_date']    = pq_today();
-	$new['expiry_date']   = pq_date_plus( $days );
+	$new['expiry_date']   = pq_type_expiry( $src['type'] ) ? pq_date_plus( pq_type_days( $src['type'], $s ) ) : '';
 	$new['payments']      = array();
 	$new['source_id']     = 0;
 	$new['source_number'] = '';
+	$new['source_type']   = '';
 	$new['rfq_id']        = 0;
 	$new['save_customer'] = false;
 	return pq_save_document( $new, 0 );

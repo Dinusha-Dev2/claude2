@@ -27,6 +27,9 @@ add_action( 'admin_menu', function () {
 	$submenu[ $parent ] = $sorted; // phpcs:ignore WordPress.WP.GlobalVariablesOverride
 }, 999 );
 
+/* Saving settings goes through options.php, which asks for manage_options unless told otherwise. */
+add_filter( 'option_page_capability_pq_settings_group', 'pq_cap' );
+
 add_action( 'admin_init', function () {
 	register_setting( 'pq_settings_group', 'pq_settings', array(
 		'type'              => 'array',
@@ -88,14 +91,16 @@ function pq_stats() {
 		'accepted' => array( 'label' => 'Accepted quotations', 'n' => 0, 'sums' => array() ),
 		'unpaid'   => array( 'label' => 'Awaiting payment', 'n' => 0, 'sums' => array() ),
 		'paid'     => array( 'label' => 'Paid invoices', 'n' => 0, 'sums' => array() ),
+		'deliver'  => array( 'label' => 'Out for delivery', 'n' => 0, 'sums' => array(), 'count_only' => true ),
 	);
 	foreach ( (array) $rows as $r ) {
 		$key = '';
 		$val = (float) $r->total;
 		if ( 'quotation' === $r->dtype && 'sent' === $r->dstatus ) { $key = 'open'; }
 		elseif ( 'quotation' === $r->dtype && 'accepted' === $r->dstatus ) { $key = 'accepted'; }
-		elseif ( 'quotation' !== $r->dtype && in_array( $r->dstatus, array( 'sent', 'partial' ), true ) ) { $key = 'unpaid'; $val = (float) $r->balance; }
+		elseif ( pq_type_has_payments( $r->dtype ) && in_array( $r->dstatus, array( 'sent', 'partial' ), true ) ) { $key = 'unpaid'; $val = (float) $r->balance; }
 		elseif ( 'invoice' === $r->dtype && 'paid' === $r->dstatus ) { $key = 'paid'; }
+		elseif ( 'delivery' === $r->dtype && 'sent' === $r->dstatus ) { $key = 'deliver'; }
 		if ( '' === $key ) { continue; }
 		$cards[ $key ]['n'] += (int) $r->n;
 		$cards[ $key ]['sums'][ $r->cur ] = ( isset( $cards[ $key ]['sums'][ $r->cur ] ) ? $cards[ $key ]['sums'][ $r->cur ] : 0 ) + $val;
@@ -109,12 +114,16 @@ add_action( 'admin_notices', function () {
 	echo '<div class="pq-app pq-stats">';
 	foreach ( pq_stats() as $card ) {
 		echo '<div class="pq-stat"><span class="pq-stat-label">' . esc_html( $card['label'] ) . '</span>';
-		if ( $card['sums'] ) {
+		if ( ! empty( $card['count_only'] ) ) {
+			echo '<strong' . ( $card['n'] ? '' : ' class="pq-zero"' ) . '>' . (int) $card['n'] . '</strong>';
+		} elseif ( $card['sums'] ) {
 			foreach ( $card['sums'] as $cur => $v ) { echo '<strong>' . esc_html( pq_money( $v, $cur ) ) . '</strong>'; }
 		} else {
 			echo '<strong class="pq-zero">0</strong>';
 		}
-		echo '<span class="pq-stat-n">' . (int) $card['n'] . ' ' . ( 1 === (int) $card['n'] ? 'document' : 'documents' ) . '</span></div>';
+		if ( empty( $card['count_only'] ) ) { echo '<span class="pq-stat-n">' . (int) $card['n'] . ' ' . ( 1 === (int) $card['n'] ? 'document' : 'documents' ) . '</span>'; }
+		else { echo '<span class="pq-stat-n">delivery notes dispatched</span>'; }
+		echo '</div>';
 	}
 	echo '</div>';
 } );

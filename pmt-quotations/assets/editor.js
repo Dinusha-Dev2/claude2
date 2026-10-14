@@ -96,10 +96,9 @@
 		var d = decimalsFor(S.currency);
 		var sub = 0;
 		var lines = S.items.map(function (it) {
-			var qty = Math.max(0, num(it.qty));
-			var price = Math.max(0, num(it.price));
-			var disc = Math.min(100, Math.max(0, num(it.discount)));
-			var line = rnd(qty * price * (1 - disc / 100), d);
+			var gross = Math.max(0, num(it.qty)) * Math.max(0, num(it.price));
+			var dv = Math.max(0, num(it.discount));
+			var line = it.disc_type === 'fixed' ? rnd(gross - Math.min(gross, dv), d) : rnd(gross * (1 - Math.min(100, dv) / 100), d);
 			sub += line;
 			return line;
 		});
@@ -132,13 +131,17 @@
 		S.items = (S.items || []).map(function (it) {
 			it._uid = newUid();
 			it.img = it.img || '';
+			it.disc_type = it.disc_type === 'fixed' ? 'fixed' : 'percent';
 			return it;
 		});
+		S.extra = S.extra || [];
+		S.show = $.extend({}, cfg.display[S.type] || {}, S.show || {});
+		S.delivery_info = $.extend({ method: '', vehicle: '', driver: '' }, S.delivery_info || {});
 		S.payments = S.payments || [];
 		S.blocks = S.blocks || [];
 		S.banks = S.banks || [];
 		S.customer = S.customer || {};
-		S.discount = S.discount || { type: 'percent', value: 0 };
+		S.discount = $.extend({ type: 'percent', value: 0, label: '' }, S.discount || {});
 		S.shipping = S.shipping || { amount: 0 };
 		S.tax = S.tax || { label: '', rate: 0, mode: 'exclusive' };
 		S.customer.currency = S.customer.currency || '';
@@ -148,7 +151,7 @@
 	function payload() {
 		var d = $.extend(true, {}, S);
 		d.items = S.items.map(function (it) {
-			return { pid: it.pid, name: it.name, desc: it.desc, sku: it.sku, img_id: it.img_id, qty: it.qty, unit: it.unit, price: it.price, discount: it.discount };
+			return { pid: it.pid, name: it.name, desc: it.desc, sku: it.sku, img_id: it.img_id, qty: it.qty, unit: it.unit, price: it.price, discount: it.discount, disc_type: it.disc_type };
 		});
 		return JSON.stringify(d);
 	}
@@ -188,6 +191,14 @@
 			var v = getPath(S, this.getAttribute('data-bind'));
 			if (this.type === 'checkbox') { this.checked = !!v; } else { this.value = (v === null || v === undefined) ? '' : v; }
 		});
+		$('#pq-form [data-bind-radio]').each(function () {
+			this.checked = getPath(S, this.getAttribute('data-bind-radio')) === this.value;
+		});
+		syncDiscountLabel();
+	}
+
+	function syncDiscountLabel() {
+		$('[data-disc-value-label]').text(S.discount.type === 'fixed' ? 'Discount (' + currencySymbol() + ')' : 'Discount (%)');
 	}
 
 	function buildStatuses() {
@@ -199,32 +210,63 @@
 		$sel.val(S.status);
 	}
 
+	function hasPayments(t) { return t === 'proforma' || t === 'invoice'; }
+
 	function applyType() {
-		var isQuote = S.type === 'quotation';
-		$('[data-expiry-label]').text(isQuote ? 'Valid until' : 'Due date');
-		$('#pq-pay-card').prop('hidden', isQuote);
-		$('[data-only]').each(function () { $(this).prop('hidden', $(this).attr('data-only') !== S.type); });
+		var kind = cfg.expiry[S.type];
+		$('[data-expiry-wrap]').prop('hidden', !kind);
+		$('[data-expiry-label]').text(kind === 'due' ? 'Due date' : 'Valid until');
+		$('#pq-pay-card').prop('hidden', !hasPayments(S.type));
+		$('#pq-dn-card').prop('hidden', S.type !== 'delivery');
+		var conv = '';
+		(cfg.targets[S.type] || []).forEach(function (t) {
+			conv += '<a href="#" data-act="convert" data-to="' + esc(t) + '">Create ' + esc(typeLabel(t).toLowerCase()) + '</a>';
+		});
+		$('#pq-convert-items').html(conv);
 		buildStatuses();
+		renderShow();
 		renderBar();
 	}
+
+	/** Moving to another type: new number and dates, its show / hide defaults, and its default terms if untouched. */
+	function onTypeChange(from) {
+		var to = S.type;
+		if (!S.id && S.number_auto && cfg.nextNumbers[to]) { S.number = cfg.nextNumbers[to]; }
+		if (!cfg.expiry[to]) { S.expiry_date = ''; }
+		else if (!expiryTouched || !S.expiry_date) { S.expiry_date = addDays(S.issue_date, cfg.typeDays[to]); }
+		S.show = $.extend({}, cfg.display[to] || {});
+		if (JSON.stringify(stripBlocks(S.blocks)) === JSON.stringify(stripBlocks(cfg.defaultBlocks[from] || []))) {
+			S.blocks = $.extend(true, [], cfg.defaultBlocks[to] || []);
+			renderBlocks();
+		}
+		if (!hasPayments(to) && S.payments.length) { S.payments = []; renderPayments(); }
+		hydrate();
+		applyType();
+	}
+	function stripBlocks(list) {
+		return (list || []).map(function (b) { return [b.title || '', b.body || '', b.style || '']; });
+	}
+
+	$('#pq-form').on('change', '[data-bind-radio]', function () {
+		setPath(S, this.getAttribute('data-bind-radio'), this.value);
+		syncDiscountLabel();
+		changed();
+	});
 
 	$('#pq-form').on('input change', '[data-bind]', function () {
 		var path = this.getAttribute('data-bind');
 		var v = this.type === 'checkbox' ? this.checked : this.value;
 		if (path === 'currency') { onCurrencyChange(v); return; }
+		var before = S.type;
 		setPath(S, path, v);
 		if (path === 'type') {
-			if (!S.id) {
-				if (S.number_auto && cfg.nextNumbers[S.type]) { S.number = cfg.nextNumbers[S.type]; $('[data-bind="number"]').val(S.number); }
-				if (!expiryTouched) { S.expiry_date = addDays(S.issue_date, S.type === 'quotation' ? cfg.validDays : cfg.dueDays); $('[data-bind="expiry_date"]').val(S.expiry_date); }
-			}
-			applyType();
+			if (before !== S.type) { onTypeChange(before); toast(typeLabel() + ': show / hide choices reset to the defaults for this type.'); }
 		} else if (path === 'number') {
 			S.number_auto = false;
 		} else if (path === 'expiry_date') {
 			expiryTouched = true;
-		} else if (path === 'issue_date' && !expiryTouched && S.issue_date) {
-			S.expiry_date = addDays(S.issue_date, S.type === 'quotation' ? cfg.validDays : cfg.dueDays);
+		} else if (path === 'issue_date' && !expiryTouched && S.issue_date && cfg.expiry[S.type]) {
+			S.expiry_date = addDays(S.issue_date, cfg.typeDays[S.type]);
 			$('[data-bind="expiry_date"]').val(S.expiry_date);
 		} else if (path === 'status') {
 			renderBar();
@@ -239,9 +281,9 @@
 	function displayStatus() {
 		var list = cfg.statuses[S.type] || {};
 		var st = S.status;
-		var today = cfg.today;
-		if (S.type === 'quotation' && st === 'sent' && S.expiry_date && S.expiry_date < today) { return ['expired', 'Expired']; }
-		if (S.type !== 'quotation' && (st === 'sent' || st === 'partial') && S.expiry_date && S.expiry_date < today && calc().balance > 0) { return ['overdue', 'Overdue']; }
+		var past = S.expiry_date && S.expiry_date < cfg.today;
+		if (cfg.expiry[S.type] === 'valid' && st === 'sent' && past) { return ['expired', 'Expired']; }
+		if (cfg.expiry[S.type] === 'due' && (st === 'sent' || st === 'partial') && past && calc().balance > 0) { return ['overdue', 'Overdue']; }
 		return [st, list[st] || st];
 	}
 
@@ -259,8 +301,10 @@
 
 	function renderLinks() {
 		var rows = [];
-		if (links.source) { rows.push('From <a href="' + esc(links.source) + '">' + esc(S.source_number || 'quotation') + '</a>'); }
-		if (links.converted) { rows.push('Converted to <a href="' + esc(links.converted) + '">' + esc(links.converted_number || 'document') + '</a>'); }
+		if (links.source) { rows.push('Made from ' + esc(typeLabel(S.source_type || 'quotation').toLowerCase()) + ' <a href="' + esc(links.source) + '">' + esc(S.source_number || '') + '</a>'); }
+		if (links.children && links.children.length) {
+			rows.push('Turned into ' + links.children.map(function (k) { return esc(k.type.toLowerCase()) + ' <a href="' + esc(k.url) + '">' + esc(k.number) + '</a>'; }).join(', '));
+		}
 		if (links.rfq) { rows.push('Made from a <a href="' + esc(links.rfq) + '">bulk order request</a>'); }
 		if (links.sent_log && links.sent_log.length) { rows.push('Emailed ' + esc(links.sent_log[0])); }
 		if (links.viewed) { rows.push('Opened by customer ' + esc(links.viewed)); }
@@ -312,9 +356,7 @@
 		S.customer = { id: c.id, name: c.name, company: c.company, email: c.email, phone: c.phone, address: c.address, city: c.city, postcode: c.postcode, country: c.country, tax_no: c.tax_no, currency: c.currency || '' };
 		S.save_customer = true;
 		if (S.customer.currency && S.customer.currency !== S.currency && !hasMoney()) {
-			S.currency = S.customer.currency;
-			updateCurrencyLabels();
-			renderItems();
+			onCurrencyChange(S.customer.currency);
 		}
 		hydrate();
 		renderCustomerLink();
@@ -328,7 +370,7 @@
 	/* ------------------------------------------------------------ */
 
 	function blankItem() {
-		return { _uid: newUid(), pid: 0, name: '', desc: '', sku: '', img_id: 0, img: '', qty: 1, unit: cfg.defaultUnit, price: '', discount: 0 };
+		return { _uid: newUid(), pid: 0, name: '', desc: '', sku: '', img_id: 0, img: '', qty: 1, unit: cfg.defaultUnit, price: '', discount: 0, disc_type: 'percent' };
 	}
 
 	function thumbHtml(it) {
@@ -352,7 +394,8 @@
 				'<label>Qty<input type="number" min="0" step="any" data-f="qty" value="' + esc(it.qty) + '"></label>' +
 				'<label>Unit<input type="text" list="pq-units" data-f="unit" value="' + esc(it.unit) + '"></label>' +
 				'<label>Price' + symbolGroup('<input type="number" min="0" step="any" data-f="price" value="' + esc(it.price) + '" placeholder="0.00">') + '</label>' +
-				'<label>Disc. %<input type="number" min="0" max="100" step="any" data-f="discount" value="' + esc(it.discount) + '"></label>' +
+				'<label>Discount<span class="pq-inline pq-idisc"><input type="number" min="0" step="any" data-f="discount" value="' + esc(it.discount) + '">' +
+					'<select data-f="disc_type" aria-label="Discount type"><option value="percent"' + (it.disc_type !== 'fixed' ? ' selected' : '') + '>%</option><option value="fixed"' + (it.disc_type === 'fixed' ? ' selected' : '') + '>' + esc(currencySymbol()) + '</option></select></span></label>' +
 				'<div class="pq-line-total"><span>Amount</span><strong data-total>' + esc(money(tot)) + '</strong></div>' +
 			'</div>' +
 			'<div class="pq-item-tools">' +
@@ -616,6 +659,14 @@
 	function onCurrencyChange(to) {
 		if (to === S.currency) { return; }
 		S.currency = to;
+		var tx = cfg.taxes[to];
+		if (tx && (tx.label !== S.tax.label || num(tx.rate) !== num(S.tax.rate))) {
+			S.tax.label = tx.label;
+			S.tax.rate = tx.rate;
+			toast('Tax set to ' + tx.label + ' ' + num(tx.rate) + '% for ' + to + '. You can change it under Tax and totals.');
+		}
+		$('[data-bind="currency"]').val(to);
+		hydrate();
 		updateCurrencyLabels();
 		renderItems();
 		renderPayments();
@@ -645,8 +696,8 @@
 		var n = 0;
 		S.items.forEach(function (it) {
 			var has = String(it.price) !== '';
-			if (a === 'discount') { it.discount = String(pct); n++; }
-			else if (a === 'clear-discount') { it.discount = 0; n++; }
+				if (a === 'discount') { it.discount = String(pct); it.disc_type = 'percent'; n++; }
+				else if (a === 'clear-discount') { it.discount = 0; it.disc_type = 'percent'; n++; }
 			else if (has && a === 'raise') { it.price = String(rnd(num(it.price) * (1 + pct / 100), d)); n++; }
 			else if (has && a === 'lower') { it.price = String(rnd(num(it.price) * (1 - pct / 100), d)); n++; }
 			else if (has && a === 'round') {
@@ -741,18 +792,69 @@
 
 	function renderSummary() {
 		var c = calc();
+		$('#pq-disc-amt').text(c.discount > 0 ? '-' + money(c.discount) : '-');
+		var tx = cfg.taxes[S.currency];
+		$('#pq-tax-hint').text(tx ? 'Default tax for ' + S.currency + ': ' + (num(tx.rate) > 0 ? tx.label + ' ' + num(tx.rate) + '%' : 'none') + '. Set per currency in Settings.' : '');
 		var rows = '<dt>Subtotal</dt><dd>' + esc(money(c.subtotal)) + '</dd>';
-		if (c.discount > 0) { rows += '<dt>Discount</dt><dd>-' + esc(money(c.discount)) + '</dd>'; }
+		if (c.discount > 0) { rows += '<dt>' + esc(S.discount.label || 'Discount') + (S.discount.type === 'percent' ? ' (' + esc(String(num(S.discount.value))) + '%)' : '') + '</dt><dd>-' + esc(money(c.discount)) + '</dd>'; }
 		if (c.shipping > 0) { rows += '<dt>Delivery</dt><dd>' + esc(money(c.shipping)) + '</dd>'; }
 		if (S.tax.mode !== 'none' && num(S.tax.rate) > 0) {
 			rows += '<dt>' + esc(S.tax.label || 'Tax') + ' (' + esc(String(num(S.tax.rate))) + '%' + (S.tax.mode === 'inclusive' ? ' included' : '') + ')</dt><dd>' + esc(money(c.tax)) + '</dd>';
 		}
 		rows += '<dt class="pq-sum-total">Total</dt><dd class="pq-sum-total">' + esc(money(c.total)) + '</dd>';
-		if (S.type !== 'quotation' && c.paid > 0) {
+		if (hasPayments(S.type) && c.paid > 0) {
 			rows += '<dt>Paid</dt><dd>-' + esc(money(c.paid)) + '</dd><dt class="pq-sum-due">Balance due</dt><dd class="pq-sum-due">' + esc(money(c.balance)) + '</dd>';
 		}
 		$('#pq-summary').html('<dl>' + rows + '</dl>');
 	}
+
+	/* ------------------------------------------------------------ */
+	/* Extra details and show / hide                                 */
+	/* ------------------------------------------------------------ */
+
+	function renderExtra() {
+		var html = '';
+		S.extra.forEach(function (x, i) {
+			html += '<div class="pq-xrow" data-i="' + i + '">' +
+				'<input type="text" data-x="label" value="' + esc(x.label) + '" placeholder="Label, e.g. Project" aria-label="Label">' +
+				'<input type="text" data-x="value" value="' + esc(x.value) + '" placeholder="Value" aria-label="Value">' +
+				'<button type="button" class="pq-ico pq-ico-del" data-act="extra-del" aria-label="Remove detail">&times;</button></div>';
+		});
+		$('#pq-extra').html(html);
+	}
+	$('#pq-extra').on('input', '[data-x]', function () {
+		S.extra[+$(this).closest('.pq-xrow').attr('data-i')][this.getAttribute('data-x')] = this.value;
+		changed();
+	});
+	$('#pq-extra').on('click', '[data-act="extra-del"]', function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+		S.extra.splice(+$(this).closest('.pq-xrow').attr('data-i'), 1);
+		renderExtra();
+		changed();
+	});
+
+	function renderShow() {
+		var groups = {};
+		cfg.displayFields.forEach(function (f) {
+			if (f.types && f.types.indexOf(S.type) < 0) { return; }
+			(groups[f.group] = groups[f.group] || []).push(f);
+		});
+		var html = '';
+		Object.keys(cfg.displayGroups).forEach(function (g) {
+			if (!groups[g]) { return; }
+			html += '<fieldset><legend>' + esc(cfg.displayGroups[g]) + '</legend>';
+			groups[g].forEach(function (f) {
+				html += '<label class="pq-check"><input type="checkbox" data-show="' + esc(f.key) + '"' + (S.show[f.key] ? ' checked' : '') + '> ' + esc(f.label) + '</label>';
+			});
+			html += '</fieldset>';
+		});
+		$('#pq-show').html(html);
+	}
+	$('#pq-show').on('change', '[data-show]', function () {
+		S.show[this.getAttribute('data-show')] = this.checked ? 1 : 0;
+		changed();
+	});
 
 	/* ------------------------------------------------------------ */
 	/* Live preview                                                  */
@@ -811,6 +913,8 @@
 		renderBlocks();
 		renderBanks();
 		renderPayments();
+		renderExtra();
+		renderShow();
 		renderSummary();
 		renderBar();
 	}
@@ -893,7 +997,7 @@
 
 	$(document).on('click', '[data-act]', function (e) {
 		var act = $(this).attr('data-act');
-		var inItems = $(this).closest('#pq-items, #pq-blocks, #pq-payments').length;
+		var inItems = $(this).closest('#pq-items, #pq-blocks, #pq-payments, #pq-extra').length;
 		if (inItems) { return; }
 		switch (act) {
 			case 'save': e.preventDefault(); save(); break;
@@ -912,10 +1016,21 @@
 				renderBlocks(); changed();
 				$('#pq-blocks .pq-block:last [data-b="title"]').trigger('focus');
 				break;
+			case 'add-extra':
+				e.preventDefault();
+				S.extra.push({ label: '', value: '' });
+				renderExtra(); changed();
+				$('#pq-extra .pq-xrow:last [data-x="label"]').trigger('focus');
+				break;
+			case 'reset-show':
+				e.preventDefault();
+				S.show = $.extend({}, cfg.display[S.type] || {});
+				renderShow(); changed();
+				break;
 			case 'reset-blocks':
 				e.preventDefault();
 				if (!S.blocks.length || window.confirm('Replace the terms on this document with your default terms?')) {
-					S.blocks = $.extend(true, [], cfg.defaultBlocks);
+					S.blocks = $.extend(true, [], cfg.defaultBlocks[S.type] || []);
 					renderBlocks(); changed();
 				}
 				break;
@@ -932,9 +1047,11 @@
 				break;
 			case 'convert':
 				e.preventDefault();
-				if (window.confirm('Create ' + (($(this).attr('data-to') === 'invoice') ? 'an invoice' : 'a proforma invoice') + ' from this quotation? The quotation will be marked as converted.')) {
-					var to = $(this).attr('data-to');
-					ensureSaved(function () { window.location.href = links[to]; });
+				var to = $(this).attr('data-to');
+				var msg = 'Create a ' + typeLabel(to).toLowerCase() + ' from this ' + typeLabel().toLowerCase() + '?';
+				if (S.type === 'quotation') { msg += ' The quotation will be marked as converted.'; }
+				if (window.confirm(msg)) {
+					ensureSaved(function () { window.location.href = (links.convert || {})[to]; });
 				}
 				break;
 			case 'duplicate':
@@ -970,10 +1087,12 @@
 	renderBlocks();
 	renderBanks();
 	renderPayments();
+	renderExtra();
+	renderShow();
 	renderSummary();
 	renderBar();
 	renderLinks();
 	if (C.notice === 'duplicated') { toast('Duplicated. This is a new draft.'); }
-	if (C.notice === 'converted') { toast('Created from your quotation. Review it, then save.'); }
+	if (C.notice === 'converted') { toast('Created from ' + typeLabel(S.source_type || 'quotation').toLowerCase() + ' ' + (S.source_number || '') + '. Review it, then save.'); }
 	schedulePreview(100);
 }(jQuery));

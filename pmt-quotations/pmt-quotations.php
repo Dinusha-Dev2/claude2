@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       PMT Quotations & Invoices
- * Description:       Quotations, proforma invoices and invoices with saved customers, a store product picker, custom items with images, payment tracking and a fully customisable document template.
- * Version:           1.4.0
+ * Description:       Quotations, proforma invoices, tax invoices and delivery notes with saved customers, a store product picker, custom items with images, payment tracking and a fully customisable document template.
+ * Version:           1.5.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            eSupport Technology
@@ -12,7 +12,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'PQ_VERSION', '1.4.0' );
+define( 'PQ_VERSION', '1.5.0' );
 define( 'PQ_FILE', __FILE__ );
 define( 'PQ_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PQ_URL', plugin_dir_url( __FILE__ ) );
@@ -20,6 +20,7 @@ define( 'PQ_CPT', 'pq_quote' );
 define( 'PQ_CUSTOMER', 'pq_customer' );
 
 require_once PQ_DIR . 'includes/helpers.php';
+require_once PQ_DIR . 'includes/upgrade.php';
 require_once PQ_DIR . 'includes/documents.php';
 require_once PQ_DIR . 'includes/render.php';
 require_once PQ_DIR . 'includes/post-types.php';

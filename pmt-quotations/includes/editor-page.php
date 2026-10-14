@@ -14,13 +14,19 @@ function pq_doc_links( $id, $doc ) {
 	if ( ! $id ) { return $links; }
 	$links['public']    = pq_public_url( $id );
 	$links['duplicate'] = pq_action_url( 'pq_duplicate_doc', $id );
-	$links['invoice']   = pq_action_url( 'pq_convert_doc', $id, array( 'to' => 'invoice' ) );
-	$links['proforma']  = pq_action_url( 'pq_convert_doc', $id, array( 'to' => 'proforma' ) );
+	$links['convert']   = array();
+	foreach ( pq_convert_targets( $doc['type'] ) as $t ) { $links['convert'][ $t ] = pq_action_url( 'pq_convert_doc', $id, array( 'to' => $t ) ); }
 	$trash              = get_delete_post_link( $id );
 	$links['trash']     = $trash ? $trash : '';
-	$conv               = (int) get_post_meta( $id, '_pq_converted_to', true );
-	$links['converted'] = ( $conv && PQ_CPT === get_post_type( $conv ) && 'trash' !== get_post_status( $conv ) ) ? pq_editor_url( $conv ) : '';
-	$links['converted_number'] = $links['converted'] ? (string) get_post_meta( $conv, '_pq_number', true ) : '';
+	// Documents made from this one, newest first.
+	$links['children'] = array();
+	$kids = get_posts( array(
+		'post_type' => PQ_CPT, 'post_status' => 'publish', 'posts_per_page' => 10, 'fields' => 'ids', 'orderby' => 'ID', 'order' => 'DESC',
+		'meta_query' => array( array( 'key' => '_pq_source', 'value' => (int) $id ) ),
+	) );
+	foreach ( $kids as $kid ) {
+		$links['children'][] = array( 'url' => pq_editor_url( $kid ), 'number' => (string) get_post_meta( $kid, '_pq_number', true ), 'type' => pq_doc_label( (string) get_post_meta( $kid, '_pq_type', true ) ) );
+	}
 	$src                = (int) $doc['source_id'];
 	$links['source']    = ( $src && PQ_CPT === get_post_type( $src ) ) ? pq_editor_url( $src ) : '';
 	$rfq                = (int) $doc['rfq_id'];
@@ -63,7 +69,23 @@ function pq_editor_boot() {
 	$next_numbers = array();
 	foreach ( array_keys( pq_types() ) as $t ) { list( $next_numbers[ $t ] ) = pq_next_number( $t, $s ); }
 	$statuses = array();
-	foreach ( array_keys( pq_types() ) as $t ) { $statuses[ $t ] = pq_statuses( $t ); }
+	$expiry   = array();
+	$days     = array();
+	$display  = array();
+	$blocks   = array();
+	$targets  = array();
+	foreach ( array_keys( pq_types() ) as $t ) {
+		$statuses[ $t ] = pq_statuses( $t );
+		$expiry[ $t ]   = pq_type_expiry( $t );
+		$days[ $t ]     = pq_type_days( $t, $s );
+		$display[ $t ]  = pq_display_for_type( $t, $s );
+		$blocks[ $t ]   = pq_blocks_for_type( $t, $s );
+		$targets[ $t ]  = pq_convert_targets( $t );
+	}
+	$fields = array();
+	foreach ( pq_display_fields() as $k => $f ) { $fields[] = array( 'key' => $k, 'label' => $f[0], 'group' => $f[1], 'types' => $f[2] ); }
+	$taxes = array();
+	foreach ( $s['currencies'] as $cur ) { $taxes[ $cur['code'] ] = pq_tax_for_currency( $cur['code'], $s ); }
 
 	$links = pq_doc_links( $id, $doc );
 
@@ -79,13 +101,20 @@ function pq_editor_boot() {
 			'units'          => pq_units_list( $s ),
 			'defaultUnit'    => $s['defaults']['unit'],
 			'banks'          => $banks,
-			'defaultBlocks'  => $s['blocks'],
+			'defaultBlocks'  => $blocks,
+			'expiry'         => $expiry,
+			'typeDays'       => $days,
+			'display'        => $display,
+			'displayFields'  => $fields,
+			'displayGroups'  => pq_display_groups(),
+			'taxes'          => $taxes,
+			'targets'        => $targets,
 			'taxShipping'    => ! empty( $s['tax']['tax_shipping'] ),
 			'storeCurrency'  => function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : '',
 			'hasStore'       => post_type_exists( 'product' ),
 			'types'          => pq_types(),
 			'statuses'       => $statuses,
-			'labels'         => array( 'quotation' => pq_doc_label( 'quotation', $s ), 'proforma' => pq_doc_label( 'proforma', $s ), 'invoice' => pq_doc_label( 'invoice', $s ) ),
+			'labels'         => array_combine( array_keys( pq_types() ), array_map( function ( $t ) use ( $s ) { return pq_doc_label( $t, $s ); }, array_keys( pq_types() ) ) ),
 			'today'          => pq_today(),
 			'validDays'      => (int) $s['defaults']['valid_days'],
 			'dueDays'        => (int) $s['defaults']['due_days'],
@@ -117,8 +146,7 @@ function pq_render_editor_page() {
 				<details class="pq-more" data-needs-saved>
 					<summary class="button">More</summary>
 					<div class="pq-more-menu">
-						<a href="#" data-act="convert" data-to="invoice" data-only="quotation">Create invoice</a>
-						<a href="#" data-act="convert" data-to="proforma" data-only="quotation">Create proforma invoice</a>
+						<span id="pq-convert-items"></span>
 						<a href="#" data-act="duplicate">Duplicate</a>
 						<a href="#" data-act="trash" class="pq-danger">Move to trash</a>
 					</div>
@@ -138,7 +166,7 @@ function pq_render_editor_page() {
 					<div class="pq-grid pq-g3">
 						<label>Type
 							<select data-bind="type">
-								<?php foreach ( pq_types() as $k => $v ) { echo '<option value="' . esc_attr( $k ) . '">' . esc_html( $v ) . '</option>'; } ?>
+								<?php foreach ( array_keys( pq_types() ) as $k ) { echo '<option value="' . esc_attr( $k ) . '">' . esc_html( pq_doc_label( $k ) ) . '</option>'; } ?>
 							</select>
 						</label>
 						<label>Number
@@ -156,7 +184,7 @@ function pq_render_editor_page() {
 						<label>Date
 							<input type="date" data-bind="issue_date">
 						</label>
-						<label><span data-expiry-label>Valid until</span>
+						<label data-expiry-wrap><span data-expiry-label>Valid until</span>
 							<input type="date" data-bind="expiry_date">
 						</label>
 					</div>
@@ -165,6 +193,16 @@ function pq_render_editor_page() {
 							<input type="text" data-bind="reference" placeholder="Optional, shown on the document">
 						</label>
 					</div>
+				</section>
+
+				<section class="pq-card" id="pq-dn-card" hidden>
+					<h2>Delivery details</h2>
+					<div class="pq-grid pq-g3">
+						<label>Delivery method <input type="text" data-bind="delivery_info.method" list="pq-dn-methods" placeholder="Own vehicle, courier, sea freight"></label>
+						<label>Vehicle / boat no. <input type="text" data-bind="delivery_info.vehicle"></label>
+						<label>Delivered by <input type="text" data-bind="delivery_info.driver" placeholder="Driver or staff name"></label>
+					</div>
+					<datalist id="pq-dn-methods"><option value="Own vehicle"><option value="Courier"><option value="Sea freight"><option value="Air freight"><option value="Customer collection"></datalist>
 				</section>
 
 				<section class="pq-card">
@@ -218,19 +256,26 @@ function pq_render_editor_page() {
 				</section>
 
 				<section class="pq-card">
-					<h2>Totals and tax</h2>
+					<h2>Discount</h2>
+					<div class="pq-disc">
+						<div class="pq-seg" role="radiogroup" aria-label="Discount type">
+							<label><input type="radio" name="pq-disc-type" value="percent" data-bind-radio="discount.type"><span>Percentage (%)</span></label>
+							<label><input type="radio" name="pq-disc-type" value="fixed" data-bind-radio="discount.type"><span>Amount (<b data-cur-symbol></b>)</span></label>
+						</div>
+						<div class="pq-grid pq-g3">
+							<label><span data-disc-value-label>Discount (%)</span> <input type="number" min="0" step="any" data-bind="discount.value" placeholder="0"></label>
+							<label>Shown on the document as <input type="text" data-bind="discount.label" placeholder="Discount"></label>
+							<div class="pq-disc-out"><span>Discount amount</span><strong id="pq-disc-amt">-</strong></div>
+						</div>
+						<p class="description">Applied to the subtotal, before tax. Each item can also have its own discount, as a percentage or an amount.</p>
+					</div>
+				</section>
+
+				<section class="pq-card">
+					<h2>Tax and totals</h2>
 					<div class="pq-grid pq-g4">
-						<label>Discount
-							<span class="pq-inline">
-								<input type="number" min="0" step="any" data-bind="discount.value">
-								<select data-bind="discount.type"><option value="percent">%</option><option value="fixed" data-cur-option>Amount</option></select>
-							</span>
-						</label>
-						<label>Delivery fee <span class="pq-inputgroup"><span class="pq-sym" data-cur-symbol></span><input type="number" min="0" step="any" data-bind="shipping.amount"></span></label>
 						<label>Tax name <input type="text" data-bind="tax.label" placeholder="GST"></label>
 						<label>Tax rate (%) <input type="number" min="0" max="100" step="any" data-bind="tax.rate"></label>
-					</div>
-					<div class="pq-grid pq-g2">
 						<label>Tax is
 							<select data-bind="tax.mode">
 								<option value="exclusive">Added on top of prices</option>
@@ -238,7 +283,9 @@ function pq_render_editor_page() {
 								<option value="none">Not charged</option>
 							</select>
 						</label>
+						<label>Delivery fee <span class="pq-inputgroup"><span class="pq-sym" data-cur-symbol></span><input type="number" min="0" step="any" data-bind="shipping.amount"></span></label>
 					</div>
+					<p class="description" id="pq-tax-hint"></p>
 					<div id="pq-summary" class="pq-summary"></div>
 				</section>
 
@@ -267,6 +314,24 @@ function pq_render_editor_page() {
 					<h2>Bank details on the document</h2>
 					<div id="pq-banks" class="pq-banks"></div>
 					<p class="description">Add or edit bank accounts in <a href="<?php echo esc_url( admin_url( 'admin.php?page=pq-settings' ) ); ?>">Settings</a>.</p>
+				</section>
+
+				<section class="pq-card">
+					<div class="pq-card-head">
+						<h2>Extra details</h2>
+						<div class="pq-card-actions"><button type="button" class="button" data-act="add-extra">Add a detail</button></div>
+					</div>
+					<p class="description">Anything else to print with the document details, for example Project, Sales person or Payment terms.</p>
+					<div id="pq-extra"></div>
+				</section>
+
+				<section class="pq-card">
+					<div class="pq-card-head">
+						<h2>Show on this document</h2>
+						<div class="pq-card-actions"><button type="button" class="button" data-act="reset-show">Use defaults for this type</button></div>
+					</div>
+					<p class="description">Untick anything you do not want printed. Defaults for each type are in <a href="<?php echo esc_url( admin_url( 'admin.php?page=pq-settings#display' ) ); ?>">Settings</a>.</p>
+					<div id="pq-show" class="pq-show"></div>
 				</section>
 
 				<section class="pq-card">

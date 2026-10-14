@@ -87,6 +87,7 @@ function pq_render_settings_page() {
 		'numbering' => 'Numbers and dates',
 		'currency' => 'Currency and tax',
 		'template' => 'Template',
+		'display'  => 'Show / hide',
 		'terms'    => 'Terms and banks',
 		'email'    => 'Email',
 		'data'     => 'Data',
@@ -151,8 +152,8 @@ function pq_render_settings_page() {
 				<h2>Defaults for new documents</h2>
 				<div class="pq-grid pq-g3">
 					<?php
-					pq_field_text( array( 'defaults', 'valid_days' ), $s['defaults']['valid_days'], 'Quotation valid for (days)', array( 'type' => 'number', 'class' => 'small-text', 'attrs' => 'min="0"' ) );
-					pq_field_text( array( 'defaults', 'due_days' ), $s['defaults']['due_days'], 'Invoice due in (days)', array( 'type' => 'number', 'class' => 'small-text', 'attrs' => 'min="0"' ) );
+					pq_field_text( array( 'defaults', 'valid_days' ), $s['defaults']['valid_days'], 'Quotations and proformas valid for (days)', array( 'type' => 'number', 'class' => 'small-text', 'attrs' => 'min="0"' ) );
+					pq_field_text( array( 'defaults', 'due_days' ), $s['defaults']['due_days'], 'Tax invoices due in (days)', array( 'type' => 'number', 'class' => 'small-text', 'attrs' => 'min="0"' ) );
 					$unit_opts = array();
 					foreach ( pq_units_list( $s ) as $u ) { $unit_opts[ $u ] = $u; }
 					pq_field_select( array( 'defaults', 'unit' ), $s['defaults']['unit'], 'Default unit', $unit_opts );
@@ -180,6 +181,7 @@ function pq_render_settings_page() {
 			<div class="pq-card">
 				<h2>Currencies</h2>
 				<p class="description">Each document picks its own currency. Changing it only changes the symbol shown beside every price and total. Prices are never converted, so type the price in the currency you choose. <strong>Decimals</strong> overrides the general decimal places for that currency.</p>
+				<p class="description"><strong>Tax name and rate</strong> are applied automatically when a document is set to that currency, for example GST 8% for USD and VAT 18% for LKR. Leave them empty to use the general tax below; a rate of 0 means no tax. <strong>Amount in words</strong> uses the currency names, for example "US Dollars" and "Cents".</p>
 				<?php
 				$codes = wp_list_pluck( $s['currencies'], 'code' );
 				pq_field_select( array( 'currency' ), $s['currency'], 'Default currency', array_combine( $codes, $codes ), 'Used for new documents. After adding a currency below, save to see it here.' );
@@ -189,12 +191,16 @@ function pq_render_settings_page() {
 					'position' => array( 'Symbol position', 'select', array( 'before' => 'Before the amount', 'after' => 'After the amount' ), 'm' ),
 					'space'    => array( 'Space', 'check', null, 'xs' ),
 					'decimals' => array( 'Decimals', 'select', array( '' => 'Default', '0' => '0', '1' => '1', '2' => '2', '3' => '3', '4' => '4' ), 'xs' ),
-				), 'Add currency', array( 'code' => '', 'symbol' => '', 'position' => 'before', 'space' => 0, 'decimals' => '' ) );
+				'tax_label' => array( 'Tax name', 'text', null, 's' ),
+				'tax_rate'  => array( 'Tax rate (%)', 'text', null, 's' ),
+				'word'      => array( 'Currency in words', 'text', null, 'm' ),
+				'subword'   => array( 'Cents in words', 'text', null, 's' ),
+				), 'Add currency', array( 'code' => '', 'symbol' => '', 'position' => 'before', 'space' => 0, 'decimals' => '', 'tax_label' => '', 'tax_rate' => '', 'word' => '', 'subword' => '' ) );
 				?>
 			</div>
 			<div class="pq-card">
-				<h2>Tax</h2>
-				<p class="description">These are the defaults. You can change the name, rate or method on each document.</p>
+				<h2>General tax</h2>
+				<p class="description">Used when a currency has no tax of its own. You can still change the name, rate or method on each document.</p>
 				<div class="pq-grid pq-g3">
 					<?php
 					pq_field_text( array( 'tax', 'label' ), $s['tax']['label'], 'Tax name', array( 'class' => 'regular-text' ) );
@@ -217,28 +223,15 @@ function pq_render_settings_page() {
 					foreach ( pq_fonts() as $k => $f ) { $fopts[ $k ] = $f[0]; }
 					pq_field_select( array( 'template', 'font' ), $s['template']['font'], 'Typeface', $fopts );
 					pq_field_select( array( 'template', 'size' ), $s['template']['size'], 'Text size', array( 'compact' => 'Compact', 'regular' => 'Regular', 'large' => 'Large' ) );
-					pq_field_text( array( 'template', 'logo_height' ), $s['template']['logo_height'], 'Logo height (px)', array( 'type' => 'number', 'class' => 'small-text', 'attrs' => 'min="20" max="140"' ) );
+					pq_field_text( array( 'template', 'logo_height' ), $s['template']['logo_height'], 'Logo height (px)', array( 'type' => 'number', 'class' => 'small-text', 'attrs' => 'min="20" max="160"' ) );
 					pq_field_text( array( 'template', 'img_size' ), $s['template']['img_size'], 'Item image size (px)', array( 'type' => 'number', 'class' => 'small-text', 'attrs' => 'min="24" max="120"' ) );
 					?>
 				</div>
 			</div>
 			<div class="pq-card">
-				<h2>Item table</h2>
-				<div class="pq-checks">
-					<?php
-					pq_field_check( array( 'template', 'show_numbers' ), $s['template']['show_numbers'], 'Show row numbers' );
-					pq_field_check( array( 'template', 'show_image' ), $s['template']['show_image'], 'Show item images' );
-					pq_field_check( array( 'template', 'show_sku' ), $s['template']['show_sku'], 'Show SKU under the item name' );
-					pq_field_check( array( 'template', 'show_unit' ), $s['template']['show_unit'], 'Show the unit next to the quantity' );
-					pq_field_check( array( 'template', 'show_signature' ), $s['template']['show_signature'], 'Add signature lines at the end' );
-					?>
-				</div>
-				<?php pq_field_select( array( 'template', 'show_discount' ), $s['template']['show_discount'], 'Discount column', array( 'auto' => 'Only when an item has a discount', 'always' => 'Always show', 'never' => 'Never show' ) ); ?>
-			</div>
-			<div class="pq-card">
 				<h2>Footer text</h2>
-				<p class="description">You can use {days}, {valid_until}, {due_date} and {number}.</p>
-				<?php foreach ( pq_types() as $t => $label ) { pq_field_text( array( 'footer', $t ), $s['footer'][ $t ], $label, array( 'class' => 'widefat' ) ); } ?>
+				<p class="description">You can use {days}, {valid_until}, {due_date}, {number} and {company}.</p>
+				<?php foreach ( array_keys( pq_types() ) as $t ) { pq_field_text( array( 'footer', $t ), $s['footer'][ $t ], pq_doc_label( $t, $s ), array( 'class' => 'widefat' ) ); } ?>
 			</div>
 			<div class="pq-card">
 				<details>
@@ -258,16 +251,51 @@ function pq_render_settings_page() {
 			</div>
 		</section>
 
+		<!-- Show / hide -->
+		<section class="pq-pane" data-pane="display" hidden>
+			<div class="pq-card">
+				<h2>What each document shows</h2>
+				<p class="description">The starting choices for each type. Every document can still switch any of these on or off in its own "Show on this document" box. Use "Preview as" on the right to see each type.</p>
+				<table class="pq-showtable">
+					<thead><tr><th scope="col">Part of the document</th>
+					<?php foreach ( array_keys( pq_types() ) as $t ) { echo '<th scope="col">' . esc_html( pq_doc_label( $t, $s ) ) . '</th>'; } ?>
+					</tr></thead>
+					<?php
+					$fields = pq_display_fields();
+					foreach ( pq_display_groups() as $g => $glabel ) {
+						echo '<tbody><tr class="pq-showgroup"><th colspan="' . ( 1 + count( pq_types() ) ) . '">' . esc_html( $glabel ) . '</th></tr>';
+						foreach ( $fields as $k => $f ) {
+							if ( $g !== $f[1] ) { continue; }
+							echo '<tr><th scope="row">' . esc_html( $f[0] ) . '</th>';
+							foreach ( array_keys( pq_types() ) as $t ) {
+								echo '<td>';
+								if ( pq_display_applies( $k, $t ) ) {
+									echo '<input type="checkbox" name="' . esc_attr( pq_n( array( 'display', $t, $k ) ) ) . '" value="1"' . checked( ! empty( $s['display'][ $t ][ $k ] ), true, false ) . ' aria-label="' . esc_attr( $f[0] . ', ' . pq_doc_label( $t, $s ) ) . '">';
+								} else {
+									echo '<span class="pq-na" title="Not used on this type">-</span>';
+								}
+								echo '</td>';
+							}
+							echo '</tr>';
+						}
+						echo '</tbody>';
+					}
+					?>
+				</table>
+			</div>
+		</section>
+
 		<!-- Terms and banks -->
 		<section class="pq-pane" data-pane="terms" hidden>
 			<div class="pq-card">
 				<h2>Default terms and notes</h2>
-				<p class="description">New documents start with these blocks. Edit them per document in the editor. A highlighted block stands out in red, good for policies.</p>
+				<p class="description">New documents start with the blocks set for their type. Edit them per document in the editor. A highlighted block stands out with a grey band, good for policies.</p>
 				<?php pq_repeater( array( 'blocks' ), $s['blocks'], array(
 					'title' => array( 'Heading', 'text', null, 'm' ),
 					'style' => array( 'Style', 'select', array( '' => 'Standard', 'highlight' => 'Highlighted' ), 's' ),
+					'on'    => array( 'Starts on', 'select', pq_block_on_options(), 'm' ),
 					'body'  => array( 'Text', 'textarea', null, 'l' ),
-				), 'Add a block', array( 'title' => '', 'body' => '', 'style' => '' ) ); ?>
+				), 'Add a block', array( 'title' => '', 'body' => '', 'style' => '', 'on' => '' ) ); ?>
 			</div>
 			<div class="pq-card">
 				<h2>Bank accounts</h2>
@@ -310,7 +338,7 @@ function pq_render_settings_page() {
 		</div>
 
 		<aside class="pq-set-preview" id="pq-set-preview">
-			<div class="pq-preview-bar"><span>Live preview</span><button type="button" class="button-link" id="pq-set-refresh">Refresh</button></div>
+			<div class="pq-preview-bar"><span>Live preview</span><label class="pq-preview-as">Preview as <select id="pq-set-type"><?php foreach ( array_keys( pq_types() ) as $t ) { echo '<option value="' . esc_attr( $t ) . '">' . esc_html( pq_doc_label( $t, $s ) ) . '</option>'; } ?></select></label><button type="button" class="button-link" id="pq-set-refresh">Refresh</button></div>
 			<div class="pq-preview-wrap" id="pq-preview-wrap"><iframe id="pq-frame" title="Template preview" tabindex="-1"></iframe></div>
 		</aside>
 		</div>

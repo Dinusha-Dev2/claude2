@@ -38,7 +38,8 @@ function pq_document_css( $s ) {
 	// First-page header: logo left, document title right, one thin rule.
 	$css .= '.pqd-head{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-bottom:12px;border-bottom:1px solid #9a9a9a}';
 	$css .= '.pqd-logo{display:block}.pqd-brandname{font-size:1.7em;font-weight:700;letter-spacing:.01em}';
-	$css .= '.pqd-doc{text-align:right}.pqd-doc h1{margin:0;font-size:1.45em;line-height:1.2;font-weight:700;color:var(--pq-accent)}';
+	$css .= '.pqd-doc{text-align:right}.pqd-doc h1{margin:0;font-size:1.6em;line-height:1.15;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pq-accent)}';
+	$css .= '.pqd-docno{margin-top:3px;color:var(--pq-muted);font-size:1.02em;letter-spacing:.02em}';
 	$css .= '.pqd-stamp{display:inline-block;margin-top:6px;padding:1px 8px;border:1px solid var(--pq-ink);font-weight:700;font-size:.9em}';
 
 	// Continuation header (pages 2 onward).
@@ -61,7 +62,8 @@ function pq_document_css( $s ) {
 	$css .= '.pqd-items td{padding:8px;border-bottom:1px solid #e6e6e6;vertical-align:top}';
 	$css .= '.pqd-items .c-no{width:30px}.pqd-items tbody .c-no{color:var(--pq-muted)}.pqd-items .c-img{width:calc(var(--pq-img) + 16px)}';
 	$css .= '.pqd-items .c-img img,.pqd-items .c-img .pqd-noimg{display:block;width:var(--pq-img);height:var(--pq-img);object-fit:contain;border:1px solid var(--pq-line);background:#fff}';
-	$css .= '.pqd-items .c-qty{width:72px;text-align:right;white-space:nowrap}.pqd-items .c-price{width:92px;text-align:right}.pqd-items .c-disc{width:54px;text-align:right}.pqd-items .c-amt{width:100px;text-align:right}';
+	$css .= '.pqd-items .c-qty{width:64px;text-align:right;white-space:nowrap}.pqd-items .c-price{width:104px;text-align:right;white-space:nowrap}.pqd-items .c-disc{width:64px;text-align:right;white-space:nowrap}.pqd-items .c-amt{width:112px;text-align:right;white-space:nowrap}';
+	$css .= '.pqd-totals td,.pqd-sum dd,.pqd-payments td:last-child{white-space:nowrap}';
 	$css .= '.pqd-items thead th.c-qty,.pqd-items thead th.c-price,.pqd-items thead th.c-disc,.pqd-items thead th.c-amt{text-align:right}';
 	$css .= '.pqd-item-name{font-weight:700}.pqd-item-desc{margin-top:1px;color:var(--pq-muted)}.pqd-item-sku{margin-top:1px;color:var(--pq-muted);font-size:.92em}';
 	$css .= '.pqd-unit{display:block;color:var(--pq-muted);font-size:.92em}.pqd-empty{padding:26px 8px;text-align:center;color:var(--pq-muted)}';
@@ -74,6 +76,7 @@ function pq_document_css( $s ) {
 	$css .= '.pqd-totals td{padding:2px 0 2px 24px;text-align:right}.pqd-totals td:last-child{min-width:104px;padding-right:8px}';
 	$css .= '.pqd-totals .t-total td{padding-top:6px;font-weight:700}.pqd-totals .t-total td:last-child{border-bottom:3px double var(--pq-ink);padding-bottom:1px}';
 	$css .= '.pqd-totals .t-due td{padding-top:6px;font-weight:700}';
+	$css .= '.pqd-words{margin:8px 0 0;padding:5px 8px;background:var(--pq-bar);font-style:italic}.pqd-words span{font-style:normal;font-weight:700;margin-right:4px}';
 
 	// Notes, bank details, signatures, footer.
 	$css .= '.pqd-note{margin-top:10px}.pqd-note h3{margin:0 0 1px;font-size:1em;font-weight:700}.pqd-note p{margin:0}';
@@ -81,7 +84,8 @@ function pq_document_css( $s ) {
 	$css .= '.pqd-banks{margin-top:14px}';
 	$css .= '.pqd-bankgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;padding:0 8px;margin-top:4px}';
 	$css .= '.pqd-bank b{display:block;margin-bottom:1px}.pqd-bank dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:0 10px}.pqd-bank dt{color:var(--pq-muted)}.pqd-bank dd{margin:0}';
-	$css .= '.pqd-sign{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:40px}.pqd-sign div{padding-top:6px;border-top:1px solid var(--pq-ink);color:var(--pq-muted)}';
+	$css .= '.pqd-sign{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:46px}.pqd-sign div{padding-top:6px;border-top:1px solid var(--pq-ink)}';
+	$css .= '.pqd-sign strong{display:block;font-weight:700}.pqd-sign span{display:block;margin-top:1px;color:var(--pq-muted);font-size:.9em}';
 	$css .= '.pqd-foot{margin-top:14px;text-align:center;color:var(--pq-muted);font-size:.9em}';
 
 	// Public toolbar.
@@ -105,7 +109,7 @@ function pq_lines( $text ) {
 	return nl2br( esc_html( $text ) );
 }
 
-/** Replace {days}, {valid_until}, {due_date}, {number} in footer text. */
+/** Replace {days}, {valid_until}, {due_date}, {number} and {company} in footer text. */
 function pq_footer_text( $doc, $s ) {
 	$tpl  = isset( $s['footer'][ $doc['type'] ] ) ? $s['footer'][ $doc['type'] ] : '';
 	$days = '';
@@ -113,11 +117,14 @@ function pq_footer_text( $doc, $s ) {
 		$days = (string) max( 0, (int) round( ( strtotime( $doc['expiry_date'] ) - strtotime( $doc['issue_date'] ) ) / DAY_IN_SECONDS ) );
 	}
 	$until = pq_fmt_date( $doc['expiry_date'], $s );
+	// A footer that talks about a date the document does not have would read "valid until ." - leave it out.
+	if ( '' === $until && preg_match( '/\{(days|valid_until|due_date)\}/', $tpl ) ) { return ''; }
 	return strtr( $tpl, array(
 		'{days}'        => $days,
 		'{valid_until}' => $until,
 		'{due_date}'    => $until,
 		'{number}'      => $doc['number'],
+		'{company}'     => $s['company']['name'],
 	) );
 }
 
@@ -141,108 +148,136 @@ function pq_logo_data( $s, $max_h ) {
 /**
  * The document as flat blocks inside #pqd-root. Without JavaScript they flow as one sheet; the script in
  * pq_paginator_js() lays them onto A4 pages with repeated headings and "Page n / N".
- * $doc must come from pq_doc_prepare().
+ * Every optional part follows pq_doc_show(). $doc must come from pq_doc_prepare().
  */
 function pq_document_body( $doc, $s, $ctx = 'public' ) {
-	$t    = $s['template'];
 	$L    = $s['labels'];
 	$c    = $doc['calc'];
 	$cur  = $doc['currency'];
 	$co   = $s['company'];
 	$cust = $doc['customer'];
-	$is_quote = ( 'quotation' === $doc['type'] );
+	$type = $doc['type'];
+	$show = pq_doc_show( $doc, $s );
 	$m    = function ( $v ) use ( $cur, $s ) { return esc_html( pq_money( $v, $cur, $s ) ); };
+	$kv   = function ( $label, $html ) { return '<dt>' . esc_html( $label ) . ':</dt><dd>' . $html . '</dd>'; };
 
-	$show_disc = false;
-	if ( 'always' === $t['show_discount'] ) {
-		$show_disc = true;
-	} elseif ( 'auto' === $t['show_discount'] ) {
+	$type_label = pq_doc_label( $type, $s );
+	$title      = $type_label . ' ' . $doc['number'];
+	$prices     = $show['prices'];
+	$show_disc  = false;
+	if ( $show['line_discount'] ) {
 		foreach ( $doc['items'] as $it ) { if ( pq_num( $it['discount'] ) > 0 ) { $show_disc = true; break; } }
 	}
-	$show_img  = ! empty( $t['show_image'] );
-	$title     = pq_doc_label( $doc['type'], $s ) . ' ' . $doc['number'];
-	$logo      = pq_logo_data( $s, $t['logo_height'] );
-	$logo_sm   = pq_logo_data( $s, 28 );
-	$customer  = pq_customer_label( $cust );
+	// The image column only appears when at least one item has a picture.
+	if ( $show['images'] ) {
+		$show['images'] = false;
+		foreach ( $doc['items'] as $it ) { if ( ! empty( $it['img_url'] ) ) { $show['images'] = true; break; } }
+	}
+	$logo     = $show['logo'] ? pq_logo_data( $s, $s['template']['logo_height'] ) : null;
+	$logo_sm  = $show['logo'] ? pq_logo_data( $s, 28 ) : null;
+	$customer = pq_customer_label( $cust );
 
 	ob_start();
-	echo '<div id="pqd-root" class="pqd-root" data-meta="' . esc_attr( wp_json_encode( array( 'title' => $title, 'company' => $co['name'], 'who' => $customer, 'page' => 'Page' ) ) ) . '">';
+	echo '<div id="pqd-root" class="pqd-root pqd-t-' . esc_attr( $type ) . '" data-meta="' . esc_attr( wp_json_encode( array( 'title' => $title, 'company' => $co['name'], 'who' => $customer, 'page' => 'Page' ) ) ) . '">';
 	echo '<div class="pqd-flow">';
 
-	/* Header: logo (or name) on the left, document title on the right */
+	/* Header: logo (or name) on the left, document title and number on the right */
 	echo '<header class="pqd-head"><div>';
 	if ( $logo ) {
 		echo '<img class="pqd-logo" src="' . esc_url( $logo['url'] ) . '" width="' . (int) $logo['w'] . '" height="' . (int) $logo['h'] . '" alt="' . esc_attr( $co['name'] ) . '">';
 	} else {
 		echo '<div class="pqd-brandname">' . esc_html( $co['name'] ) . '</div>';
 	}
-	echo '</div><div class="pqd-doc"><h1>' . esc_html( pq_doc_label( $doc['type'], $s ) ) . '</h1>';
-	if ( 'paid' === $doc['status'] && ! $is_quote ) { echo '<div class="pqd-stamp">' . esc_html( $L['paid_stamp'] ) . '</div>'; }
+	echo '</div><div class="pqd-doc"><h1>' . esc_html( $type_label ) . '</h1>';
+	echo '<div class="pqd-docno">' . esc_html( $L['number'] . ' ' . $doc['number'] ) . '</div>';
+	if ( 'paid' === $doc['status'] && pq_type_has_payments( $type ) ) { echo '<div class="pqd-stamp">' . esc_html( $L['paid_stamp'] ) . '</div>'; }
 	echo '</div></header>';
 
-	/* Business and customer on the left, summary on the right */
-	$kv = function ( $label, $html ) { return '<dt>' . esc_html( $label ) . ':</dt><dd>' . $html . '</dd>'; };
-
+	/* Business and customer on the left, document details on the right */
 	echo '<section class="pqd-parties"><div class="pqd-left">';
 
 	echo '<div class="pqd-grp"><p class="pqd-bar">' . esc_html( $L['from'] ) . ':<span>' . esc_html( $co['name'] ) . '</span></p><dl class="pqd-kv">';
-	if ( '' !== $co['address'] ) { echo $kv( $L['address'], pq_lines( $co['address'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
-	foreach ( $co['details'] as $row ) {
-		if ( '' !== trim( $row['value'] ) ) { echo $kv( '' !== trim( $row['label'] ) ? rtrim( trim( $row['label'] ), ':' ) : '', esc_html( $row['value'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+	if ( $show['company_address'] && '' !== $co['address'] ) { echo $kv( $L['address'], pq_lines( $co['address'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+	if ( $show['company_details'] ) {
+		foreach ( $co['details'] as $row ) {
+			if ( '' !== trim( $row['value'] ) ) { echo $kv( '' !== trim( $row['label'] ) ? rtrim( trim( $row['label'] ), ':' ) : '', esc_html( $row['value'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+		}
 	}
-	if ( '' !== $co['phone'] ) { echo $kv( $L['phone'], esc_html( $co['phone'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
-	if ( '' !== $co['email'] ) { echo $kv( $L['email'], esc_html( $co['email'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
-	if ( '' !== $co['website'] ) { echo $kv( $L['web'], esc_html( preg_replace( '#^https?://#', '', untrailingslashit( $co['website'] ) ) ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+	if ( $show['company_contact'] ) {
+		if ( '' !== $co['phone'] ) { echo $kv( $L['phone'], esc_html( $co['phone'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+		if ( '' !== $co['email'] ) { echo $kv( $L['email'], esc_html( $co['email'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+		if ( '' !== $co['website'] ) { echo $kv( $L['web'], esc_html( preg_replace( '#^https?://#', '', untrailingslashit( $co['website'] ) ) ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+	}
 	echo '</dl></div>';
 
 	echo '<div class="pqd-grp"><p class="pqd-bar">' . esc_html( $L['bill_to'] ) . ':';
 	if ( pq_customer_has_data( $cust ) ) {
-		$main = '' !== $cust['company'] ? $cust['company'] : $cust['name'];
-		echo '<span>' . esc_html( $main ) . '</span></p><dl class="pqd-kv">';
-		if ( '' !== $cust['company'] && '' !== $cust['name'] ) { echo $kv( $L['attn'], esc_html( $cust['name'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+		echo '<span>' . esc_html( '' !== $cust['company'] ? $cust['company'] : $cust['name'] ) . '</span>';
+	}
+	echo '</p><dl class="pqd-kv">';
+	if ( '' !== $cust['company'] && '' !== $cust['name'] ) { echo $kv( $L['attn'], esc_html( $cust['name'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+	if ( $show['customer_address'] ) {
 		$addr = array();
 		if ( '' !== $cust['address'] ) { $addr[] = pq_lines( $cust['address'] ); }
 		$place = array_filter( array( trim( $cust['city'] . ' ' . $cust['postcode'] ), $cust['country'] ) );
 		if ( $place ) { $addr[] = esc_html( implode( ', ', $place ) ); }
 		if ( $addr ) { echo $kv( $L['address'], implode( '<br>', $addr ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+	if ( $show['customer_contact'] ) {
 		if ( '' !== $cust['phone'] ) { echo $kv( $L['phone'], esc_html( $cust['phone'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
 		if ( '' !== $cust['email'] ) { echo $kv( $L['email'], esc_html( $cust['email'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
-		if ( '' !== $cust['tax_no'] ) { echo $kv( $L['customer_tax'], esc_html( $cust['tax_no'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
-		if ( '' !== $doc['delivery'] ) { echo $kv( $L['deliver_to'], pq_lines( $doc['delivery'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
-		echo '</dl>';
-	} else {
-		echo '</p><dl class="pqd-kv">';
-		if ( '' !== $doc['delivery'] ) { echo $kv( $L['deliver_to'], pq_lines( $doc['delivery'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
-		echo '</dl>';
 	}
-	echo '</div></div>';
+	if ( $show['customer_tax'] && '' !== $cust['tax_no'] ) { echo $kv( $L['customer_tax'], esc_html( $cust['tax_no'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+	if ( $show['deliver_to'] && '' !== $doc['delivery'] ) { echo $kv( $L['deliver_to'], pq_lines( $doc['delivery'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+	echo '</dl></div></div>';
 
-	echo '<div class="pqd-grp pqd-sum"><p class="pqd-bar">' . esc_html( strtr( $L['summary_title'], array( '{type}' => pq_doc_label( $doc['type'], $s ) ) ) ) . '</p><dl class="pqd-kv">';
+	/* Document details */
+	echo '<div class="pqd-grp pqd-sum"><p class="pqd-bar">' . esc_html( strtr( $L['summary_title'], array( '{type}' => $type_label ) ) ) . '</p><dl class="pqd-kv">';
 	echo $kv( $L['number'], esc_html( $doc['number'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 	echo $kv( $L['date'], esc_html( pq_fmt_date( $doc['issue_date'], $s ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
-	if ( $doc['expiry_date'] ) { echo $kv( $is_quote ? $L['valid_until'] : $L['due_date'], esc_html( pq_fmt_date( $doc['expiry_date'], $s ) ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
-	if ( '' !== $doc['reference'] ) { echo $kv( $L['reference'], esc_html( $doc['reference'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
-	if ( ! empty( $doc['source_number'] ) ) { echo $kv( $L['source'], esc_html( $doc['source_number'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
-	echo '<dt class="is-strong is-first">' . esc_html( $L['total'] ) . ':</dt><dd class="is-strong is-first">' . $m( $c['total'] ) . '</dd>';
-	if ( ! $is_quote ) {
-		echo '<dt>' . esc_html( $L['paid'] ) . ':</dt><dd>' . $m( $c['paid'] ) . '</dd>';
-		echo '<dt class="is-strong">' . esc_html( $L['balance'] ) . ':</dt><dd class="is-strong">' . $m( $c['balance'] ) . '</dd>';
+	if ( $show['expiry'] && $doc['expiry_date'] ) {
+		echo $kv( 'due' === pq_type_expiry( $type ) ? $L['due_date'] : $L['valid_until'], esc_html( pq_fmt_date( $doc['expiry_date'], $s ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+	if ( $show['reference'] && '' !== $doc['reference'] ) { echo $kv( $L['reference'], esc_html( $doc['reference'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+	if ( $show['source_ref'] && ! empty( $doc['source_number'] ) ) {
+		$st = ! empty( $doc['source_type'] ) ? $doc['source_type'] : 'quotation';
+		echo $kv( strtr( $L['source'], array( '{type}' => pq_doc_label( $st, $s ) ) ), esc_html( $doc['source_number'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+	if ( $show['delivery_info'] ) {
+		$di = $doc['delivery_info'];
+		if ( '' !== $di['method'] ) { echo $kv( $L['delivery_method'], esc_html( $di['method'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+		if ( '' !== $di['vehicle'] ) { echo $kv( $L['vehicle'], esc_html( $di['vehicle'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+		if ( '' !== $di['driver'] ) { echo $kv( $L['driver'], esc_html( $di['driver'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+	if ( $show['extra'] ) {
+		foreach ( $doc['extra'] as $x ) {
+			if ( '' !== $x['value'] ) { echo $kv( rtrim( $x['label'], ':' ), esc_html( $x['value'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+		}
+	}
+	if ( $prices ) {
+		echo '<dt class="is-strong is-first">' . esc_html( $L['total'] ) . ':</dt><dd class="is-strong is-first">' . $m( $c['total'] ) . '</dd>';
+		if ( pq_type_has_payments( $type ) ) {
+			echo '<dt>' . esc_html( $L['paid'] ) . ':</dt><dd>' . $m( $c['paid'] ) . '</dd>';
+			echo '<dt class="is-strong">' . esc_html( $L['balance'] ) . ':</dt><dd class="is-strong">' . $m( $c['balance'] ) . '</dd>';
+		}
 	}
 	echo '</dl></div></section>';
 
 	/* Items */
+	$cols = 2 + ( $show['row_numbers'] ? 1 : 0 ) + ( $show['images'] ? 1 : 0 ) + ( $prices ? 2 : 0 ) + ( $show_disc ? 1 : 0 );
 	echo '<table class="pqd-items"><thead><tr>';
-	if ( ! empty( $t['show_numbers'] ) ) { echo '<th class="c-no">' . esc_html( $L['col_no'] ) . '</th>'; }
-	if ( $show_img ) { echo '<th class="c-img"></th>'; }
-	echo '<th>' . esc_html( $L['col_item'] ) . '</th><th class="c-qty">' . esc_html( $L['col_qty'] ) . '</th><th class="c-price">' . esc_html( $L['col_price'] ) . '</th>';
+	if ( $show['row_numbers'] ) { echo '<th class="c-no">' . esc_html( $L['col_no'] ) . '</th>'; }
+	if ( $show['images'] ) { echo '<th class="c-img"></th>'; }
+	echo '<th>' . esc_html( $L['col_item'] ) . '</th><th class="c-qty">' . esc_html( $L['col_qty'] ) . '</th>';
+	if ( $prices ) { echo '<th class="c-price">' . esc_html( $L['col_price'] ) . '</th>'; }
 	if ( $show_disc ) { echo '<th class="c-disc">' . esc_html( $L['col_discount'] ) . '</th>'; }
-	echo '<th class="c-amt">' . esc_html( $L['col_amount'] ) . '</th></tr></thead><tbody>';
-	$cols = 3 + ( ! empty( $t['show_numbers'] ) ? 1 : 0 ) + ( $show_img ? 1 : 0 ) + ( $show_disc ? 1 : 0 );
+	if ( $prices ) { echo '<th class="c-amt">' . esc_html( $L['col_amount'] ) . '</th>'; }
+	echo '</tr></thead><tbody>';
 	if ( ! $doc['items'] ) { echo '<tr><td class="pqd-empty" colspan="' . (int) $cols . '">No items yet</td></tr>'; }
 	foreach ( $doc['items'] as $i => $it ) {
 		echo '<tr>';
-		if ( ! empty( $t['show_numbers'] ) ) { echo '<td class="c-no">' . (int) ( $i + 1 ) . '</td>'; }
-		if ( $show_img ) {
+		if ( $show['row_numbers'] ) { echo '<td class="c-no">' . (int) ( $i + 1 ) . '</td>'; }
+		if ( $show['images'] ) {
 			echo '<td class="c-img">';
 			if ( ! empty( $it['img_url'] ) ) {
 				$u = (string) $it['img_url'];
@@ -251,57 +286,77 @@ function pq_document_body( $doc, $s, $ctx = 'public' ) {
 			echo '</td>';
 		}
 		echo '<td><div class="pqd-item-name">' . esc_html( $it['name'] ) . '</div>';
-		if ( '' !== $it['desc'] ) { echo '<div class="pqd-item-desc">' . pq_lines( $it['desc'] ) . '</div>'; }
-		if ( ! empty( $t['show_sku'] ) && '' !== $it['sku'] ) { echo '<div class="pqd-item-sku">' . esc_html( $L['sku'] ) . ': ' . esc_html( $it['sku'] ) . '</div>'; }
+		if ( $show['item_desc'] && '' !== $it['desc'] ) { echo '<div class="pqd-item-desc">' . pq_lines( $it['desc'] ) . '</div>'; }
+		if ( $show['sku'] && '' !== $it['sku'] ) { echo '<div class="pqd-item-sku">' . esc_html( $L['sku'] ) . ': ' . esc_html( $it['sku'] ) . '</div>'; }
 		echo '</td><td class="c-qty">' . esc_html( pq_qty( $it['qty'] ) );
-		if ( ! empty( $t['show_unit'] ) && '' !== $it['unit'] ) { echo '<span class="pqd-unit">' . esc_html( $it['unit'] ) . '</span>'; }
-		echo '</td><td class="c-price">' . ( '' === $it['price'] ? '-' : $m( $it['price'] ) ) . '</td>';
-		if ( $show_disc ) { echo '<td class="c-disc">' . ( pq_num( $it['discount'] ) > 0 ? esc_html( pq_qty( $it['discount'] ) ) . '%' : '' ) . '</td>'; }
-		echo '<td class="c-amt">' . $m( $c['lines'][ $i ] ) . '</td></tr>';
+		if ( $show['unit'] && '' !== $it['unit'] ) { echo '<span class="pqd-unit">' . esc_html( $it['unit'] ) . '</span>'; }
+		echo '</td>';
+		if ( $prices ) { echo '<td class="c-price">' . ( '' === $it['price'] ? '-' : $m( $it['price'] ) ) . '</td>'; }
+		if ( $show_disc ) {
+			$dv = pq_num( $it['discount'] );
+			$dt = $dv <= 0 ? '' : ( 'fixed' === $it['disc_type'] ? $m( $dv ) : esc_html( pq_qty( $dv ) ) . '%' );
+			echo '<td class="c-disc">' . $dt . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		}
+		if ( $prices ) { echo '<td class="c-amt">' . $m( $c['lines'][ $i ] ) . '</td>'; }
+		echo '</tr>';
 	}
 	echo '</tbody></table>';
 
-	/* Totals and payments */
-	echo '<div class="pqd-sumrow"><div class="pqd-payments">';
-	if ( ! $is_quote && $doc['payments'] ) {
-		echo '<h3>Payments received</h3><table>';
-		foreach ( $doc['payments'] as $p ) {
-			$what = trim( pq_fmt_date( $p['date'], $s ) . ( '' !== $p['method'] ? ' - ' . $p['method'] : '' ) );
-			echo '<tr><td>' . esc_html( $what ) . '</td><td>' . $m( $p['amount'] ) . '</td></tr>';
+	/* Totals, payments and amount in words */
+	$pays = $show['payments'] && $doc['payments'];
+	if ( $prices || $pays ) {
+		echo '<div class="pqd-sumrow"><div class="pqd-payments">';
+		if ( $pays ) {
+			echo '<h3>' . esc_html( $L['payments'] ) . '</h3><table>';
+			foreach ( $doc['payments'] as $p ) {
+				$what = trim( pq_fmt_date( $p['date'], $s ) . ( '' !== $p['method'] ? ' - ' . $p['method'] : '' ) );
+				echo '<tr><td>' . esc_html( $what ) . '</td><td>' . $m( $p['amount'] ) . '</td></tr>';
+			}
+			echo '</table>';
 		}
-		echo '</table>';
+		echo '</div>';
+		if ( $prices ) {
+			echo '<table class="pqd-totals">';
+			echo '<tr><td>' . esc_html( $L['subtotal'] ) . '</td><td>' . $m( $c['subtotal'] ) . '</td></tr>';
+			if ( $c['discount'] > 0 ) {
+				$dl = '' !== $doc['discount']['label'] ? $doc['discount']['label'] : $L['discount'];
+				if ( 'percent' === $doc['discount']['type'] ) { $dl .= ' (' . pq_qty( $doc['discount']['value'] ) . '%)'; }
+				echo '<tr><td>' . esc_html( $dl ) . '</td><td>-' . $m( $c['discount'] ) . '</td></tr>';
+			}
+			if ( $c['shipping'] > 0 ) { echo '<tr><td>' . esc_html( $L['shipping'] ) . '</td><td>' . $m( $c['shipping'] ) . '</td></tr>'; }
+			if ( 'none' !== $doc['tax']['mode'] && pq_num( $doc['tax']['rate'] ) > 0 ) {
+				$tl = $doc['tax']['label'] . ' (' . pq_qty( $doc['tax']['rate'] ) . '%)';
+				if ( 'inclusive' === $doc['tax']['mode'] ) { $tl .= ' included'; }
+				echo '<tr><td>' . esc_html( $tl ) . '</td><td>' . $m( $c['tax'] ) . '</td></tr>';
+			}
+			echo '<tr class="t-total"><td>' . esc_html( $L['total'] ) . '</td><td>' . $m( $c['total'] ) . '</td></tr>';
+			if ( pq_type_has_payments( $type ) && $c['paid'] > 0 ) {
+				echo '<tr><td>' . esc_html( $L['paid'] ) . '</td><td>-' . $m( $c['paid'] ) . '</td></tr>';
+				echo '<tr class="t-due"><td>' . esc_html( $L['balance'] ) . '</td><td>' . $m( $c['balance'] ) . '</td></tr>';
+			}
+			echo '</table>';
+		}
+		echo '</div>';
+		if ( $show['amount_words'] && $c['total'] > 0 ) {
+			echo '<p class="pqd-words"><span>' . esc_html( $L['amount_words'] ) . ':</span> ' . esc_html( pq_amount_in_words( $c['total'], $cur, $s ) ) . '</p>';
+		}
 	}
-	echo '</div><table class="pqd-totals">';
-	echo '<tr><td>' . esc_html( $L['subtotal'] ) . '</td><td>' . $m( $c['subtotal'] ) . '</td></tr>';
-	if ( $c['discount'] > 0 ) {
-		$dl = $L['discount'];
-		if ( 'percent' === $doc['discount']['type'] ) { $dl .= ' (' . pq_qty( $doc['discount']['value'] ) . '%)'; }
-		echo '<tr><td>' . esc_html( $dl ) . '</td><td>-' . $m( $c['discount'] ) . '</td></tr>';
-	}
-	if ( $c['shipping'] > 0 ) { echo '<tr><td>' . esc_html( $L['shipping'] ) . '</td><td>' . $m( $c['shipping'] ) . '</td></tr>'; }
-	if ( 'none' !== $doc['tax']['mode'] && pq_num( $doc['tax']['rate'] ) > 0 ) {
-		$tl = $doc['tax']['label'] . ' (' . pq_qty( $doc['tax']['rate'] ) . '%)';
-		if ( 'inclusive' === $doc['tax']['mode'] ) { $tl .= ' included'; }
-		echo '<tr><td>' . esc_html( $tl ) . '</td><td>' . $m( $c['tax'] ) . '</td></tr>';
-	}
-	echo '<tr class="t-total"><td>' . esc_html( $L['total'] ) . '</td><td>' . $m( $c['total'] ) . '</td></tr>';
-	if ( ! $is_quote && $c['paid'] > 0 ) {
-		echo '<tr><td>' . esc_html( $L['paid'] ) . '</td><td>-' . $m( $c['paid'] ) . '</td></tr>';
-		echo '<tr class="t-due"><td>' . esc_html( $L['balance'] ) . '</td><td>' . $m( $c['balance'] ) . '</td></tr>';
-	}
-	echo '</table></div>';
 
 	/* Terms and notes: one block each, so a page break never cuts through one */
-	foreach ( $doc['blocks'] as $b ) {
-		echo '<div class="pqd-note' . ( 'highlight' === $b['style'] ? ' is-hl' : '' ) . '">';
-		if ( '' !== $b['title'] ) { echo '<h3>' . esc_html( $b['title'] ) . '</h3>'; }
-		if ( '' !== $b['body'] ) { echo '<p>' . pq_lines( $b['body'] ) . '</p>'; }
-		echo '</div>';
+	if ( $show['terms'] ) {
+		foreach ( $doc['blocks'] as $b ) {
+			echo '<div class="pqd-note' . ( 'highlight' === $b['style'] ? ' is-hl' : '' ) . '">';
+			if ( '' !== $b['title'] ) { echo '<h3>' . esc_html( $b['title'] ) . '</h3>'; }
+			if ( '' !== $b['body'] ) { echo '<p>' . pq_lines( $b['body'] ) . '</p>'; }
+			echo '</div>';
+		}
 	}
 
 	/* Bank details */
 	$banks = array();
-	foreach ( $s['banks'] as $b ) { if ( in_array( $b['id'], $doc['banks'], true ) ) { $banks[] = $b; } }
+	if ( $show['banks'] ) {
+		foreach ( $s['banks'] as $b ) { if ( in_array( $b['id'], $doc['banks'], true ) ) { $banks[] = $b; } }
+	}
 	if ( $banks ) {
 		echo '<section class="pqd-banks"><p class="pqd-bar">' . esc_html( $L['bank'] ) . ':</p><div class="pqd-bankgrid">';
 		foreach ( $banks as $b ) {
@@ -317,10 +372,17 @@ function pq_document_body( $doc, $s, $ctx = 'public' ) {
 		echo '</div></section>';
 	}
 
-	if ( ! empty( $t['show_signature'] ) ) {
-		echo '<section class="pqd-sign"><div>' . esc_html( $L['signature_company'] ) . '</div><div>' . esc_html( $L['signature_customer'] ) . '</div></section>';
+	/* Signatures: who signs depends on the type */
+	if ( $show['signature'] ) {
+		$pair = array( $L['signature_company'], 'quotation' === $type ? $L['signature_customer'] : $L['signature_buyer'] );
+		if ( 'delivery' === $type ) { $pair = array( $L['signature_delivered'], $L['signature_received'] ); }
+		echo '<section class="pqd-sign">';
+		foreach ( $pair as $who ) {
+			echo '<div><strong>' . esc_html( $who ) . '</strong><span>' . esc_html( $L['signature_hint'] ) . '</span></div>';
+		}
+		echo '</section>';
 	}
-	$foot = trim( pq_footer_text( $doc, $s ) );
+	$foot = $show['footer'] ? trim( pq_footer_text( $doc, $s ) ) : '';
 	if ( '' !== $foot ) { echo '<footer class="pqd-foot">' . pq_lines( $foot ) . '</footer>'; }
 	echo '</div>'; // .pqd-flow
 
@@ -439,9 +501,11 @@ function pq_document_html( $doc, $s = null, $ctx = 'public' ) {
 }
 
 /** A realistic sample document for the template preview in settings. */
-function pq_sample_doc( $s ) {
-	$d = pq_blank_doc( 'quotation', $s, false );
-	$d['number']   = $s['numbering']['quotation']['prefix'] . ( $s['numbering']['quotation']['pad'] ? str_pad( (string) $s['numbering']['quotation']['next'], (int) $s['numbering']['quotation']['pad'], '0', STR_PAD_LEFT ) : (string) $s['numbering']['quotation']['next'] );
+function pq_sample_doc( $s, $type = 'quotation' ) {
+	$type = isset( pq_types()[ $type ] ) ? $type : 'quotation';
+	$d    = pq_blank_doc( $type, $s, false );
+	$n    = $s['numbering'][ $type ];
+	$d['number']   = $n['prefix'] . ( $n['pad'] ? str_pad( (string) $n['next'], (int) $n['pad'], '0', STR_PAD_LEFT ) : (string) $n['next'] );
 	$d['customer'] = array_merge( pq_blank_customer(), array(
 		'name'    => 'Mr. Nuwan',
 		'company' => 'Fushifaru Resort',
@@ -457,5 +521,17 @@ function pq_sample_doc( $s ) {
 		array_merge( pq_blank_item(), array( 'name' => 'Electric Flat Grill with Groove 550x400x230mm', 'desc' => '220V, 50Hz, 3kW', 'sku' => 'EFG-550G', 'qty' => 1, 'unit' => 'Pcs', 'price' => 400, 'img_url' => $ph ) ),
 	);
 	$d['reference'] = 'PO-2026-118';
+	if ( 'quotation' !== $type ) {
+		$d['source_type']   = 'quotation';
+		$d['source_number'] = $s['numbering']['quotation']['prefix'] . $s['numbering']['quotation']['next'];
+	}
+	if ( 'invoice' === $type ) {
+		$d['payments'] = array( array( 'date' => pq_today(), 'amount' => 600, 'method' => 'Bank transfer', 'note' => '' ) );
+		$d['status']   = 'partial';
+	}
+	if ( 'delivery' === $type ) {
+		$d['delivery']      = 'Fushifaru Resort, Lhaviyani Atoll';
+		$d['delivery_info'] = array( 'method' => 'Sea freight', 'vehicle' => 'Boat FS-12', 'driver' => 'Ahmed' );
+	}
 	return $d;
 }

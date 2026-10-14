@@ -50,7 +50,7 @@ add_action( 'wp_ajax_pq_preview', function () {
 		$s = pq_sanitize_settings( isset( $arr['pq_settings'] ) ? $arr['pq_settings'] : array() );
 	}
 	if ( ! empty( $_POST['sample'] ) ) {
-		$doc = pq_sample_doc( $s );
+		$doc = pq_sample_doc( $s, isset( $_POST['sample_type'] ) ? sanitize_key( wp_unslash( $_POST['sample_type'] ) ) : 'quotation' ); // phpcs:ignore
 	} else {
 		$doc = pq_normalize_doc( pq_post_json( 'doc' ), $s );
 		if ( '' === $doc['number'] ) { $doc['number'] = '(number assigned on save)'; }
