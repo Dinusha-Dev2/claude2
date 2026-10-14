@@ -134,7 +134,7 @@ function pq_logo_data( $s, $max_h ) {
 	if ( ! $src || empty( $src[1] ) || empty( $src[2] ) ) { return null; }
 	$h = min( (int) $src[2], (int) $max_h );
 	$w = (int) round( $src[1] * $h / $src[2] );
-	if ( $w > 260 ) { $h = (int) round( $h * 260 / $w ); $w = 260; }
+	if ( $w > 420 ) { $h = (int) round( $h * 420 / $w ); $w = 420; }
 	return array( 'url' => $src[0], 'w' => max( 1, $w ), 'h' => max( 1, $h ) );
 }
 

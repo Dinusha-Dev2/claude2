@@ -190,7 +190,7 @@ function pq_default_settings() {
 			'accent'         => '#1a1a1a',
 			'font'           => 'arial',
 			'size'           => 'regular',
-			'logo_height'    => 54,
+			'logo_height'    => 90,
 			'img_size'       => 48,
 			'show_numbers'   => 1,
 			'show_image'     => 1,
