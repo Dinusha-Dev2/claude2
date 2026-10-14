@@ -1,7 +1,7 @@
 === PMT Quotations & Invoices ===
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.6.0
+Stable tag: 1.6.1
 License: GPLv2 or later
 
 Quotations, proforma invoices, tax invoices and delivery notes for PMT Asia, with saved customers, a WooCommerce product picker, custom items with images, payment tracking and a customisable template.
@@ -16,6 +16,12 @@ Quotations, proforma invoices, tax invoices and delivery notes for PMT Asia, wit
 * Prices are not converted between currencies. Store prices are only filled in when the quote currency matches the store currency.
 
 == Changelog ==
+= 1.6.1 =
+* Every series counts on its own from its own saved documents: the next number is the highest saved number of that type plus one (QT-0002 after QT-0001, TXI-0002 after TXI-0001). Other types, and old PMT- or INV- numbers, never affect it.
+* A number is only used when a document is saved. "Create tax invoice", "Create delivery note", "Duplicate" and so on now open an unsaved draft; nothing is stored until you click Save, and the original is marked converted at that moment.
+* Deleting the last document of a series frees its number again.
+* Settings > Numbers and dates: "Next number" is now "Start at" (the first number of a series) and the table shows the next new number for each type.
+
 = 1.6.0 =
 * New numbering, one series per type, each starting at 0001: QT-0001 (quotation), PI-0001 (proforma invoice), TXI-0001 (tax invoice), DN-0001 (delivery note). Existing documents keep their numbers; numbers already used are always skipped.
 * Separate pages for each type under Quotes & Invoices: Quotations, Proforma invoices, Tax invoices and Delivery notes. Each has its own title, status cards with totals, status filter and "New ..." button. All documents is still there.

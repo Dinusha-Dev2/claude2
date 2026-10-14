@@ -13,6 +13,9 @@ function pq_maybe_upgrade() {
 	if ( '' !== $from && version_compare( $from, '1.6.0', '<' ) ) {
 		pq_upgrade_to_160();
 	}
+	if ( '' !== $from && version_compare( $from, '1.6.1', '<' ) ) {
+		pq_upgrade_to_161();
+	}
 	if ( PQ_VERSION !== $from ) {
 		update_option( 'pq_version', PQ_VERSION, false );
 	}
@@ -86,6 +89,17 @@ function pq_upgrade_to_160() {
 	foreach ( $new as $type => $prefix ) {
 		// Numbers already used are skipped when the next one is worked out, so restarting at 1 never clashes.
 		$raw['numbering'][ $type ] = array( 'prefix' => $prefix, 'next' => 1, 'pad' => 4 );
+	}
+	update_option( 'pq_settings', $raw, false );
+	pq_settings( true );
+}
+
+/** 1.6.1: numbers follow the saved documents of each type, so the old running counters become "start at 1". */
+function pq_upgrade_to_161() {
+	$raw = get_option( 'pq_settings', array() );
+	if ( ! is_array( $raw ) || empty( $raw['numbering'] ) || ! is_array( $raw['numbering'] ) ) { return; }
+	foreach ( $raw['numbering'] as $type => $n ) {
+		if ( is_array( $n ) ) { $raw['numbering'][ $type ]['next'] = 1; }
 	}
 	update_option( 'pq_settings', $raw, false );
 	pq_settings( true );

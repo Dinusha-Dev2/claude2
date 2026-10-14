@@ -1092,7 +1092,8 @@
 	renderSummary();
 	renderBar();
 	renderLinks();
-	if (C.notice === 'duplicated') { toast('Duplicated. This is a new draft.'); }
-	if (C.notice === 'converted') { toast('Created from ' + typeLabel(S.source_type || 'quotation').toLowerCase() + ' ' + (S.source_number || '') + '. Review it, then save.'); }
+	// Converted or duplicated documents arrive unsaved: nothing is stored and no number is used until Save.
+	if (C.notice === 'duplicated' && !S.id) { toast('Copy ready. It is not saved yet: review it, then click Save.'); dirty = true; $('#pq-dirty').prop('hidden', false); }
+	if (C.notice === 'converted' && !S.id) { toast('New ' + typeLabel().toLowerCase() + ' from ' + typeLabel(S.source_type || 'quotation').toLowerCase() + ' ' + (S.source_number || '') + '. It is not saved yet: review it, then click Save.'); dirty = true; $('#pq-dirty').prop('hidden', false); }
 	schedulePreview(100);
 }(jQuery));

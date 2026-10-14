@@ -821,11 +821,37 @@ function pq_number_exists( $number, $exclude = 0 ) {
 	return (bool) $id;
 }
 
-/** Next free number for a type. Returns array( 'PMT-14617', 14617 ). */
+/** Highest number saved in a series, e.g. 7 when TXI-0007 is the last tax invoice. Trashed documents do not count. */
+function pq_highest_number( $type, $s = null ) {
+	global $wpdb;
+	$s      = $s ? $s : pq_settings();
+	$prefix = (string) $s['numbering'][ $type ]['prefix'];
+	$rows   = $wpdb->get_col( $wpdb->prepare(
+		"SELECT m.meta_value FROM {$wpdb->postmeta} m
+		 INNER JOIN {$wpdb->posts} p ON p.ID = m.post_id
+		 INNER JOIN {$wpdb->postmeta} t ON t.post_id = p.ID AND t.meta_key = '_pq_type' AND t.meta_value = %s
+		 WHERE m.meta_key = '_pq_number' AND m.meta_value LIKE %s
+		 AND p.post_type = %s AND p.post_status NOT IN ('trash','auto-draft')",
+		$type, $wpdb->esc_like( $prefix ) . '%', PQ_CPT
+	) );
+	$max = 0;
+	foreach ( (array) $rows as $v ) {
+		$rest = substr( (string) $v, strlen( $prefix ) );
+		if ( '' !== $rest && ctype_digit( $rest ) ) { $max = max( $max, (int) $rest ); }
+	}
+	return $max;
+}
+
+/**
+ * Next number for a type. Every series runs on its own: it continues from its own highest
+ * saved number (QT-0002 after QT-0001), never from another type, and never counts a number
+ * that was not saved. "Start at" in the settings sets the first number of a series.
+ * Returns array( 'QT-0002', 2 ).
+ */
 function pq_next_number( $type, $s = null ) {
 	$s   = $s ? $s : pq_settings();
 	$n   = $s['numbering'][ $type ];
-	$num = max( 1, (int) $n['next'] );
+	$num = max( max( 1, (int) $n['next'] ), pq_highest_number( $type, $s ) + 1 );
 	$guard = 0;
 	do {
 		$number = $n['prefix'] . ( $n['pad'] ? str_pad( (string) $num, (int) $n['pad'], '0', STR_PAD_LEFT ) : (string) $num );
@@ -836,21 +862,6 @@ function pq_next_number( $type, $s = null ) {
 	return array( $number, $num );
 }
 
-/** Move the counter past a number that was just used. */
-function pq_bump_number( $type, $used ) {
-	$raw = get_option( 'pq_settings', array() );
-	$raw = is_array( $raw ) ? $raw : array();
-	$cur = pq_settings();
-	$next = max( (int) $cur['numbering'][ $type ]['next'], (int) $used + 1 );
-	if ( ! isset( $raw['numbering'] ) || ! is_array( $raw['numbering'] ) ) { $raw['numbering'] = array(); }
-	$raw['numbering'][ $type ] = array(
-		'prefix' => $cur['numbering'][ $type ]['prefix'],
-		'next'   => $next,
-		'pad'    => $cur['numbering'][ $type ]['pad'],
-	);
-	update_option( 'pq_settings', $raw, false );
-	pq_settings( true );
-}
 
 /* ------------------------------------------------------------------ */
 /* Totals                                                              */

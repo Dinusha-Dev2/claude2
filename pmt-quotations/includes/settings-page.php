@@ -132,9 +132,9 @@ function pq_render_settings_page() {
 		<section class="pq-pane" data-pane="numbering" hidden>
 			<div class="pq-card">
 				<h2>Document numbers</h2>
-				<p class="description">Each type has its own series. The next number is used for the next new document.</p>
+				<p class="description">Each type has its own series and counts on its own: a new document gets the next number after the highest one already saved of that type (QT-0002 after QT-0001). A number is only used when a document is saved, and deleting the last document frees its number again.</p>
 				<table class="pq-numtable">
-					<thead><tr><th>Type</th><th>Prefix</th><th>Next number</th><th>Digits</th></tr></thead>
+					<thead><tr><th>Type</th><th>Prefix</th><th>Start at</th><th>Digits</th><th>Next new number</th></tr></thead>
 					<tbody>
 					<?php foreach ( pq_types() as $t => $label ) : ?>
 						<tr>
@@ -142,11 +142,12 @@ function pq_render_settings_page() {
 							<td><input type="text" size="8" name="<?php echo esc_attr( pq_n( array( 'numbering', $t, 'prefix' ) ) ); ?>" value="<?php echo esc_attr( $s['numbering'][ $t ]['prefix'] ); ?>"></td>
 							<td><input type="number" min="1" class="small-text" name="<?php echo esc_attr( pq_n( array( 'numbering', $t, 'next' ) ) ); ?>" value="<?php echo (int) $s['numbering'][ $t ]['next']; ?>"></td>
 							<td><input type="number" min="0" max="10" class="small-text" name="<?php echo esc_attr( pq_n( array( 'numbering', $t, 'pad' ) ) ); ?>" value="<?php echo (int) $s['numbering'][ $t ]['pad']; ?>"></td>
+							<td><strong><?php echo esc_html( pq_next_number( $t, $s )[0] ); ?></strong></td>
 						</tr>
 					<?php endforeach; ?>
 					</tbody>
 				</table>
-				<p class="description">Digits pads the number with zeros: 4 digits makes INV-0001. Use 0 for no padding.</p>
+				<p class="description">Digits pads the number with zeros: 4 digits makes TXI-0001. "Start at" is the first number of a series, for example 1, or 501 to continue from an old system.</p>
 			</div>
 			<div class="pq-card">
 				<h2>Defaults for new documents</h2>

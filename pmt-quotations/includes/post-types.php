@@ -210,20 +210,20 @@ function pq_admin_post_guard( $action ) {
 	return $id;
 }
 
+/* Both open a new, unsaved draft in the editor. Its number is only taken when it is saved. */
 add_action( 'admin_post_pq_duplicate_doc', function () {
-	$id  = pq_admin_post_guard( 'pq_duplicate_doc' );
-	$res = pq_duplicate_document( $id );
-	if ( is_wp_error( $res ) ) { wp_die( esc_html( $res->get_error_message() ) ); }
-	wp_safe_redirect( pq_editor_url( $res['id'], array( 'notice' => 'duplicated' ) ) );
+	$id = pq_admin_post_guard( 'pq_duplicate_doc' );
+	if ( ! pq_get_doc( $id ) ) { wp_die( 'Document not found.' ); }
+	wp_safe_redirect( pq_editor_url( 0, array( 'dup' => $id, 'notice' => 'duplicated' ) ) );
 	exit;
 } );
 
 add_action( 'admin_post_pq_convert_doc', function () {
-	$id = pq_admin_post_guard( 'pq_convert_doc' );
-	$to = isset( $_GET['to'] ) ? sanitize_key( wp_unslash( $_GET['to'] ) ) : 'invoice';
-	$res = pq_convert_document( $id, $to );
-	if ( is_wp_error( $res ) ) { wp_die( esc_html( $res->get_error_message() ) ); }
-	wp_safe_redirect( pq_editor_url( $res['id'], array( 'notice' => 'converted' ) ) );
+	$id  = pq_admin_post_guard( 'pq_convert_doc' );
+	$to  = isset( $_GET['to'] ) ? sanitize_key( wp_unslash( $_GET['to'] ) ) : 'invoice';
+	$new = pq_build_conversion( $id, $to );
+	if ( is_wp_error( $new ) ) { wp_die( esc_html( $new->get_error_message() ) ); }
+	wp_safe_redirect( pq_editor_url( 0, array( 'from' => $id, 'to' => $to, 'notice' => 'converted' ) ) );
 	exit;
 } );
 

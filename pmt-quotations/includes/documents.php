@@ -357,7 +357,7 @@ function pq_save_document( $raw, $id = 0 ) {
 	$s   = pq_settings();
 	$d   = pq_normalize_doc( $raw, $s );
 	$id  = absint( $id );
-	$bump = 0;
+	$is_new = ! $id;
 
 	if ( $id ) {
 		$existing = get_post( $id );
@@ -371,12 +371,12 @@ function pq_save_document( $raw, $id = 0 ) {
 		$old_type = get_post_meta( $id, '_pq_type', true );
 		if ( $old_type && $old_type !== $d['type'] && get_post_meta( $id, '_pq_number', true ) === $d['number'] ) {
 			// Type changed: give it a number from the new series unless the user typed one.
-			list( $d['number'], $bump_num ) = pq_next_number( $d['type'], $s );
-			$bump = $bump_num;
+			$d['number'] = pq_next_number( $d['type'], $s )[0];
 		}
 	} else {
+		// The number shown in the editor is only a preview; the real one is taken now, at save time.
 		if ( '' === $d['number'] || $d['number_auto'] ) {
-			list( $d['number'], $bump ) = pq_next_number( $d['type'], $s );
+			$d['number'] = pq_next_number( $d['type'], $s )[0];
 		} elseif ( pq_number_exists( $d['number'] ) ) {
 			return new WP_Error( 'pq_number', 'That document number is already used. Choose a different number.' );
 		}
@@ -437,7 +437,9 @@ function pq_save_document( $raw, $id = 0 ) {
 	if ( ! get_post_meta( $id, '_pq_key', true ) ) {
 		update_post_meta( $id, '_pq_key', wp_generate_password( 32, false, false ) );
 	}
-	if ( $bump ) { pq_bump_number( $d['type'], $bump ); }
+	if ( $is_new && $d['source_id'] && PQ_CPT === get_post_type( $d['source_id'] ) ) {
+		pq_mark_source_converted( $d['source_id'], $d['type'], $id );
+	}
 
 	$saved = pq_get_doc( $id );
 	return array( 'id' => $id, 'doc' => $saved );
@@ -447,7 +449,11 @@ function pq_save_document( $raw, $id = 0 ) {
 /* Convert and duplicate                                               */
 /* ------------------------------------------------------------------ */
 
-function pq_convert_document( $id, $target ) {
+/**
+ * A new, unsaved document made from another one. Nothing is stored and no number is used
+ * until it is saved; the editor shows it as a draft to review.
+ */
+function pq_build_conversion( $id, $target ) {
 	$src = pq_get_doc( $id );
 	if ( ! $src ) { return new WP_Error( 'pq_missing', 'Document not found.' ); }
 	if ( ! in_array( $target, pq_convert_targets( $src['type'] ), true ) ) {
@@ -458,7 +464,7 @@ function pq_convert_document( $id, $target ) {
 	$new['id']            = 0;
 	$new['type']          = $target;
 	$new['status']        = 'draft';
-	$new['number']        = '';
+	$new['number']        = pq_next_number( $target, $s )[0];
 	$new['number_auto']   = true;
 	$new['issue_date']    = pq_today();
 	$new['expiry_date']   = pq_type_expiry( $target ) ? pq_date_plus( pq_type_days( $target, $s ) ) : '';
@@ -470,30 +476,42 @@ function pq_convert_document( $id, $target ) {
 	$new['source_type']   = $src['type'];
 	$new['save_customer'] = false;
 	if ( 'delivery' === $target || 'delivery' === $src['type'] ) { $new['blocks'] = pq_blocks_for_type( $target, $s ); }
-	$res = pq_save_document( $new, 0 );
-	if ( is_wp_error( $res ) ) { return $res; }
-	// A quotation is done once converted; a proforma is done once it becomes the tax invoice.
-	if ( 'quotation' === $src['type'] || ( 'proforma' === $src['type'] && 'invoice' === $target ) ) {
-		$src['status'] = 'converted';
-		update_post_meta( $id, '_pq_status', 'converted' );
-		$stored = get_post_meta( $id, '_pq_data', true );
-		if ( is_array( $stored ) ) {
-			$stored['status'] = 'converted';
-			update_post_meta( $id, '_pq_data', wp_slash( $stored ) );
-		}
-	}
-	update_post_meta( $id, '_pq_converted_to', (int) $res['id'] );
-	return $res;
+	return $new;
 }
 
-function pq_duplicate_document( $id ) {
+/** Make and save a converted document in one go (used by code; the screens save from the editor). */
+function pq_convert_document( $id, $target ) {
+	$new = pq_build_conversion( $id, $target );
+	return is_wp_error( $new ) ? $new : pq_save_document( $new, 0 );
+}
+
+/**
+ * Once a document made from another is saved for the first time: a quotation is done
+ * whatever it became, and a proforma is done once it becomes the tax invoice.
+ */
+function pq_mark_source_converted( $src_id, $new_type, $new_id ) {
+	$src_type = (string) get_post_meta( $src_id, '_pq_type', true );
+	if ( ! $src_type ) { return; }
+	if ( 'quotation' === $src_type || ( 'proforma' === $src_type && 'invoice' === $new_type ) ) {
+		update_post_meta( $src_id, '_pq_status', 'converted' );
+		$stored = get_post_meta( $src_id, '_pq_data', true );
+		if ( is_array( $stored ) ) {
+			$stored['status'] = 'converted';
+			update_post_meta( $src_id, '_pq_data', wp_slash( $stored ) );
+		}
+	}
+	update_post_meta( $src_id, '_pq_converted_to', (int) $new_id );
+}
+
+/** An unsaved copy of a document, as a new draft of the same type. */
+function pq_build_duplicate( $id ) {
 	$src = pq_get_doc( $id );
 	if ( ! $src ) { return new WP_Error( 'pq_missing', 'Document not found.' ); }
 	$s   = pq_settings();
 	$new = $src;
 	$new['id']            = 0;
 	$new['status']        = 'draft';
-	$new['number']        = '';
+	$new['number']        = pq_next_number( $src['type'], $s )[0];
 	$new['number_auto']   = true;
 	$new['issue_date']    = pq_today();
 	$new['expiry_date']   = pq_type_expiry( $src['type'] ) ? pq_date_plus( pq_type_days( $src['type'], $s ) ) : '';
@@ -503,7 +521,12 @@ function pq_duplicate_document( $id ) {
 	$new['source_type']   = '';
 	$new['rfq_id']        = 0;
 	$new['save_customer'] = false;
-	return pq_save_document( $new, 0 );
+	return $new;
+}
+
+function pq_duplicate_document( $id ) {
+	$new = pq_build_duplicate( $id );
+	return is_wp_error( $new ) ? $new : pq_save_document( $new, 0 );
 }
 
 /* ------------------------------------------------------------------ */

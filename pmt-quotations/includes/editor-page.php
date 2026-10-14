@@ -60,6 +60,14 @@ function pq_editor_boot() {
 		if ( ! empty( $_GET['from_rfq'] ) ) { // phpcs:ignore
 			$doc = pq_prefill_from_rfq( $doc, absint( $_GET['from_rfq'] ) ); // phpcs:ignore
 		}
+		// Converted or duplicated: an unsaved draft, built fresh from the original.
+		if ( ! empty( $_GET['from'] ) && ! empty( $_GET['to'] ) ) { // phpcs:ignore
+			$built = pq_build_conversion( absint( $_GET['from'] ), sanitize_key( wp_unslash( $_GET['to'] ) ) ); // phpcs:ignore
+			if ( ! is_wp_error( $built ) ) { $doc = $built; }
+		} elseif ( ! empty( $_GET['dup'] ) ) { // phpcs:ignore
+			$built = pq_build_duplicate( absint( $_GET['dup'] ) ); // phpcs:ignore
+			if ( ! is_wp_error( $built ) ) { $doc = $built; }
+		}
 	}
 
 	$banks = array();
@@ -138,7 +146,7 @@ function pq_render_editor_page() {
 			<div class="pq-bar-title">
 				<?php
 				$back_id   = isset( $_GET['doc'] ) ? absint( $_GET['doc'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
-				$back_type = $back_id ? (string) get_post_meta( $back_id, '_pq_type', true ) : ( isset( $_GET['type'] ) ? sanitize_key( wp_unslash( $_GET['type'] ) ) : 'quotation' ); // phpcs:ignore
+				$back_type = $back_id ? (string) get_post_meta( $back_id, '_pq_type', true ) : ( isset( $_GET['to'] ) ? sanitize_key( wp_unslash( $_GET['to'] ) ) : ( isset( $_GET['type'] ) ? sanitize_key( wp_unslash( $_GET['type'] ) ) : 'quotation' ) ); // phpcs:ignore
 				$back_type = isset( pq_types()[ $back_type ] ) ? $back_type : 'quotation';
 				?>
 				<a class="pq-back" href="<?php echo esc_url( admin_url( pq_list_url( $back_type ) ) ); ?>"><?php echo esc_html( pq_type_plural( $back_type ) ); ?></a>
