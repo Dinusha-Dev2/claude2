@@ -1,0 +1,1186 @@
+<div>
+<section class="howit">
+
+
+
+
+
+<style>
+
+/* ══════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:#fff;color:#071527;
+     -webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* ══════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════ */
+:root{
+  --navy:    #071527;
+  --navy2:   #0c1e30;
+  --teal:    #0e9aaa;
+  --tealb:   #12c8d8;
+  --teald:   #0b7d8c;
+  --teal-5:  rgba(14,154,170,.05);
+  --teal-10: rgba(14,154,170,.10);
+  --amber:   #f5a623;
+  --amberd:  #d9870c;
+  --cream:   #faf7f2;
+  --cream2:  #f3ede3;
+  --white:   #ffffff;
+  --ink:     #071527;
+  --ink2:    #1a3040;
+  --muted:   #556070;
+  --muted2:  #8494a6;
+  --border:  #e4e8ed;
+  --border2: #edf0f4;
+  --ease:    cubic-bezier(.4,0,.2,1);
+  --spring:  cubic-bezier(.34,1.56,.64,1);
+  --reveal:  cubic-bezier(.16,1,.3,1);
+}
+
+/* ══════════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════════ */
+@keyframes fadeUp    {from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes fadeIn    {from{opacity:0}to{opacity:1}}
+@keyframes lineH     {from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes lineV     {from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes spinDia   {to{transform:rotate(calc(45deg + 360deg))}}
+@keyframes pulseRing {0%{box-shadow:0 0 0 0 rgba(14,154,170,.35)}70%{box-shadow:0 0 0 14px rgba(14,154,170,0)}100%{box-shadow:0 0 0 0 rgba(14,154,170,0)}}
+@keyframes progressFill{from{width:0}to{width:var(--pw,100%)}}
+@keyframes dotBounce {0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+@keyframes checkPop  {0%{opacity:0;transform:scale(0) rotate(-30deg)}70%{transform:scale(1.2) rotate(5deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes connectorGrow{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+@keyframes shimmer   {0%{background-position:-300% 0}100%{background-position:300% 0}}
+@keyframes numberSlide{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ══════════════════════════════════════════
+   ██ HW — HOW IT WORKS SECTION
+══════════════════════════════════════════ */
+.hw{
+  background:var(--white);
+  position:relative;overflow:hidden;
+}
+
+/* ── Subtle bg textures (light) ── */
+.hw-bg-dots{
+  position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(14,154,170,.055) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:
+    radial-gradient(ellipse 80% 60% at 50% 50%,black 30%,transparent 100%);
+  pointer-events:none;z-index:0;
+}
+.hw-bg-teal-wash{
+  position:absolute;top:-8%;left:-8%;
+  width:clamp(300px,45vw,680px);height:clamp(300px,45vw,680px);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(14,154,170,.04) 0%,transparent 68%);
+  pointer-events:none;z-index:0;
+}
+.hw-bg-amber-wash{
+  position:absolute;bottom:-5%;right:-5%;
+  width:clamp(200px,30vw,460px);height:clamp(200px,30vw,460px);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(245,166,35,.05) 0%,transparent 68%);
+  pointer-events:none;z-index:0;
+}
+
+/* ── Section header ── */
+.hw-head{
+  max-width:1360px;margin:0 auto;
+  padding:clamp(5rem,8vw,8.5rem) clamp(1.5rem,5vw,4.5rem) clamp(2rem,3.5vw,3.5rem);
+  display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;
+  flex-wrap:wrap;
+  position:relative;z-index:1;
+}
+.hw-head-left{}
+.hw-kicker{
+  display:flex;align-items:center;gap:9px;
+  font-family:'Poppins',sans-serif;font-size:.56rem;font-weight:600;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--teal);
+  margin-bottom:.7rem;
+  animation:fadeUp .7s var(--reveal) forwards;opacity:0;
+}
+.hw-kicker::before{
+  content:'';width:22px;height:1.5px;background:currentColor;
+  border-radius:2px;flex-shrink:0;
+}
+.hw-kicker-pip{
+  width:5px;height:5px;border-radius:1px;background:var(--amber);
+  transform:rotate(45deg);flex-shrink:0;
+  animation:spinDia 8s linear infinite;
+}
+.hw-h{
+  font-family:'Bagind',serif;
+  font-size:clamp(2.2rem,4.2vw,3.8rem);
+  font-weight:400;line-height:.9;color:var(--ink);
+  margin-bottom:.7rem;
+  animation:fadeUp .75s .08s var(--reveal) forwards;opacity:0;
+}
+.hw-h span{color:var(--teal);position:relative;display:inline-block;}
+.hw-h span::after{
+  content:'';position:absolute;bottom:0;left:0;
+  height:2.5px;width:0;
+  background:linear-gradient(90deg,var(--teal),var(--tealb));
+  border-radius:2px;
+  animation:lineH .9s 1s var(--ease) forwards;
+}
+.hw-sub{
+  font-family:'Poppins',sans-serif;font-size:.84rem;font-weight:300;
+  color:var(--muted);max-width:400px;line-height:1.72;
+  animation:fadeUp .75s .15s var(--reveal) forwards;opacity:0;
+}
+.hw-head-right{
+  animation:fadeUp .75s .2s var(--reveal) forwards;opacity:0;
+}
+.hw-time-badge{
+  display:flex;align-items:center;gap:.8rem;
+  background:var(--cream);border:1px solid var(--border2);
+  border-radius:2px;padding:.9rem 1.3rem;
+  box-shadow:0 4px 18px rgba(7,21,39,.06);
+}
+.hw-time-ico{
+  width:42px;height:42px;border-radius:2px;
+  background:linear-gradient(135deg,var(--teal),var(--teald));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;color:#fff;flex-shrink:0;
+}
+.hw-time-n{
+  font-family:'Bagind',serif;font-size:1.6rem;color:var(--ink);line-height:1;
+}
+.hw-time-l{
+  font-family:'Poppins',sans-serif;font-size:.5rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);margin-top:.15rem;
+}
+
+/* ══════════════════════════════════════════
+   PROGRESS TRACK (desktop)
+══════════════════════════════════════════ */
+.hw-track{
+  max-width:1360px;margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,4.5rem);
+  position:relative;z-index:1;
+  animation:fadeUp .75s .22s var(--reveal) forwards;opacity:0;
+}
+.hw-track-bar{
+  display:flex;align-items:center;
+  margin-bottom:clamp(2rem,3.5vw,3.5rem);
+  position:relative;
+}
+/* Step number buttons */
+.hw-step-btn{
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  cursor:pointer;flex-shrink:0;position:relative;z-index:2;
+  background:none;border:none;padding:0;
+}
+.hw-step-circle{
+  width:52px;height:52px;border-radius:50%;
+  border:2px solid var(--border);
+  background:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bagind',serif;font-size:1.1rem;color:var(--muted2);
+  transition:border-color .3s,background .3s,color .3s,
+             box-shadow .3s,transform .3s var(--spring);
+  position:relative;
+}
+.hw-step-circle i{
+  position:absolute;font-size:.7rem;
+  opacity:0;transform:scale(0);
+  transition:opacity .25s,transform .25s var(--spring);
+}
+.hw-step-circle .hw-num{
+  transition:opacity .25s;
+}
+/* connector line between steps */
+.hw-step-connector{
+  flex:1;height:2px;
+  background:var(--border2);
+  position:relative;overflow:hidden;
+  margin:0 .2rem;
+  margin-bottom:1.6rem;
+}
+.hw-step-connector-fill{
+  position:absolute;top:0;left:0;height:100%;width:0;
+  background:linear-gradient(90deg,var(--teal),var(--tealb));
+  border-radius:2px;
+  transition:width .6s var(--ease);
+}
+.hw-step-connector-fill.active{width:100%}
+/* Dot travelling along connector */
+.hw-step-connector-dot{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:8px;height:8px;border-radius:50%;
+  background:var(--tealb);
+  left:-8px;
+  transition:left .6s var(--ease);
+  opacity:0;
+}
+.hw-step-connector-fill.active + .hw-step-connector-dot{opacity:1;left:calc(100% - 4px)}
+
+.hw-step-label{
+  font-family:'Poppins',sans-serif;font-size:.52rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);
+  text-align:center;white-space:nowrap;
+  transition:color .3s;
+  max-width:80px;line-height:1.3;
+}
+
+/* Active/completed states */
+.hw-step-btn.active .hw-step-circle{
+  border-color:var(--teal);
+  background:var(--teal);
+  color:#fff;
+  box-shadow:0 0 0 6px rgba(14,154,170,.12),0 8px 24px rgba(14,154,170,.28);
+  transform:scale(1.1);
+  animation:pulseRing 2s ease-in-out infinite;
+}
+.hw-step-btn.active .hw-step-label{color:var(--teal)}
+.hw-step-btn.active .hw-num{opacity:1}
+.hw-step-btn.active .hw-step-circle i{opacity:0;transform:scale(0)}
+
+.hw-step-btn.done .hw-step-circle{
+  border-color:var(--teal);background:var(--teal);color:#fff;
+  box-shadow:0 4px 14px rgba(14,154,170,.22);
+  animation:none;transform:scale(1);
+}
+.hw-step-btn.done .hw-num{opacity:0}
+.hw-step-btn.done .hw-step-circle i{
+  opacity:1;transform:scale(1);
+  animation:checkPop .35s var(--spring) forwards;
+}
+.hw-step-btn.done .hw-step-label{color:var(--teal)}
+
+/* ══════════════════════════════════════════
+   STEP CONTENT PANELS
+══════════════════════════════════════════ */
+.hw-panels{
+  max-width:1360px;margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,4.5rem) clamp(5rem,8vw,8rem);
+  position:relative;z-index:1;
+}
+.hw-panel{
+  display:none;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(3rem,6vw,7rem);
+  align-items:center;
+}
+.hw-panel.visible{
+  display:grid;
+  animation:fadeIn .45s var(--ease) forwards;
+}
+
+/* ── Panel left: text ── */
+.hw-panel-left{}
+.hw-panel-step-tag{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(14,154,170,.07);
+  border:1px solid rgba(14,154,170,.18);
+  border-radius:2px;padding:5px 14px;
+  font-family:'Poppins',sans-serif;font-size:.56rem;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--teal);
+  margin-bottom:1rem;
+}
+.hw-panel-step-tag i{font-size:.6rem}
+.hw-panel-h{
+  font-family:'Bagind',serif;
+  font-size:clamp(1.7rem,3.2vw,2.8rem);
+  font-weight:400;line-height:.95;color:var(--ink);
+  margin-bottom:.9rem;
+}
+.hw-panel-h em{color:var(--teal);font-style:normal}
+.hw-panel-desc{
+  font-family:'Poppins',sans-serif;font-size:.86rem;font-weight:300;
+  color:var(--muted);line-height:1.95;margin-bottom:1.5rem;
+}
+.hw-panel-desc strong{font-weight:500;color:var(--ink2)}
+
+/* Feature list */
+.hw-feats{
+  display:flex;flex-direction:column;gap:.5rem;
+  margin-bottom:1.6rem;
+}
+.hw-feat{
+  display:flex;align-items:flex-start;gap:.75rem;
+  padding:.65rem .85rem;
+  background:var(--cream);
+  border:1px solid var(--border2);
+  border-radius:2px;
+  border-left:3px solid var(--teal);
+  transition:border-color .22s,background .22s,transform .22s var(--spring),box-shadow .22s;
+}
+.hw-feat:hover{
+  background:rgba(14,154,170,.04);
+  border-color:rgba(14,154,170,.3);
+  border-left-color:var(--teal);
+  transform:translateX(4px);
+  box-shadow:0 4px 16px rgba(14,154,170,.08);
+}
+.hw-feat-ico{
+  width:26px;height:26px;border-radius:2px;
+  background:rgba(14,154,170,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.6rem;color:var(--teal);flex-shrink:0;
+  transition:background .22s,transform .22s var(--spring);
+}
+.hw-feat:hover .hw-feat-ico{background:var(--teal);color:#fff;transform:scale(1.1) rotate(-5deg)}
+.hw-feat-text{}
+.hw-feat-title{
+  font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:600;
+  color:var(--ink);line-height:1.2;
+}
+.hw-feat-sub{
+  font-family:'Poppins',sans-serif;font-size:.64rem;font-weight:300;
+  color:var(--muted2);margin-top:.15rem;
+}
+
+/* Time indicator */
+.hw-time-row{
+  display:flex;align-items:center;gap:.6rem;
+  margin-bottom:1.4rem;
+}
+.hw-time-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);
+  border-radius:2px;padding:5px 14px;
+  font-family:'Poppins',sans-serif;font-size:.6rem;font-weight:600;
+  color:var(--amberd);
+}
+.hw-time-tag i{font-size:.58rem}
+.hw-time-tag2{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid var(--border2);border-radius:2px;padding:5px 14px;
+  font-family:'Poppins',sans-serif;font-size:.6rem;font-weight:400;
+  color:var(--muted2);
+}
+.hw-time-tag2 i{font-size:.58rem;color:var(--teal)}
+
+/* Panel CTA */
+.hw-panel-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--teal);color:#fff;
+  font-family:'Poppins',sans-serif;font-size:.7rem;font-weight:500;
+  padding:12px 26px;border-radius:2px;
+  box-shadow:0 6px 22px rgba(14,154,170,.26);
+  transition:background .22s,transform .22s,box-shadow .22s;
+  position:relative;overflow:hidden;
+}
+.hw-panel-cta::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);
+  background-size:200% 100%;background-position:-200% 0;
+  transition:background-position .5s;
+}
+.hw-panel-cta:hover{background:var(--teald);transform:translateY(-2px);
+  color: #fff;}
+.hw-panel-cta:hover::after{background-position:200% 0}
+.hw-panel-cta i{font-size:.66rem}
+
+/* ── Panel right: visual card ── */
+.hw-panel-right{position:relative}
+
+.hw-vis-card{
+  background:var(--navy);
+  border-radius:2px;overflow:hidden;
+  position:relative;
+  box-shadow:0 40px 80px rgba(7,21,39,.16),0 10px 26px rgba(7,21,39,.1);
+  min-height:380px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+/* Image inside card */
+.hw-vis-img{
+  position:absolute;inset:0;
+  overflow:hidden;
+}
+.hw-vis-img img{
+  width:100%;height:100%;object-fit:cover;
+  filter:brightness(.7) saturate(.88);
+  transform:scale(1.05);
+  transition:transform 8s linear,filter .4s;
+}
+.hw-vis-card:hover .hw-vis-img img{
+  transform:scale(1.0);filter:brightness(.8) saturate(.95);
+}
+.hw-vis-grad{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(7,21,39,.88) 0%,rgba(7,21,39,.1) 55%,transparent 100%);
+}
+.hw-vis-card::after{
+  content:'';position:absolute;inset:0;
+  border:1.5px solid rgba(14,154,170,.12);
+  border-radius:inherit;pointer-events:none;z-index:3;
+}
+
+/* Card badge */
+.hw-vis-badge{
+  position:absolute;top:1.2rem;left:1.2rem;z-index:4;
+  background:var(--amber);color:var(--navy);
+  border-radius:2px;padding:4px 14px;
+  font-family:'Poppins',sans-serif;font-size:.56rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;
+  box-shadow:0 4px 14px rgba(245,166,35,.38);
+}
+/* Step indicator top right */
+.hw-vis-step{
+  position:absolute;top:1.2rem;right:1.2rem;z-index:4;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bagind',serif;font-size:1.1rem;color:#fff;
+}
+
+/* Card content */
+.hw-vis-body{
+  position:relative;z-index:2;padding:1.6rem 1.8rem 1.8rem;
+}
+.hw-vis-title{
+  font-family:'Bagind',serif;
+  font-size:clamp(1.15rem,2vw,1.55rem);
+  color:#fff;line-height:1.05;margin-bottom:.5rem;
+}
+.hw-vis-meta{
+  display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+.hw-vis-meta-item{
+  display:flex;align-items:center;gap:5px;
+  font-family:'Poppins',sans-serif;font-size:.58rem;font-weight:300;
+  color:rgba(255,255,255,.5);
+}
+.hw-vis-meta-item i{font-size:.54rem;color:var(--tealb)}
+.hw-vis-meta-sep{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.2)}
+/* Progress bar inside card */
+.hw-vis-prog{
+  margin-top:.8rem;
+}
+.hw-vis-prog-label{
+  display:flex;justify-content:space-between;
+  font-family:'Poppins',sans-serif;font-size:.53rem;font-weight:500;
+  color:rgba(255,255,255,.38);margin-bottom:.4rem;
+}
+.hw-vis-prog-track{
+  height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;
+}
+.hw-vis-prog-fill{
+  height:100%;border-radius:2px;
+  background:linear-gradient(90deg,var(--teal),var(--tealb));
+  animation:progressFill .8s .3s var(--ease) forwards;width:0;
+}
+
+/* Floating mini card */
+.hw-float-card{
+  position:absolute;bottom:-1.6rem;left:-2rem;
+  background:var(--white);
+  border:1px solid var(--border2);
+  border-radius:2px;padding:.9rem 1.1rem;
+  box-shadow:0 18px 48px rgba(7,21,39,.13),0 4px 12px rgba(7,21,39,.07);
+  z-index:5;min-width:185px;
+  animation:fadeUp .6s .3s var(--reveal) forwards;opacity:0;
+}
+.hw-float-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--tealb));
+  border-radius:2px 2px 0 0;
+}
+.hw-float-top{
+  display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;
+}
+.hw-float-ico{
+  width:28px;height:28px;border-radius:2px;
+  background:rgba(14,154,170,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.62rem;color:var(--teal);flex-shrink:0;
+}
+.hw-float-label{
+  font-family:'Poppins',sans-serif;font-size:.62rem;font-weight:600;
+  color:var(--ink);
+}
+.hw-float-dots{
+  display:flex;gap:3px;
+}
+.hw-float-dots span{
+  width:6px;height:6px;border-radius:50%;background:var(--teal);display:block;
+}
+.hw-float-dots span:nth-child(1){animation:dotBounce 1s .0s ease-in-out infinite}
+.hw-float-dots span:nth-child(2){animation:dotBounce 1s .15s ease-in-out infinite}
+.hw-float-dots span:nth-child(3){animation:dotBounce 1s .3s ease-in-out infinite}
+.hw-float-text{
+  font-family:'Poppins',sans-serif;font-size:.6rem;font-weight:300;
+  color:var(--muted2);
+}
+
+/* ══════════════════════════════════════════
+   BOTTOM TRUST STRIP
+══════════════════════════════════════════ */
+.hw-bottom{
+  background:var(--cream);
+  border-top:1px solid var(--border2);
+  position:relative;z-index:1;
+}
+.hw-bottom-inner{
+  max-width:1360px;margin:0 auto;
+  padding:clamp(2rem,3.5vw,3rem) clamp(1.5rem,5vw,4.5rem);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;
+  animation:fadeUp .7s .1s var(--reveal) forwards;opacity:0;
+}
+.hw-trust-items{
+  display:flex;align-items:center;gap:2rem;flex-wrap:wrap;
+}
+.hw-trust-item{
+  display:flex;align-items:center;gap:.6rem;
+}
+.hw-trust-item i{font-size:.75rem;color:var(--teal)}
+.hw-trust-label{
+  font-family:'Poppins',sans-serif;font-size:.64rem;font-weight:500;
+  color:var(--muted);
+}
+.hw-trust-sep{width:1px;height:18px;background:var(--border);flex-shrink:0}
+.hw-start-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--navy);color:#fff;
+  font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:600;
+  padding:13px 28px;border-radius:2px;
+  box-shadow:0 6px 22px rgba(7,21,39,.2);
+  transition:background .22s,transform .22s,box-shadow .22s;
+  white-space:nowrap;
+}
+.hw-start-btn:hover{background:var(--navy2);transform:translateY(-2px);
+  color: #fff;}
+.hw-start-btn i{font-size:.68rem}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media(max-width:1060px){
+  .hw-panel{grid-template-columns:1fr;gap:3rem}
+  .hw-panel-right{max-width:520px;margin:0 auto;}
+}
+@media(max-width:720px){
+  .hw-head{flex-direction:column;align-items:flex-start}
+  .hw-track-bar{gap:0}
+  .hw-step-label{display:none}
+  .hw-step-circle{width:42px;height:42px;font-size:.95rem}
+  .hw-step-connector{margin-bottom:.5rem}
+  .hw-bottom-inner{flex-direction:column;align-items:flex-start}
+  .hw-trust-items{gap:1.1rem}
+}
+@media(max-width:520px){
+  .hw-float-card{left:-.5rem;bottom:-1.2rem}
+  .hw-feats{gap:.4rem}
+}
+</style>
+
+
+<!-- ════════════════════════════════════════════════════
+     HOW IT WORKS — INTERACTIVE SECTION
+════════════════════════════════════════════════════ -->
+<section class="hw" id="how-it-works">
+
+  <div class="hw-bg-dots"       aria-hidden="true"></div>
+  <div class="hw-bg-teal-wash"  aria-hidden="true"></div>
+  <div class="hw-bg-amber-wash" aria-hidden="true"></div>
+
+  <!-- ── Section Header ── -->
+  <div class="hw-head">
+    <div class="hw-head-left">
+      <div class="hw-kicker">How It Works <div class="hw-kicker-pip"></div></div>
+      <h2 class="hw-h">Your Journey<br>Starts <span>Here</span></h2>
+      <p class="hw-sub">From your very first message to your last day on the island — five simple steps, zero stress, total peace of mind.</p>
+    </div>
+    <div class="hw-head-right">
+      <div class="hw-time-badge">
+        <div class="hw-time-ico"><i class="fas fa-clock"></i></div>
+        <div>
+          <div class="hw-time-n">48h</div>
+          <div class="hw-time-l">Free itinerary turnaround</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Step Progress Track ── -->
+  <div class="hw-track">
+    <div class="hw-track-bar" id="hwTrackBar">
+
+      <!-- Step 1 -->
+      <button class="hw-step-btn active" data-step="0" aria-label="Step 1: Tell Us Your Dream">
+        <div class="hw-step-circle">
+          <span class="hw-num">1</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="hw-step-label">Tell Us<br>Your Dream</div>
+      </button>
+
+      <div class="hw-step-connector"><div class="hw-step-connector-fill"></div><div class="hw-step-connector-dot"></div></div>
+
+      <!-- Step 2 -->
+      <button class="hw-step-btn" data-step="1" aria-label="Step 2: We Build Your Plan">
+        <div class="hw-step-circle">
+          <span class="hw-num">2</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="hw-step-label">We Build<br>Your Plan</div>
+      </button>
+
+      <div class="hw-step-connector"><div class="hw-step-connector-fill"></div><div class="hw-step-connector-dot"></div></div>
+
+      <!-- Step 3 -->
+      <button class="hw-step-btn" data-step="2" aria-label="Step 3: Refine & Confirm">
+        <div class="hw-step-circle">
+          <span class="hw-num">3</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="hw-step-label">Refine<br>&amp; Confirm</div>
+      </button>
+
+      <div class="hw-step-connector"><div class="hw-step-connector-fill"></div><div class="hw-step-connector-dot"></div></div>
+
+      <!-- Step 4 -->
+      <button class="hw-step-btn" data-step="3" aria-label="Step 4: Arrive & Explore">
+        <div class="hw-step-circle">
+          <span class="hw-num">4</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="hw-step-label">Arrive<br>&amp; Explore</div>
+      </button>
+
+      <div class="hw-step-connector"><div class="hw-step-connector-fill"></div><div class="hw-step-connector-dot"></div></div>
+
+      <!-- Step 5 -->
+      <button class="hw-step-btn" data-step="4" aria-label="Step 5: Memories Forever">
+        <div class="hw-step-circle">
+          <span class="hw-num">5</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="hw-step-label">Memories<br>Forever</div>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ══ CONTENT PANELS ══ -->
+  <div class="hw-panels" id="hwPanels">
+
+    <!-- ── PANEL 0: Tell Us Your Dream ── -->
+    <div class="hw-panel visible" data-panel="0">
+      <div class="hw-panel-left">
+        <div class="hw-panel-step-tag"><i class="fas fa-paper-plane"></i>Step 01 of 05</div>
+        <h3 class="hw-panel-h">Tell Us<br>Your <em>Dream</em></h3>
+        <p class="hw-panel-desc">
+          Every journey begins with a conversation. Reach out via WhatsApp, email or our contact form — tell us your travel dates, where you're coming from, <strong>what excites you</strong>, and anything else on your mind. There are no wrong answers.
+        </p>
+        <div class="hw-feats">
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fab fa-whatsapp"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Chat with us on WhatsApp</div>
+              <div class="hw-feat-sub">We reply within a few hours — usually much faster</div>
+            </div>
+          </div>
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-envelope"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Drop us an email</div>
+              <div class="hw-feat-sub">Full brief? Use email — we love detail</div>
+            </div>
+          </div>
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-comment-dots"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Fill in our quick form</div>
+              <div class="hw-feat-sub">Takes 3 minutes, helps us craft a better plan</div>
+            </div>
+          </div>
+        </div>
+        <div class="hw-time-row">
+          <div class="hw-time-tag"><i class="fas fa-clock"></i>Takes just 5 minutes</div>
+          <div class="hw-time-tag2"><i class="fas fa-lock"></i>No commitment, no payment</div>
+        </div>
+        <a href="/contact-us" class="hw-panel-cta">
+          <i class="fas fa-paper-plane"></i>Start the Conversation
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="hw-panel-right">
+        <div class="hw-vis-card">
+          <div class="hw-vis-img">
+            <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Hikkaduwa_processed.webp"
+                 alt="Starting your Sri Lanka journey"
+                 onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=720&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="hw-vis-grad"></div>
+          <div class="hw-vis-badge">Step 01</div>
+          <div class="hw-vis-step">1</div>
+          <div class="hw-vis-body">
+            <div class="hw-vis-title">Your Story Begins Here</div>
+            <div class="hw-vis-meta">
+              <div class="hw-vis-meta-item"><i class="fas fa-globe"></i>Worldwide travellers welcome</div>
+              <div class="hw-vis-meta-sep"></div>
+              <div class="hw-vis-meta-item"><i class="fas fa-shield-alt"></i>100% Free consultation</div>
+            </div>
+            <div class="hw-vis-prog">
+              <div class="hw-vis-prog-label"><span>Journey progress</span><span>Step 1 / 5</span></div>
+              <div class="hw-vis-prog-track">
+                <div class="hw-vis-prog-fill" style="--pw:20%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hw-float-card">
+          <div class="hw-float-top">
+            <div class="hw-float-ico"><i class="fab fa-whatsapp"></i></div>
+            <div class="hw-float-label">We're replying…</div>
+          </div>
+          <div class="hw-float-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="hw-float-text" style="margin-top:.4rem">Avg. response time: <strong style="color:var(--teal)">under 2 hours</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PANEL 1: We Build Your Plan ── -->
+    <div class="hw-panel" data-panel="1">
+      <div class="hw-panel-left">
+        <div class="hw-panel-step-tag"><i class="fas fa-pencil-ruler"></i>Step 02 of 05</div>
+        <h3 class="hw-panel-h">We Build<br>Your <em>Plan</em></h3>
+        <p class="hw-panel-desc">
+          Within 48 hours, our team crafts a <strong>fully personalised day-by-day itinerary</strong> — hand-picked hotels, private guide, vehicle, routes and experiences tailored exactly to your travel style. Delivered to your inbox. Completely free.
+        </p>
+        <div class="hw-feats">
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-calendar-alt"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Full day-by-day itinerary</div>
+              <div class="hw-feat-sub">Every morning through evening, thoughtfully planned</div>
+            </div>
+          </div>
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-hotel"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Curated hotel recommendations</div>
+              <div class="hw-feat-sub">Budget to luxury — matched to your preference</div>
+            </div>
+          </div>
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-file-invoice-dollar"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Transparent pricing breakdown</div>
+              <div class="hw-feat-sub">No hidden fees — you see exactly what you pay for</div>
+            </div>
+          </div>
+        </div>
+        <div class="hw-time-row">
+          <div class="hw-time-tag"><i class="fas fa-clock"></i>Ready in 48 hours</div>
+          <div class="hw-time-tag2"><i class="fas fa-gift"></i>Completely free of charge</div>
+        </div>
+        <a href="/contact-us" class="hw-panel-cta">
+          <i class="fas fa-calendar-check"></i>Get My Free Itinerary
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="hw-panel-right">
+        <div class="hw-vis-card">
+          <div class="hw-vis-img">
+            <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Central-Highlands-of-Sri-Lanka_processed.webp"
+                 alt="Planning your Sri Lanka tour"
+                 onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=720&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="hw-vis-grad"></div>
+          <div class="hw-vis-badge">Step 02</div>
+          <div class="hw-vis-step">2</div>
+          <div class="hw-vis-body">
+            <div class="hw-vis-title">Your Itinerary, Crafted With Care</div>
+            <div class="hw-vis-meta">
+              <div class="hw-vis-meta-item"><i class="fas fa-pencil-ruler"></i>Fully bespoke plan</div>
+              <div class="hw-vis-meta-sep"></div>
+              <div class="hw-vis-meta-item"><i class="fas fa-clock"></i>Delivered in 48h</div>
+            </div>
+            <div class="hw-vis-prog">
+              <div class="hw-vis-prog-label"><span>Journey progress</span><span>Step 2 / 5</span></div>
+              <div class="hw-vis-prog-track">
+                <div class="hw-vis-prog-fill" style="--pw:40%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hw-float-card">
+          <div class="hw-float-top">
+            <div class="hw-float-ico"><i class="fas fa-file-alt"></i></div>
+            <div class="hw-float-label">Itinerary ready!</div>
+          </div>
+          <div class="hw-float-text">10-day custom plan · 4 regions · <strong style="color:var(--teal)">Sent to inbox ✓</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PANEL 2: Refine & Confirm ── -->
+    <div class="hw-panel" data-panel="2">
+      <div class="hw-panel-left">
+        <div class="hw-panel-step-tag"><i class="fas fa-sync-alt"></i>Step 03 of 05</div>
+        <h3 class="hw-panel-h">Refine<br>&amp; <em>Confirm</em></h3>
+        <p class="hw-panel-desc">
+          Your plan is a <strong>living document</strong>, not a take-it-or-leave-it offer. Swap hotels, adjust pacing, add a cooking class or remove a long drive — unlimited revisions until everything feels exactly right. Only then do you confirm and pay a deposit.
+        </p>
+        <div class="hw-feats">
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-infinity"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Unlimited free revisions</div>
+              <div class="hw-feat-sub">Change anything, anytime — no questions asked</div>
+            </div>
+          </div>
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-handshake"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Confirm when you're ready</div>
+              <div class="hw-feat-sub">Secure deposit only after you're 100% happy</div>
+            </div>
+          </div>
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-undo"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Free cancellation policy</div>
+              <div class="hw-feat-sub">Plans change — we understand completely</div>
+            </div>
+          </div>
+        </div>
+        <div class="hw-time-row">
+          <div class="hw-time-tag"><i class="fas fa-sync-alt"></i>No revision limits</div>
+          <div class="hw-time-tag2"><i class="fas fa-undo"></i>Free 7-day cancellation</div>
+        </div>
+        <a href="/contact-us" class="hw-panel-cta">
+          <i class="fas fa-check-circle"></i>I'm Ready to Confirm
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="hw-panel-right">
+        <div class="hw-vis-card">
+          <div class="hw-vis-img">
+            <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya-village-cyling_processed.webp"
+                 alt="Confirming your tour"
+                 onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=720&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="hw-vis-grad"></div>
+          <div class="hw-vis-badge">Step 03</div>
+          <div class="hw-vis-step">3</div>
+          <div class="hw-vis-body">
+            <div class="hw-vis-title">Perfected Together</div>
+            <div class="hw-vis-meta">
+              <div class="hw-vis-meta-item"><i class="fas fa-infinity"></i>Unlimited revisions</div>
+              <div class="hw-vis-meta-sep"></div>
+              <div class="hw-vis-meta-item"><i class="fas fa-lock"></i>Secure deposit</div>
+            </div>
+            <div class="hw-vis-prog">
+              <div class="hw-vis-prog-label"><span>Journey progress</span><span>Step 3 / 5</span></div>
+              <div class="hw-vis-prog-track">
+                <div class="hw-vis-prog-fill" style="--pw:60%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hw-float-card">
+          <div class="hw-float-top">
+            <div class="hw-float-ico"><i class="fas fa-check-circle"></i></div>
+            <div class="hw-float-label">Tour confirmed!</div>
+          </div>
+          <div class="hw-float-text">Booking secured · <strong style="color:var(--teal)">All set ✓</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PANEL 3: Arrive & Explore ── -->
+    <div class="hw-panel" data-panel="3">
+      <div class="hw-panel-left">
+        <div class="hw-panel-step-tag"><i class="fas fa-plane-arrival"></i>Step 04 of 05</div>
+        <h3 class="hw-panel-h">Arrive &amp;<br><em>Explore</em></h3>
+        <p class="hw-panel-desc">
+          Your private guide meets you at the airport with a name board and a smile. From that moment, <strong>your only job is to be present.</strong> Every transfer, every booking, every early morning entrance ticket — handled. You just show up and experience.
+        </p>
+        <div class="hw-feats">
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-user-tie"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Airport meet &amp; greet</div>
+              <div class="hw-feat-sub">Your guide is waiting from the first second you land</div>
+            </div>
+          </div>
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-car"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Private A/C vehicle throughout</div>
+              <div class="hw-feat-sub">Never share a vehicle or a guide with strangers</div>
+            </div>
+          </div>
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-headset"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">24/7 support on-tour</div>
+              <div class="hw-feat-sub">Real person, real answers — any hour, any situation</div>
+            </div>
+          </div>
+        </div>
+        <div class="hw-time-row">
+          <div class="hw-time-tag"><i class="fas fa-plane-arrival"></i>From airport to last day</div>
+          <div class="hw-time-tag2"><i class="fas fa-headset"></i>24/7 support included</div>
+        </div>
+        <a href="destinations" class="hw-panel-cta">
+          <i class="fas fa-map-marked-alt"></i>Explore Destinations
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="hw-panel-right">
+        <div class="hw-vis-card">
+          <div class="hw-vis-img">
+            <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/minneriya-national-park_processed.webp"
+                 alt="Exploring Sri Lanka"
+                 onerror="this.src='https://images.unsplash.com/photo-1594652634010-275456c808d0?w=720&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="hw-vis-grad"></div>
+          <div class="hw-vis-badge">Step 04</div>
+          <div class="hw-vis-step">4</div>
+          <div class="hw-vis-body">
+            <div class="hw-vis-title">Sri Lanka Awaits You</div>
+            <div class="hw-vis-meta">
+              <div class="hw-vis-meta-item"><i class="fas fa-user-shield"></i>100% Private tour</div>
+              <div class="hw-vis-meta-sep"></div>
+              <div class="hw-vis-meta-item"><i class="fas fa-map-marker-alt"></i>60+ destinations</div>
+            </div>
+            <div class="hw-vis-prog">
+              <div class="hw-vis-prog-label"><span>Journey progress</span><span>Step 4 / 5</span></div>
+              <div class="hw-vis-prog-track">
+                <div class="hw-vis-prog-fill" style="--pw:80%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hw-float-card">
+          <div class="hw-float-top">
+            <div class="hw-float-ico"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="hw-float-label">You're in Sri Lanka!</div>
+          </div>
+          <div class="hw-float-text">Guide &amp; vehicle ready · <strong style="color:var(--teal)">Day 1 underway ✓</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PANEL 4: Memories Forever ── -->
+    <div class="hw-panel" data-panel="4">
+      <div class="hw-panel-left">
+        <div class="hw-panel-step-tag"><i class="fas fa-star"></i>Step 05 of 05</div>
+        <h3 class="hw-panel-h">Memories<br><em>Forever</em></h3>
+        <p class="hw-panel-desc">
+          The tour ends but the relationship doesn't. We follow up to hear about your experience, <strong>welcome your honest review</strong>, and stay ready to help you plan your next chapter — whether that's returning to Sri Lanka or exploring somewhere new.
+        </p>
+        <div class="hw-feats">
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-star"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Share your story</div>
+              <div class="hw-feat-sub">Your honest review helps future travellers find us</div>
+            </div>
+          </div>
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-heart"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Join our travel family</div>
+              <div class="hw-feat-sub">Return guests get priority booking &amp; exclusive deals</div>
+            </div>
+          </div>
+          <div class="hw-feat">
+            <div class="hw-feat-ico"><i class="fas fa-globe"></i></div>
+            <div class="hw-feat-text">
+              <div class="hw-feat-title">Refer a friend</div>
+              <div class="hw-feat-sub">Loved your trip? Share Pixel Ceylon — we'll thank you</div>
+            </div>
+          </div>
+        </div>
+        <div class="hw-time-row">
+          <div class="hw-time-tag"><i class="fas fa-star"></i>4.9★ average rating</div>
+          <div class="hw-time-tag2"><i class="fas fa-users"></i>200+ happy travellers</div>
+        </div>
+        <a href="/trip-planner" class="hw-panel-cta">
+          <i class="fas fa-calendar-check"></i>Plan My Sri Lanka Trip
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="hw-panel-right">
+        <div class="hw-vis-card">
+          <div class="hw-vis-img">
+            <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/pinnawala_processed.webp"
+                 alt="Memories from Sri Lanka"
+                 onerror="this.src='https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=720&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="hw-vis-grad"></div>
+          <div class="hw-vis-badge">Complete ✓</div>
+          <div class="hw-vis-step" style="background:rgba(245,166,35,.2);border-color:rgba(245,166,35,.3);color:var(--amber)">5</div>
+          <div class="hw-vis-body">
+            <div class="hw-vis-title">Journey Complete — Memories Last Forever</div>
+            <div class="hw-vis-meta">
+              <div class="hw-vis-meta-item"><i class="fas fa-star" style="color:var(--amber)"></i>Leave your review</div>
+              <div class="hw-vis-meta-sep"></div>
+              <div class="hw-vis-meta-item"><i class="fas fa-redo"></i>Come back again</div>
+            </div>
+            <div class="hw-vis-prog">
+              <div class="hw-vis-prog-label"><span>Journey progress</span><span>Complete!</span></div>
+              <div class="hw-vis-prog-track">
+                <div class="hw-vis-prog-fill" style="--pw:100%;background:linear-gradient(90deg,var(--amber),var(--amberd))"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hw-float-card">
+          <div class="hw-float-top">
+            <div class="hw-float-ico" style="background:rgba(245,166,35,.1)"><i class="fas fa-star" style="color:var(--amber)"></i></div>
+            <div class="hw-float-label">Sarah left a review!</div>
+          </div>
+          <div class="hw-float-text">"Absolutely unforgettable." · <strong style="color:var(--amber)">5 stars ★★★★★</strong></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /hw-panels -->
+
+
+  <!-- ── Bottom Trust Strip ── -->
+  <div class="hw-bottom">
+    <div class="hw-bottom-inner">
+      <div class="hw-trust-items">
+        <div class="hw-trust-item"><i class="fas fa-shield-alt"></i><span class="hw-trust-label">No payment until you're happy</span></div>
+        <div class="hw-trust-sep"></div>
+        <div class="hw-trust-item"><i class="fas fa-clock"></i><span class="hw-trust-label">Itinerary in 48 hours</span></div>
+        <div class="hw-trust-sep"></div>
+        <div class="hw-trust-item"><i class="fas fa-undo"></i><span class="hw-trust-label">Free cancellation</span></div>
+        <div class="hw-trust-sep"></div>
+        <div class="hw-trust-item"><i class="fas fa-headset"></i><span class="hw-trust-label">24/7 on-tour support</span></div>
+        <div class="hw-trust-sep"></div>
+        <div class="hw-trust-item"><i class="fas fa-star"></i><span class="hw-trust-label">4.9★ rated on Google</span></div>
+      </div>
+      <a href="/trip-planner" class="hw-start-btn">
+        <i class="fas fa-paper-plane"></i>Start My Journey — It's Free
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function(){
+
+  const steps    = Array.from(document.querySelectorAll('.hw-step-btn'));
+  const panels   = Array.from(document.querySelectorAll('.hw-panel'));
+  const connectors = Array.from(document.querySelectorAll('.hw-step-connector-fill'));
+
+  let current = 0;
+
+  function goTo(idx){
+    if(idx === current) return;
+
+    // Update step buttons
+    steps.forEach((btn, i) => {
+      btn.classList.remove('active','done');
+      if(i < idx)       btn.classList.add('done');
+      else if(i === idx) btn.classList.add('active');
+    });
+
+    // Animate connectors
+    connectors.forEach((fill, i) => {
+      if(i < idx) fill.classList.add('active');
+      else        fill.classList.remove('active');
+    });
+
+    // Swap panels
+    panels.forEach(p => p.classList.remove('visible'));
+    panels[idx].classList.add('visible');
+
+    // Re-trigger progress bar animation inside new panel
+    const fill = panels[idx].querySelector('.hw-vis-prog-fill');
+    if(fill){
+      fill.style.width = '0';
+      fill.style.animation = 'none';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          fill.style.animation = 'progressFill .8s .25s var(--ease) forwards';
+        });
+      });
+    }
+
+    // Re-trigger floating card fade
+    const floatCard = panels[idx].querySelector('.hw-float-card');
+    if(floatCard){
+      floatCard.style.opacity = '0';
+      floatCard.style.animation = 'none';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          floatCard.style.animation = 'fadeUp .6s .2s var(--reveal) forwards';
+        });
+      });
+    }
+
+    current = idx;
+  }
+
+  // Click step buttons
+  steps.forEach((btn, i) => {
+    btn.addEventListener('click', () => goTo(i));
+  });
+
+  // Auto-advance every 4 seconds when in viewport
+  let autoTimer = null;
+  let paused = false;
+
+  function startAuto(){
+    autoTimer = setInterval(() => {
+      if(!paused) goTo((current + 1) % steps.length);
+    }, 4000);
+  }
+
+  // Pause on hover
+  const section = document.getElementById('how-it-works');
+  section.addEventListener('mouseenter', () => { paused = true; });
+  section.addEventListener('mouseleave', () => { paused = false; });
+
+  // Start auto only when section enters viewport
+  const sio = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting && !autoTimer) startAuto();
+      if(!e.isIntersecting && autoTimer){
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+    });
+  }, {threshold:.2});
+  sio.observe(section);
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if(!section.matches(':hover')) return;
+    if(e.key === 'ArrowRight') goTo(Math.min(current + 1, steps.length - 1));
+    if(e.key === 'ArrowLeft')  goTo(Math.max(current - 1, 0));
+  });
+
+  // Swipe support (touch)
+  let touchStartX = 0;
+  section.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+  section.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 50){
+      if(dx < 0) goTo(Math.min(current + 1, steps.length - 1));
+      else        goTo(Math.max(current - 1, 0));
+    }
+  });
+
+})();
+</script>
+</section>
+</div>

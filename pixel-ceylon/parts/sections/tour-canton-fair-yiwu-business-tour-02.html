@@ -1,0 +1,275 @@
+<section class="Experiences">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/bagind" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+  --navy:       #0c1f2c;
+  --navy-mid:   #102536;
+  --navy-soft:  #163044;
+  --teal-d:     #1a6b7a;
+  --teal:       #1ab8b0;
+  --teal-pale:  rgba(26,184,176,.12);
+  --teal-glow:  rgba(26,184,176,.06);
+  --cream:      #f0ede4;
+  --cream-warm: #e8e3d8;
+  --orange:     #f4a100;
+  --orange-l:   #ffbf3c;
+  --orange-pale:rgba(244,161,0,.12);
+  --white:      #ffffff;
+  --ink:        #0c1f2c;
+  --muted:      rgba(12,31,44,.45);
+  --muted-lt:   rgba(240,237,228,.45);
+  --border:     rgba(12,31,44,.09);
+  --border-lt:  rgba(240,237,228,.1);
+  --serif:      'Bagind','Playfair Display',Georgia,serif;
+  --sans:       'Poppins',system-ui,sans-serif;
+  --mono:       'DM Mono','Courier New',monospace;
+  --ease:       cubic-bezier(.4,0,.2,1);
+  --spring:     cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: #fff; color: var(--ink); overflow-x: hidden; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img    { display: block; max-width: 100%; object-fit: cover; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+a      { text-decoration: none; color: inherit; }
+
+/* ── SECTION SHELL ── */
+.secthree {
+  position: relative;
+  overflow: hidden;
+  background: var(--white);
+}
+.secthree::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 5;
+  background: linear-gradient(90deg, transparent 0%, var(--orange) 35%, var(--teal) 70%, transparent 100%);
+}
+.secthree::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.inner { position: relative; z-index: 2; max-width: 1440px; margin: 0 auto; padding: 5rem 2.4rem; }
+
+/* ── BLOBS ── */
+.blob { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
+.b1 { top: -18%; left: -8%; width: 65vw; height: 65vw; max-width: 720px; max-height: 720px;
+      background: radial-gradient(circle, rgba(244,161,0,.04) 0%, transparent 65%); }
+.b2 { bottom: -12%; right: -6%; width: 52vw; height: 52vw; max-width: 600px; max-height: 600px;
+      background: radial-gradient(circle, rgba(26,184,176,.05) 0%, transparent 65%); }
+
+/* ── EYEBROW ── */
+.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.ey-line  { width: 32px; height: 1px; background: var(--orange); flex-shrink: 0; }
+.ey-txt   { font-family: var(--mono); font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--orange); font-weight: 500; }
+.ey-dot   { width: 5px; height: 5px; background: var(--teal); border-radius: 50%; flex-shrink: 0; }
+
+/* ── HEADING ── */
+.sec-h { font-family: var(--serif); font-size: clamp(2rem,3.6vw,3.8rem); font-weight: 400; line-height: 1.05; color: var(--ink); margin-bottom: .7rem; letter-spacing: -.01em; }
+.sec-h em  { font-style: normal !important; color: #0e9aaa !important; }
+.sec-sub   { font-size: .82rem; font-weight: 300; color: var(--muted); line-height: 1.9; max-width: 480px; }
+</style>
+
+<style>
+/* ── HIGHLIGHTS GRID ── */
+.hl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 3rem;
+}
+
+/* ── CARD BASE ── */
+.hl-card {
+  background: var(--white);
+  position: relative;
+  overflow: hidden;
+  transition: background .25s var(--ease), box-shadow .25s var(--ease);
+}
+.hl-card:hover .hl-img img { transform: scale(1.06); }
+.hl-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--teal-d), var(--teal));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .35s var(--ease); z-index: 3;
+}
+.hl-card:hover::before { transform: scaleX(1); }
+.hl-card.wide { grid-column: span 2; }
+
+/* ── IMAGE ── */
+.hl-img { height: 230px; overflow: hidden; position: relative; }
+.hl-card.wide .hl-img { height: 275px; }
+.hl-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .6s var(--ease);
+  filter: brightness(.78) saturate(1.1);
+}
+.hl-img::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 75px;
+  background: linear-gradient(transparent, var(--white)); transition: background .25s;
+}
+.hl-card:hover .hl-img::after { background: linear-gradient(transparent, rgba(26,184,176,.06)); }
+
+/* ── BADGE ── */
+.hl-badge {
+  position: absolute; top: .8rem; left: .8rem; z-index: 2;
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(12,31,44,.82); backdrop-filter: blur(8px);
+  border: 1px solid rgba(26,184,176,.3); border-radius: 2px;
+  padding: 4px 10px; font-family: var(--mono); font-size: .5rem; font-weight: 500; color: var(--cream);
+}
+.hl-badge i { color: var(--teal); font-size: .5rem; }
+
+/* ── BODY ── */
+.hl-body { padding: 1.2rem 1.4rem 1.5rem; }
+.hl-cat  { font-family: var(--mono); font-size: .52rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 4px; }
+.hl-name { font-family: var(--serif); font-size: 1.25rem; font-weight: 400; color: var(--ink); line-height: 1.1; margin-bottom: .5rem; }
+.hl-desc { font-size: .7rem; font-weight: 300; color: var(--muted); line-height: 1.75; margin-bottom: .85rem; }
+
+/* ── CHIPS ── */
+.hl-chips { display: flex; flex-wrap: wrap; gap: .22rem; }
+.hl-chip  {
+  background: var(--white); border: 1px solid var(--border); border-radius: 2px;
+  padding: 2px 9px; font-size: .56rem; color: var(--muted);
+  transition: background .2s, border-color .2s, color .2s;
+}
+.hl-card:hover .hl-chip {
+  background: rgba(26,184,176,.08);
+  border-color: rgba(26,184,176,.22);
+  color: var(--teal-d);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .hl-grid { grid-template-columns: 1fr 1fr; }
+  .hl-card.wide { grid-column: span 2; }
+}
+@media (max-width: 580px) {
+  .hl-grid { grid-template-columns: 1fr; }
+  .hl-card.wide { grid-column: 1; }
+}
+</style>
+
+<section class="secthree">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="inner">
+
+    <div class="eyebrow">
+      <div class="ey-line"></div>
+      <span class="ey-txt">Tour Highlights</span>
+      <div class="ey-dot"></div>
+    </div>
+    <h2 class="sec-h">Key <em>Business Experiences</em><br>Across Every Day</h2>
+    <p class="sec-sub">From 4 days on the floors of the world's largest trade fair to 3 days sourcing at Yiwu's 75,000-shop wholesale market — every day of this tour is designed to maximise your sourcing value.</p>
+
+    <div class="hl-grid">
+
+      <!-- WIDE CARD — Canton Fair Phase 1 -->
+      <div class="hl-card wide">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/phase-1.webp" alt="Canton Fair Phase 1">
+          <div class="hl-badge"><i class="fas fa-building"></i> 4 Full Days</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--orange)">Trade Fair</div>
+          <div class="hl-name">Canton Fair Phase 1 — Guangzhou</div>
+          <div class="hl-desc">Four full days at the world's largest trade fair — Canton Fair Phase 1 focuses on industrial products, electronics, hardware, machinery and building materials. Daily hotel shuttle or metro to the Pazhou Complex is arranged. Meet major factory owners and export representatives face-to-face, negotiate pricing and MOQs, inspect samples and shortlist your best suppliers across four intensive sourcing days.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">Electronics &amp; Industrial</span>
+            <span class="hl-chip">Hardware &amp; Machinery</span>
+            <span class="hl-chip">Factory Representatives</span>
+            <span class="hl-chip">MOQ Negotiations</span>
+            <span class="hl-chip">Sample Inspections</span>
+            <span class="hl-chip">Daily Hotel Shuttle</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2 — Yiwu Trade City -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/trade-city.webp" alt="Yiwu International Trade City">
+          <div class="hl-badge"><i class="fas fa-store"></i> 75,000+ Shops</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--teal-d)">Wholesale Market</div>
+          <div class="hl-name">Yiwu International Trade City</div>
+          <div class="hl-desc">Three full days at the world's largest wholesale market — 75,000+ shops across 5 districts covering gifts, accessories, toys, tools and daily-use items. Flexible MOQs make it ideal for mixed-goods and variety container orders.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">75,000+ Shops</span>
+            <span class="hl-chip">Flexible MOQ</span>
+            <span class="hl-chip">Ready Stock</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3 — High-Speed Rail & Logistics -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/hiht-speed-trail.webp" alt="High-Speed Rail Guangzhou to Yiwu">
+          <div class="hl-badge"><i class="fas fa-train"></i> ~7 hrs Rail</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--teal)">Rail Transfer &amp; Logistics</div>
+          <div class="hl-name">High-Speed Rail &amp; Freight Planning</div>
+          <div class="hl-desc">Evening high-speed train from Guangzhou South to Yiwu Station — approx. 6.5 to 7.5 hours — connecting both sourcing cities in one smooth journey. Daytime logistics consultation covers FCL/LCL freight, customs documentation and shipment timelines.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">Guangzhou South → Yiwu</span>
+            <span class="hl-chip">FCL / LCL Freight</span>
+            <span class="hl-chip">Customs Guidance</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4 — Guangzhou City Tour -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/chen-chan-hall1.webp" alt="Guangzhou City Tour">
+          <div class="hl-badge"><i class="fas fa-city"></i> City &amp; Culture</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--orange)">Guangzhou City Tour</div>
+          <div class="hl-name">Chen Clan Hall &amp; Shangxiajiu Street</div>
+          <div class="hl-desc">Explore Guangzhou beyond the fair — visit the magnificent 19th-century Chen Clan Ancestral Hall, stroll the historic Shangxiajiu Pedestrian Street for local food sampling, and browse Beijing Road for retail market exploration.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">Chen Clan Hall</span>
+            <span class="hl-chip">Shangxiajiu Street</span>
+            <span class="hl-chip">Beijing Road</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 5 — Full Business Support -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/fraid-forward.webp" alt="Full Business Support">
+          <div class="hl-badge"><i class="fas fa-concierge-bell"></i> 100% Supported</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--teal-d)">Business Support</div>
+          <div class="hl-name">End-to-End Sourcing Assistance</div>
+          <div class="hl-desc">Daily hotel-to-fair transfers in both cities, freight forwarding consultations, optional interpreter assistance, supplier shortlisting support and order management guidance — full business support from arrival in Guangzhou to departure from Yiwu.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">Daily Transfers</span>
+            <span class="hl-chip">Freight Forwarding</span>
+            <span class="hl-chip">Interpreter Option</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</section>

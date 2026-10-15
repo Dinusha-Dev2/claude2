@@ -1,0 +1,462 @@
+<section class="map">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/bagind" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root{--ink:#0d1117;--canvas:#f7f6f5;--canvas-warm:#f7f6f5;--gold:#c9953a;--gold-l:#e8b96a;--gold-pale:#fdf6e8;--teal:#1a7a85;--teal-l:#2ba8b7;--teal-pale:rgba(26,122,133,0.12);--jade:#2d8a5c;--coral:#d45f4a;--sky:#3580b8;--violet:#6b5fad;--border-soft:rgba(13,17,23,0.08);--serif:'Bagind','Playfair Display',Georgia,serif;--sans:'Poppins',system-ui,sans-serif;--mono:'DM Mono','Courier New',monospace;--ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--sans);color:var(--ink);overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;background:#f7f6f5}img{display:block;max-width:100%;object-fit:cover}button{font-family:inherit;cursor:pointer;border:none;background:none}a{text-decoration:none;color:inherit}
+.rms{background:#f7f6f5!important;position:relative;overflow:hidden}.rms::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.028;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.rms-blob{position:absolute;pointer-events:none;border-radius:50%;z-index:0}.rms-b1{top:-20%;left:-10%;width:70vw;height:70vw;max-width:800px;max-height:800px;background:radial-gradient(circle,rgba(201,149,58,.06) 0%,transparent 65%)}.rms-b2{bottom:-15%;right:-8%;width:55vw;height:55vw;max-width:640px;max-height:640px;background:radial-gradient(circle,rgba(26,122,133,.06) 0%,transparent 65%)}
+.rms-inner{position:relative;z-index:2;max-width:1440px;margin:0 auto;padding:0 2.4rem}
+.rms-head{padding:4.5rem 0 2.4rem;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:end}.rms-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:1rem}.rms-ey-line{width:32px;height:1px;background:var(--gold);flex-shrink:0}.rms-ey-txt{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:500}.rms-ey-dot{width:5px;height:5px;background:var(--teal-l);border-radius:50%;flex-shrink:0;animation:dotPulse 3s ease-in-out infinite}@keyframes dotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.rms-title{font-family:var(--serif);font-size:clamp(2.2rem,3.8vw,4rem);font-weight:400;line-height:1.05;color:var(--ink);letter-spacing:-.01em;margin-bottom:.75rem}.rms-title em{font-style:normal!important;color:#0e9aaa!important}.rms-title .rms-gold{color:#f4a100}.rms-desc{font-size:.82rem;font-weight:300;color:rgba(13,17,23,.5);line-height:1.9;max-width:460px}
+.rms-hpills{display:flex;flex-direction:column;gap:.5rem;align-items:flex-end}.rms-hpill{display:flex;align-items:center;gap:8px;background:white;border:1px solid var(--border-soft);border-radius:2px;padding:6px 14px 6px 8px;white-space:nowrap;transition:box-shadow .2s,transform .2s}.rms-hpill:hover{transform:translateX(-3px)}.rhp-ic{width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0}.rhp-ic.gold{background:var(--gold-pale);color:var(--gold)}.rhp-ic.teal{background:var(--teal-pale);color:var(--teal)}.rhp-ic.jade{background:rgba(45,138,92,.1);color:var(--jade)}.rhp-ic.sky{background:rgba(53,128,184,.1);color:var(--sky)}.rhp-ic.violet{background:rgba(107,95,173,.1);color:var(--violet)}.rhp-val{font-family:var(--serif);font-size:1.05rem;font-weight:400;color:var(--ink)}.rhp-lbl{font-size:.64rem;color:rgba(13,17,23,.44)}
+.rms-layout{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start;padding-bottom:3rem}
+.rms-panel{background:white;border:1px solid var(--border-soft);border-radius:5px;overflow:hidden;display:flex;flex-direction:column;position:sticky;top:1rem}.rmp-head{padding:1.2rem 1.3rem 1rem;border-bottom:1px solid var(--border-soft);background:linear-gradient(135deg,var(--gold-pale) 0%,white 100%)}.rmp-head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem}.rmp-title{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--ink)}.rmp-title-ic{width:28px;height:28px;border-radius:2px;background:var(--gold-pale);border:1px solid rgba(201,149,58,.2);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.65rem}.rmp-badge{background:var(--ink);color:white;font-family:var(--mono);font-size:.52rem;font-weight:500;letter-spacing:.05em;padding:3px 10px;border-radius:2px;white-space:nowrap}.rmp-sub{font-size:.6rem;color:rgba(13,17,23,.38);margin-top:2px}
+.rmp-progress{padding:.7rem 1.3rem .55rem;border-bottom:1px solid var(--border-soft)}.rmp-prog-bar{height:2px;background:var(--border-soft);border-radius:2px;overflow:hidden;margin-bottom:5px}.rmp-prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-l));border-radius:2px;transition:width .5s var(--ease)}.rmp-prog-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.49rem;color:rgba(13,17,23,.3)}
+.rmp-list{flex:1;overflow-y:auto;padding:8px;max-height:500px}.rmp-list::-webkit-scrollbar{width:3px}.rmp-list::-webkit-scrollbar-thumb{background:rgba(0,0,0,.08);border-radius:3px}
+.rmp-all{display:flex;align-items:center;gap:10px;padding:.6rem .8rem;border-radius:2px;cursor:pointer;border:1.5px solid transparent;transition:all .2s var(--ease);user-select:none;margin-bottom:4px}.rmp-all:hover{background:var(--canvas)}.rmp-all.on{background:var(--ink);border-color:var(--ink)}.rmp-all-ic{width:36px;height:36px;border-radius:2px;background:var(--canvas);border:1px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-size:.68rem;color:rgba(13,17,23,.5);flex-shrink:0;transition:all .2s}.rmp-all.on .rmp-all-ic{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15);color:white}.rmp-all-txt .rmp-nm{font-size:.72rem;font-weight:600;color:var(--ink);transition:color .2s}.rmp-all.on .rmp-all-txt .rmp-nm{color:white}.rmp-all-txt .rmp-sb{font-size:.58rem;color:rgba(13,17,23,.38);transition:color .2s}.rmp-all.on .rmp-all-txt .rmp-sb{color:rgba(255,255,255,.5)}.rmp-all-ct{margin-left:auto;font-family:var(--mono);font-size:.55rem;font-weight:500;background:var(--border-soft);border-radius:2px;padding:2px 8px;color:rgba(13,17,23,.4);transition:all .2s}.rmp-all.on .rmp-all-ct{background:rgba(255,255,255,.15);color:rgba(255,255,255,.7)}
+.rmp-div{height:1px;background:var(--border-soft);margin:5px 6px 8px}.rmp-group{font-family:var(--mono);font-size:.48rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(13,17,23,.28);padding:.15rem .8rem .3rem}
+.rmp-row{display:flex;align-items:center;gap:9px;padding:.55rem .75rem;border-radius:5px;cursor:pointer;border:1.5px solid transparent;transition:all .22s var(--ease);user-select:none;margin-bottom:2px;position:relative}.rmp-row:hover{background:var(--canvas)}.rmp-row.on{border-color:var(--rc,var(--gold));background:white}.rmp-num{width:34px;height:34px;border-radius:2px;background:var(--canvas);border:1.5px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:.9rem;font-weight:700;color:rgba(13,17,23,.35);flex-shrink:0;transition:all .25s var(--spring)}.rmp-row:hover .rmp-num{color:rgba(13,17,23,.7)}.rmp-row.on .rmp-num{color:white;border-color:transparent;background:var(--rc,var(--gold))}.rmp-info{flex:1;min-width:0}.rmp-nm{font-size:.7rem;font-weight:600;color:rgba(13,17,23,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;margin-bottom:2px;transition:color .2s}.rmp-row.on .rmp-nm{color:var(--ink)}.rmp-sb{font-size:.57rem;font-weight:400;color:rgba(13,17,23,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;transition:color .2s}.rmp-row.on .rmp-sb{color:var(--rc,var(--gold))}.rmp-ct{width:18px;height:18px;border-radius:50%;background:var(--border-soft);border:1px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.48rem;color:rgba(13,17,23,.3);flex-shrink:0;transition:all .2s}.rmp-row.on .rmp-ct{background:var(--rc,var(--gold));border-color:transparent;color:white}.rmp-swatch{width:3px;height:22px;border-radius:2px;flex-shrink:0;opacity:0;transition:opacity .2s}.rmp-row.on .rmp-swatch{opacity:1}.rmp-mob-lbl{font-size:.48rem;font-weight:600;color:rgba(13,17,23,.3);transition:color .2s;display:none}
+.rmp-legend{padding:.8rem 1.3rem .9rem;border-top:1px solid var(--border-soft);background:var(--canvas)}.rmp-legend-title{font-family:var(--mono);font-size:.48rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(13,17,23,.3);margin-bottom:.5rem}.rmp-legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:.28rem}.rml-item{display:flex;align-items:center;gap:6px}.rml-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}.rml-lbl{font-size:.56rem;color:rgba(13,17,23,.42)}
+.rms-frame{position:relative;border-radius:5px;overflow:visible;height:660px;border:1px solid var(--border-soft)}
+#rms-map{width:100%;height:660px;display:block}
+.rmo-pill{position:absolute;top:1rem;left:1rem;z-index:500;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.92);backdrop-filter:blur(20px) saturate(150%);border:1px solid var(--border-soft);border-radius:2px;padding:.38rem 1rem .38rem .65rem;pointer-events:none}.rmo-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;animation:livePulse 2.5s ease-in-out infinite}@keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(26,122,133,.5)}50%{box-shadow:0 0 0 6px rgba(26,122,133,0)}}.rmo-count{font-family:var(--serif);font-size:1.05rem;font-weight:400;color:var(--ink);line-height:1}.rmo-label{font-size:.56rem;color:rgba(13,17,23,.4)}
+.rmo-strip{position:absolute;bottom:1rem;left:1rem;z-index:500;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.92);backdrop-filter:blur(18px) saturate(150%);border:1px solid var(--border-soft);border-radius:2px;padding:.42rem 1rem;pointer-events:none;transition:opacity .3s}.rmo-strip-ic{color:var(--gold);font-size:.65rem;flex-shrink:0}.rmo-strip-txt{font-size:.66rem;font-weight:600;color:var(--ink)}.rmo-strip-sub{font-size:.56rem;color:rgba(13,17,23,.4);margin-left:4px}
+.rmo-hint{position:absolute;bottom:1rem;right:1rem;z-index:500;background:rgba(255,255,255,.7);backdrop-filter:blur(10px);border:1px solid var(--border-soft);border-radius:2px;padding:.32rem .7rem;display:flex;align-items:center;gap:5px;font-size:.54rem;color:rgba(13,17,23,.35);pointer-events:none}
+.leaflet-control-zoom{border:none!important;box-shadow:none!important;margin:.8rem!important}.leaflet-control-zoom a{background:rgba(255,255,255,.96)!important;border:1px solid var(--border-soft)!important;color:rgba(13,17,23,.5)!important;width:32px!important;height:32px!important;line-height:30px!important;font-size:.8rem!important;transition:all .2s!important}.leaflet-control-zoom a:hover{background:var(--gold-pale)!important;color:var(--gold)!important;border-color:rgba(201,149,58,.3)!important}.leaflet-control-zoom-in{border-radius:2px 2px 0 0!important}.leaflet-control-zoom-out{border-radius:0 0 2px 2px!important}.leaflet-control-attribution{background:rgba(255,255,255,.85)!important;color:rgba(13,17,23,.35)!important;font-size:.48rem!important}
+.rms-detail{position:absolute;top:50%;right:1rem;z-index:700;width:330px;background:white;border:1px solid var(--border-soft);border-radius:2px;box-shadow:0 8px 40px rgba(0,0,0,.13),0 2px 10px rgba(0,0,0,.07);display:none;flex-direction:row;opacity:0;transform:translateY(-50%) translateX(8px) scale(.97);transition:opacity .26s var(--ease),transform .32s var(--spring);overflow:hidden;max-height:540px}.rms-detail.vis{display:flex;opacity:1;transform:translateY(-50%) translateX(0) scale(1)}.rms-detail.multi{width:330px}
+.rmd-x{position:absolute;top:.55rem;right:.55rem;z-index:30;width:24px;height:24px;border-radius:2px;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);border:none;color:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.55rem;transition:all .15s}.rmd-x:hover{background:rgba(0,0,0,.8)}
+.rmd-vtab-strip{width:34px;flex-shrink:0;order:-1;background:#f2f1f0;border-right:1px solid var(--border-soft);display:flex;flex-direction:column;align-items:center;padding:2.6rem 0 .5rem;gap:0}.rmd-vtab{width:100%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:.6rem 0 .55rem;border:none;background:transparent;transition:background .16s;position:relative;flex-shrink:0}.rmd-vtab:hover{background:rgba(0,0,0,.04)}.rmd-vtab.active{background:white}.rmd-vtab::after{content:'';position:absolute;right:0;top:22%;bottom:22%;width:2px;border-radius:2px 0 0 2px;background:var(--vtab-color,var(--gold));opacity:0;transition:opacity .18s}.rmd-vtab.active::after{opacity:1}.rmd-vtab-num{font-family:var(--mono);font-size:.48rem;font-weight:600;color:rgba(13,17,23,.2);line-height:1;transition:color .16s}.rmd-vtab.active .rmd-vtab-num{color:var(--vtab-color,var(--gold))}.rmd-vtab-dot{width:5px;height:5px;border-radius:50%;background:rgba(13,17,23,.14);transition:background .16s,transform .16s;flex-shrink:0}.rmd-vtab.active .rmd-vtab-dot{background:var(--vtab-color,var(--gold));transform:scale(1.25)}.rmd-vtab-lbl{font-family:var(--sans);font-size:.42rem;font-weight:600;color:rgba(13,17,23,.25);writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);white-space:nowrap;overflow:hidden;max-height:46px;text-overflow:ellipsis;transition:color .16s;letter-spacing:.04em;text-transform:uppercase}.rmd-vtab.active .rmd-vtab-lbl{color:rgba(13,17,23,.6)}.rmd-vtab-div{width:18px;height:1px;background:rgba(13,17,23,.07);flex-shrink:0;margin:.08rem 0}
+.rmd-content-area{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}.rmd-slides-viewport{overflow:hidden;flex:1;min-height:0;position:relative}.rmd-slides-track{display:flex;height:100%;transition:transform .42s cubic-bezier(.4,0,.2,1);will-change:transform}.rmd-slide{min-width:100%;height:100%;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#2ba8b7 rgba(26,122,133,0.08)}.rmd-slide::-webkit-scrollbar{width:2px}.rmd-slide::-webkit-scrollbar-thumb{background:#2ba8b7;border-radius:2px}
+.rmd-slide-img{position:relative;height:130px;flex-shrink:0;overflow:hidden}.rmd-slide-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.75) saturate(1.1);transition:transform .55s}.rms-detail:hover .rmd-slide-img img{transform:scale(1.04)}.rmd-slide-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,.25) 100%)}
+.rmd-region{position:absolute;bottom:.6rem;left:.7rem;z-index:2;background:rgba(0,0,0,.52);backdrop-filter:blur(8px);border-radius:20px;padding:2px 8px;font-size:.5rem;color:rgba(255,255,255,.85);display:flex;align-items:center;gap:4px}.rmd-region i{color:var(--gold);font-size:.46rem}
+.rmd-body{padding:.7rem .85rem .75rem;display:flex;flex-direction:column;gap:.4rem;cursor:grab;user-select:none}.rmd-body.dragging{cursor:grabbing}.rmd-cat{font-family:var(--mono);font-size:.49rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1px}.rmd-name{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--ink);line-height:1.15}.rmd-tagline{font-size:.61rem;font-weight:300;color:rgba(13,17,23,.55);line-height:1.6;border-left:2px solid var(--gold);background:var(--gold-pale);border-radius:0 2px 2px 0;padding:.38rem .65rem}
+.rmd-acts{display:flex;flex-direction:column;gap:.14rem}.rmd-act{display:flex;align-items:flex-start;gap:7px;padding:.26rem .5rem;background:var(--canvas);border-radius:2px;font-size:.59rem;color:rgba(13,17,23,.6);line-height:1.38;transition:background .15s}.rmd-act:hover{background:#f0efee}.rmd-act i{color:var(--teal);font-size:.52rem;flex-shrink:0;margin-top:2px}
+.rmd-facts{display:flex;flex-wrap:wrap;gap:.16rem}.rmd-fact{display:flex;align-items:center;gap:4px;background:white;border:1px solid var(--border-soft);border-radius:2px;padding:3px 7px;font-size:.56rem;color:rgba(13,17,23,.45)}.rmd-fact i{font-size:.5rem;color:var(--gold)}.rmd-fact strong{color:var(--ink);font-weight:600}
+.rmd-night{display:flex;align-items:center;gap:7px;background:var(--canvas-warm);border:1px solid rgba(201,149,58,.15);border-radius:2px;padding:.36rem .6rem}.rmd-night i{color:var(--gold);font-size:.62rem;flex-shrink:0}.rmd-night-txt{font-size:.58rem;color:rgba(13,17,23,.5);line-height:1.35}.rmd-night-txt strong{color:var(--gold);font-weight:600;display:block;font-size:.58rem;margin-bottom:1px}
+.rmd-chips{display:flex;flex-wrap:wrap;gap:.16rem}.rmd-chip{background:var(--canvas);border:1px solid var(--border-soft);border-radius:2px;padding:2px 7px;font-size:.52rem;color:rgba(13,17,23,.45)}
+.rmd-cta{display:flex;gap:.35rem;margin-top:.1rem}.rmd-main{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--ink);color:white;font-size:.65rem;font-weight:600;padding:9px 12px;border-radius:4px;cursor:pointer;transition:all .22s}.rmd-main:hover{background:var(--teal);transform:translateY(-1px);color:#fff!important}.rmd-save{width:34px;height:34px;border-radius:4px;flex-shrink:0;background:var(--canvas);border:1px solid var(--border-soft);color:rgba(13,17,23,.3);font-size:.7rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}.rmd-save:hover{background:var(--gold-pale);border-color:rgba(201,149,58,.3);color:var(--gold)}.rmd-save.saved{background:var(--gold-pale);border-color:rgba(201,149,58,.4);color:var(--gold)}
+.rmd-stop-footer{display:flex;align-items:center;justify-content:space-between;padding:.36rem .82rem .38rem;background:#f2f1f0;border-top:1px solid var(--border-soft);flex-shrink:0}.rmd-stop-progress{display:flex;align-items:center;gap:6px;flex:1}.rmd-stop-prog-label{font-family:var(--mono);font-size:.45rem;font-weight:500;color:rgba(13,17,23,.3);white-space:nowrap;letter-spacing:.04em}.rmd-stop-prog-dots{display:flex;gap:3px;align-items:center}.rmd-stop-prog-dot{height:3px;border-radius:2px;background:rgba(13,17,23,.1);transition:all .26s var(--ease);cursor:pointer;width:14px}.rmd-stop-prog-dot.active{background:var(--dot-color,var(--gold));width:22px}.rmd-stop-nav{display:flex;gap:3px}.rmd-stop-nav-btn{width:22px;height:22px;border-radius:2px;background:white;border:1px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-size:.52rem;color:rgba(13,17,23,.35);cursor:pointer;transition:all .14s}.rmd-stop-nav-btn:hover{background:var(--ink);color:white;border-color:var(--ink)}.rmd-stop-nav-btn:disabled{opacity:.22;pointer-events:none}
+.rmd-single-img{position:relative;height:130px;flex-shrink:0;overflow:hidden}.rmd-single-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.75) saturate(1.1);transition:transform .55s var(--ease)}.rms-detail:hover .rmd-single-img img{transform:scale(1.04)}.rmd-single-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,.25) 100%)}
+.rmd-daybadge{position:absolute;top:.6rem;left:.7rem;z-index:2;display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.48);backdrop-filter:blur(8px);border-radius:20px;padding:3px 10px 3px 7px;font-family:var(--mono);font-size:.48rem;font-weight:500}.rmd-dbdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}.rmd-dbnum{color:rgba(255,255,255,.85)}
+.rmd-single-body{padding:.7rem .85rem .75rem;display:flex;flex-direction:column;gap:.4rem;flex:1;min-height:0;overflow-y:auto;cursor:grab;user-select:none;scrollbar-width:thin;scrollbar-color:#2ba8b7 rgba(26,122,133,0.08)}.rmd-single-body::-webkit-scrollbar{width:2px}.rmd-single-body::-webkit-scrollbar-thumb{background:#2ba8b7}.rmd-single-body.dragging{cursor:grabbing}
+.rms-tt{position:fixed;z-index:9999;pointer-events:none;display:none;transform:translate(-50%,-100%) translateY(-16px);filter:drop-shadow(0 16px 40px rgba(0,0,0,.15))}.rmtt-card{width:210px;background:white;border:1px solid var(--border-soft);border-radius:5px;overflow:hidden}.rmtt-img{width:100%;height:105px;overflow:hidden;position:relative}.rmtt-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(1.1);display:block}.rmtt-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:35px;background:linear-gradient(transparent,rgba(255,255,255,.95))}.rmtt-body{padding:.6rem .85rem .72rem}.rmtt-row{display:flex;align-items:center;gap:5px;margin-bottom:.22rem}.rmtt-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}.rmtt-cat{font-family:var(--mono);font-size:.5rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase}.rmtt-name{font-family:var(--serif);font-size:1.02rem;font-weight:400;color:var(--ink);line-height:1.14;margin-bottom:.14rem}.rmtt-hint{font-size:.6rem;font-weight:300;color:rgba(13,17,23,.5);line-height:1.46}.rmtt-arrow{width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid white;margin:0 auto;filter:drop-shadow(0 2px 2px rgba(0,0,0,.06))}
+.rms-stats-band{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--border-soft);background:white}.rmsb{padding:1.6rem 1.2rem;display:flex;align-items:center;gap:.85rem;border-right:1px solid var(--border-soft);transition:background .2s;cursor:default}.rmsb:last-child{border-right:none}.rmsb:hover{background:var(--canvas)}.rmsb-ic{width:42px;height:42px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}.rmsb-ic.gold{background:var(--gold-pale);color:var(--gold)}.rmsb-ic.teal{background:var(--teal-pale);color:var(--teal)}.rmsb-ic.jade{background:rgba(45,138,92,.1);color:var(--jade)}.rmsb-ic.sky{background:rgba(53,128,184,.1);color:var(--sky)}.rmsb-ic.violet{background:rgba(107,95,173,.1);color:var(--violet)}.rmsb-val{font-family:var(--serif);font-size:2.1rem;font-weight:400;color:var(--ink);line-height:1}.rmsb-lbl{font-size:.6rem;font-weight:300;color:rgba(13,17,23,.42);margin-top:3px;line-height:1.4}
+.rms-ticker{overflow:hidden;padding:.65rem 0;background:var(--ink)}.rmt-track{display:flex;white-space:nowrap;animation:tickerRun 38s linear infinite}.rms-ticker:hover .rmt-track{animation-play-state:paused}@keyframes tickerRun{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}.rmt-item{display:inline-flex;align-items:center;gap:.5rem;padding:0 2rem;font-size:.64rem;font-weight:500;color:rgba(255,255,255,.28);letter-spacing:.03em;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0}.rmt-item i{font-size:.58rem;color:var(--gold)}.rmt-item strong{font-weight:600;color:rgba(255,255,255,.65)}
+.rpin{position:relative;display:flex;align-items:flex-start;justify-content:center;cursor:pointer}.rpin-ring{position:absolute;border-radius:50%;top:0;left:50%;transform:translateX(-50%);animation:rpinPulse 2.8s ease-out infinite;pointer-events:none}@keyframes rpinPulse{0%{transform:translateX(-50%) scale(.85);opacity:.7}70%,100%{transform:translateX(-50%) scale(2.4);opacity:0}}.rpin-body{border-radius:50%;border:2.5px solid rgba(255,255,255,.96);display:flex;align-items:center;justify-content:center;position:relative;z-index:2;font-family:var(--sans);font-weight:700;color:white;transition:transform .22s var(--spring),box-shadow .22s;flex-shrink:0}.rpin-body:hover{transform:scale(1.22)}.rpin-lbl{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);background:white;border:1px solid var(--border-soft);border-radius:2px;padding:1px 6px;white-space:nowrap;font-family:var(--mono);font-size:.42rem;font-weight:500;color:rgba(13,17,23,.5);pointer-events:none;z-index:3}
+#rms-ov{display:none;position:fixed;inset:0;z-index:8999;background:rgba(13,17,23,.5);backdrop-filter:blur(4px)}@media(max-width:900px){#rms-ov.on{display:block}}
+#rms-map{width:100%;height:660px;display:block}@media(max-width:860px){#rms-map{height:510px}}@media(max-width:640px){#rms-map{height:420px}}@media(max-width:480px){#rms-map{height:360px}}
+@media(max-width:1180px){.rms-stats-band{grid-template-columns:repeat(3,1fr)}.rms-layout{grid-template-columns:250px 1fr}}
+@media(max-width:860px){.rms-layout{grid-template-columns:1fr;gap:10px}.rms-panel{position:static;flex-direction:row;max-height:none;border-radius:5px;overflow-x:auto;overflow-y:hidden}.rmp-head,.rmp-progress,.rmp-legend,.rmp-group,.rmp-div{display:none}.rmp-list{display:flex;flex-direction:row;padding:.45rem .45rem;gap:.3rem;overflow-x:auto;overflow-y:hidden;max-height:none}.rmp-list::-webkit-scrollbar{height:3px}.rmp-all{flex-direction:column;text-align:center;gap:4px;padding:.48rem .55rem;min-width:64px;flex-shrink:0;border-radius:2px;margin-bottom:0}.rmp-all-txt .rmp-nm{font-size:.6rem}.rmp-all-txt .rmp-sb,.rmp-all-ct{display:none}.rmp-all-ic{width:36px;height:36px;border-radius:2px}.rmp-row{flex-direction:column;align-items:center;text-align:center;gap:4px;padding:.48rem .5rem;min-width:60px;border-radius:2px;flex-shrink:0;margin-bottom:0}.rmp-info,.rmp-ct,.rmp-swatch{display:none}.rmp-num{width:36px;height:36px;border-radius:2px}.rmp-mob-lbl{display:block}.rms-frame{height:510px;border-radius:5px}.rms-head{grid-template-columns:1fr;padding-top:3.5rem}.rms-hpills{display:none}.rms-stats-band{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.rms-inner{padding:0 1.2rem}.rms-frame{height:420px}.rms-head{padding-top:3rem;padding-bottom:1.8rem}.rms-title{font-size:2.2rem}.rms-stats-band{grid-template-columns:1fr 1fr}.rms-detail,.rms-detail.multi{width:calc(100% - 1.5rem);left:.75rem;right:.75rem;top:auto;bottom:0;transform:none;max-height:88vh;border-radius:2px 2px 0 0}.rms-detail.vis{transform:none}.rmsb{padding:1.1rem .9rem;gap:.65rem}.rmsb-ic{width:38px;height:38px}}
+@media(max-width:480px){.rms-stats-band{grid-template-columns:1fr}.rms-frame{height:360px}.rms-title{font-size:1.9rem}}
+@keyframes upFade{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}.rms-head{animation:upFade .7s .05s both}.rms-layout{animation:upFade .7s .18s both}.rms-stats-band{animation:upFade .7s .3s both}.rms-ticker{animation:upFade .7s .4s both}
+</style>
+
+<section class="rms" id="rms-map-section">
+  <div class="rms-blob rms-b1"></div><div class="rms-blob rms-b2"></div>
+  <div class="rms-inner">
+    <div class="rms-head">
+      <div>
+        <div class="rms-eyebrow"><div class="rms-ey-line"></div><span class="rms-ey-txt">4 Nights &middot; 5 Days &middot; Live Route Map</span><div class="rms-ey-dot"></div></div>
+        <h2 class="rms-title">Kuala Lumpur &amp; <em>Genting Route</em><br><span class="rms-gold">Family Tour &middot; Malaysia</span></h2>
+        <p class="rms-desc">Select any day to zoom in. Click any pin for full details, activities and family tips for each stop across greater Kuala Lumpur and Genting Highlands.</p>
+      </div>
+      <div class="rms-hpills">
+        <div class="rms-hpill"><div class="rhp-ic gold"><i class="fas fa-hat-wizard"></i></div><span class="rhp-val">3+</span><span class="rhp-lbl">Theme Parks &mdash; Genting, Sunway &amp; Aquaria</span></div>
+        <div class="rms-hpill"><div class="rhp-ic teal"><i class="fas fa-mountain"></i></div><span class="rhp-val">1,800m</span><span class="rhp-lbl">Genting Highlands &mdash; Cool Hill Resort</span></div>
+        <div class="rms-hpill"><div class="rhp-ic jade"><i class="fas fa-child"></i></div><span class="rhp-val">Kids</span><span class="rhp-lbl">Family-Friendly All 5 Days</span></div>
+        <div class="rms-hpill"><div class="rhp-ic sky"><i class="fas fa-flag"></i></div><span class="rhp-val">🇱🇰</span><span class="rhp-lbl">From Sri Lanka &mdash; Family Package</span></div>
+      </div>
+    </div>
+    <div class="rms-layout">
+      <div class="rms-panel">
+        <div class="rmp-head">
+          <div class="rmp-head-row"><div class="rmp-title"><div class="rmp-title-ic"><i class="fas fa-route"></i></div>Tour Itinerary</div><div class="rmp-badge" id="rms-badge">All &middot; 6</div></div>
+          <div class="rmp-sub">Click a day to filter the map</div>
+        </div>
+        <div class="rmp-progress"><div class="rmp-prog-bar"><div class="rmp-prog-fill" id="rms-prog" style="width:100%"></div></div><div class="rmp-prog-labels"><span>Day 1</span><span>Day 5</span></div></div>
+        <div class="rmp-list" id="rms-list"></div>
+        <div class="rmp-legend">
+          <div class="rmp-legend-title">Category Legend</div>
+          <div class="rmp-legend-grid">
+            <div class="rml-item"><span class="rml-dot" style="background:#3580b8"></span><span class="rml-lbl">Airport</span></div>
+            <div class="rml-item"><span class="rml-dot" style="background:#c9953a"></span><span class="rml-lbl">City Tour & Landmark</span></div>
+            <div class="rml-item"><span class="rml-dot" style="background:#2d8a5c"></span><span class="rml-lbl">Hill Resort</span></div>
+            <div class="rml-item"><span class="rml-dot" style="background:#6b5fad"></span><span class="rml-lbl">Theme Park</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="rms-frame" id="rms-frame">
+        <div id="rms-map"></div>
+        <div class="rmo-pill"><div class="rmo-dot"></div><span class="rmo-count" id="rms-count">6</span><span class="rmo-label">&ensp;stops shown</span></div>
+        <div class="rmo-strip"><i class="rmo-strip-ic fas fa-map-signs"></i><span class="rmo-strip-txt" id="rms-day-txt">Full 5-Day Route</span><span class="rmo-strip-sub" id="rms-day-sub">Kuala Lumpur &mdash; Malaysia</span></div>
+        <div class="rmo-hint"><i class="fas fa-hand-pointer"></i>&ensp;Click any pin to explore</div>
+        <div class="rms-detail" id="rms-detail"></div>
+      </div>
+    </div>
+  </div>
+  <div class="rms-stats-band">
+    <div class="rmsb"><div class="rmsb-ic gold"><i class="fas fa-hat-wizard"></i></div><div><div class="rmsb-val">3+</div><div class="rmsb-lbl">Theme parks &middot; Genting, Sunway &amp; Aquaria</div></div></div>
+    <div class="rmsb"><div class="rmsb-ic teal"><i class="fas fa-mountain"></i></div><div><div class="rmsb-val">1,800m</div><div class="rmsb-lbl">Genting Highlands altitude</div></div></div>
+    <div class="rmsb"><div class="rmsb-ic jade"><i class="fas fa-child"></i></div><div><div class="rmsb-val">Kids</div><div class="rmsb-lbl">Family-friendly all 5 days</div></div></div>
+    <div class="rmsb"><div class="rmsb-ic violet"><i class="fas fa-moon"></i></div><div><div class="rmsb-val">4</div><div class="rmsb-lbl">Nights &middot; 5 days</div></div></div>
+    <div class="rmsb"><div class="rmsb-ic sky"><i class="fas fa-map-marker-alt"></i></div><div><div class="rmsb-val">KL</div><div class="rmsb-lbl">Kuala Lumpur &middot; Malaysia</div></div></div>
+  </div>
+  <div class="rms-ticker"><div class="rmt-track" id="rms-ticker"></div></div>
+</section>
+
+<div class="rms-tt" id="rms-tt"><div class="rmtt-card"><div class="rmtt-img"><img id="rmtt-img" src="" alt=""></div><div class="rmtt-body"><div class="rmtt-row"><div class="rmtt-dot" id="rmtt-dot"></div><span class="rmtt-cat" id="rmtt-cat"></span></div><div class="rmtt-name" id="rmtt-name"></div><div class="rmtt-hint" id="rmtt-hint"></div></div></div><div class="rmtt-arrow"></div></div>
+<div id="rms-ov"></div>
+
+<script>
+(function () {
+
+const DAYS = [
+  {
+    n:1, label:'Arrival in Kuala Lumpur', sub:'KUL Airport · Hotel Check-in · Bukit Bintang · Petronas Night',
+    color:'#3580b8', night:'Kuala Lumpur',
+    stops:[{
+      id:'my-kul', name:'Kuala Lumpur International Airport', lat:2.7456, lng:101.7072,
+      region:'Sepang · Selangor · Kuala Lumpur International Airport',
+      cat:'Airport & Arrival', catColor:'#3580b8',
+      hint:'Arrive at KUL · airport transfer to city hotel · check-in · Bukit Bintang evening · Petronas night photos',
+      tagline:'Arrive at Kuala Lumpur International Airport and transfer to your family-friendly city hotel near Bukit Bintang or KLCC. Evening stroll along Bukit Bintang for world-class street food and shopping. Optional night photo visit to the iconic Petronas Twin Towers lit against the skyline.',
+      img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Lumpur-airport.webp',
+      activities:[
+        {i:'fa-plane-arrival',t:'Arrive at Kuala Lumpur International Airport (KUL)'},
+        {i:'fa-car',t:'Airport transfer to city hotel — Bukit Bintang / KLCC area'},
+        {i:'fa-hotel',t:'Hotel check-in · 4-star family-friendly property'},
+        {i:'fa-utensils',t:'Bukit Bintang — street food, shops and night market'},
+        {i:'fa-camera',t:'Optional: Petronas Twin Towers night photo stop'}
+      ],
+      facts:[{i:'fa-plane',l:'Airport',v:'KUL'},{i:'fa-hotel',l:'Area',v:'Bukit Bintang'},{i:'fa-bed',l:'Night',v:'Kuala Lumpur'}],
+      chips:['KUL Airport','Hotel Check-in','Bukit Bintang Evening'],
+      nightAt:'4-star Family Hotel — Kuala Lumpur (Bukit Bintang / KLCC area)'
+    }]
+  },
+  {
+    n:2, label:'Kuala Lumpur City Tour', sub:'Petronas Towers · Aquaria KLCC · Batu Caves · KL Bird Park',
+    color:'#c9953a', night:'Kuala Lumpur',
+    stops:[
+      {
+        id:'my-petronas', name:'Petronas Twin Towers & Aquaria KLCC', lat:3.1578, lng:101.7122,
+        region:'KLCC · Kuala Lumpur City Centre · Twin Towers',
+        cat:'City Landmark', catColor:'#c9953a',
+        hint:'Petronas Twin Towers skyline · KLCC Park for kids · Aquaria KLCC underwater tunnel & sharks',
+        tagline:'Morning at the iconic Petronas Twin Towers — once the world’s tallest buildings, now a must-see KL landmark. Kids play in the gorgeous KLCC Park below. Then explore Aquaria KLCC, featuring a spectacular 90-metre underwater tunnel where sharks and stingrays glide overhead.',
+        img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Petronas-Twin-Towers-KLCC.webp',
+        activities:[
+          {i:'fa-building',t:'Petronas Twin Towers — iconic KL landmark & skyline photo'},
+          {i:'fa-child',t:'KLCC Park — playground and open space for children'},
+          {i:'fa-fish',t:'Aquaria KLCC — 90-metre underwater tunnel experience'},
+          {i:'fa-water',t:'Sharks, stingrays and thousands of marine creatures'}
+        ],
+        facts:[{i:'fa-building',l:'Towers',v:'Petronas'},{i:'fa-fish',l:'Aquaria',v:'KLCC'}],
+        chips:['Petronas Towers','KLCC Park','Aquaria Tunnel'],
+        nightAt:'4-star Family Hotel — Kuala Lumpur'
+      },
+      {
+        id:'my-batu', name:'Batu Caves & KL Bird Park', lat:3.2379, lng:101.6840,
+        region:'Gombak · Selangor · Batu Caves Hindu Temple Complex',
+        cat:'Culture & Nature', catColor:'#c9953a',
+        hint:'Batu Caves · 272 colourful steps · monkeys · KL Bird Park flamingos · Jalan Alor street food',
+        tagline:'Afternoon at Batu Caves — a stunning Hindu temple complex inside dramatic limestone hills, reached by 272 colourful steps with friendly monkeys along the way. Then visit KL Bird Park, the world’s largest free-flight aviary. Evening at Jalan Alor for famous KL street food.',
+        img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Batu-Caves-Bird-Park.webp',
+        activities:[
+          {i:'fa-mountain',t:'Batu Caves — 272 colourful steps to limestone temple'},
+          {i:'fa-paw',t:'Friendly macaque monkeys along the cave steps'},
+          {i:'fa-dove',t:'KL Bird Park — world’s largest free-flight aviary'},
+          {i:'fa-feather',t:'Flamingos, hornbills and tropical birds up close'},
+          {i:'fa-utensils',t:'Jalan Alor famous street food evening'}
+        ],
+        facts:[{i:'fa-mountain',l:'Steps',v:'272'},{i:'fa-dove',l:'Bird Park',v:'Flamingos'},{i:'fa-bed',l:'Night',v:'KL'}],
+        chips:['Batu Caves','KL Bird Park','Jalan Alor Street Food'],
+        nightAt:'4-star Family Hotel — Kuala Lumpur'
+      }
+    ]
+  },
+  {
+    n:3, label:'Genting Highlands — Full Day', sub:'Awana SkyWay Cable Car · Skytropolis Theme Park · Chin Swee Temple',
+    color:'#2d8a5c', night:'Kuala Lumpur',
+    stops:[{
+      id:'my-genting', name:'Genting Highlands — SkyWay & Skytropolis', lat:3.4225, lng:101.7931,
+      region:'Pahang · Genting Highlands · 1,800m Cool Hill Resort',
+      cat:'Theme Park & Hill Resort', catColor:'#2d8a5c',
+      hint:'Awana SkyWay cable car · Skytropolis Indoor Theme Park · Chin Swee Caves Temple · 1,800m cool climate',
+      tagline:'Full day at Malaysia’s iconic cool hill resort at 1,800 metres. Take the Awana SkyWay gondola cable car up through the clouds for breathtaking mountain views. Explore Skytropolis Indoor Theme Park with rides and games for all ages. Visit Chin Swee Caves Temple for scenic hilltop views. Return to KL for dinner.',
+      img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Genting-Highlands-—-Skytropolis.webp',
+      activities:[
+        {i:'fa-tram',t:'Awana SkyWay gondola cable car — mountain views through the clouds'},
+        {i:'fa-hat-wizard',t:'Skytropolis Indoor Theme Park — rides for all ages'},
+        {i:'fa-place-of-worship',t:'Chin Swee Caves Temple — hilltop panoramic views'},
+        {i:'fa-thermometer-quarter',t:'Cool climate at 1,800m — refreshing escape from KL heat'},
+        {i:'fa-car',t:'Return transfer to Kuala Lumpur for dinner'}
+      ],
+      facts:[{i:'fa-mountain',l:'Altitude',v:'1,800m'},{i:'fa-tram',l:'SkyWay',v:'Cable Car'},{i:'fa-bed',l:'Night',v:'KL'}],
+      chips:['Awana SkyWay','Skytropolis Indoor Park','Chin Swee Temple'],
+      nightAt:'4-star Family Hotel — Kuala Lumpur (same hotel)'
+    }]
+  },
+  {
+    n:4, label:'Sunway Lagoon Theme Park', sub:'Water Parks · Rides · Wildlife Zone · Bukit Bintang Last Night',
+    color:'#6b5fad', night:'Kuala Lumpur',
+    stops:[{
+      id:'my-sunway', name:'Sunway Lagoon Theme Park', lat:3.0732, lng:101.6050,
+      region:'Petaling Jaya · Selangor · Sunway Lagoon — 6 Parks in 1',
+      cat:'Theme Park', catColor:'#6b5fad',
+      hint:'Sunway Lagoon · wave pool, water slides, wildlife park, thrill rides · full family day · excellent for kids',
+      tagline:'Full day at Sunway Lagoon — one of Malaysia’s top family theme parks featuring 6 parks in one: water park, amusement rides, wildlife park, extreme park, scream park and Nickelodeon park. The wave pool and water slides are a massive hit with children. Evening at Bukit Bintang for last-night shopping and dinner.',
+      img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Sunway-Lagoon-Theme-Park.webp',
+      activities:[
+        {i:'fa-water',t:'Sunway Lagoon Water Park — wave pool and water slides'},
+        {i:'fa-roller-coaster',t:'Amusement park rides and thrill attractions'},
+        {i:'fa-paw',t:'Wildlife park — encounter exotic animals'},
+        {i:'fa-shopping-bag',t:'Sunway Pyramid Mall for evening shopping'},
+        {i:'fa-utensils',t:'Last night at Bukit Bintang — shopping and dinner'}
+      ],
+      facts:[{i:'fa-star',l:'Parks',v:'6-in-1'},{i:'fa-water',l:'Waves',v:'Pool'},{i:'fa-bed',l:'Night',v:'KL (last)'}],
+      chips:['Sunway Lagoon','Water Park','Wildlife Zone','6 Parks in 1'],
+      nightAt:'4-star Family Hotel — Kuala Lumpur (last night)'
+    }]
+  },
+  {
+    n:5, label:'Departure from Kuala Lumpur', sub:'Breakfast · Hotel Checkout · KUL Airport · Return to Colombo',
+    color:'#3580b8', night:'Departure',
+    stops:[{
+      id:'my-departure', name:'KUL Airport — Departure to Sri Lanka', lat:2.7460, lng:101.7078,
+      region:'Sepang · Selangor · KUL International Airport · Departure Terminal',
+      cat:'Airport & Departure', catColor:'#3580b8',
+      hint:'Hotel checkout · transfer to KUL Airport · departure to Colombo · Malaysia adventure complete',
+      tagline:'Enjoy breakfast at the hotel and check out. Transfer to Kuala Lumpur International Airport for your departure flight home to Colombo. Your Malaysia family adventure is complete — Petronas Towers, Batu Caves, Genting Highlands and Sunway Lagoon all ticked off!',
+      img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Lumpur.webp',
+      activities:[
+        {i:'fa-utensils',t:'Hotel breakfast and checkout'},
+        {i:'fa-car',t:'Transfer to Kuala Lumpur International Airport (KUL)'},
+        {i:'fa-plane-departure',t:'Departure flight to Colombo, Sri Lanka'}
+      ],
+      facts:[{i:'fa-plane',l:'Airport',v:'KUL'},{i:'fa-flag',l:'Return',v:'Sri Lanka'}],
+      chips:['KUL Airport','Departure','Return to SL'],
+      nightAt:'Departure'
+    }]
+  }
+];
+
+const ALL_STOPS = DAYS.flatMap(d => d.stops.map(s => ({ ...s, dayN: d.n, dayLabel: d.label, dayColor: d.color })));
+
+function waitAndInit() {
+  var el = document.getElementById('rms-map');
+  if (!el) { setTimeout(waitAndInit, 100); return; }
+  if (el.clientHeight < 10) { el.style.height = '660px'; }
+  var map = window._rmsMap = L.map('rms-map', { center: [3.22, 101.73], zoom: 10, zoomControl: true, scrollWheelZoom: false });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '&copy;<a href="https://carto.com/">CARTO</a> &copy;<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', subdomains: 'abcd', maxZoom: 19 }).addTo(map);
+  var routeLL = ALL_STOPS.map(function(s){ return [s.lat, s.lng]; });
+  L.polyline(routeLL, { color: 'rgba(201,149,58,.55)', weight: 2.5, dashArray: '7 5', lineCap: 'round' }).addTo(map);
+
+  function mkIcon(s) {
+    var c = s.dayColor, sz = 36, totalH = sz + 24;
+    return L.divIcon({ html: '<div class="rpin" style="width:'+sz+'px;height:'+totalH+'px"><div class="rpin-ring" style="width:'+sz+'px;height:'+sz+'px;border:2.5px solid '+c+'"></div><div class="rpin-body" style="width:'+sz+'px;height:'+sz+'px;background:'+c+';font-size:.68rem;box-shadow:0 4px 20px '+c+'77">'+s.dayN+'</div><div class="rpin-lbl">Day '+s.dayN+'</div></div>', className: '', iconSize: [sz, totalH], iconAnchor: [sz/2, sz/2], popupAnchor: [0, -(sz/2+12)] });
+  }
+
+  var ttEl = document.getElementById('rms-tt'), ttImg = document.getElementById('rmtt-img'), ttDot = document.getElementById('rmtt-dot'), ttCat = document.getElementById('rmtt-cat'), ttNm = document.getElementById('rmtt-name'), ttHi = document.getElementById('rmtt-hint');
+  var isMob = function(){ return window.innerWidth <= 900; };
+  function showTT(s, e) { if (isMob()) return; ttImg.src = s.img; ttDot.style.background = s.catColor; ttCat.textContent = 'Day ' + s.dayN + ' · ' + s.cat; ttCat.style.color = s.catColor; ttNm.textContent = s.name; ttHi.textContent = s.hint; ttEl.style.display = 'block'; moveTT(e); }
+  function moveTT(e) { ttEl.style.left = e.clientX + 'px'; ttEl.style.top = e.clientY + 'px'; }
+  function hideTT() { ttEl.style.display = 'none'; }
+
+  var saved = new Set(), frame = document.getElementById('rms-frame'), detailEl = document.getElementById('rms-detail'), ovEl = document.getElementById('rms-ov'), countEl = document.getElementById('rms-count'), dayTxt = document.getElementById('rms-day-txt'), daySub = document.getElementById('rms-day-sub'), badge = document.getElementById('rms-badge'), progFill = document.getElementById('rms-prog');
+
+  function buildSlideHTML(s, idx) {
+    var acts = s.activities.map(function(a){ return '<div class="rmd-act"><i class="fas '+a.i+'"></i>'+a.t+'</div>'; }).join('');
+    var facts = s.facts.map(function(f){ return '<div class="rmd-fact"><i class="fas '+f.i+'"></i><strong>'+f.v+'</strong>&ensp;'+f.l+'</div>'; }).join('');
+    var chips = s.chips.map(function(c){ return '<div class="rmd-chip">'+c+'</div>'; }).join('');
+    var sv = saved.has(s.id);
+    var waMsg = encodeURIComponent('Hi! I would like to know more about the Malaysia Family Tour 5D/4N: ' + window.location.href);
+    return '<div class="rmd-slide-img"><img src="'+s.img+'" alt="'+s.name+'" loading="lazy"><div class="rmd-region"><i class="fas fa-map-marker-alt"></i>'+s.region+'</div></div>'
+      + '<div class="rmd-body" data-slide-idx="'+idx+'">'
+      + '<div><div class="rmd-cat" style="color:'+s.catColor+'">'+s.cat+'</div><div class="rmd-name">'+s.name+'</div></div>'
+      + '<div class="rmd-tagline">'+s.tagline+'</div>'
+      + '<div class="rmd-acts">'+acts+'</div><div class="rmd-facts">'+facts+'</div>'
+      + '<div class="rmd-night"><i class="fas fa-moon"></i><div class="rmd-night-txt"><strong>Overnight Stay</strong>'+s.nightAt+'</div></div>'
+      + '<div class="rmd-chips">'+chips+'</div>'
+      + '<div class="rmd-cta"><a class="rmd-main" href="https://wa.me/94777273794?text='+waMsg+'" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i>&ensp;Enquire About This Tour</a>'
+      + '<button class="rmd-save '+(sv?'saved':'')+'" id="rmd-save-'+s.id+'" data-saveid="'+s.id+'"><i class="'+(sv?'fas':'far')+' fa-heart"></i></button></div>'
+      + '</div>';
+  }
+
+  function buildMultiDetail(stops, day, initialIdx) {
+    var slides = stops.map(function(s,i){ return '<div class="rmd-slide">'+buildSlideHTML(s,i)+'</div>'; }).join('');
+    var vtabs = stops.map(function(s,i){
+      var shortName = s.name.split(' — ')[0].split(' · ')[0].split(' &')[0].split(' ').slice(0,2).join(' ');
+      return '<div class="rmd-vtab '+(i===initialIdx?'active':'')+'" data-vtab="'+i+'" style="--vtab-color:'+s.catColor+'" onclick="rmsGoSlide('+i+')">'+'<div class="rmd-vtab-num">'+(i+1)+'</div><div class="rmd-vtab-dot"></div><div class="rmd-vtab-lbl">'+shortName+'</div></div>'+(i<stops.length-1?'<div class="rmd-vtab-div"></div>':'');
+    }).join('');
+    var dotBtns = stops.map(function(s,i){ return '<div class="rmd-stop-prog-dot '+(i===initialIdx?'active':'')+'" style="--dot-color:'+s.catColor+'" onclick="rmsGoSlide('+i+')"></div>'; }).join('');
+    return '<button class="rmd-x" onclick="rmsClose()"><i class="fas fa-times"></i></button>'
+      + '<div class="rmd-content-area"><div class="rmd-slides-viewport"><div class="rmd-slides-track" id="rmd-track" style="transform:translateX(-'+(initialIdx*100)+'%)">'
+      + slides+'</div></div>'
+      + '<div class="rmd-stop-footer"><div class="rmd-stop-progress"><span class="rmd-stop-prog-label">Stop <span id="rmd-stop-cur">'+(initialIdx+1)+'</span> / '+stops.length+'</span><div class="rmd-stop-prog-dots" id="rmd-prog-dots">'+dotBtns+'</div></div>'
+      + '<div class="rmd-stop-nav"><button class="rmd-stop-nav-btn" id="rmd-nav-prev" onclick="rmsNavStop(-1)" '+(initialIdx===0?'disabled':'')+'>&#8249;</button><button class="rmd-stop-nav-btn" id="rmd-nav-next" onclick="rmsNavStop(1)" '+(initialIdx===stops.length-1?'disabled':'')+'>&#8250;</button></div></div></div>'
+      + '<div class="rmd-vtab-strip" id="rmd-vtab-strip">'+vtabs+'</div>';
+  }
+
+  function buildSingleDetail(s) {
+    var acts = s.activities.map(function(a){ return '<div class="rmd-act"><i class="fas '+a.i+'"></i>'+a.t+'</div>'; }).join('');
+    var facts = s.facts.map(function(f){ return '<div class="rmd-fact"><i class="fas '+f.i+'"></i><strong>'+f.v+'</strong>&ensp;'+f.l+'</div>'; }).join('');
+    var chips = s.chips.map(function(c){ return '<div class="rmd-chip">'+c+'</div>'; }).join('');
+    var sv = saved.has(s.id);
+    var waMsg = encodeURIComponent('Hi! I would like to know more about the Malaysia Family Tour 5D/4N: ' + window.location.href);
+    return '<button class="rmd-x" onclick="rmsClose()"><i class="fas fa-times"></i></button>'
+      + '<div class="rmd-content-area"><div class="rmd-single-img"><img src="'+s.img+'" alt="'+s.name+'" loading="lazy">'
+      + '<div class="rmd-daybadge"><div class="rmd-dbdot" style="background:'+s.dayColor+'"></div><span class="rmd-dbnum">Day '+s.dayN+'</span></div>'
+      + '<div class="rmd-region"><i class="fas fa-map-marker-alt"></i>'+s.region+'</div></div>'
+      + '<div class="rmd-single-body" id="rmd-body-scroll">'
+      + '<div><div class="rmd-cat" style="color:'+s.catColor+'">'+s.cat+'</div><div class="rmd-name">'+s.name+'</div></div>'
+      + '<div class="rmd-tagline">'+s.tagline+'</div>'
+      + '<div class="rmd-acts">'+acts+'</div><div class="rmd-facts">'+facts+'</div>'
+      + '<div class="rmd-night"><i class="fas fa-moon"></i><div class="rmd-night-txt"><strong>Overnight Stay</strong>'+s.nightAt+'</div></div>'
+      + '<div class="rmd-chips">'+chips+'</div>'
+      + '<div class="rmd-cta"><a class="rmd-main" href="https://wa.me/94777273794?text='+waMsg+'" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i>&ensp;Enquire About This Tour</a>'
+      + '<button class="rmd-save '+(sv?'saved':'')+'" id="rmd-save-'+s.id+'" data-saveid="'+s.id+'"><i class="'+(sv?'fas':'far')+' fa-heart"></i></button></div>'
+      + '</div></div>';
+  }
+
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-saveid]');
+    if (btn) { e.preventDefault(); var id = btn.getAttribute('data-saveid'); saved.has(id) ? saved.delete(id) : saved.add(id); var sv = saved.has(id); btn.classList.toggle('saved',sv); btn.innerHTML = sv ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>'; }
+  });
+
+  var _multiStops = null, _currentSlide = 0;
+
+  window.rmsNavStop = function(dir) { if (!_multiStops) return; var next = _currentSlide + dir; if (next < 0 || next >= _multiStops.length) return; window.rmsGoSlide(next); };
+
+  window.rmsGoSlide = function(idx) {
+    if (!_multiStops) return; _currentSlide = idx;
+    var track = document.getElementById('rmd-track'); if (track) track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    detailEl.querySelectorAll('.rmd-vtab').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+    detailEl.querySelectorAll('.rmd-stop-prog-dot').forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+    var cur = document.getElementById('rmd-stop-cur'); if (cur) cur.textContent = idx + 1;
+    var prev = document.getElementById('rmd-nav-prev'), nxt = document.getElementById('rmd-nav-next');
+    if (prev) prev.disabled = (idx === 0); if (nxt) nxt.disabled = (idx === _multiStops.length - 1);
+    var slides = detailEl.querySelectorAll('.rmd-slide'); if (slides[idx]) slides[idx].scrollTop = 0;
+    map.panTo([_multiStops[idx].lat, _multiStops[idx].lng], { animate: true, duration: .5 });
+  };
+
+  function openDetail(s) {
+    hideTT();
+    var day = DAYS.find(function(d){ return d.n === s.dayN; });
+    var isMulti = day && day.stops.length > 1;
+    var initialIdx = isMulti ? day.stops.findIndex(function(ds){ return ds.id === s.id; }) : 0;
+    _multiStops = isMulti ? day.stops.map(function(ds){ return Object.assign({}, ds, { dayN: day.n, dayLabel: day.label, dayColor: day.color }); }) : null;
+    _currentSlide = initialIdx;
+    detailEl.innerHTML = isMulti ? buildMultiDetail(_multiStops, day, initialIdx) : buildSingleDetail(s);
+    detailEl.classList.toggle('multi', isMulti);
+    function attachDrag(el) {
+      if (!el) return; var isDown = false, startY = 0, scrollTop = 0;
+      el.addEventListener('mousedown', function(e) { if (e.target.closest('a,button,input')) return; isDown = true; startY = e.pageY; scrollTop = el.scrollTop; el.classList.add('dragging'); e.preventDefault(); });
+      window.addEventListener('mousemove', function(e){ if (!isDown) return; el.scrollTop = scrollTop - (e.pageY - startY); });
+      window.addEventListener('mouseup', function(){ if (!isDown) return; isDown = false; el.classList.remove('dragging'); });
+    }
+    if (isMulti) detailEl.querySelectorAll('.rmd-slide').forEach(function(sl){ attachDrag(sl); });
+    else attachDrag(document.getElementById('rmd-body-scroll'));
+    if (isMob()) {
+      if (detailEl.parentElement !== document.body) document.body.appendChild(detailEl);
+      Object.assign(detailEl.style, { position:'fixed', top:'auto', right:'0', bottom:'0', left:'0', width:'100%', maxHeight:'88vh', overflowY:'hidden', borderRadius:'2px 2px 0 0', zIndex:'9000', display:'flex', opacity:'1', transform:'translateY(100%)', transition:'transform .42s cubic-bezier(.34,1.56,.64,1)' });
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ detailEl.style.transform = 'translateY(0)'; }); });
+      ovEl.classList.add('on'); document.body.style.overflow = 'hidden';
+    } else {
+      if (detailEl.parentElement !== frame) frame.appendChild(detailEl);
+      detailEl.removeAttribute('style'); detailEl.classList.add('vis');
+      map.panTo([s.lat, s.lng], { animate: true, duration: .6 });
+    }
+  }
+
+  window.rmsClose = function() {
+    _multiStops = null; _currentSlide = 0;
+    detailEl.classList.remove('vis','multi'); ovEl.classList.remove('on'); document.body.style.overflow = '';
+    detailEl.style.transform = 'translateY(100%)';
+    setTimeout(function(){ detailEl.innerHTML = ''; detailEl.removeAttribute('style'); if (detailEl.parentElement !== frame) frame.appendChild(detailEl); }, 430);
+  };
+
+  var mMap = {};
+  ALL_STOPS.forEach(function(s) {
+    var m = L.marker([s.lat, s.lng], { icon: mkIcon(s), title: s.name });
+    m.on('mouseover', function(e){ showTT(s, e.originalEvent); });
+    m.on('mousemove', function(e){ moveTT(e.originalEvent); });
+    m.on('mouseout', hideTT);
+    m.on('click', function(){ openDetail(s); });
+    m.addTo(map); mMap[s.id] = { marker: m, stop: s };
+  });
+
+  function applyDay(dayN) {
+    var cnt = 0;
+    ALL_STOPS.forEach(function(s) {
+      var mk = mMap[s.id].marker, show = (dayN === 'all' || s.dayN === dayN);
+      if (show) { if (!map.hasLayer(mk)) mk.addTo(map); cnt++; } else { if (map.hasLayer(mk)) map.removeLayer(mk); }
+    });
+    countEl.textContent = cnt;
+    var d = DAYS.find(function(x){ return x.n === dayN; });
+    badge.textContent = dayN === 'all' ? 'All · ' + ALL_STOPS.length : 'Day ' + dayN + ' · ' + (d ? d.stops.length : 0);
+    dayTxt.textContent = dayN === 'all' ? 'Full 5-Day Route' : 'Day ' + dayN + ' — ' + (d ? d.label : '');
+    daySub.textContent = dayN === 'all' ? 'Kuala Lumpur — Malaysia' : (d ? d.sub : '');
+    progFill.style.width = dayN === 'all' ? '100%' : Math.round((dayN / 5) * 100) + '%';
+    if (dayN !== 'all' && d) {
+      var lats = d.stops.map(function(s){ return s.lat; }), lngs = d.stops.map(function(s){ return s.lng; });
+      if (d.stops.length === 1) map.setView([d.stops[0].lat, d.stops[0].lng], 13, { animate: true, duration: .7 });
+      else map.fitBounds([[Math.min.apply(null,lats)-.02, Math.min.apply(null,lngs)-.02],[Math.max.apply(null,lats)+.02, Math.max.apply(null,lngs)+.02]], { animate: true, duration: .7, padding: [50,50] });
+    } else { map.flyTo([3.22, 101.73], 10, { animate: true, duration: .8 }); }
+  }
+
+  var listEl = document.getElementById('rms-list');
+  var allRow = document.createElement('div'); allRow.className = 'rmp-all on'; allRow.dataset.d = 'all';
+  allRow.innerHTML = '<div class="rmp-all-ic"><i class="fas fa-child"></i></div><div class="rmp-all-txt"><div class="rmp-nm">All Days</div><div class="rmp-sb">Complete 5-day Malaysia family tour</div></div><div class="rmp-all-ct">'+ALL_STOPS.length+'</div><span class="rmp-mob-lbl" style="display:none">All</span>';
+  allRow.addEventListener('click', function() { listEl.querySelectorAll('.rmp-row,.rmp-all').forEach(function(r){ r.classList.remove('on'); }); allRow.classList.add('on'); rmsClose(); applyDay('all'); });
+  listEl.appendChild(allRow);
+  var div1 = document.createElement('div'); div1.className = 'rmp-div'; listEl.appendChild(div1);
+  var grp = document.createElement('div'); grp.className = 'rmp-group'; grp.textContent = 'Daily Itinerary'; listEl.appendChild(grp);
+
+  DAYS.forEach(function(day) {
+    var row = document.createElement('div'); row.className = 'rmp-row'; row.dataset.d = day.n; row.style.setProperty('--rc', day.color);
+    row.innerHTML = '<div class="rmp-swatch" style="background:'+day.color+'"></div><div class="rmp-num">'+day.n+'</div><div class="rmp-info"><div class="rmp-nm">'+day.label+'</div><div class="rmp-sb">'+day.sub+'</div></div><div class="rmp-ct">'+day.stops.length+'</div><span class="rmp-mob-lbl">D'+day.n+'</span>';
+    row.addEventListener('click', function() {
+      listEl.querySelectorAll('.rmp-row,.rmp-all').forEach(function(r){ r.classList.remove('on'); }); row.classList.add('on');
+      var firstStop = ALL_STOPS.find(function(s){ return s.dayN === day.n; }); if (firstStop) openDetail(firstStop);
+      applyDay(day.n);
+    });
+    listEl.appendChild(row);
+  });
+
+  var TICK = [
+    { i:'fa-plane-arrival',  s:'Arrive KUL Airport',         t:'Hotel check-in · Bukit Bintang dinner · Petronas night' },
+    { i:'fa-building',       s:'Petronas Twin Towers',        t:'KLCC Park for kids · Aquaria underwater tunnel' },
+    { i:'fa-mountain',       s:'Batu Caves',                  t:'272 colourful steps · monkeys · KL Bird Park flamingos' },
+    { i:'fa-utensils',       s:'Jalan Alor Street Food',      t:'Famous KL street food — family-friendly night market' },
+    { i:'fa-tram',           s:'Awana SkyWay Cable Car',      t:'Genting Highlands · through the clouds to 1,800m' },
+    { i:'fa-hat-wizard',     s:'Skytropolis Theme Park',      t:'Indoor rides and family fun at Genting Highlands' },
+    { i:'fa-place-of-worship',s:'Chin Swee Caves Temple',     t:'Hilltop panoramic views · scenic temple complex' },
+    { i:'fa-water',          s:'Sunway Lagoon Water Park',    t:'Wave pool · water slides · 6 parks in one venue' },
+    { i:'fa-paw',            s:'Sunway Wildlife Park',        t:'Encounter exotic animals and wildlife up close' },
+    { i:'fa-plane-departure',s:'Depart KUL Airport',          t:'Return to Colombo · memories made for life' }
+  ];
+  document.getElementById('rms-ticker').innerHTML = TICK.concat(TICK).map(function(t){ return '<div class="rmt-item"><i class="fas '+t.i+'"></i><strong>'+t.s+'</strong>&ensp;'+t.t+'</div>'; }).join('');
+
+  frame.addEventListener('click', function(){ map.scrollWheelZoom.enable(); });
+  frame.addEventListener('mouseleave', function(){ map.scrollWheelZoom.disable(); });
+  ovEl.addEventListener('click', rmsClose);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') rmsClose(); });
+  window.addEventListener('resize', function(){ if (!isMob() && detailEl.parentElement === document.body) rmsClose(); });
+
+  (function retryInvalidate(n) { map.invalidateSize({ animate: false }); if (n > 0) setTimeout(function(){ retryInvalidate(n - 1); }, 500); })(8);
+  window.addEventListener('load', function(){ map.invalidateSize({ animate: false }); });
+  if (typeof IntersectionObserver !== 'undefined') { new IntersectionObserver(function(e){ if (e[0].isIntersecting) map.invalidateSize({ animate: false }); }, { threshold: 0 }).observe(document.getElementById('rms-map-section')); }
+}
+
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', waitAndInit); } else { waitAndInit(); }
+
+})();
+</script>
+</section>

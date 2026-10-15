@@ -1,0 +1,275 @@
+<section class="Experiences">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/bagind" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+  --navy:       #0c1f2c;
+  --navy-mid:   #102536;
+  --navy-soft:  #163044;
+  --teal-d:     #1a6b7a;
+  --teal:       #1ab8b0;
+  --teal-pale:  rgba(26,184,176,.12);
+  --teal-glow:  rgba(26,184,176,.06);
+  --cream:      #f0ede4;
+  --cream-warm: #e8e3d8;
+  --orange:     #f4a100;
+  --orange-l:   #ffbf3c;
+  --orange-pale:rgba(244,161,0,.12);
+  --white:      #ffffff;
+  --ink:        #0c1f2c;
+  --muted:      rgba(12,31,44,.45);
+  --muted-lt:   rgba(240,237,228,.45);
+  --border:     rgba(12,31,44,.09);
+  --border-lt:  rgba(240,237,228,.1);
+  --serif:      'Bagind','Playfair Display',Georgia,serif;
+  --sans:       'Poppins',system-ui,sans-serif;
+  --mono:       'DM Mono','Courier New',monospace;
+  --ease:       cubic-bezier(.4,0,.2,1);
+  --spring:     cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: #fff; color: var(--ink); overflow-x: hidden; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img    { display: block; max-width: 100%; object-fit: cover; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+a      { text-decoration: none; color: inherit; }
+
+/* ── SECTION SHELL ── */
+.secthree {
+  position: relative;
+  overflow: hidden;
+  background: var(--white);
+}
+.secthree::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 5;
+  background: linear-gradient(90deg, transparent 0%, var(--orange) 35%, var(--teal) 70%, transparent 100%);
+}
+.secthree::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.inner { position: relative; z-index: 2; max-width: 1440px; margin: 0 auto; padding: 5rem 2.4rem; }
+
+/* ── BLOBS ── */
+.blob { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
+.b1 { top: -18%; left: -8%; width: 65vw; height: 65vw; max-width: 720px; max-height: 720px;
+      background: radial-gradient(circle, rgba(244,161,0,.04) 0%, transparent 65%); }
+.b2 { bottom: -12%; right: -6%; width: 52vw; height: 52vw; max-width: 600px; max-height: 600px;
+      background: radial-gradient(circle, rgba(26,184,176,.05) 0%, transparent 65%); }
+
+/* ── EYEBROW ── */
+.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.ey-line  { width: 32px; height: 1px; background: var(--orange); flex-shrink: 0; }
+.ey-txt   { font-family: var(--mono); font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--orange); font-weight: 500; }
+.ey-dot   { width: 5px; height: 5px; background: var(--teal); border-radius: 50%; flex-shrink: 0; }
+
+/* ── HEADING ── */
+.sec-h { font-family: var(--serif); font-size: clamp(2rem,3.6vw,3.8rem); font-weight: 400; line-height: 1.05; color: var(--ink); margin-bottom: .7rem; letter-spacing: -.01em; }
+.sec-h em  { font-style: normal !important; color: #0e9aaa !important; }
+.sec-sub   { font-size: .82rem; font-weight: 300; color: var(--muted); line-height: 1.9; max-width: 480px; }
+</style>
+
+<style>
+/* ── HIGHLIGHTS GRID ── */
+.hl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 3rem;
+}
+
+/* ── CARD BASE ── */
+.hl-card {
+  background: var(--white);
+  position: relative;
+  overflow: hidden;
+  transition: background .25s var(--ease), box-shadow .25s var(--ease);
+}
+.hl-card:hover .hl-img img { transform: scale(1.06); }
+.hl-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--teal-d), var(--teal));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .35s var(--ease); z-index: 3;
+}
+.hl-card:hover::before { transform: scaleX(1); }
+.hl-card.wide { grid-column: span 2; }
+
+/* ── IMAGE ── */
+.hl-img { height: 230px; overflow: hidden; position: relative; }
+.hl-card.wide .hl-img { height: 275px; }
+.hl-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .6s var(--ease);
+  filter: brightness(.78) saturate(1.1);
+}
+.hl-img::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 75px;
+  background: linear-gradient(transparent, var(--white)); transition: background .25s;
+}
+.hl-card:hover .hl-img::after { background: linear-gradient(transparent, rgba(26,184,176,.06)); }
+
+/* ── BADGE ── */
+.hl-badge {
+  position: absolute; top: .8rem; left: .8rem; z-index: 2;
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(12,31,44,.82); backdrop-filter: blur(8px);
+  border: 1px solid rgba(26,184,176,.3); border-radius: 2px;
+  padding: 4px 10px; font-family: var(--mono); font-size: .5rem; font-weight: 500; color: var(--cream);
+}
+.hl-badge i { color: var(--teal); font-size: .5rem; }
+
+/* ── BODY ── */
+.hl-body { padding: 1.2rem 1.4rem 1.5rem; }
+.hl-cat  { font-family: var(--mono); font-size: .52rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 4px; }
+.hl-name { font-family: var(--serif); font-size: 1.25rem; font-weight: 400; color: var(--ink); line-height: 1.1; margin-bottom: .5rem; }
+.hl-desc { font-size: .7rem; font-weight: 300; color: var(--muted); line-height: 1.75; margin-bottom: .85rem; }
+
+/* ── CHIPS ── */
+.hl-chips { display: flex; flex-wrap: wrap; gap: .22rem; }
+.hl-chip  {
+  background: var(--white); border: 1px solid var(--border); border-radius: 2px;
+  padding: 2px 9px; font-size: .56rem; color: var(--muted);
+  transition: background .2s, border-color .2s, color .2s;
+}
+.hl-card:hover .hl-chip {
+  background: rgba(26,184,176,.08);
+  border-color: rgba(26,184,176,.22);
+  color: var(--teal-d);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .hl-grid { grid-template-columns: 1fr 1fr; }
+  .hl-card.wide { grid-column: span 2; }
+}
+@media (max-width: 580px) {
+  .hl-grid { grid-template-columns: 1fr; }
+  .hl-card.wide { grid-column: 1; }
+}
+</style>
+
+<section class="secthree">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="inner">
+
+    <div class="eyebrow">
+      <div class="ey-line"></div>
+      <span class="ey-txt">Tour Highlights</span>
+      <div class="ey-dot"></div>
+    </div>
+    <h2 class="sec-h">Key <em>Malaysia Family</em><br>Experiences</h2>
+    <p class="sec-sub">From the iconic Petronas Twin Towers and Batu Caves to the cool rides of Genting Highlands and a full day at Sunway Lagoon — perfectly crafted for Sri Lankan families with children.</p>
+
+    <div class="hl-grid">
+
+      <!-- WIDE CARD — Petronas Twin Towers & KLCC -->
+      <div class="hl-card wide">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Petronas-Twin-Towers-KLCC.webp" alt="Petronas Twin Towers Kuala Lumpur">
+          <div class="hl-badge"><i class="fas fa-building"></i> Iconic KL Landmark</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--orange)">City Landmark</div>
+          <div class="hl-name">Petronas Twin Towers, KLCC Park &amp; Aquaria KLCC</div>
+          <div class="hl-desc">Start Day 2 at the iconic Petronas Twin Towers — once the world's tallest buildings and still KL's most recognisable skyline. Kids run freely in KLCC Park below while you take in the stunning architecture. Then head into Aquaria KLCC for a spectacular 90-metre underwater tunnel experience — sharks, stingrays and thousands of marine creatures surround you on all sides. One of the best indoor family attractions in Southeast Asia.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">Petronas Twin Towers</span>
+            <span class="hl-chip">KLCC Park Playground</span>
+            <span class="hl-chip">Aquaria KLCC</span>
+            <span class="hl-chip">90m Underwater Tunnel</span>
+            <span class="hl-chip">Sharks &amp; Stingrays</span>
+            <span class="hl-chip">Kids Favourite</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2 — Genting Highlands -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Genting-Highlands-—-Skytropolis.webp" alt="Genting Highlands Skytropolis Theme Park">
+          <div class="hl-badge"><i class="fas fa-tram"></i> 1,800m Hill Resort</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--teal-d)">Hill Resort &amp; Theme Park</div>
+          <div class="hl-name">Genting Highlands — SkyWay &amp; Skytropolis</div>
+          <div class="hl-desc">Full Day 3 at Malaysia's famous cool hill resort. Take the Awana SkyWay gondola cable car up through the clouds at 1,800m. Explore Skytropolis Indoor Theme Park with rides for all ages, then visit the scenic Chin Swee Caves Temple with panoramic views across the highlands.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">Awana SkyWay Cable Car</span>
+            <span class="hl-chip">Skytropolis Park</span>
+            <span class="hl-chip">Chin Swee Temple</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3 — Sunway Lagoon -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Sunway-Lagoon-Theme-Park.webp" alt="Sunway Lagoon Water Park">
+          <div class="hl-badge"><i class="fas fa-water"></i> 6 Parks in 1</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--teal)">Theme Park</div>
+          <div class="hl-name">Sunway Lagoon — Water Parks &amp; Rides</div>
+          <div class="hl-desc">Full Day 4 at Sunway Lagoon — Malaysia's top family theme park with 6 parks in one venue: water park, amusement rides, wildlife park, extreme park, scream park and Nickelodeon park. The wave pool and water slides are a massive hit for children of all ages.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">Wave Pool</span>
+            <span class="hl-chip">Water Slides</span>
+            <span class="hl-chip">Wildlife Park</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4 — Batu Caves & KL Bird Park -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Batu-Caves-Bird-Park.webp" alt="Batu Caves Kuala Lumpur">
+          <div class="hl-badge"><i class="fas fa-mountain"></i> 272 Steps</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--orange)">Culture &amp; Nature</div>
+          <div class="hl-name">Batu Caves &amp; KL Bird Park</div>
+          <div class="hl-desc">Afternoon on Day 2 — climb the spectacular Batu Caves with 272 colourful steps leading to a sacred Hindu temple inside dramatic limestone hills, with friendly monkeys along the way. Then visit KL Bird Park, the world's largest free-flight aviary with flamingos and hornbills.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">272 Colourful Steps</span>
+            <span class="hl-chip">Limestone Temple</span>
+            <span class="hl-chip">KL Bird Park</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 5 — KL Food & City Nights -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/city-night.webp" alt="Kuala Lumpur City Nights Bukit Bintang">
+          <div class="hl-badge"><i class="fas fa-utensils"></i> KL Food &amp; Nights</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--teal-d)">City Life &amp; Food</div>
+          <div class="hl-name">Bukit Bintang &amp; Jalan Alor Street Food</div>
+          <div class="hl-desc">Two evenings in Kuala Lumpur's vibrant Bukit Bintang neighbourhood — street shopping, world-class food courts and the famous Jalan Alor open-air food street. Satay, roti canai, nasi lemak and fresh tropical fruit — a lively, family-friendly night out the kids will love.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">Bukit Bintang</span>
+            <span class="hl-chip">Jalan Alor Food Street</span>
+            <span class="hl-chip">Local Malaysian Cuisine</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</section>

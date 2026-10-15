@@ -1,0 +1,227 @@
+/*
+ * Base layer.
+ *
+ * The sections were built on top of the Astra theme and the Elementor page
+ * wrapper, and rely on some of their defaults (body line-height, heading and
+ * paragraph spacing, the smaller root font size on mobile). These are exactly
+ * the rules that reached the sections on the old site, rewritten for this
+ * theme's markup: .pct-body is the <body>, .pct-site wraps the page content,
+ * .pct-section wraps each section, and .pct-entry marks pages that used the
+ * theme's default content wrapper (the home page) rather than a full-width one.
+ */
+
+:root {
+	--ast-border-color: var(--ast-global-color-7);
+	--ast-comment-inputs-background: #F9FAFB;
+	--ast-global-color-0: #046bd2;
+	--ast-global-color-2: #1e293b;
+	--ast-global-color-3: #334155;
+	--ast-global-color-4: #FFFFFF;
+	--ast-global-color-5: #F0F5FA;
+	--ast-global-color-7: #D1D5DB;
+	--ast-global-color-secondary: var(--ast-global-color-5);
+}
+
+body, html, h1, h2, h3, li, p, ul, h4, textarea { border: 0px; font-size: 100%; font-style: inherit; font-weight: inherit; margin: 0px; outline: 0px; padding: 0px; vertical-align: baseline; }
+html { text-size-adjust: 100%; }
+body { margin: 0px; }
+nav, main { display: block; }
+a { background-color: transparent; }
+a { text-decoration: none; }
+strong { font-weight: 700; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+small { font-size: 80%; }
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+img { border: 0px; }
+svg:not(:root) { overflow: hidden; }
+button, input, select, textarea { color: inherit; font: inherit; margin: 0px; }
+button { overflow: visible; }
+button, select { text-transform: none; }
+button { appearance: button; cursor: pointer; }
+button, input { line-height: normal; }
+textarea { overflow: auto; }
+h1, h2, h3, h4 { clear: both; }
+.pct-entry :where(h1), h1 { color: rgb(128, 130, 133); font-size: 2em; line-height: 1.2; }
+.pct-entry :where(h2), h2 { color: rgb(128, 130, 133); font-size: 1.7em; line-height: 1.3; }
+.pct-entry :where(h3), h3 { color: rgb(128, 130, 133); font-size: 1.5em; line-height: 1.4; }
+h4 { color: rgb(128, 130, 133); line-height: 1.5; font-size: 1.3em; }
+html { box-sizing: border-box; }
+* { box-sizing: inherit; }
+body { color: rgb(128, 130, 133); background: rgb(255, 255, 255); font-style: normal; }
+ul { margin: 0px 0px 1.5em 3em; }
+ul { list-style: disc; }
+em, i { font-style: italic; }
+img { height: auto; max-width: 100%; }
+button, input, select, textarea { color: rgb(128, 130, 133); font-weight: 400; font-size: 100%; margin: 0px; vertical-align: baseline; }
+mark { background: 0px 0px; text-decoration: none; }
+button { border-width: 1px; border-style: solid; border-image: initial; border-color: var(--ast-border-color); border-radius: 2px; background: rgb(230, 230, 230); padding: 0.6em 1em 0.4em; color: rgb(255, 255, 255); }
+input[type="email"], input[type="tel"], input[type="text"], textarea { color: rgb(102, 102, 102); border: 1px solid var(--ast-border-color); border-radius: 2px; appearance: none; }
+textarea { padding-left: 3px; width: 100%; }
+a { color: rgb(65, 105, 225); }
+body { -webkit-font-smoothing: antialiased; }
+body:not(.logged-in) { position: relative; }
+a { transition: 0.2s linear; }
+img { vertical-align: middle; }
+.pct-entry :where(h1, h2, h3, h4, h5, h6) { margin-bottom: 20px; }
+p { margin-bottom: 1.75em; }
+input, select { line-height: 1; }
+body, button, textarea { line-height: 1.85714; }
+body { background-color: rgb(255, 255, 255); }
+body { overflow-x: hidden; }
+input[type="email"], input[type="tel"], input[type="text"], select, textarea { color: rgb(102, 102, 102); padding: 0.75em; height: auto; border-width: 1px; border-style: solid; border-color: var(--ast-border-color); border-radius: 2px; background: var(--ast-comment-inputs-background); box-shadow: none; box-sizing: border-box; transition: 0.2s linear; }
+textarea { width: 100%; }
+.pct-entry p { margin-bottom: 1.6em; }
+html { font-size: 100%; }
+a { color: var(--ast-global-color-0); }
+body, button, input, select, textarea { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; font-weight: 400; font-size: 1rem; line-height: var(--ast-body-line-height,1.65); }
+h1, h2, h3, .pct-entry :where(h1, h2, h3, h4, h5, h6), h4 { font-weight: 600; }
+h1, .pct-entry :where(h1) { font-size: 2.25rem; font-weight: 600; line-height: 1.4em; }
+h2, .pct-entry :where(h2) { font-size: 1.875rem; font-weight: 600; line-height: 1.3em; }
+h3, .pct-entry :where(h3) { font-size: 1.5rem; font-weight: 600; line-height: 1.3em; }
+h4 { font-size: 1.25rem; line-height: 1.2em; font-weight: 600; }
+body, h1, h2, h3, .pct-entry :where(h1, h2, h3, h4, h5, h6), h4 { color: var(--ast-global-color-3); }
+.pct-body .pct-entry a { text-decoration: underline; }
+input { outline: none; }
+input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select, textarea { font-size: 16px; font-style: normal; font-weight: 400; line-height: 24px; width: 100%; padding: 12px 16px; border-radius: 4px; box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px; color: var(--ast-form-input-text,#475569); }
+input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select { height: 40px; }
+input[type="date"] { border-width: 1px; border-style: solid; border-color: var(--ast-border-color); background: var( --ast-global-color-secondary,--ast-global-color-5 ); }
+label { color: var(--ast-global-color-2,#111827 ); font-size: 14px; font-style: normal; font-weight: 500; line-height: 20px; }
+select { padding: 6px 10px; }
+button { border-radius: 4px; box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px; }
+button { border-style: solid; border-width: 0px; color: rgb(255, 255, 255); border-color: var(--ast-global-color-0); background-color: var(--ast-global-color-0); padding: 15px 30px; font-family: inherit; font-weight: 500; font-size: 1rem; line-height: 1em; }
+@media (max-width: 921px) {
+	button { padding: 14px 28px; }
+}
+@media (max-width: 544px) {
+	button { padding: 12px 24px; }
+}
+@media (max-width: 921px) {
+	h1, .pct-entry :where(h1) { font-size: 1.875rem; }
+	h2, .pct-entry :where(h2) { font-size: 1.5625rem; }
+	h3, .pct-entry :where(h3) { font-size: 1.25rem; }
+}
+@media (max-width: 544px) {
+	h1, .pct-entry :where(h1) { font-size: 1.875rem; }
+	h2, .pct-entry :where(h2) { font-size: 1.5625rem; }
+	h3, .pct-entry :where(h3) { font-size: 1.25rem; }
+}
+@media (max-width: 921px) {
+	html { font-size: 91.2%; }
+}
+@media (max-width: 544px) {
+	html { font-size: 91.2%; }
+}
+.pct-entry :where(h1, h2, h3, h4, h5, h6) { clear: none; }
+.pct-entry ul { padding-top: revert; padding-right: revert; padding-bottom: revert; margin: revert; padding-left: 20px; }
+h1, h2, h3, .pct-entry :where(h1, h2, h3, h4, h5, h6), h4 { color: var(--ast-global-color-2); }
+.pct-body { background-color: var(--ast-global-color-4); }
+@media (max-width: 921px) {
+	.pct-body { background-color: var(--ast-global-color-4); }
+}
+@media (max-width: 544px) {
+	.pct-body { background-color: var(--ast-global-color-4); }
+}
+:where(body) { margin: 0px; }
+body { padding: 0px; }
+a:where(:not(.wp-element-button)) { text-decoration: none; }
+.pct-site * { box-sizing: border-box; }
+.pct-site a { box-shadow: none; text-decoration: none; }
+.pct-site img { border: none; border-radius: 0px; box-shadow: none; height: auto; max-width: 100%; }
+.pct-section { position: relative; }
+@media (prefers-reduced-motion: no-preference) {
+	html { scroll-behavior: smooth; }
+}
+.pct-site .pct-section.pct-section { margin-block-end: 0px; }
+.pct-site .pct-section { min-width: 0px; }
+.pct-site.pct-site > .pct-section { max-width: 100%; }
+@media (prefers-reduced-motion: reduce) {
+	html * { transition-delay: 0s !important; transition-duration: 0s !important; }
+}
+
+/* Plain pages (posts, archives, 404) that have no hand-built section. */
+.pct-content {
+	box-sizing: border-box;
+	max-width: 860px;
+	margin: 0 auto;
+	padding: 160px 24px 96px;
+	font-family: 'Poppins', sans-serif;
+	line-height: 1.7;
+	color: #1a2433;
+}
+
+.pct-content h1 {
+	font-size: clamp(2rem, 4vw, 3rem);
+	line-height: 1.15;
+	color: #071527;
+}
+
+.pct-content img {
+	max-width: 100%;
+	height: auto;
+}
+
+.pct-content a {
+	color: #0e8f9b;
+}
+
+.pct-button {
+	display: inline-block;
+	padding: 12px 24px;
+	border-radius: 999px;
+	background: #f5a623;
+	color: #071527 !important;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+/* Scroll-to-top button (same look and behaviour as the previous theme's). */
+.pct-scroll-top {
+	display: none;
+	position: fixed;
+	right: 30px;
+	bottom: 30px;
+	z-index: 99;
+	width: 2.1em;
+	height: 2.1em;
+	line-height: 2.1;
+	font-size: 15px;
+	text-align: center;
+	cursor: pointer;
+	color: #fff;
+	background-color: var(--ast-global-color-0);
+	border-radius: 2px;
+	outline: inherit;
+}
+
+.pct-scroll-top.is-visible {
+	display: block;
+}
+
+.pct-scroll-top svg {
+	width: 1.6em;
+	margin-left: 0;
+	vertical-align: middle;
+	transform: translate(0, -20%) rotate(180deg);
+	fill: currentColor;
+}
+
+@media (max-width: 921px) {
+	.pct-scroll-top svg {
+		width: 1em;
+	}
+}
+
+.screen-reader-text {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	border: 0;
+	word-wrap: normal !important;
+}

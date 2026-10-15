@@ -1,0 +1,951 @@
+<section class="maphero">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/bagind" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+
+/* ═══════════════════════════════
+   RESET
+═══════════════════════════════ */
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html   { scroll-behavior: smooth; }
+body   { font-family: 'Poppins', sans-serif; background: #071527; color: #f0ece2; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+img    { display: block; }
+button { font-family: 'Poppins', sans-serif; cursor: pointer; border: none; background: none; }
+a      { text-decoration: none; color: inherit; }
+
+/* ═══════════════════════════════
+   TOKENS
+═══════════════════════════════ */
+:root {
+  --navy:#071527; --navy2:#0b1e35; --navy3:#0e2440;
+  --teal:#0e9aaa; --teald:#0b7d8c; --tealb:#12c8d8;
+  --tgl:rgba(14,154,170,.15); --tgl2:rgba(14,154,170,.07);
+  --amber:#f5a623; --amberd:#d9870c; --agl:rgba(245,166,35,.18);
+  --cream:#f0ece2;
+  --c80:rgba(240,236,226,.80); --c60:rgba(240,236,226,.60);
+  --c40:rgba(240,236,226,.40); --c20:rgba(240,236,226,.20);
+  --c12:rgba(240,236,226,.12); --c08:rgba(240,236,226,.08);
+  --c05:rgba(240,236,226,.05); --c03:rgba(240,236,226,.03);
+  --bt:rgba(14,154,170,.22); --bc:rgba(240,236,226,.10);
+  --ease:cubic-bezier(.4,0,.2,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --cu:#f5a623; --cw:#2db87d; --cb:#12c8d8; --ch:#5ec46e; --cc:#9b7fe8;
+  --bagind:'Bagind',serif; --pop:'Poppins',sans-serif;
+}
+
+/* ═══════════════════════════════
+   SECTION
+═══════════════════════════════ */
+.xsec { position: relative; width: 100%; background: var(--navy); overflow: hidden; }
+.xsec::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 3;
+  background: linear-gradient(90deg, transparent 0%, var(--teal) 30%, var(--amber) 68%, transparent 100%);
+  opacity: .62;
+}
+.xblob   { position: absolute; pointer-events: none; border-radius: 50%; }
+.xblob-1 { top: -160px; left: -140px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(14,154,170,.08) 0%, transparent 65%); }
+.xblob-2 { bottom: -100px; right: -60px; width: 560px; height: 560px; background: radial-gradient(circle, rgba(245,166,35,.055) 0%, transparent 65%); }
+.xgrain  {
+  position: absolute; inset: 0; pointer-events: none; opacity: .02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ═══════════════════════════════
+   LAYOUT
+═══════════════════════════════ */
+.xinner { position: relative; z-index: 2; max-width: 1560px; margin: 0 auto; padding: 0 3rem; }
+
+/* ═══════════════════════════════
+   PAGE HEADER
+═══════════════════════════════ */
+.xhead {
+  padding-top: 4.5rem;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 2.5rem; align-items: end;
+}
+.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.ey-bar  { width: 26px; height: 1.5px; background: var(--teal); border-radius: 2px; }
+.ey-txt  { font-family: var(--pop); font-size: .63rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--teal); }
+.ey-gem  { width: 5px; height: 5px; border-radius: 2px; background: var(--amber); transform: rotate(45deg); flex-shrink: 0; animation: gemSpin 6s linear infinite; }
+@keyframes gemSpin { to { transform: rotate(calc(45deg + 360deg)); } }
+.xh-title {
+  font-family: var(--bagind); font-weight: 400; font-style: normal;
+  line-height: .96; color: var(--cream);
+  font-size: clamp(2.6rem, 4.2vw, 4rem); margin-bottom: .65rem;
+}
+.xh-title strong { font-weight: 400; }
+.xh-title em     { font-style: normal; color: var(--tealb); }
+.xh-desc   { font-family: var(--pop); font-size: .85rem; font-weight: 300; color: var(--c60); line-height: 1.85; max-width: 460px; }
+.xh-badges { display: flex; flex-direction: column; gap: .45rem; align-items: flex-end; padding-bottom: .2rem; }
+.sb    { display: flex; align-items: center; gap: 8px; background: var(--c05); border: 1px solid var(--bc); border-radius: 2px; padding: 6px 14px 6px 9px; white-space: nowrap; }
+.sb-d  { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.sb-v  { font-family: var(--bagind); font-size: .95rem; font-weight: 400; color: var(--cream); }
+.sb-l  { font-family: var(--pop); font-size: .68rem; font-weight: 400; color: var(--c40); }
+
+/* ═══════════════════════════════════════════════════════════════
+   MAP WRAPPER — flex row: [vertical filter strip] + [map]
+═══════════════════════════════════════════════════════════════ */
+.xmap-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-top: 1.8rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CATEGORY FILTER STRIP — vertical pill column
+   Desktop : icon + label + count  (full width segments)
+   Mobile  : icon-only circles (compact, floating right)
+═══════════════════════════════════════════════════════════════ */
+.xcat-strip {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Frosted vertical pill shell */
+.xcat-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: rgba(240,236,226,.04);
+  border: 1px solid var(--bc);
+  border-radius: 2px;
+  padding: 5px;
+}
+
+/* Thin horizontal divider */
+.xcat-bar-sep {
+  width: 100%;
+  height: 1px;
+  background: var(--bc);
+  flex-shrink: 0;
+  margin: 2px 0;
+}
+
+/* Each segment */
+.xcat-seg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: .58rem .9rem .58rem .6rem;
+  border-radius: 2px;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  background: transparent;
+  user-select: none;
+  white-space: nowrap;
+  width: 100%;
+  transition: background .22s var(--ease), border-color .22s var(--ease), transform .18s var(--spring);
+}
+.xcat-seg:hover  { background: var(--c08); }
+.xcat-seg.on     { background: var(--c08); border-color: var(--xcs-clr, var(--teal)); }
+.xcat-seg:active { transform: scale(.97); }
+
+/* Icon circle */
+.xcat-seg-ic {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .64rem; flex-shrink: 0;
+  transition: transform .22s var(--spring);
+}
+.xcat-seg:hover .xcat-seg-ic,
+.xcat-seg.on    .xcat-seg-ic { transform: scale(1.1); }
+
+/* Label */
+.xcat-seg-nm {
+  font-family: var(--pop); font-size: .66rem; font-weight: 500;
+  color: var(--c40); transition: color .2s; flex: 1;
+}
+.xcat-seg:hover .xcat-seg-nm,
+.xcat-seg.on    .xcat-seg-nm { color: var(--cream); }
+.xcat-seg.on    .xcat-seg-nm { font-weight: 600; }
+
+/* Count */
+.xcat-seg-ct {
+  font-family: var(--bagind); font-size: .82rem;
+  color: var(--c20); line-height: 1;
+  transition: color .2s; flex-shrink: 0;
+}
+.xcat-seg:hover .xcat-seg-ct,
+.xcat-seg.on    .xcat-seg-ct { color: var(--c60); }
+
+/* ═══════════════════════════════
+   MAP FRAME
+═══════════════════════════════ */
+.xmap-frame {
+  flex: 1;
+  position: relative; border-radius: 2px; overflow: hidden;
+  border: 1px solid rgba(14,154,170,.20);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.38), 0 32px 90px rgba(7,21,39,.72);
+  height: 720px;
+}
+#sl-map { width: 100%; height: 100%; }
+
+/* Live count pill */
+.xmap-pill {
+  position: absolute; top: 1rem; left: 1rem; z-index: 500;
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(7,21,39,.84); backdrop-filter: blur(18px);
+  border: 1px solid var(--bc); border-radius: 2px;
+  padding: .45rem .95rem .45rem .65rem; pointer-events: none;
+}
+.xmp-pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--tealb); flex-shrink: 0; animation: mpPulse 2.4s ease-in-out infinite; }
+@keyframes mpPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(18,200,216,.5); } 50% { box-shadow: 0 0 0 6px rgba(18,200,216,0); } }
+.xmp-num { font-family: var(--bagind); font-size: 1rem; font-weight: 400; color: var(--cream); line-height: 1; }
+.xmp-lbl { font-family: var(--pop); font-size: .58rem; font-weight: 400; color: var(--c40); }
+
+/* Leaflet overrides */
+.leaflet-control-zoom             { border: none !important; box-shadow: none !important; margin: .8rem !important; }
+.leaflet-control-zoom a           { background: rgba(7,21,39,.9) !important; border: 1px solid var(--bc) !important; color: var(--c60) !important; width: 32px !important; height: 32px !important; line-height: 30px !important; font-size: .8rem !important; transition: all .2s !important; }
+.leaflet-control-zoom a:hover     { background: var(--tgl) !important; color: var(--tealb) !important; border-color: var(--bt) !important; }
+.leaflet-control-zoom-in          { border-radius: 2px; }
+.leaflet-control-zoom-out         { border-radius: 2px; }
+.leaflet-control-attribution      { background: rgba(7,21,39,.62) !important; color: rgba(240,236,226,.22) !important; font-size: .52rem !important; backdrop-filter: blur(8px); border-radius: 2px; }
+.leaflet-control-attribution a    { color: rgba(14,154,170,.45) !important; }
+
+/* ═══════════════════════════════
+   HOVER TOOLTIP
+═══════════════════════════════ */
+.xtooltip  { position: fixed; z-index: 9999; pointer-events: none; display: none; transform: translate(-50%,-100%) translateY(-14px); filter: drop-shadow(0 16px 40px rgba(7,21,39,.7)); }
+.xtt-card  { width: 215px; background: rgba(7,21,39,.93); backdrop-filter: blur(20px); border: 1px solid var(--bc); border-radius: 2px; overflow: hidden; }
+.xtt-img   { width: 100%; height: 108px; overflow: hidden; }
+.xtt-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.74) saturate(1.1); display: block; }
+.xtt-body  { padding: .7rem .85rem .75rem; }
+.xtt-cat   { display: flex; align-items: center; gap: 5px; margin-bottom: .28rem; }
+.xtt-cd    { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.xtt-cl    { font-family: var(--pop); font-size: .55rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.xtt-name  { font-family: var(--bagind); font-size: 1.05rem; font-weight: 400; color: var(--cream); line-height: 1.15; margin-bottom: .2rem; }
+.xtt-hint  { font-family: var(--pop); font-size: .64rem; font-weight: 300; color: var(--c60); line-height: 1.45; }
+.xtt-arrow { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 8px solid rgba(7,21,39,.93); margin: 0 auto; }
+
+/* ═══════════════════════════════
+   DETAIL PANEL
+═══════════════════════════════ */
+.xdetail {
+  position: absolute; top: 50%; right: 1rem; z-index: 600; width: 315px;
+  max-height: calc(100% - 2rem);
+
+  background: rgba(6,19,38,.95); backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(240,236,226,.11); border-radius: 2px; overflow: hidden;
+  box-shadow: 0 28px 70px rgba(7,21,39,.78), 0 0 0 1px rgba(14,154,170,.07);
+  display: none; flex-direction: column; opacity: 0;
+  transform: translateY(-50%) translateX(16px) scale(.98);
+  transition: opacity .32s var(--ease), transform .36s var(--spring);
+}
+.xdetail.vis { display: flex; opacity: 1; transform: translateY(-50%) translateX(0) scale(1); }
+.xdetail.mobile-sheet {
+  position: fixed !important; top: auto !important; right: 0 !important; bottom: 0 !important; left: 0 !important;
+  width: 100% !important; max-height: 82vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  border-radius: 2px; z-index: 9000 !important;
+  transform: translateY(100%) !important; opacity: 1 !important;
+  transition: transform .42s var(--spring) !important;
+}
+.xdetail.mobile-sheet.vis  { transform: translateY(0) !important; display: flex !important; }
+.xdetail.mobile-sheet::before { content: ''; display: block; width: 42px; height: 5px; border-radius: 2px; background: var(--c20); margin: 12px auto 0; flex-shrink: 0; }
+.xd-close {
+  position: absolute;
+  top: 0.5rem;   /* Slightly tighter positioning */
+  right: 0.5rem; 
+  z-index: 10;
+  
+  width: 18px; 
+  color: #fff;
+
+  font-size: 10px; 
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+}
+
+.xd-close:hover {
+  color: red;
+  background: #fff;
+}
+.xd-img           { position: relative; height: 155px; flex-shrink: 0; overflow: hidden; }
+.xd-img img       { width: 100%; height: 100%; object-fit: cover; filter: brightness(.72) saturate(1.1); transition: transform .5s var(--ease); }
+.xdetail:hover .xd-img img { transform: scale(1.04); }
+.xd-cbadge        {
+  position: absolute; top: .75rem; left: .85rem;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(7,21,39,.72); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.11); border-radius: 2px; padding: 4px 10px 4px 7px;
+  font-family: var(--pop); font-size: .55rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+}
+.xd-cbadge-dot    { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.xd-region        {
+  position: absolute; bottom: .75rem; right: .8rem;
+  background: rgba(7,21,39,.62); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.09); border-radius: 2px; padding: 3px 10px;
+  font-family: var(--pop); font-size: .59rem; font-weight: 400; color: var(--c60);
+  display: flex; align-items: center; gap: 5px;
+}
+.xd-region i      { color: var(--amber); font-size: .56rem; }
+.xd-body          { padding: 1rem 1.15rem 1.1rem; display: flex; flex-direction: column; gap: .6rem; overflow-y: auto; flex: 1; scrollbar-width: none; -ms-overflow-style: none; }
+.xd-body::-webkit-scrollbar { display: none; }
+.xd-name          { font-family: var(--bagind); font-size: 1.15rem; font-weight: 400; color: var(--cream); line-height: 1.05; }
+.xd-tagline {
+  font-family: var(--pop);
+  font-size: .67rem;
+  font-weight: 300;
+  color: var(--c60);
+  line-height: 1.5;
+  border-left: 2px solid rgba(14,154,170,.35);
+  padding-left: .6rem;
+  /* REMOVED: display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden */
+}
+.xd-facts         { display: flex; flex-wrap: wrap; gap: .32rem; }
+.xd-fact          { display: flex; align-items: center; gap: 4px; background: var(--c05); border: 1px solid var(--bc); border-radius: 2px; padding: 3px 7px; font-family: var(--pop); font-size: .6rem; font-weight: 400; color: var(--c60); }
+.xd-fact i        { font-size: .58rem; color: var(--teal); }
+.xd-fact strong   { color: var(--cream); font-weight: 600; }
+.xd-when          { display: flex; align-items: flex-start; gap: 7px; background: rgba(245,166,35,.07); border: 1px solid rgba(245,166,35,.15); border-radius: 2px; padding: .38rem .65rem; }
+.xd-when i        { color: var(--amber); font-size: .78rem; flex-shrink: 0; margin-top: 2px; }
+.xd-when-txt      { font-family: var(--pop); font-size: .63rem; font-weight: 300; color: var(--c60); line-height: 1.4; }
+.xd-when-txt strong { color: var(--amber); display: block; font-size: .63rem; font-weight: 600; margin-bottom: 1px; }
+.xd-chips         { display: flex; flex-wrap: wrap; gap: .22rem; }
+.xd-chip          { background: var(--c03); border: 1px solid var(--bc); border-radius: 2px; padding: 2px 7px; font-family: var(--pop); font-size: .57rem; font-weight: 400; color: var(--c60); }
+.xd-cta           { display: flex; gap: .5rem;color: #fff !important; text-decoration: none!important; }
+.xd-main          { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; background: var(--teal); color: #fff !important; text-decoration: none !important; font-family: var(--pop); font-size: .7rem; font-weight: 600; padding: 8px; border-radius: 2px; cursor: pointer; transition: background .2s, transform .18s; }
+.xd-main:hover    { background: var(--teald); transform: translateY(-1px);color: #fff !important; text-decoration: none!important; }
+.xd-save          { width: 34px; height: 34px; border-radius: 2px; background: var(--c05); border: 1px solid var(--bc); color: var(--c40); font-size: .76rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
+.xd-save:hover    { background: rgba(245,166,35,.12); border-color: rgba(245,166,35,.28); color: var(--amber); }
+
+/* ═══════════════════════════════
+   BELOW MAP
+═══════════════════════════════ */
+.xbelow      { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 0 0; flex-wrap: wrap; }
+.xlegend     { display: flex; flex-wrap: wrap; gap: .38rem; }
+.xlp         { display: flex; align-items: center; gap: 6px; background: var(--c03); border: 1px solid var(--bc); border-radius: 2px; padding: 5px 12px 5px 8px; cursor: pointer; transition: background .2s, border-color .2s; }
+.xlp:hover, .xlp.on { background: var(--c08); border-color: var(--c20); }
+.xlp-d       { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.xlp-n       { font-family: var(--pop); font-size: .67rem; font-weight: 500; color: var(--c40); transition: color .2s; }
+.xlp:hover .xlp-n, .xlp.on .xlp-n { color: var(--cream); }
+.xlp-c       { font-family: var(--bagind); font-size: .85rem; font-weight: 400; color: var(--c40); margin-left: 2px; }
+.xcount-wrap { display: flex; align-items: center; gap: .6rem; flex-shrink: 0; }
+.xcount-num  { font-family: var(--bagind); font-size: 2.6rem; font-weight: 400; color: var(--teal); line-height: 1; }
+.xcount-lbl  { font-family: var(--pop); font-size: .65rem; font-weight: 300; color: var(--c40); line-height: 1.45; }
+
+/* ═══════════════════════════════
+   TICKER
+═══════════════════════════════ */
+.xticker-wrap { margin-top: 1.5rem; overflow: hidden; border-top: 1px solid var(--bc); border-bottom: 1px solid var(--bc); background: var(--c03); padding: .62rem 0; }
+.xticker      { display: flex; white-space: nowrap; animation: tickerRun 34s linear infinite; }
+.xticker-wrap:hover .xticker { animation-play-state: paused; }
+@keyframes tickerRun { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.xti          { display: inline-flex; align-items: center; gap: .5rem; padding: 0 2rem; font-family: var(--pop); font-size: .68rem; font-weight: 400; color: var(--c40); letter-spacing: .02em; border-right: 1px solid var(--bc); flex-shrink: 0; }
+.xti i        { font-size: .62rem; }
+.xti strong   { font-weight: 600; color: var(--cream); }
+
+/* ═══════════════════════════════
+   STAT CARDS
+═══════════════════════════════ */
+.xstats     { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; padding: 2.5rem 0 5rem; }
+.xsc        { background: var(--c03); border: 1px solid var(--bc); border-radius: 2px; padding: 1.25rem 1.4rem; display: flex; align-items: center; gap: 1rem; transition: background .22s, border-color .22s, transform .22s; cursor: default; }
+.xsc:hover  { background: var(--tgl2); border-color: rgba(14,154,170,.18); transform: translateY(-3px); }
+.xsc-ic     { width: 44px; height: 44px; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0; }
+.xsc-ic.t   { background: var(--tgl);              color: var(--teal); }
+.xsc-ic.a   { background: var(--agl);              color: var(--amber); }
+.xsc-ic.g   { background: rgba(45,184,125,.14);     color: #2db87d; }
+.xsc-ic.v   { background: rgba(155,127,232,.14);    color: #9b7fe8; }
+.xsc-n      { font-family: var(--bagind); font-size: 2rem; font-weight: 400; color: var(--cream); line-height: 1; }
+.xsc-l      { font-family: var(--pop); font-size: .64rem; font-weight: 300; color: var(--c40); margin-top: 4px; line-height: 1.4; }
+
+/* ═══════════════════════════════
+   MAP MARKERS
+═══════════════════════════════ */
+.cml      { position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer !important; }
+.cml-ring { position: absolute; border-radius: 50%; animation: cmlPulse 2.8s ease-out infinite; }
+@keyframes cmlPulse { 0% { transform: scale(.82); opacity: .55; } 70%,100% { transform: scale(2.2); opacity: 0; } }
+.cml-body { border-radius: 50%; border: 2.5px solid rgba(255,255,255,.86); display: flex; align-items: center; justify-content: center; color: #fff; position: relative; z-index: 1; transition: transform .22s var(--spring), box-shadow .22s; }
+
+/* ═══════════════════════════════
+   OVERLAY
+═══════════════════════════════ */
+#xoverlay { display: none; position: fixed; inset: 0; z-index: 8999; background: rgba(7,21,39,.60); }
+@media (max-width: 900px) { #xoverlay.on { display: block; } }
+
+/* ═══════════════════════════════
+   RESPONSIVE
+═══════════════════════════════ */
+@media (max-width: 1100px) {
+  .xstats { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 900px) {
+  .xinner     { padding: 0 2rem; }
+  .xhead      { grid-template-columns: 1fr; padding-top: 3.5rem; }
+  .xh-badges  { display: none; }
+  .xmap-frame { height: 500px; border-radius: 2px; }
+}
+
+/* ── MOBILE ≤640px: compact icon-only circle column ── */
+@media (max-width: 640px) {
+  .xinner      { padding: 0 1.3rem; }
+  .xhead       { padding-top: 3rem; }
+  .xh-desc     { display: none; }
+  .xmap-frame  { height: 420px; border-radius: 2px; }
+  .xbelow      { flex-direction: column; align-items: flex-start; gap: .8rem; }
+  .xcount-wrap { display: none; }
+  .xstats      { grid-template-columns: 1fr 1fr; padding: 1.8rem 0 3.5rem; gap: .75rem; }
+
+  /* Compact circles on mobile */
+  .xmap-wrap   { gap: 7px; }
+  .xcat-bar    {
+    border-radius: 2px;
+    padding: 5px;
+    gap: 4px;
+  }
+  .xcat-bar-sep { width: 18px; height: 1px; margin: 1px auto; }
+  .xcat-seg {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    padding: 0;
+    justify-content: center;
+    position: relative;
+  }
+  .xcat-seg-ic {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    font-size: .7rem;
+    background: transparent !important;
+  }
+  /* Floating label to the RIGHT on mobile (strip is on left) */
+  .xcat-seg-nm {
+    display: none;
+    position: absolute;
+    left: calc(100% + 9px);
+    top: 50%; transform: translateY(-50%);
+    background: rgba(7,21,39,.92);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--bc);
+    border-radius: 2px;
+    padding: 3px 9px;
+    font-size: .6rem; font-weight: 500; color: var(--cream);
+    white-space: nowrap; pointer-events: none; z-index: 10;
+  }
+  .xcat-seg:hover .xcat-seg-nm { display: block; }
+  .xcat-seg-ct { display: none; }
+}
+
+@media (max-width: 420px) {
+  .xstats     { grid-template-columns: 1fr; }
+  .xh-title   { font-size: clamp(2.2rem, 9vw, 3rem); }
+  .xmap-frame { height: 360px; }
+}
+
+/* ═══════════════════════════════
+   ENTRY ANIMATIONS
+═══════════════════════════════ */
+@keyframes upFade { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+.xhead        { animation: upFade .8s .05s both; }
+.xmap-wrap    { animation: upFade .8s .15s both; }
+.xbelow       { animation: upFade .8s .28s both; }
+.xticker-wrap { animation: upFade .8s .36s both; }
+.xstats       { animation: upFade .8s .44s both; }
+
+</style>
+
+<section class="xsec" id="explore">
+  <div class="xblob xblob-1"></div>
+  <div class="xblob xblob-2"></div>
+  <div class="xgrain"></div>
+  <div class="xinner">
+
+    <!-- HEAD -->
+    <div class="xhead">
+      <div>
+        <div class="eyebrow">
+          <div class="ey-bar"></div>
+          <span class="ey-txt">Interactive Destination Map</span>
+          <div class="ey-gem"></div>
+        </div>
+        <h2 class="xh-title">Discover Every Corner<br>of <span style="color:var(--tealb)">Beautiful Sri Lanka</span></h2>
+        <p class="xh-desc">Explore 37 iconic destinations — from ancient UNESCO kingdoms and wild safari parks to misty hill stations and golden beaches. Click any glowing pin to reveal the full story.</p>
+      </div>
+      <div class="xh-badges">
+        <div class="sb"><div class="sb-d" style="background:var(--cu)"></div><span class="sb-v">8</span><span class="sb-l">&nbsp;UNESCO Heritage Sites</span></div>
+        <div class="sb"><div class="sb-d" style="background:var(--cw)"></div><span class="sb-v">6</span><span class="sb-l">&nbsp;Wildlife Safari Parks</span></div>
+        <div class="sb"><div class="sb-d" style="background:var(--cb)"></div><span class="sb-v">8</span><span class="sb-l">&nbsp;Pristine Beaches</span></div>
+        <div class="sb"><div class="sb-d" style="background:var(--ch)"></div><span class="sb-v">6</span><span class="sb-l">&nbsp;Highland Destinations</span></div>
+      </div>
+    </div>
+
+    <!-- MAP WRAPPER: vertical filter strip + map side by side -->
+    <div class="xmap-wrap">
+
+      <!-- VERTICAL CATEGORY STRIP -->
+      <div class="xcat-strip" id="xcatStrip">
+        <div class="xcat-bar">
+
+          <div class="xcat-seg on" data-c="all" style="--xcs-clr:var(--teal)" onclick="xcatSelect('all',this)">
+            <div class="xcat-seg-ic" style="background:rgba(14,154,170,.2)">
+              <i class="fas fa-globe" style="color:var(--tealb)"></i>
+            </div>
+            <span class="xcat-seg-nm">All</span>
+            <span class="xcat-seg-ct">37</span>
+          </div>
+
+          <div class="xcat-bar-sep"></div>
+
+          <div class="xcat-seg" data-c="unesco" style="--xcs-clr:#f5a623" onclick="xcatSelect('unesco',this)">
+            <div class="xcat-seg-ic" style="background:rgba(245,166,35,.18)">
+              <i class="fas fa-award" style="color:#f5a623"></i>
+            </div>
+            <span class="xcat-seg-nm">UNESCO</span>
+            <span class="xcat-seg-ct">8</span>
+          </div>
+
+          <div class="xcat-seg" data-c="wildlife" style="--xcs-clr:#2db87d" onclick="xcatSelect('wildlife',this)">
+            <div class="xcat-seg-ic" style="background:rgba(45,184,125,.18)">
+              <i class="fas fa-paw" style="color:#2db87d"></i>
+            </div>
+            <span class="xcat-seg-nm">Wildlife</span>
+            <span class="xcat-seg-ct">6</span>
+          </div>
+
+          <div class="xcat-seg" data-c="beach" style="--xcs-clr:#12c8d8" onclick="xcatSelect('beach',this)">
+            <div class="xcat-seg-ic" style="background:rgba(18,200,216,.18)">
+              <i class="fas fa-umbrella-beach" style="color:#12c8d8"></i>
+            </div>
+            <span class="xcat-seg-nm">Beaches</span>
+            <span class="xcat-seg-ct">8</span>
+          </div>
+
+          <div class="xcat-seg" data-c="hills" style="--xcs-clr:#5ec46e" onclick="xcatSelect('hills',this)">
+            <div class="xcat-seg-ic" style="background:rgba(94,196,110,.18)">
+              <i class="fas fa-mountain" style="color:#5ec46e"></i>
+            </div>
+            <span class="xcat-seg-nm">Hills</span>
+            <span class="xcat-seg-ct">6</span>
+          </div>
+
+          <div class="xcat-seg" data-c="culture" style="--xcs-clr:#9b7fe8" onclick="xcatSelect('culture',this)">
+            <div class="xcat-seg-ic" style="background:rgba(155,127,232,.18)">
+              <i class="fas fa-city" style="color:#9b7fe8"></i>
+            </div>
+            <span class="xcat-seg-nm">Culture</span>
+            <span class="xcat-seg-ct">6</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- MAP FRAME -->
+      <div class="xmap-frame" id="xmap-frame">
+        <div id="sl-map"></div>
+        <div class="xmap-pill">
+          <div class="xmp-pulse"></div>
+          <span class="xmp-num" id="xmpnum">37</span>
+          <span class="xmp-lbl">destinations shown</span>
+        </div>
+        <div class="xdetail" id="xdetail"></div>
+      </div>
+
+    </div>
+    <!-- END MAP WRAPPER -->
+
+    <div class="xbelow">
+      <div class="xlegend" id="xlegend"></div>
+      <div class="xcount-wrap">
+        <div class="xcount-num" id="xcnum">37</div>
+        <div class="xcount-lbl">Iconic<br>Destinations</div>
+      </div>
+    </div>
+
+    <div class="xticker-wrap">
+      <div class="xticker" id="xticker"></div>
+    </div>
+
+    <div class="xstats">
+      <div class="xsc"><div class="xsc-ic t"><i class="fas fa-award"></i></div><div><div class="xsc-n">8</div><div class="xsc-l">UNESCO World Heritage Sites on the island</div></div></div>
+      <div class="xsc"><div class="xsc-ic a"><i class="fas fa-paw"></i></div><div><div class="xsc-n">26</div><div class="xsc-l">National Parks &amp; Wildlife Sanctuaries</div></div></div>
+      <div class="xsc"><div class="xsc-ic g"><i class="fas fa-water"></i></div><div><div class="xsc-n">1,340<span style="font-size:1.1rem">km</span></div><div class="xsc-l">Of pristine Indian Ocean coastline</div></div></div>
+      <div class="xsc"><div class="xsc-ic v"><i class="fas fa-mountain"></i></div><div><div class="xsc-n">2,524<span style="font-size:1.1rem">m</span></div><div class="xsc-l">Pidurutalagala — Sri Lanka's highest peak</div></div></div>
+    </div>
+
+  </div>
+</section>
+
+<div id="xoverlay"></div>
+
+<div class="xtooltip" id="xtooltip">
+  <div class="xtt-card">
+    <div class="xtt-img"><img id="xttimg" src="" alt=""></div>
+    <div class="xtt-body">
+      <div class="xtt-cat"><div class="xtt-cd" id="xttcd"></div><span class="xtt-cl" id="xttcl"></span></div>
+      <div class="xtt-name" id="xttname"></div>
+      <div class="xtt-hint" id="xtthint"></div>
+    </div>
+  </div>
+  <div class="xtt-arrow"></div>
+</div>
+
+<script>
+const SPOTS = [
+  {id:'sigiriya',name:'Sigiriya Rock Fortress',cat:'unesco',cLabel:'UNESCO Heritage',region:'Cultural Triangle · Central Province',lat:7.9570,lng:80.7603,tagline:"A 5th-century royal citadel carved from a 200-metre volcanic rock — ancient frescoes, mirror water gardens and sweeping jungle panoramas.",hint:'Lion Rock: 200m above the jungle since 5th century AD',img:'https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya_processed.webp',facts:[{i:'fa-mountain',l:'Height',v:'200 m'},{i:'fa-calendar',l:'Era',v:'5th century AD'},{i:'fa-users',l:'Visitors',v:'1.2M+'}],best:'Nov – May',note:'Climb at 6 AM to beat crowds and catch sunrise over the jungle',chips:['Ancient Frescoes','Lion Paw Gate','Water Gardens','Panoramic Summit']},
+  {id:'anuradhapura',name:'Anuradhapura',cat:'unesco',cLabel:'UNESCO Heritage',region:'North Central Province',lat:8.3468,lng:80.3960,tagline:"One of the world's oldest continuously inhabited cities — home to the 2,250-year-old Sri Maha Bodhi, the most sacred tree on Earth.",hint:'Founded 3rd century BC — the 2,250-yr-old Bodhi Tree lives here',img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Anuradhapura_processed.webp',facts:[{i:'fa-tree',l:'Sacred Tree',v:'2,250 yrs'},{i:'fa-calendar',l:'Founded',v:'3rd c. BC'},{i:'fa-bicycle',l:'Best Way',v:'Cycling'}],best:'Year-round',note:'Cycling the archaeological park reveals hidden stupas far from the main path',chips:['Sri Maha Bodhi','Ruwanwelisaya Stupa','Abhayagiri Temple','Cycling Tour']},
+  {id:'polonnaruwa',name:'Polonnaruwa',cat:'unesco',cLabel:'UNESCO Heritage',region:'North Central Province',lat:7.9403,lng:81.0027,tagline:"Sri Lanka's breathtaking medieval capital — royal palaces, moonstone carvings and the serene Gal Vihara rock sculptures intact after 800 years.",hint:'Medieval capital with Gal Vihara rock sculptures',img:'https://pixelceylontours.com/wp-content/uploads/2026/03/polonnaruwa_processed.webp',facts:[{i:'fa-crown',l:'Capital Era',v:'11th–13th c.'},{i:'fa-image',l:'Highlight',v:'Gal Vihara'},{i:'fa-award',l:'Status',v:'UNESCO WHS'}],best:'Nov – Apr',note:'Early morning light makes the ancient stone sculptures glow golden',chips:['Royal Palace','Gal Vihara','Vatadage Shrine','Moonstone Carvings']},
+  {id:'dambulla',name:'Dambulla Cave Temple',cat:'unesco',cLabel:'UNESCO Heritage',region:'Central Province',lat:7.8599,lng:80.6487,tagline:"Five sacred caves shelter 80 gilded Buddha statues and 2,100 m² of ceiling paintings — Asia's finest cave temple complex.",hint:"80 gilded Buddhas inside 5 sacred caves — Asia's finest",img:'https://pixelceylontours.com/wp-content/uploads/2026/03/dambulla-cave-temple_processed.webp',facts:[{i:'fa-place-of-worship',l:'Caves',v:'5 chambers'},{i:'fa-spa',l:'Statues',v:'80 Buddhas'},{i:'fa-award',l:'Status',v:'UNESCO WHS'}],best:'Nov – Apr',note:'Arrive at 7:30 AM opening before tour buses for meditative silence',chips:['Cave Paintings','2,100 m² Murals','Golden Temple','Rock Summit View']},
+  {id:'kandy',name:'Temple of the Tooth',cat:'unesco',cLabel:'UNESCO Heritage',region:'Kandy · Hill Capital',lat:7.2942,lng:80.6418,tagline:"Sri Lanka's most sacred Buddhist shrine — housing a tooth relic of the Buddha. Three daily puja ceremonies fill candlelit halls with incense and drums.",hint:'Sacred tooth relic enshrined since 4th century AD',img:'https://pixelceylontours.com/wp-content/uploads/2026/03/temple-of-tooth_processed.webp',facts:[{i:'fa-pray',l:'Puja',v:'3× daily'},{i:'fa-mountain',l:'Altitude',v:'500 m'},{i:'fa-award',l:'Status',v:'UNESCO WHS'}],best:'Year-round',note:'The 6:30 PM candlelit puja is the most atmospheric — arrive 30 min early',chips:['Puja Ceremony','Kandy Lake','Cultural Dance Show','Royal Museum']},
+  {id:'galle',name:'Galle Dutch Fort',cat:'unesco',cLabel:'UNESCO Heritage',region:'Southern Province',lat:6.0270,lng:80.2168,tagline:"A living colonial fort city — Dutch ramparts, cobblestone lanes, boutique cafés and the finest preserved European fortification in Asia.",hint:'Best-preserved European fort in Asia — still lived in',img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Galle-Dutch-Fort_processed.webp',facts:[{i:'fa-fort-awesome-alt',l:'Built',v:'1663 Dutch'},{i:'fa-water',l:'Setting',v:'Ocean-front'},{i:'fa-award',l:'Status',v:'UNESCO WHS'}],best:'Nov – Apr',note:"Sunset walk along the fort ramparts is one of Sri Lanka's top experiences",chips:['Fort Ramparts Walk','Lighthouse','Colonial Streets','Boutique Shops']},
+  {id:'sinharaja',name:'Sinharaja Forest',cat:'unesco',cLabel:'UNESCO Biosphere',region:'Sabaragamuwa / Southern Province',lat:6.3963,lng:80.4998,tagline:"Sri Lanka's last pristine primary rainforest — a UNESCO Biosphere Reserve with 60% endemic trees and 147 extraordinary bird species.",hint:"Last intact tropical rainforest — 60% endemic species",img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Sinharaja-Forest_processed.webp',facts:[{i:'fa-tree',l:'Forest Area',v:'11,187 ha'},{i:'fa-dove',l:'Bird Species',v:'147'},{i:'fa-award',l:'Status',v:'UNESCO WHS'}],best:'Jan – Apr · Aug – Sep',note:'Dawn bird-watching with local guides reveals extremely rare endemic species',chips:['Endemic Birds','Guided Trek','Forest Waterfalls','Purple-faced Langur']},
+  {id:'centralhighlands',name:'Central Highlands of Sri Lanka',cat:'unesco',cLabel:'UNESCO Natural Heritage',region:'Central & Sabaragamuwa Province',lat:6.8068,lng:80.6500,tagline:"Sri Lanka\'s newest UNESCO World Heritage Site (2010) — a trio of pristine montane rainforests: Peak Wilderness (Adam\'s Peak), Horton Plains and the Knuckles Conservation Forest, sheltering leopards and hundreds of endemic species.",hint:"Three montane rainforests inscribed UNESCO 2010 — leopard, langur & endemic flora",img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Knuckles-Mountain_processed.webp',facts:[{i:'fa-mountain',l:'Highest Point',v:'2,524 m'},{i:'fa-tree',l:'Total Area',v:'56,844 ha'},{i:'fa-award',l:'Inscribed',v:'2010'}],best:'Dec – May',note:"Horton Plains dawn walk to World\'s End cliff drops 870 m into mist-filled valleys — arrive at 6 AM",chips:["World\'s End Cliff","Adam\'s Peak Pilgrimage","Knuckles Trek","Purple-faced Langur","Sri Lanka Leopard"]},
+  {id:'yala',name:'Yala National Park',cat:'wildlife',cLabel:'Wildlife Safari',region:'Southern Province',lat:6.2808,lng:81.3225,tagline:"The highest leopard density per km² anywhere on Earth — plus wild elephants, sloth bears, mugger crocodiles and 215+ bird species.",hint:"World's highest leopard density — unforgettable jeep safaris",img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Yala-National-Park_processed.webp',facts:[{i:'fa-paw',l:'Famous For',v:'Leopards'},{i:'fa-map',l:'Area',v:'979 km²'},{i:'fa-dove',l:'Birds',v:'215+'}],best:'Feb – Jul',note:'Dawn and dusk jeep drives offer the best leopard sightings near waterholes',chips:['Leopard Safaris','Wild Elephants','Sloth Bears','Coastal Lagoons']},
+  {id:'udawalawe',name:'Udawalawe National Park',cat:'wildlife',cLabel:'Wildlife Safari',region:'Sabaragamuwa / Uva Province',lat:6.4782,lng:80.8924,tagline:"Sri Lanka's best park for guaranteed elephant sightings — herds of 200+ elephants roam open grasslands around a glittering reservoir.",hint:'Herds of 200+ elephants roam open plains daily',img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Udawalawe-National-Park_processed.webp',facts:[{i:'fa-map',l:'Area',v:'308 km²'},{i:'fa-sun',l:'Best Drive',v:'6 AM / 3 PM'},{i:'fa-paw',l:'Elephants',v:'700+'}],best:'Year-round',note:'The Elephant Transit Home here rehabilitates orphaned baby elephants',chips:['Elephant Herds','Water Buffalo','Crocodiles','Reservoir Views']},
+  {id:'minneriya',name:'Minneriya National Park',cat:'wildlife',cLabel:'Wildlife Safari',region:'North Central Province',lat:8.0296,lng:80.9076,tagline:"Home to 'The Gathering' — one of Earth's greatest wildlife spectacles as 300+ wild elephants converge on the ancient Minneriya tank each dry season.",hint:"'The Gathering' — 300+ elephants meet each dry season",img:'https://pixelceylontours.com/wp-content/uploads/2026/03/minneriya-national-park_processed.webp',facts:[{i:'fa-map',l:'Area',v:'88.9 km²'},{i:'fa-calendar',l:'Best Season',v:'Jun – Oct'},{i:'fa-paw',l:'Peak',v:'300+ elephants'}],best:'Jun – Oct',note:'Combine with Kaudulla park for the widest chance of finding the elephant herd',chips:["'The Gathering'",'Sambar Deer','Painted Stork','Ancient Reservoir']},
+  {id:'wilpattu',name:'Wilpattu National Park',cat:'wildlife',cLabel:'Wildlife Safari',region:'North Western Province',lat:8.4556,lng:80.0176,tagline:"Sri Lanka's largest national park — a hauntingly beautiful wilderness of natural lakes called villus, with secretive leopards and sloth bears.",hint:"Sri Lanka's largest park — natural lake wilderness",img:'https://pixelceylontours.com/wp-content/uploads/2026/03/leaport-tour.webp',facts:[{i:'fa-map',l:'Area',v:'1,317 km²'},{i:'fa-water',l:'Feature',v:'Villu Lakes'},{i:'fa-paw',l:'Famous For',v:'Leopard & Bear'}],best:'Feb – Oct',note:'Far fewer tourists than Yala means more authentic wildlife encounters',chips:['Leopards','Sloth Bears','Flamingos','Villu Lakes']},
+  {id:'mirissa',name:'Mirissa Beach',cat:'beach',cLabel:'Beach & Coast',region:'Southern Province',lat:5.9483,lng:80.4716,tagline:"Golden crescent beach fringed by coconut palms — the world's premier blue whale watching destination and a legendary surf spot.",hint:'Blue whale capital of the world + crescent paradise beach',img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Trincomalee_processed.webp',facts:[{i:'fa-fish',l:'Famous For',v:'Blue Whales'},{i:'fa-umbrella-beach',l:'Vibe',v:'Relaxed'},{i:'fa-water',l:'Surf',v:'Nov – Apr'}],best:'Nov – Apr',note:'Blue whale watching boats leave at 6:30 AM — book the night before',chips:['Blue Whale Watching','Parrot Rock Sunset','Surf Breaks','Coconut Tree Hill']},
+  {id:'unawatuna',name:'Unawatuna Beach',cat:'beach',cLabel:'Beach & Coast',region:'Southern Province',lat:6.0106,lng:80.2494,tagline:"A sheltered horseshoe bay with calm turquoise waters — perfect for snorkelling coral reefs, lazy beach days, and fresh seafood at candlelit restaurants.",hint:'Sheltered horseshoe bay — top snorkelling & seafood',img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Arugam-Bay_processed.webp',facts:[{i:'fa-water',l:'Swimming',v:'Calm year-round'},{i:'fa-fish',l:'Snorkelling',v:'Coral reef'},{i:'fa-utensils',l:'Food',v:'Excellent'}],best:'Nov – Apr',note:'The Rumassala hill at the far end of the bay has a remarkable coral reef',chips:['Snorkelling','Jungle Beach','Peace Pagoda','Sunset Dining']},
+  {id:'trincomalee',name:'Trincomalee & Nilaveli',cat:'beach',cLabel:'Beach & Coast',region:'Eastern Province',lat:8.5674,lng:81.2330,tagline:"Sri Lanka's east coast gem — pristine white-sand beaches, spectacular snorkelling around Pigeon Island, and spinner dolphins in a natural harbour.",hint:'East coast paradise — Pigeon Island reef & spinner dolphins',img:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&auto=format&fit=crop&q=80',facts:[{i:'fa-umbrella-beach',l:'Beach',v:'Nilaveli'},{i:'fa-fish',l:'Snorkelling',v:'Pigeon Island'},{i:'fa-water',l:'Wildlife',v:'Spinner Dolphins'}],best:'May – Sep',note:'Pigeon Island is one of two national parks in Sri Lanka actually in the sea',chips:['Pigeon Island','Snorkelling','Whale Watching','Fort Frederick']},
+  {id:'arugambay',name:'Arugam Bay',cat:'beach',cLabel:'Beach & Coast',region:'Eastern Province',lat:6.8399,lng:81.8354,tagline:"Asia's iconic surf spot — a laid-back lagoon village with world-class right-hander waves and abundant wildlife on the doorstep.",hint:"Asia's top surf spot — legendary right-hander waves",img:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&auto=format&fit=crop&q=80',facts:[{i:'fa-water',l:'Surf Break',v:'World-class'},{i:'fa-paw',l:'Wildlife',v:'Elephants nearby'},{i:'fa-sun',l:'Season',v:'May – Oct'}],best:'May – Oct',note:'Pottuvil Lagoon at dawn offers incredible bird & crocodile spotting by canoe',chips:['Surfing','Pottuvil Lagoon','Elephant Rock','Baobab Tree']},
+  {id:'bentota',name:'Bentota & Beruwala',cat:'beach',cLabel:'Beach & Coast',region:'Western Province',lat:6.4269,lng:80.0000,tagline:"The golden stretch of Sri Lanka's west coast — water sports, ayurveda resorts, sea turtle hatcheries, and the Madu River lagoon teeming with birds.",hint:'Water sports capital + turtle hatcheries & Madu River',img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Bentota.webp',facts:[{i:'fa-water',l:'Activities',v:'Water Sports'},{i:'fa-leaf',l:'Wellness',v:'Ayurveda'},{i:'fa-fish',l:'Conservation',v:'Sea Turtles'}],best:'Nov – Apr',note:'Madu River boat safari through mangroves is a hidden gem of the west coast',chips:['Water Sports','Turtle Hatchery','Madu River Safari','Ayurveda Spa']},
+  {id:'ella',name:'Ella & Nine Arch Bridge',cat:'hills',cLabel:'Hill Country',region:'Uva Province',lat:6.8667,lng:81.0466,tagline:"Sri Lanka's most photogenic hill station — the iconic Nine Arch Bridge, misty peaks, Ella Rock hike, and the world's most scenic train journey.",hint:'Nine Arch Bridge + Ella Rock — hill country icon',img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Ella-Nine-Arch-Bridge_processed.webp',facts:[{i:'fa-train',l:'Train',v:'Kandy–Ella line'},{i:'fa-mountain',l:'Hike',v:'Ella Rock'},{i:'fa-bridge',l:'Icon',v:'Nine Arch Bridge'}],best:'Year-round',note:'Stand at Nine Arch Bridge at 8 AM to catch the vintage blue train pass through',chips:['Nine Arch Bridge','Ella Rock Hike','Tea Plantations',"Little Adam's Peak"]},
+  {id:'nuwaraeliya',name:'Nuwara Eliya',cat:'hills',cLabel:'Hill Country',region:'Central Province · 1,868 m',lat:6.9497,lng:80.7891,tagline:"'Little England' — Sri Lanka's highest city at 1,868 m, draped in rolling tea estates, colonial bungalows, cool mists and strawberry farms.",hint:"'Little England' at 1,868 m — Sri Lanka's tea capital",img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Nuwara-Eliya_processed.webp',facts:[{i:'fa-mountain',l:'Altitude',v:'1,868 m'},{i:'fa-mug-hot',l:'Famous For',v:'Ceylon Tea'},{i:'fa-thermometer-half',l:'Climate',v:'Cool & misty'}],best:'Year-round',note:'Factory tours at Pedro or Mackwoods Tea Estate include a fresh high-grown tasting',chips:['Tea Plantation Tours','Gregory Lake','Horton Plains','Victoria Park']},
+  {id:'hortonplains',name:"Horton Plains & World's End",cat:'hills',cLabel:'Hill Country',region:'Central Province · 2,100 m',lat:6.8024,lng:80.8024,tagline:"A high-altitude cloud forest plateau at 2,100 m — dramatic mist-filled trails leading to World's End, an 870-metre sheer escarpment drop.",hint:"World's End — an 870m sheer drop from misty cloud forest",img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Horton-Plains_processed.webp',facts:[{i:'fa-mountain',l:'Altitude',v:'2,100 m'},{i:'fa-wind',l:'Feature',v:"World's End"},{i:'fa-paw',l:'Wildlife',v:'Sambar Deer'}],best:'Jan – Mar',note:"Arrive before 9 AM — clouds roll in and obscure World's End by late morning",chips:["World's End","Baker's Falls",'Cloud Forest','Sambar Deer']},
+  {id:'colombo',name:'Colombo',cat:'culture',cLabel:'Culture & Cities',region:'Western Province · Capital',lat:6.9271,lng:79.8612,tagline:"A cosmopolitan port city blending Dutch colonial architecture, vibrant street art, world-class dining, buzzing Pettah market and a rapidly evolving skyline.",hint:'Vibrant capital — colonial forts, street art & Pettah market',img:'https://pixelceylontours.com/wp-content/uploads/2026/03/colombo_processed.webp',facts:[{i:'fa-city',l:'Population',v:'752,000+'},{i:'fa-plane',l:'Gateway',v:"Int'l hub"},{i:'fa-utensils',l:'Food',v:'World-class'}],best:'Year-round',note:'The Pettah bazaar and Galle Face Green sunset are quintessential Colombo experiences',chips:['Galle Face Green','Pettah Market','Gangaramaya Temple','Dutch Hospital']},
+  {id:'negombo',name:'Negombo',cat:'culture',cLabel:'Culture & Cities',region:'Western Province',lat:7.2092,lng:79.8380,tagline:"The gateway city to Sri Lanka — a vibrant fishing town with Dutch-built canals, lively Catholic churches, and the freshest seafood in the country.",hint:"Gateway city — Dutch canals, fish markets & Catholic heritage",img:'https://pixelceylontours.com/wp-content/uploads/2026/03/negambo-beach_processed.webp',facts:[{i:'fa-fish',l:'Famous For',v:'Fresh seafood'},{i:'fa-water',l:'Feature',v:'Dutch canals'},{i:'fa-church',l:'Heritage',v:'Catholic churches'}],best:'Year-round',note:'The dawn fish auction at Negombo beach is a spectacular local experience',chips:['Fish Market','Dutch Canals',"St. Mary's Church",'Lagoon Boat Rides']},
+  /* ── Additional Wildlife ── */
+  {
+    id:'pinnawala', cat:'wildlife', name:'Pinnawala Elephant Orphanage',
+    lat:7.2760, lng:80.0700, region:'Kegalle · Sabaragamuwa Province',
+    tagline:"Watch 90+ rescued elephants being fed and bathing twice daily in the Maha Oya river — the world's largest captive elephant herd in a natural setting.",
+    hint:'90+ rescued elephants · river bathing 10 AM & 2 PM · baby elephants',
+    days:1, bestTime:'Year-round', minRecommended:0.5,
+    facts:[{i:'fa-paw',l:'Residents',v:'90+ elephants'},{i:'fa-water',l:'River Bath',v:'10 AM & 2 PM'},{i:'fa-camera',l:'Photos',v:'Get close'}],
+    chips:['River Bathing','Baby Elephants','Feeding Session','Photography'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/pinnawala_processed.webp'
+  },
+  {
+    id:'kumana', cat:'wildlife', name:'Kumana National Park',
+    lat:6.5800, lng:81.6833, region:'Eastern Province · Near Arugam Bay',
+    tagline:"A remote, pristine park famous for spectacular bird migrations — thousands of painted storks, herons and pelicans nest around the ancient Kumana lagoon.",
+    hint:'Remote wetland · 255 bird species · rarely visited gem',
+    days:1, bestTime:'Apr – Jul', minRecommended:1,
+    facts:[{i:'fa-dove',l:'Birds',v:'255 species'},{i:'fa-map',l:'Area',v:'36,096 ha'},{i:'fa-water',l:'Feature',v:'Kumana Lagoon'}],
+    chips:['Bird Migration','Painted Stork','Wild Buffaloes','Mangrove Forest'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Kumana-National-Park_processed.webp'
+  },
+
+  /* ── Additional Beaches ── */
+  {
+    id:'hikkaduwa', cat:'beach', name:'Hikkaduwa',
+    lat:6.1395, lng:80.1034, region:'Southern Province · West Coast',
+    tagline:"Sri Lanka's most accessible coral reef sanctuary — snorkel with resident sea turtles just metres from shore, learn to surf and enjoy a lively beachfront.",
+    hint:'Coral reef snorkelling · sea turtles · lively surf town',
+    days:1, bestTime:'Nov – Apr', minRecommended:0.5,
+    facts:[{i:'fa-fish',l:'Highlight',v:'Coral Reef'},{i:'fa-water',l:'Surf',v:'Beginner breaks'},{i:'fa-paw',l:'Wildlife',v:'Sea Turtles'}],
+    chips:['Coral Reef Snorkelling','Sea Turtle Sanctuary','Surf Lessons','Beach Nightlife'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Hikkaduwa_processed.webp'
+  },
+  {
+    id:'tangalle', cat:'beach', name:'Tangalle',
+    lat:6.0232, lng:80.7982, region:'Southern Province · Far South Coast',
+    tagline:"Sri Lanka's most secluded south coast — wide undeveloped bays, ancient turtle nesting beaches and rocky headland coves far from the tourist trail.",
+    hint:'Secluded unspoilt beaches · sea turtle nesting · peaceful far south',
+    days:1, bestTime:'Nov – Apr', minRecommended:1,
+    facts:[{i:'fa-umbrella-beach',l:'Vibe',v:'Secluded & Wild'},{i:'fa-water',l:'Turtles',v:'Nesting beach'},{i:'fa-sun',l:'Coast',v:'Far South'}],
+    chips:['Turtle Nesting','Rekawa Lagoon','Remote Coves','Blow Hole'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Tangalle_processed.webp'
+  },
+  {
+    id:'negombo-beach', cat:'beach', name:'Negombo Beach',
+    lat:7.2092, lng:79.8380, region:'Western Province · Near Airport',
+    tagline:"Sri Lanka's gateway beach — a lively west coast strip with Dutch-built canals, dawn fish auctions, fresh seafood and easy access from the international airport.",
+    hint:'Airport gateway · Dutch canals · dawn fish auction · beach strip',
+    days:1, bestTime:'Nov – Apr', minRecommended:0.5,
+    facts:[{i:'fa-plane',l:'Transfer',v:'12 km · 20 min'},{i:'fa-fish',l:'Famous For',v:'Fresh Seafood'},{i:'fa-water',l:'Feature',v:'Dutch Canals'}],
+    chips:['Dutch Canals','Fish Market',"St. Mary's Church",'Lagoon Boat Rides'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/negambo-beach_processed.webp'
+  },
+
+  /* ── Additional Hills ── */
+  {
+    id:'adamspeak', cat:'hills', name:"Adam's Peak (Sri Pada)",
+    lat:6.8096, lng:80.4997, region:"Sabaragamuwa Province · 2,243 m",
+    tagline:"Sri Lanka's most sacred pilgrimage peak at 2,243 m — climb 5,500+ steps by torchlight and witness the famous triangular shadow at sunrise from the summit.",
+    hint:'Sacred pilgrimage mountain · night climb · iconic sunrise shadow',
+    days:1, bestTime:'Dec – May', minRecommended:1,
+    facts:[{i:'fa-mountain',l:'Altitude',v:'2,243 m'},{i:'fa-stairs',l:'Steps',v:'5,500+'},{i:'fa-sun',l:'Highlight',v:'Summit Sunrise'}],
+    chips:['Night Pilgrimage','Summit Sunrise','Sacred Footprint','4 Religions'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Adams-Peak_processed.webp'
+  },
+  {
+    id:'haputale', cat:'hills', name:"Haputale & Lipton's Seat",
+    lat:6.7688, lng:80.9542, region:"Uva Province · 1,431 m",
+    tagline:"A hidden hilltop village on a dramatic ridge — trek through Dambatenne tea estate to Lipton's Seat for one of Sri Lanka's finest uninterrupted 360° panoramas.",
+    hint:"Lipton's Seat · tea estate walks · dramatic ridge panorama",
+    days:1, bestTime:'Year-round', minRecommended:0.5,
+    facts:[{i:'fa-mountain',l:'Altitude',v:'1,431 m'},{i:'fa-mug-hot',l:'Legend',v:"Lipton's Seat"},{i:'fa-eye',l:'Views',v:'360° panorama'}],
+    chips:["Lipton's Seat",'Dambatenne Tea Factory','Ridge Walk','Valley Views'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Haputale-Liptons-Seat_processed.webp'
+  },
+  {
+    id:'knuckles', cat:'hills', name:'Knuckles Mountain Range',
+    lat:7.4167, lng:80.7500, region:'Central Province · UNESCO Buffer Zone',
+    tagline:"Sri Lanka's finest trekking wilderness — mist-draped cloud forests, cascading waterfalls, dramatic peaks and authentic village homestay experiences.",
+    hint:'Cloud-forest multi-day trekking · waterfalls · village homestays',
+    days:2, bestTime:'Jan – Apr', minRecommended:1,
+    facts:[{i:'fa-hiking',l:'Trekking',v:'Multi-day routes'},{i:'fa-mountain',l:'Peak',v:'1,906 m'},{i:'fa-award',l:'Status',v:'UNESCO Buffer'}],
+    chips:['Cloud Forest Trek','Corbetts Gap','Village Homestays','Endemic Wildlife'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Knuckles-Mountain_processed.webp'
+  },
+
+  /* ── Additional Culture ── */
+  {
+    id:'kandy-city', cat:'culture', name:'Kandy',
+    lat:7.2906, lng:80.6337, region:'Central Province · Hill Capital · 500 m',
+    tagline:"Sri Lanka's cultural heart and last royal capital — a lakeside hill city with the spectacular Esala Perahera festival, vibrant arts scene and botanical gardens.",
+    hint:"Cultural capital · Esala Perahera festival · Royal Botanical Gardens",
+    days:2, bestTime:'Year-round', minRecommended:1,
+    facts:[{i:'fa-water',l:'Feature',v:'Kandy Lake'},{i:'fa-theater-masks',l:'Festival',v:'Esala Perahera'},{i:'fa-leaf',l:'Gardens',v:'Royal Botanic'}],
+    chips:['Kandy Lake Walk','Cultural Dance Show','Royal Botanical Gardens','Perahera Festival'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/kandy_processed.webp'
+  },
+  {
+    id:'jaffna', cat:'culture', name:'Jaffna',
+    lat:9.6615, lng:80.0255, region:'Northern Province',
+    tagline:"Sri Lanka's vibrant Tamil cultural heart — ancient Nainativu temple, magnificent Jaffna Fort, fiery northern cuisine and a warm, resilient community.",
+    hint:'Tamil cultural capital · ancient temples · Jaffna Fort · unique northern cuisine',
+    days:2, bestTime:'May – Sep', minRecommended:1,
+    facts:[{i:'fa-place-of-worship',l:'Famous For',v:'Hindu Temples'},{i:'fa-utensils',l:'Cuisine',v:'Spicy Northern'},{i:'fa-fort-awesome',l:'Landmark',v:'Jaffna Fort'}],
+    chips:['Nainativu Temple','Jaffna Fort','Nagadeepa Island','Traditional Cuisine'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Jaffna_processed.webp'
+  },
+  {
+    id:'galle-city', cat:'culture', name:'Galle City',
+    lat:6.0535, lng:80.2210, region:'Southern Province · Cultural Hub',
+    tagline:"Beyond the famous fort walls lies a vibrant fishing town with fresh fish markets, colonial architecture, local cafés and the relaxed character of the south coast.",
+    hint:'Beyond the fort · local fish markets · authentic southern culture',
+    days:1, bestTime:'Nov – Apr', minRecommended:0.5,
+    facts:[{i:'fa-fish',l:'Market',v:'Fresh Fish'},{i:'fa-utensils',l:'Food',v:'Coastal Cuisine'},{i:'fa-city',l:'Character',v:'Relaxed South'}],
+    chips:['Fish Market','Local Cafes','Colonial Architecture','South Coast Vibe'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Galle-City_processed.webp'
+  },
+  {
+    id:'mannar', cat:'culture', name:'Mannar Island',
+    lat:8.9781, lng:79.9045, region:'Northern Province · Causeway Island',
+    tagline:"A remote, otherworldly island — ancient baobab trees brought by Arab traders, Adam's Bridge ruins stretching to India and spectacular flamingo flocks.",
+    hint:'Remote island · ancient baobab trees · flamingos · Adams Bridge',
+    days:1, bestTime:'May – Sep', minRecommended:1,
+    facts:[{i:'fa-tree',l:'Famous For',v:'Baobab Trees'},{i:'fa-dove',l:'Wildlife',v:'Flamingos'},{i:'fa-water',l:'Feature',v:"Adam's Bridge"}],
+    chips:['Ancient Baobabs','Flamingo Flocks',"Adam's Bridge",'Mannar Fort'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Mannar_processed.webp'
+  },
+
+  /* ── Local Experiences ── */
+  {
+    id:'sigiriya-village', cat:'experience', cLabel:'Local Experience', name:'Sigiriya Village Cycling',
+    lat:7.9500, lng:80.7450, region:'Cultural Triangle · Village Life',
+    tagline:"An immersive rural cycling experience through paddy fields, ancient irrigation canals and tiny villages — ending with a traditional home-cooked Sri Lankan lunch.",
+    hint:'Paddy field cycling · catamaran ride · village lunch experience',
+    days:1, best:'Year-round', note:'The catamaran ride through village canals adds a peaceful contrast to the busy Sigiriya fortress nearby', bestTime:'Year-round', minRecommended:0.5,
+    facts:[{i:'fa-bicycle',l:'Activity',v:'Village Cycling'},{i:'fa-water',l:'Bonus',v:'Catamaran Ride'},{i:'fa-utensils',l:'Lunch',v:'Village Meal'}],
+    chips:['Paddy Field Cycling','Catamaran Ride','Village Lunch','Irrigation Canals'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya-village-cyling_processed.webp'
+  },
+  {
+    id:'pigeon-island', cat:'experience', cLabel:'Marine Experience', name:'Pigeon Island Marine Park',
+    lat:8.6200, lng:81.2400, region:'Eastern Province · Off Nilaveli Beach',
+    tagline:"Sri Lanka's premier marine national park — vibrant coral gardens, blacktip reef sharks, hawksbill turtles and over 300 tropical fish species in crystal waters.",
+    hint:'Marine park · blacktip reef sharks · hawksbill turtles · coral gardens',
+    days:1, best:'May – Sep', note:'Snorkel early morning before boat traffic for the clearest water and best reef shark sightings', bestTime:'May – Sep', minRecommended:0.5,
+    facts:[{i:'fa-fish',l:'Fish',v:'300+ species'},{i:'fa-water',l:'Highlight',v:'Blacktip Sharks'},{i:'fa-paw',l:'Turtles',v:'Hawksbill'}],
+    chips:['Reef Sharks','Coral Gardens','Sea Turtles','Snorkelling'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/pigeon-island_processed.webp'
+  },
+  {
+    id:'lipton-seat', cat:'experience', cLabel:'Tea Country Experience', name:"Lipton's Seat at Dambatenne",
+    lat:6.7900, lng:81.0300, region:'Uva Province · Tea Country',
+    tagline:"Hike through Dambatenne tea estate to the famous viewpoint where Sir Thomas Lipton surveyed his vast tea empire — uninterrupted views stretching across Uva.",
+    hint:"Thomas Lipton's viewpoint · uninterrupted tea estate panoramas",
+    days:1, best:'Year-round', note:'Arrive before 9 AM for the clearest views — clouds roll in and obscure the panorama by late morning', bestTime:'Year-round', minRecommended:0.5,
+    facts:[{i:'fa-mug-hot',l:'Legend',v:'Thomas Lipton'},{i:'fa-eye',l:'Views',v:'360° Panorama'},{i:'fa-hiking',l:'Hike',v:'Through Tea'}],
+    chips:['Tea Estate Walk','Panoramic Views','Colonial History','Photography'],
+    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Liptons-Seat-at-Dambatenne_processed.webp'
+  }
+];
+
+const CAT_COLOR = { unesco:'#f5a623', wildlife:'#2db87d', beach:'#12c8d8', hills:'#5ec46e', culture:'#9b7fe8', experience:'#e17055' };
+const CAT_ICON  = { unesco:'fa-award', wildlife:'fa-paw', beach:'fa-umbrella-beach', hills:'fa-mountain', culture:'fa-city', experience:'fa-star' };
+const isMobile  = () => window.innerWidth <= 900;
+
+/* ── MAP ── */
+const map = L.map('sl-map', { center:[7.8731,80.7718], zoom:7, zoomControl:true, scrollWheelZoom:false });
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution:'&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap contributors',
+  subdomains:'abcd', maxZoom:19,
+}).addTo(map);
+
+/* ── MARKER ICON ── */
+function makeIcon(spot, size=34) {
+  const color = CAT_COLOR[spot.cat] || '#0e9aaa';
+  const icon  = CAT_ICON[spot.cat]  || 'fa-map-marker-alt';
+  const half  = size / 2;
+  return L.divIcon({
+    html:`<div class="cml" style="width:${size}px;height:${size}px;">
+      <div class="cml-ring" style="width:${size}px;height:${size}px;border:2px solid ${color};top:0;left:0;"></div>
+      <div class="cml-body" style="width:${size}px;height:${size}px;background:${color};box-shadow:0 0 14px ${color}99;font-size:${Math.round(size*.36)}px;">
+        <i class="fas ${icon}" style="color:#fff;pointer-events:none;"></i>
+      </div></div>`,
+    className:'', iconSize:[size,size], iconAnchor:[half,half], popupAnchor:[0,-(half+4)],
+  });
+}
+
+/* ── TOOLTIP ── */
+const ttEl   = document.getElementById('xtooltip');
+const ttImg  = document.getElementById('xttimg');
+const ttCd   = document.getElementById('xttcd');
+const ttCl   = document.getElementById('xttcl');
+const ttName = document.getElementById('xttname');
+const ttHint = document.getElementById('xtthint');
+function showTooltip(spot, e) {
+  if (isMobile()) return;
+  ttImg.src = spot.img; ttImg.alt = spot.name;
+  ttCd.style.background = CAT_COLOR[spot.cat];
+  ttCl.textContent = spot.cLabel; ttCl.style.color = CAT_COLOR[spot.cat];
+  ttName.textContent = spot.name; ttHint.textContent = spot.hint;
+  ttEl.style.display = 'block'; moveTooltip(e);
+}
+function moveTooltip(e) { ttEl.style.left = e.clientX+'px'; ttEl.style.top = e.clientY+'px'; }
+function hideTooltip()  { ttEl.style.display = 'none'; }
+
+/* ── DETAIL PANEL ── */
+const mapFrame  = document.getElementById('xmap-frame');
+const detailEl  = document.getElementById('xdetail');
+const overlayEl = document.getElementById('xoverlay');
+
+function buildDetailHTML(spot) {
+  const color = CAT_COLOR[spot.cat] || '#0e9aaa';
+  const facts = spot.facts.map(f=>`<div class="xd-fact"><i class="fas ${f.i}"></i><strong>${f.v}</strong><span>${f.l}</span></div>`).join('');
+  const chips = spot.chips.map(c=>`<div class="xd-chip">${c}</div>`).join('');
+  return `
+    <button class="xd-close" onclick="closeDetail()"><i class="fas fa-times"></i></button>
+    <div class="xd-img">
+      <img src="${spot.img}" alt="${spot.name}">
+      <div class="xd-cbadge"><div class="xd-cbadge-dot" style="background:${color}"></div><span style="color:${color}">${spot.cLabel || spot.cat || ''}</span></div>
+      <div class="xd-region"><i class="fas fa-map-marker-alt"></i>${spot.region}</div>
+    </div>
+    <div class="xd-body">
+      <div class="xd-name">${spot.name}</div>
+      <div class="xd-tagline">${spot.tagline}</div>
+      <div class="xd-facts">${facts}</div>
+      ${spot.best ? `<div class="xd-when"><i class="fas fa-calendar-alt"></i><div class="xd-when-txt"><strong>Best Time to Visit</strong>${spot.best}${spot.note ? ' — ' + spot.note : ''}</div></div>` : ''}
+      <div class="xd-chips">${chips}</div>
+      <div class="xd-cta">
+        <a href="/trip-planner" class="xd-main">
+  <i class="fas fa-paper-plane"></i> Plan This Trip
+</a>
+        <button class="xd-save" title="Save"><i class="far fa-heart"></i></button>
+      </div>
+    </div>`;
+}
+
+function openDetail(spot) {
+  hideTooltip();
+  detailEl.innerHTML = buildDetailHTML(spot);
+  if (isMobile()) {
+    if (detailEl.parentElement !== document.body) document.body.appendChild(detailEl);
+    detailEl.classList.add('mobile-sheet');
+    detailEl.classList.remove('vis');
+    requestAnimationFrame(() => requestAnimationFrame(() => detailEl.classList.add('vis')));
+    overlayEl.classList.add('on');
+    document.body.style.overflow = 'hidden';
+  } else {
+    if (detailEl.parentElement !== mapFrame) mapFrame.appendChild(detailEl);
+    detailEl.classList.remove('mobile-sheet');
+    detailEl.classList.add('vis');
+    map.panTo([spot.lat, spot.lng], { animate:true, duration:.6 });
+  }
+}
+function closeDetail() {
+  detailEl.classList.remove('vis');
+  overlayEl.classList.remove('on');
+  document.body.style.overflow = '';
+  setTimeout(() => {
+    detailEl.innerHTML = '';
+    detailEl.classList.remove('mobile-sheet');
+    if (detailEl.parentElement !== mapFrame) mapFrame.appendChild(detailEl);
+  }, 450);
+}
+
+/* ── MARKERS ── */
+const markerMap = {};
+SPOTS.forEach(spot => {
+  const marker = L.marker([spot.lat, spot.lng], { icon:makeIcon(spot), title:spot.name });
+  marker.on('mouseover', e => showTooltip(spot, e.originalEvent));
+  marker.on('mousemove', e => moveTooltip(e.originalEvent));
+  marker.on('mouseout',  () => hideTooltip());
+  marker.on('click',     () => openDetail(spot));
+  marker.addTo(map);
+  markerMap[spot.id] = { marker, spot };
+});
+
+/* ── FILTER CORE ── */
+let activeFilter = 'all';
+function applyFilter(cat) {
+  activeFilter = cat;
+  let count = 0;
+  SPOTS.forEach(spot => {
+    const { marker } = markerMap[spot.id];
+    const show = cat === 'all' || spot.cat === cat;
+    if (show) { if (!map.hasLayer(marker)) marker.addTo(map); count++; }
+    else       { if ( map.hasLayer(marker)) map.removeLayer(marker); }
+  });
+  document.getElementById('xmpnum').textContent = count;
+  document.getElementById('xcnum').textContent  = count;
+  if (detailEl.classList.contains('vis') && cat !== 'all') {
+    const nm = detailEl.querySelector('.xd-name');
+    if (nm) { const s = SPOTS.find(x => x.name === nm.textContent); if (s && s.cat !== cat) closeDetail(); }
+  }
+  document.querySelectorAll('.xlp').forEach(lp =>
+    lp.classList.toggle('on', cat === 'all' || lp.dataset.c === cat));
+}
+
+/* ── CATEGORY STRIP SELECT ── */
+function xcatSelect(cat, segEl) {
+  document.querySelectorAll('.xcat-seg').forEach(s => s.classList.remove('on'));
+  segEl.classList.add('on');
+  applyFilter(cat);
+}
+
+/* ── LEGEND ── */
+const catNames = { unesco:'UNESCO Heritage', wildlife:'Wildlife & Safari', beach:'Beaches & Coast', hills:'Hill Country', culture:'Culture & Cities' };
+const legendEl = document.getElementById('xlegend');
+Object.entries(catNames).forEach(([cat, label]) => {
+  const count = SPOTS.filter(s => s.cat === cat).length;
+  const color = CAT_COLOR[cat];
+  const lp    = document.createElement('div');
+  lp.className = 'xlp on'; lp.dataset.c = cat;
+  lp.innerHTML = `<div class="xlp-d" style="background:${color}"></div><span class="xlp-n">${label}</span><span class="xlp-c">${count}</span>`;
+  lp.addEventListener('click', () => {
+    const nc  = activeFilter === cat ? 'all' : cat;
+    const seg = document.querySelector(`.xcat-seg[data-c="${nc}"]`);
+    if (seg) xcatSelect(nc, seg);
+  });
+  legendEl.appendChild(lp);
+});
+
+/* ── TICKER ── */
+(function buildTicker() {
+  const items = [...SPOTS, ...SPOTS];
+  document.getElementById('xticker').innerHTML = items.map(s =>
+    `<span class="xti"><i class="fas ${CAT_ICON[s.cat]}" style="color:${CAT_COLOR[s.cat]}"></i><strong>${s.name}</strong><span style="color:${CAT_COLOR[s.cat]}88">${s.region}</span></span>`
+  ).join('');
+})();
+
+/* ── UTILS ── */
+map.scrollWheelZoom.disable();
+mapFrame.addEventListener('click',      () => map.scrollWheelZoom.enable());
+mapFrame.addEventListener('mouseleave', () => map.scrollWheelZoom.disable());
+overlayEl.addEventListener('click', closeDetail);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+window.addEventListener('resize', () => { if (!isMobile() && detailEl.parentElement === document.body) closeDetail(); });
+</script>
+</section>

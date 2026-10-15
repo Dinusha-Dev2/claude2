@@ -1,0 +1,1018 @@
+<section class="itenery">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/bagind" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --navy:#0c1f2c;--navy-mid:#102536;--navy-soft:#163044;
+  --teal-d:#1a6b7a;--teal:#1ab8b0;--teal-pale:rgba(26,184,176,.12);
+  --cream:#f0ede4;--cream-warm:#e8e3d8;--cream-pale:#f8f6f2;
+  --orange:#f4a100;--orange-l:#ffbf3c;--orange-pale:rgba(244,161,0,.1);
+  --jade:#1a7a5a;--jade-pale:rgba(26,122,90,.1);
+  --coral:#d45f4a;--white:#ffffff;--ink:#0c1f2c;
+  --muted:rgba(12,31,44,.45);--muted-lt:rgba(240,237,228,.45);
+  --border:rgba(12,31,44,.09);--border-m:rgba(12,31,44,.12);--border-lt:rgba(240,237,228,.1);
+  --violet:#6b5fad;--violet-lt:rgba(107,95,173,.08);
+  --serif:'Bagind','Playfair Display',Georgia,serif;
+  --sans:'Poppins',system-ui,sans-serif;
+  --mono:'DM Mono','Courier New',monospace;
+  --r-lg:5px;--r-sm:2px;
+  --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1);
+  --sh-sm:0 1px 6px rgba(12,31,44,.05);
+  --sh-md:0 4px 20px rgba(12,31,44,.08);
+  --sh-lg:0 12px 48px rgba(12,31,44,.11);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:#f7f6f5!important;color:#fff;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{display:block;width:100%;height:100%;object-fit:cover}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+a{text-decoration:none;color:inherit}
+
+.wrap{max-width:1440px;margin:0 auto;padding:1rem 2rem 4rem 2.5rem}
+.cols{display:grid;grid-template-columns:1fr 408px;gap:3.5rem;align-items:start}
+
+.eyebrow{display:flex;align-items:center;gap:9px;margin-bottom:.85rem}
+.ey-bar{width:24px;height:1.5px;background:var(--orange);flex-shrink:0}
+.ey-txt{font-family:var(--mono);font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);font-weight:500}
+.ey-dot{width:4px;height:4px;background:var(--teal);border-radius:50%;flex-shrink:0}
+
+.heading{font-family:var(--serif);font-size:clamp(1.85rem,2.5vw,2.65rem);font-weight:400;color:var(--ink);line-height:1.05;margin-bottom:.45rem;letter-spacing:-.01em}
+.heading em{font-style:normal!important;color:#0e9aaa!important}
+.sub-txt{font-size:.73rem;font-weight:300;color:var(--muted);line-height:1.9;max-width:460px}
+
+.meta-row{display:flex;flex-wrap:wrap;gap:.32rem;margin-top:.85rem;margin-bottom:2.2rem}
+.mpill{display:flex;align-items:center;gap:5px;background:var(--white);border:1px solid var(--border-m);border-radius:var(--r-sm);padding:5px 12px;font-family:var(--mono);font-size:.55rem;font-weight:500;color:var(--ink);box-shadow:var(--sh-sm)}
+.mpill i{color:var(--orange);font-size:.52rem}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:58px}
+.timeline::before{content:'';position:absolute;left:21px;top:30px;bottom:30px;width:1.5px;background:linear-gradient(180deg,var(--teal) 0%,rgba(26,184,176,.08) 100%)}
+.day{position:relative;margin-bottom:10px}
+.day::before{content:'';position:absolute;left:-37px;top:22px;width:7px;height:7px;border-radius:50%;background:var(--cream-warm);border:1.5px solid var(--border-m);transition:background .3s,border-color .3s;z-index:1}
+.day.open::before{background:var(--dc,var(--teal));border-color:var(--dc,var(--teal))}
+.day-box{position:absolute;left:-58px;top:11px;width:42px;height:42px;border-radius:var(--r-sm);border:1.5px solid var(--border-m);background:var(--white);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.58rem;font-weight:500;color:var(--muted);transition:all .32s var(--spring);z-index:2;box-shadow:var(--sh-sm)}
+.day.open .day-box{background:var(--dc,var(--teal));border-color:var(--dc,var(--teal));color:#fff;transform:scale(1.08);box-shadow:0 4px 16px rgba(26,184,176,.22)}
+.day-card{background:var(--white);border:1px solid var(--border-m);border-radius:var(--r-lg);overflow:hidden;transition:border-color .28s,box-shadow .28s,transform .2s;box-shadow:var(--sh-sm)}
+.day-card:hover{transform:translateY(-1px);box-shadow:var(--sh-md)}
+.day.open .day-card{border-color:var(--dc,var(--teal));box-shadow:0 6px 32px rgba(26,184,176,.1);transform:none}
+.day-hdr{display:flex;align-items:center;gap:10px;padding:12px 15px;cursor:pointer;border-left:3px solid transparent;transition:background .15s,border-color .22s;-webkit-tap-highlight-color:transparent;user-select:none}
+.day-hdr:hover{background:rgba(26,184,176,.025)}
+.day.open .day-hdr{background:linear-gradient(90deg,rgba(26,184,176,.045) 0%,transparent 65%);border-left-color:var(--dc,var(--teal))}
+.day-num{font-family:var(--mono);font-size:.49rem;letter-spacing:.09em;color:var(--muted);white-space:nowrap;flex-shrink:0;min-width:40px;transition:color .22s}
+.day.open .day-num{color:var(--dc,var(--teal))}
+.day-info{flex:1;min-width:0}
+.day-title{font-size:.76rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;transition:color .2s}
+.day.open .day-title{color:var(--dc,var(--teal-d))}
+.day-sub{font-size:.59rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-night{display:flex;align-items:center;gap:5px;border:1px solid var(--border-m);border-radius:var(--r-sm);background:var(--cream-pale);padding:3px 9px 3px 7px;font-family:var(--mono);font-size:.53rem;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.day-night i{font-size:.46rem;color:var(--orange)}
+.day-arrow{width:28px;height:28px;border-radius:var(--r-sm);border:1px solid var(--border-m);background:var(--cream-pale);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.52rem;flex-shrink:0;transition:all .32s var(--spring)}
+.day.open .day-arrow{background:var(--dc,var(--teal));border-color:var(--dc,var(--teal));color:#fff;transform:rotate(180deg)}
+.day-body{max-height:0;overflow:hidden;transition:max-height .48s var(--ease)}
+.day.open .day-body{max-height:600px}
+.day-body-inner{display:grid;grid-template-columns:185px 1fr;border-top:1px solid var(--border)}
+.db-img{position:relative;min-height:100%;overflow:hidden}
+.db-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.62) saturate(1.14);transition:transform .55s var(--ease)}
+.day.open .db-img img{transform:scale(1.04)}
+.db-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(12,31,44,.8) 0%,rgba(12,31,44,.2) 50%,transparent 100%)}
+.db-img::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--dc,var(--teal));z-index:3}
+.db-cap{position:absolute;bottom:.9rem;left:.9rem;z-index:2}
+.db-cap-d{font-family:var(--mono);font-size:.41rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,228,.38);margin-bottom:3px}
+.db-cap-loc{font-family:var(--serif);font-size:1.1rem;color:var(--cream);line-height:1.1}
+.db-detail{padding:1rem 1.1rem 1rem;display:flex;flex-direction:column;gap:.7rem;background:var(--white)}
+.db-sec-lbl{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.46rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+.db-sec-lbl::after{content:'';flex:1;height:1px;background:var(--border);margin-left:4px}
+.db-acts{display:flex;flex-direction:column;gap:.12rem}
+.db-act{display:flex;align-items:flex-start;gap:8px;padding:.28rem .45rem;border-radius:var(--r-sm);font-size:.63rem;color:rgba(12,31,44,.58);line-height:1.4;transition:background .15s,color .15s}
+.db-act:hover{background:rgba(26,184,176,.06);color:var(--ink)}
+.db-act i{color:var(--teal-d);font-size:.54rem;flex-shrink:0;margin-top:3px}
+.act-badge{margin-left:auto;flex-shrink:0;font-family:var(--mono);font-size:.42rem;letter-spacing:.05em;text-transform:uppercase;padding:1px 6px;border-radius:var(--r-sm);border:1px solid;white-space:nowrap}
+.act-badge.h{color:var(--teal-d);border-color:rgba(26,107,122,.18);background:rgba(26,107,122,.06)}
+.act-badge.w{color:var(--jade);border-color:rgba(26,122,90,.18);background:rgba(26,122,90,.05)}
+.act-badge.e{color:var(--orange);border-color:rgba(244,161,0,.2);background:rgba(244,161,0,.05)}
+.act-badge.t{color:var(--muted);border-color:var(--border-m);background:var(--cream-pale)}
+.act-badge.o{color:var(--violet);border-color:rgba(107,95,173,.2);background:rgba(107,95,173,.06)}
+.db-divider{height:1px;background:var(--border);margin:.1rem 0}
+.db-hls{display:flex;flex-wrap:wrap;gap:.24rem}
+.db-hl{display:flex;align-items:center;gap:4px;background:var(--cream-pale);border:1px solid var(--border-m);border-radius:var(--r-sm);padding:3px 10px;font-family:var(--mono);font-size:.51rem;color:var(--ink);font-weight:500;transition:background .15s,border-color .15s}
+.db-hl:hover{background:var(--orange-pale,rgba(244,161,0,.1));border-color:rgba(244,161,0,.3);color:var(--orange)}
+.db-hl i{font-size:.44rem;color:var(--orange)}
+.db-night-row{display:flex;align-items:center;gap:8px;background:linear-gradient(90deg,rgba(244,161,0,.08) 0%,transparent 100%);border:1px solid rgba(244,161,0,.2);border-radius:var(--r-sm);padding:.42rem .7rem;margin-top:.1rem}
+.db-night-row i{color:var(--orange);font-size:.64rem;flex-shrink:0}
+.db-night-t{font-size:.59rem;color:var(--muted);line-height:1.4}
+.db-night-t strong{color:rgba(12,31,44,.78);font-weight:600;display:block;font-size:.62rem}
+
+/* RIGHT COL */
+.price-col{position:sticky;top:2rem;display:flex;flex-direction:column;gap:14px}
+.ph-wrap{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border-m);box-shadow:var(--sh-lg)}
+.ph-top{padding:2rem 2rem 1.8rem;background:linear-gradient(145deg,var(--navy) 0%,var(--navy-soft) 100%);position:relative;overflow:hidden}
+.ph-top::before{content:'';position:absolute;top:-55px;right:-55px;width:210px;height:210px;border-radius:50%;background:radial-gradient(circle,rgba(26,184,176,.12) 0%,transparent 65%)}
+.ph-top::after{content:'';position:absolute;bottom:-40px;left:-40px;width:165px;height:165px;border-radius:50%;background:radial-gradient(circle,rgba(244,161,0,.08) 0%,transparent 65%)}
+.ph-top-bar{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal) 0%,var(--orange) 100%)}
+.ph-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(244,161,0,.12);border:1px solid rgba(244,161,0,.22);border-radius:var(--r-sm);padding:3px 11px;font-family:var(--mono);font-size:.5rem;color:var(--orange-l);margin-bottom:1.15rem;position:relative;z-index:1}
+.ph-badge i{font-size:.46rem}
+.ph-from{font-size:.61rem;color:rgba(240,237,228,.28);position:relative;z-index:1}
+.ph-price{font-family:var(--serif);font-size:3.5rem;color:var(--cream);line-height:.88;margin:.22rem 0 .18rem;position:relative;z-index:1}
+.ph-price sup{font-size:1.25rem;color:var(--orange-l);margin-right:2px}
+.ph-per{font-size:.6rem;color:rgba(240,237,228,.28);position:relative;z-index:1}
+.ph-incl{display:flex;flex-wrap:wrap;gap:.28rem;margin-top:.95rem;padding-top:.95rem;border-top:1px solid rgba(240,237,228,.07);position:relative;z-index:1}
+.ph-tag{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:.52rem;color:rgba(240,237,228,.28)}
+.ph-tag i{color:var(--teal);font-size:.48rem}
+.ph-body{padding:1.3rem 1.65rem;background:var(--white)}
+.ph-opts-lbl{font-family:var(--mono);font-size:.47rem;font-weight:500;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
+.ph-opts{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
+.ph-opt{display:flex;align-items:center;justify-content:space-between;padding:.66rem .88rem;border-radius:var(--r-lg);border:1.5px solid var(--border-m);cursor:pointer;transition:border-color .22s,background .22s,box-shadow .22s;position:relative;overflow:hidden;background:var(--white)}
+.ph-opt::before{content:'';position:absolute;inset:0;background:var(--oc,var(--teal));opacity:0;transition:opacity .2s}
+.ph-opt:hover::before{opacity:.035}
+.ph-opt.sel{border-color:var(--oc,var(--teal));box-shadow:0 0 0 3px rgba(26,184,176,.07)}
+.ph-opt.sel::before{opacity:.045}
+.ph-opt-l{display:flex;align-items:center;gap:9px;position:relative;z-index:1}
+.ph-opt-ic{width:32px;height:32px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0}
+.ph-opt-ic.s{background:var(--violet-lt);color:var(--violet)}
+.ph-opt-ic.d{background:rgba(26,184,176,.08);color:var(--teal-d)}
+.ph-opt-ic.g{background:var(--jade-pale);color:var(--jade)}
+.ph-opt-name{font-size:.7rem;font-weight:600;color:var(--ink)}
+.ph-opt-note{font-size:.55rem;color:var(--muted);margin-top:1px}
+.ph-opt-price{font-family:var(--serif);font-size:1.06rem;color:var(--ink);white-space:nowrap;position:relative;z-index:1}
+.ph-opt-price small{font-family:var(--sans);font-size:.54rem;color:var(--muted)}
+.ph-opt.sel .ph-opt-price{color:var(--oc,var(--teal-d));font-weight:600}
+.ph-hr{height:1px;background:var(--border);margin:.25rem 0 .88rem}
+.ph-book{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 24px;background:linear-gradient(135deg,var(--orange),#d98e10);color:#fff;font-family:var(--sans);font-size:.78rem;font-weight:600;letter-spacing:.02em;border-radius:2px;border:none;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;transition:transform .22s var(--ease)}
+.ph-book::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(to right,transparent,rgba(255,255,255,.2),transparent);transition:left .55s}
+.ph-book:hover::after{left:150%}
+.ph-book:hover{transform:translateY(-2px) scale(1.02);color:#fff}
+.ph-enq{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;background:var(--white);color:var(--ink);font-family:var(--sans);font-weight:600;font-size:.72rem;border-radius:var(--r-sm);border:1.5px solid var(--border-m);cursor:pointer;margin-top:.42rem;transition:border-color .2s,color .2s,background .2s}
+.ph-enq:hover{border-color:var(--teal-d);color:#fff;background:#163044}
+.ph-secure{display:flex;align-items:center;justify-content:center;gap:5px;font-family:var(--mono);font-size:.52rem;color:var(--muted);margin-top:.65rem}
+.ph-secure i{color:var(--jade);font-size:.52rem}
+
+.highlights-card{background:var(--white);border:1px solid var(--border-m);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-sm)}
+.highlights-head{display:flex;align-items:center;gap:9px;padding:.78rem 1.15rem;background:linear-gradient(90deg,var(--navy) 0%,var(--navy-soft) 100%)}
+.highlights-head i{color:var(--orange);font-size:.72rem}
+.highlights-head-txt{font-family:var(--sans);font-size:.72rem;font-weight:600;color:var(--cream)}
+.highlights-items{padding:.6rem .95rem .75rem;display:flex;flex-direction:column;gap:.3rem}
+.highlights-item{display:flex;align-items:center;gap:8px;padding:.25rem .4rem;border-radius:var(--r-sm);font-size:.63rem;color:rgba(12,31,44,.58);transition:background .15s}
+.highlights-item:hover{background:rgba(26,184,176,.06)}
+.highlights-item i{color:var(--teal);font-size:.46rem;flex-shrink:0}
+.highlights-item strong{color:var(--ink);font-weight:600}
+
+.info-card{background:var(--white);border:1px solid var(--border-m);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-sm)}
+.info-head{display:flex;align-items:center;gap:8px;padding:.72rem 1.1rem;background:var(--cream);border-bottom:1px solid var(--border-m)}
+.info-head-ic{width:26px;height:26px;background:var(--orange-pale);border:1px solid rgba(244,161,0,.2);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:.62rem;flex-shrink:0}
+.info-head-txt{font-family:var(--sans);font-size:.72rem;font-weight:600;color:var(--ink)}
+.info-rows{padding:.5rem .9rem .65rem}
+.info-row{display:flex;align-items:center;gap:8px;padding:.3rem 0;border-bottom:1px solid rgba(12,31,44,.04);font-size:.63rem;color:rgba(12,31,44,.56)}
+.info-row:last-child{border-bottom:none}
+.info-row i{color:var(--teal-d);font-size:.52rem;flex-shrink:0;width:13px;text-align:center}
+.info-row strong{color:var(--ink);font-weight:600}
+.dark-card{background:var(--navy);border-radius:var(--r-lg);padding:1.2rem 1.3rem;display:flex;align-items:flex-start;gap:11px;border:1px solid rgba(26,184,176,.1);box-shadow:var(--sh-md)}
+.dark-ic{width:38px;height:38px;background:rgba(244,161,0,.11);border:1px solid rgba(244,161,0,.2);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dark-ic i{color:var(--orange);font-size:.82rem}
+.dark-h{font-family:var(--serif);font-size:.98rem;color:var(--cream);margin-bottom:4px}
+.dark-p{font-size:.59rem;color:rgba(240,237,228,.34);line-height:1.7}
+
+/* INCLUSIONS */
+.inc-section{margin-top:2.8rem;background:var(--white);border:1px solid var(--border-m);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-sm)}
+.inc-section::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent 0%,var(--orange) 35%,var(--teal) 70%,transparent 100%)}
+.inc-header{padding:1.2rem 1.5rem .9rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem}
+.inc-header-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:.3rem}
+.inc-header-eyebrow .ey-bar{width:18px}
+.inc-header-eyebrow .ey-txt{font-size:.5rem}
+.inc-header-title{font-family:var(--serif);font-size:1.35rem;font-weight:400;color:var(--ink);line-height:1.1}
+.inc-header-title em{font-style:normal!important;color:#0e9aaa}
+.inc-header-sub{font-size:.62rem;color:var(--muted);margin-top:.2rem;line-height:1.6}
+.inc-tabs{display:flex;gap:0;border:1px solid var(--border-m);border-radius:var(--r-sm);overflow:hidden;background:var(--cream-pale)}
+.inc-tab{display:flex;align-items:center;gap:6px;padding:7px 18px;font-family:var(--mono);font-size:.58rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);cursor:pointer;border:none;background:transparent;transition:all .22s var(--ease)}
+.inc-tab i{font-size:.58rem}
+.inc-tab.inc-active{background:var(--white);color:var(--ink);box-shadow:var(--sh-sm)}
+.inc-tab.inc-active.tab-in{color:var(--jade)}
+.inc-tab.inc-active.tab-out{color:var(--coral)}
+.inc-tab-count{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;font-size:.48rem;font-weight:600;background:rgba(12,31,44,.07);color:var(--muted)}
+.inc-tab.inc-active .inc-tab-count{background:var(--jade-pale);color:var(--jade)}
+.inc-tab.inc-active.tab-out .inc-tab-count{background:rgba(212,95,74,.1);color:var(--coral)}
+.inc-pane{display:none;animation:fadeIn .22s ease}
+.inc-pane.inc-visible{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.inc-items-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;padding:.5rem 1.2rem 1.3rem}
+.inc-item{display:flex;align-items:flex-start;gap:10px;padding:.52rem .4rem;border-bottom:1px solid rgba(12,31,44,.045);font-size:.69rem;color:rgba(12,31,44,.65);line-height:1.5;transition:background .15s;border-radius:var(--r-sm)}
+.inc-item:hover{background:rgba(12,31,44,.02)}
+.inc-pane-in .inc-item:nth-last-child(-n+2){border-bottom:none}
+.inc-pane-out .inc-item:nth-last-child(-n+2){border-bottom:none}
+.inc-items-grid .inc-item:nth-child(odd){border-right:1px solid rgba(12,31,44,.045);padding-right:1rem}
+.inc-items-grid .inc-item:nth-child(even){padding-left:1rem}
+.inc-ic{width:20px;height:20px;border-radius:50%;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:.52rem}
+.inc-ic.in{background:var(--jade-pale);color:var(--jade)}
+.inc-ic.out{background:rgba(212,95,74,.08);color:var(--coral)}
+.inc-note{margin:.2rem 1.2rem 1.2rem;background:var(--cream);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:2px;padding:.85rem 1.1rem;display:flex;align-items:flex-start;gap:10px}
+.inc-note i{color:var(--orange);font-size:.75rem;flex-shrink:0;margin-top:2px}
+.inc-note p{font-size:.67rem;color:var(--muted);line-height:1.75}
+.inc-note strong{color:var(--ink);font-weight:600}
+
+/* ============================================
+   RESPONSIVE — FIXED & COMPLETE
+   ============================================ */
+
+/* Large tablet: tighten two-col layout */
+@media(max-width:1100px){
+  .cols{grid-template-columns:1fr 360px;gap:2rem}
+  .wrap{padding:0 1.5rem 3rem}
+}
+
+/* Tablet portrait: stack layout, unstick price col */
+@media(max-width:880px){
+  .wrap{padding:2rem 1.25rem 3rem}
+  .cols{
+    grid-template-columns:1fr;
+    gap:2rem
+  }
+  .price-col{
+    position:static
+  }
+  /* heading scale */
+  .heading{font-size:clamp(1.55rem,5vw,2rem)}
+  .sub-txt{max-width:100%}
+  /* hide night badge pill - saves space */
+  .day-night{display:none}
+  /* expanded body: allow more height */
+  .day.open .day-body{max-height:1000px}
+}
+
+/* Small mobile: tightest layout */
+@media(max-width:600px){
+  .wrap{padding:1.5rem .85rem 2.5rem}
+
+  /* Timeline adjustments */
+  .timeline{padding-left:42px}
+  .timeline::before{left:13px;top:28px;bottom:28px}
+
+  .day-box{
+    left:-42px;
+    width:30px;
+    height:30px;
+    font-size:.5rem
+  }
+  .day.open .day-body{max-height:1100px}
+
+  /* Day header: tighter padding, larger tap target */
+  .day-hdr{
+    padding:10px 11px;
+    gap:8px
+  }
+  .day-num{
+    font-size:.46rem;
+    min-width:32px
+  }
+  .day-title{
+    font-size:.72rem;
+    white-space:normal;
+    overflow:visible;
+    text-overflow:unset;
+    line-height:1.3
+  }
+  .day-sub{
+    font-size:.56rem;
+    white-space:normal;
+    overflow:visible;
+    text-overflow:unset;
+    line-height:1.3;
+    margin-top:2px
+  }
+  .day-arrow{width:24px;height:24px;font-size:.48rem}
+
+  /* Day body: full-width single column */
+  .day-body-inner{
+    grid-template-columns:1fr;
+    display:flex;
+    flex-direction:column
+  }
+  .db-img{
+    position:relative;
+    min-height:0;
+    height:170px;
+    width:100%
+  }
+  .db-img img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%
+  }
+  .db-detail{
+    padding:.85rem .9rem .85rem
+  }
+
+  /* acts: hide badge on very small screens */
+  .act-badge{display:none}
+
+  /* highlights pills wrap nicely */
+  .db-hls{gap:.2rem}
+  .db-hl{font-size:.48rem;padding:3px 8px}
+
+  /* night row */
+  .db-night-row{padding:.38rem .6rem}
+  .db-night-t{font-size:.56rem}
+  .db-night-t strong{font-size:.59rem}
+
+  /* Meta pills — wrap & shrink */
+  .meta-row{gap:.25rem}
+  .mpill{font-size:.5rem;padding:4px 9px}
+
+  /* Heading */
+  .heading{font-size:1.5rem;line-height:1.1}
+
+  /* Inclusions */
+  .inc-items-grid{
+    grid-template-columns:1fr;
+    padding:.4rem .85rem 1rem
+  }
+  .inc-items-grid .inc-item:nth-child(odd){
+    border-right:none;
+    padding-right:.4rem
+  }
+  .inc-items-grid .inc-item:nth-child(even){padding-left:.4rem}
+  .inc-pane-in .inc-item:nth-last-child(-n+2){border-bottom:1px solid rgba(12,31,44,.045)}
+  .inc-pane-out .inc-item:nth-last-child(-n+2){border-bottom:1px solid rgba(12,31,44,.045)}
+  .inc-pane-in .inc-item:last-child,
+  .inc-pane-out .inc-item:last-child{border-bottom:none}
+  .inc-item{font-size:.65rem}
+
+  .inc-header{
+    flex-direction:column;
+    align-items:flex-start;
+    padding:1rem .9rem .75rem
+  }
+  .inc-note{margin:.15rem .85rem 1rem;padding:.7rem .85rem}
+  .inc-note p{font-size:.63rem}
+
+  /* Inclusions tabs — compact */
+  .inc-tab{padding:6px 13px;font-size:.54rem;gap:5px}
+
+  /* Price col */
+  .ph-top{padding:1.4rem 1.25rem 1.3rem}
+  .ph-price{font-size:2.9rem}
+  .ph-body{padding:1.1rem 1.15rem}
+  .ph-opts-lbl{font-size:.44rem}
+  .ph-opt{padding:.58rem .72rem}
+  .ph-opt-name{font-size:.67rem}
+  .ph-opt-note{font-size:.52rem}
+  .ph-opt-price{font-size:.98rem}
+  .ph-book{font-size:.74rem;padding:10px 18px}
+  .ph-enq{font-size:.68rem;padding:10px}
+  .ph-incl{gap:.22rem}
+  .ph-tag{font-size:.48rem}
+
+  /* Highlights & info cards */
+  .highlights-items{padding:.5rem .85rem .65rem}
+  .highlights-item{font-size:.6rem}
+  .info-rows{padding:.4rem .8rem .55rem}
+  .info-row{font-size:.6rem}
+  .dark-card{padding:1rem 1.1rem}
+  .dark-h{font-size:.9rem}
+  .dark-p{font-size:.57rem}
+}
+
+/* Very small phones (≤380px) */
+@media(max-width:380px){
+  .wrap{padding:1.2rem .65rem 2rem}
+  .timeline{padding-left:36px}
+  .timeline::before{left:10px}
+  .day-box{left:-36px;width:26px;height:26px;font-size:.46rem}
+  .day::before{left:-31px}
+  .day-hdr{padding:9px 10px;gap:6px}
+  .day-title{font-size:.68rem}
+  .day-sub{font-size:.53rem}
+  .heading{font-size:1.35rem}
+  .ph-price{font-size:2.5rem}
+  .ph-top{padding:1.2rem 1rem 1.1rem}
+  .ph-body{padding:.95rem 1rem}
+}
+</style>
+
+<section>
+<div class="wrap">
+<div class="cols">
+
+<!-- LEFT — ITINERARY -->
+<div>
+  <div class="eyebrow"><div class="ey-bar"></div><span class="ey-txt">Day by Day</span><div class="ey-dot"></div></div>
+  <h2 class="heading">Sri Lanka <em>Heritage, Wildlife</em> &amp; Sunset Beaches</h2>
+  <p class="sub-txt">13 Nights / 14 Days · Six UNESCO sites, wild leopard safaris, the world's most scenic train ride, a relaxing day in Kandy and golden beaches at Bentota — Sri Lanka's most complete journey for European travellers.</p>
+  <div class="meta-row">
+    <div class="mpill"><i class="fas fa-moon"></i>13 Nights</div>
+    <div class="mpill"><i class="fas fa-route"></i>Negombo → Colombo</div>
+    <div class="mpill"><i class="fas fa-award"></i>6 UNESCO Sites</div>
+    <div class="mpill"><i class="fas fa-paw"></i>Leopard Safari · Yala</div>
+    <div class="mpill"><i class="fas fa-train"></i>Scenic Train</div>
+    <div class="mpill"><i class="fas fa-user-shield"></i>Fully Private</div>
+  </div>
+
+  <div class="timeline">
+
+    <!-- DAY 01 -->
+    <div class="day" style="--dc:#3580b8" id="day-1">
+      <div class="day-box">01</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(1)">
+          <span class="day-num">DAY 01</span>
+          <div class="day-info"><div class="day-title">Arrival · Negombo Beach</div><div class="day-sub">Airport Transfer · Dutch Canals · Sunset Walk · Seafood Dinner</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Negombo</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-1"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/negambo-beach_processed.webp" loading="lazy" alt="Negombo Beach"><div class="db-cap"><div class="db-cap-d">Day 01 · Arrival</div><div class="db-cap-loc">Negombo</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-plane-arrival"></i>Airport meet &amp; greet · 20 min transfer to Negombo<span class="act-badge t">Transfer</span></div>
+              <div class="db-act"><i class="fas fa-umbrella-beach"></i>Relax on Negombo's golden west coast beach<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-water"></i>Dutch colonial canal boat ride<span class="act-badge e">Experience</span></div>
+              <div class="db-act"><i class="fas fa-sun"></i>Sunset walk along the beachfront<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-utensils"></i>Fresh seafood dinner · beachfront restaurants<span class="act-badge e">Dinner</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>West Coast Beach</div><div class="db-hl"><i class="fas fa-circle"></i>Dutch Canals</div><div class="db-hl"><i class="fas fa-circle"></i>Airport 20 min</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Negombo</strong>Beachfront hotel · 1st of 13 nights</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 02 -->
+    <div class="day" style="--dc:#c9953a" id="day-2">
+      <div class="day-box">02</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(2)">
+          <span class="day-num">DAY 02</span>
+          <div class="day-info"><div class="day-title">Anuradhapura — UNESCO Sacred City</div><div class="day-sub">Ancient Capital · Sacred Bodhi Tree · Colossal Stupas</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Anuradhapura</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-2"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Anuradhapura_processed.webp" loading="lazy" alt="Anuradhapura Ancient City"><div class="db-cap"><div class="db-cap-d">Day 02 · UNESCO</div><div class="db-cap-loc">Anuradhapura</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-road"></i>Drive from Negombo · 3 hrs through the cultural triangle<span class="act-badge t">Transfer</span></div>
+              <div class="db-act"><i class="fas fa-place-of-worship"></i>Sri Maha Bodhi — the sacred Bodhi tree · 2,300 years old<span class="act-badge h">UNESCO</span></div>
+              <div class="db-act"><i class="fas fa-circle"></i>Ruwanwelisaya &amp; Jetavanaramaya — colossal white stupas<span class="act-badge h">Heritage</span></div>
+              <div class="db-act"><i class="fas fa-landmark"></i>Royal palace ruins, moonstone &amp; Isurumuniya Temple<span class="act-badge h">Heritage</span></div>
+              <div class="db-act"><i class="fas fa-camera"></i>Sunset over the ancient sacred city<span class="act-badge e">Experience</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>Sacred Bodhi Tree</div><div class="db-hl"><i class="fas fa-circle"></i>Colossal Stupas</div><div class="db-hl"><i class="fas fa-circle"></i>UNESCO WHS</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Anuradhapura</strong>Heritage hotel · 1 night</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 03 -->
+    <div class="day" style="--dc:#c9953a" id="day-3">
+      <div class="day-box">03</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(3)">
+          <span class="day-num">DAY 03</span>
+          <div class="day-info"><div class="day-title">Sigiriya Rock Fortress</div><div class="day-sub">UNESCO Palace · 200m Climb · Ancient Frescoes · Village Tour</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Sigiriya</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-3"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya_processed.webp" loading="lazy" alt="Sigiriya Rock Fortress"><div class="db-cap"><div class="db-cap-d">Day 03 · UNESCO</div><div class="db-cap-loc">Sigiriya</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-mountain"></i>Sigiriya Rock Fortress climb · 200m · 1,200 ancient steps<span class="act-badge h">UNESCO</span></div>
+              <div class="db-act"><i class="fas fa-image"></i>5th-century frescoes &amp; mirror wall inscriptions<span class="act-badge h">Heritage</span></div>
+              <div class="db-act"><i class="fas fa-paw"></i>Lion Paw Gate entrance &amp; symmetrical water gardens<span class="act-badge h">Heritage</span></div>
+              <div class="db-act"><i class="fas fa-bicycle"></i>Optional village cycling · Habarana rice paddies &amp; lakes<span class="act-badge o">Optional</span></div>
+              <div class="db-act"><i class="fas fa-utensils"></i>Authentic Sri Lankan village lunch<span class="act-badge e">Experience</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>200m Rock Climb</div><div class="db-hl"><i class="fas fa-circle"></i>Ancient Frescoes</div><div class="db-hl"><i class="fas fa-circle"></i>Lion Paw Gate</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Sigiriya</strong>Jungle-edge boutique hotel · 1 night</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 04 -->
+    <div class="day" style="--dc:#c9953a" id="day-4">
+      <div class="day-box">04</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(4)">
+          <span class="day-num">DAY 04</span>
+          <div class="day-info"><div class="day-title">Polonnaruwa · Minneriya Safari</div><div class="day-sub">UNESCO Medieval City · Gal Vihara Buddhas · Elephant Gathering Safari</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Sigiriya</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-4"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/polonnaruwa_processed.webp" loading="lazy" alt="Polonnaruwa Ancient City"><div class="db-cap"><div class="db-cap-d">Day 04 · UNESCO + Safari</div><div class="db-cap-loc">Polonnaruwa · Minneriya</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-bicycle"></i>Explore Polonnaruwa UNESCO medieval city by bicycle<span class="act-badge h">UNESCO</span></div>
+              <div class="db-act"><i class="fas fa-spa"></i>Gal Vihara — magnificent rock-cut Buddha statues<span class="act-badge h">Heritage</span></div>
+              <div class="db-act"><i class="fas fa-landmark"></i>Royal palace complex &amp; Rankot Vihara stupa<span class="act-badge h">Heritage</span></div>
+              <div class="db-act"><i class="fas fa-paw"></i>Afternoon jeep safari · Minneriya — "The Gathering"<span class="act-badge w">Wildlife</span></div>
+              <div class="db-act"><i class="fas fa-elephant"></i>Hundreds of wild elephants converge at the ancient tank<span class="act-badge w">Wildlife</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>Gal Vihara Buddhas</div><div class="db-hl"><i class="fas fa-circle"></i>The Gathering</div><div class="db-hl"><i class="fas fa-circle"></i>Wild Elephants</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Sigiriya</strong>Jungle-edge boutique hotel · 2nd night</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 05 -->
+    <div class="day" style="--dc:#6b5fad" id="day-5">
+      <div class="day-box">05</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(5)">
+          <span class="day-num">DAY 05</span>
+          <div class="day-info"><div class="day-title">Dambulla Cave Temple · Pinnawala</div><div class="day-sub">UNESCO Cave Shrine · 80 Buddhas · Elephant Orphanage · Kandy</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Kandy</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-5"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/dambulla-cave-temple_processed.webp" loading="lazy" alt="Dambulla Cave Temple"><div class="db-cap"><div class="db-cap-d">Day 05 · UNESCO</div><div class="db-cap-loc">Dambulla · Pinnawala · Kandy</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-place-of-worship"></i>Dambulla Cave Temple · 5 sacred caves · UNESCO WHS<span class="act-badge h">UNESCO</span></div>
+              <div class="db-act"><i class="fas fa-spa"></i>80 gilded Buddha statues &amp; 2,100 m² ceiling paintings<span class="act-badge h">Heritage</span></div>
+              <div class="db-act"><i class="fas fa-paw"></i>Pinnawala — elephant bathing &amp; feeding · 80+ rescued elephants<span class="act-badge w">Wildlife</span></div>
+              <div class="db-act"><i class="fas fa-water"></i>Maha Oya river elephant bathing show<span class="act-badge w">Wildlife</span></div>
+              <div class="db-act"><i class="fas fa-road"></i>Drive to Kandy · 1.5 hrs · evening arrival<span class="act-badge t">Transfer</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>5 Sacred Caves</div><div class="db-hl"><i class="fas fa-circle"></i>80 Gilded Buddhas</div><div class="db-hl"><i class="fas fa-circle"></i>Pinnawala Elephants</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Kandy</strong>Hill-view boutique hotel · 1st of 3 nights</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 06 -->
+    <div class="day" style="--dc:#6b5fad" id="day-6">
+      <div class="day-box">06</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(6)">
+          <span class="day-num">DAY 06</span>
+          <div class="day-info"><div class="day-title">Kandy City Tour</div><div class="day-sub">Temple of Tooth UNESCO · Royal Botanical Gardens · Kandyan Dance</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Kandy</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-6"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/kandy_processed.webp" loading="lazy" alt="Kandy Temple of Tooth"><div class="db-cap"><div class="db-cap-d">Day 06 · Culture</div><div class="db-cap-loc">Kandy</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-pray"></i>Temple of the Sacred Tooth Relic · UNESCO WHS<span class="act-badge h">UNESCO</span></div>
+              <div class="db-act"><i class="fas fa-fire"></i>Evening puja ceremony — candlelit devotional offering<span class="act-badge e">Experience</span></div>
+              <div class="db-act"><i class="fas fa-leaf"></i>Royal Botanical Gardens · Peradeniya · orchid collection<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-water"></i>Kandy Lake evening walk<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-theater-masks"></i>Optional Kandyan cultural dance show<span class="act-badge o">Optional</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>Sacred Tooth Temple</div><div class="db-hl"><i class="fas fa-circle"></i>Evening Puja</div><div class="db-hl"><i class="fas fa-circle"></i>Botanical Gardens</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Kandy</strong>Hill-view boutique hotel · 2nd of 3 nights</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 07 -->
+    <div class="day" style="--dc:#6b5fad" id="day-7">
+      <div class="day-box">07</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(7)">
+          <span class="day-num">DAY 07</span>
+          <div class="day-info"><div class="day-title">Kandy Relax Day</div><div class="day-sub">Ayurveda Spa · Cooking Class · Lake Walk · Slow Travel Day</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Kandy</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-7"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/ayurweda.webp" loading="lazy" alt="Kandy Botanical Garden"><div class="db-cap"><div class="db-cap-d">Day 07 · Leisure</div><div class="db-cap-loc">Kandy</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-spa"></i>Optional Ayurveda spa treatment — full body &amp; herbal<span class="act-badge o">Optional</span></div>
+              <div class="db-act"><i class="fas fa-utensils"></i>Optional Sri Lankan cooking class with local family<span class="act-badge o">Optional</span></div>
+              <div class="db-act"><i class="fas fa-hiking"></i>Light nature walk around Kandy Lake<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-shopping-bag"></i>Handicraft &amp; gem shopping · Kandy market<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-coffee"></i>Coffee &amp; cake at lakeside cafés<span class="act-badge e">Leisure</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>Ayurveda Option</div><div class="db-hl"><i class="fas fa-circle"></i>Cooking Class</div><div class="db-hl"><i class="fas fa-circle"></i>Full Leisure Day</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Kandy</strong>Hill-view boutique hotel · 3rd of 3 nights</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 08 -->
+    <div class="day" style="--dc:#1a7a85" id="day-8">
+      <div class="day-box">08</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(8)">
+          <span class="day-num">DAY 08</span>
+          <div class="day-info"><div class="day-title">Nuwara Eliya — Tea Country</div><div class="day-sub">Tea Plantation · Tea Factory · Gregory Lake · Little England at 1,868m</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Nuwara Eliya</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-8"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Nuwara-Eliya_processed.webp" loading="lazy" alt="Nuwara Eliya Tea Country"><div class="db-cap"><div class="db-cap-d">Day 08 · Tea Country</div><div class="db-cap-loc">Nuwara Eliya</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-road"></i>Scenic drive from Kandy through highlands<span class="act-badge t">Transfer</span></div>
+              <div class="db-act"><i class="fas fa-mug-hot"></i>Tea plantation guided walk &amp; tasting<span class="act-badge e">Experience</span></div>
+              <div class="db-act"><i class="fas fa-industry"></i>Working tea factory visit — Ceylon tea processing<span class="act-badge e">Experience</span></div>
+              <div class="db-act"><i class="fas fa-water"></i>Gregory Lake walk · optional rowboat ride<span class="act-badge o">Optional</span></div>
+              <div class="db-act"><i class="fas fa-city"></i>Colonial town walk · Victoria Park<span class="act-badge e">Leisure</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>Tea Plantation</div><div class="db-hl"><i class="fas fa-circle"></i>Tea Factory Tour</div><div class="db-hl"><i class="fas fa-circle"></i>Gregory Lake</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Nuwara Eliya</strong>Colonial hill hotel · 1,868 m altitude · 1 night</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 09 -->
+    <div class="day" style="--dc:#1a7a85" id="day-9">
+      <div class="day-box">09</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(9)">
+          <span class="day-num">DAY 09</span>
+          <div class="day-info"><div class="day-title">Scenic Train · Ella Arrival</div><div class="day-sub">Nanu Oya → Ella · Tea Valleys · Misty Highlands · Nine Arches</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Ella</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-9"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Ella-Nine-Arch-Bridge_processed.webp" loading="lazy" alt="Ella Nine Arches Bridge"><div class="db-cap"><div class="db-cap-d">Day 09 · Scenic Train</div><div class="db-cap-loc">Nanu Oya · Ella</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-train"></i>Iconic scenic train: Nanu Oya → Ella · approx. 3 hrs<span class="act-badge e">Experience</span></div>
+              <div class="db-act"><i class="fas fa-mountain"></i>Sweeping emerald tea valleys &amp; misty mountain passes<span class="act-badge e">Scenic</span></div>
+              <div class="db-act"><i class="fas fa-water"></i>Cascading waterfalls visible from train windows<span class="act-badge e">Scenic</span></div>
+              <div class="db-act"><i class="fas fa-home"></i>Arrive Ella · check in · settle into highland village<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-utensils"></i>Evening dinner with Ella Gap mountain valley views<span class="act-badge e">Dinner</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>Scenic Train · 3 hrs</div><div class="db-hl"><i class="fas fa-circle"></i>Tea Valley Views</div><div class="db-hl"><i class="fas fa-circle"></i>Ella Village</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Ella</strong>Highland boutique hotel · 1st of 2 nights</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 10 -->
+    <div class="day" style="--dc:#1a7a85" id="day-10">
+      <div class="day-box">10</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(10)">
+          <span class="day-num">DAY 10</span>
+          <div class="day-info"><div class="day-title">Ella Exploration Day</div><div class="day-sub">Nine Arches Bridge · Little Adam's Peak · Sunset Mountain Views</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Ella</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-10"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/little-adams-peak.webp" loading="lazy" alt="Little Adam's Peak Ella"><div class="db-cap"><div class="db-cap-d">Day 10 · Highlands</div><div class="db-cap-loc">Ella</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-bridge"></i>Nine Arches Bridge walk &amp; photography (trains 9AM &amp; 3PM)<span class="act-badge e">Experience</span></div>
+              <div class="db-act"><i class="fas fa-hiking"></i>Little Adam's Peak hike — 360° valley panoramas<span class="act-badge e">Adventure</span></div>
+              <div class="db-act"><i class="fas fa-sun"></i>Sunset mountain views from Ella hilltop bars<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-mug-hot"></i>Tea café with misty valley views<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-wind"></i>Optional zipline adventure in Ella<span class="act-badge o">Optional</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>Nine Arches Bridge</div><div class="db-hl"><i class="fas fa-circle"></i>Little Adam's Peak</div><div class="db-hl"><i class="fas fa-circle"></i>360° Panoramas</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Ella</strong>Highland boutique hotel · 2nd of 2 nights</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 11 -->
+    <div class="day" style="--dc:#2d8a5c" id="day-11">
+      <div class="day-box">11</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(11)">
+          <span class="day-num">DAY 11</span>
+          <div class="day-info"><div class="day-title">Yala National Park Safari</div><div class="day-sub">Wild Leopards · Elephants · Sloth Bears · Jeep Safari</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Yala / Tissa</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-11"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Yala-National-Park_processed.webp" loading="lazy" alt="Yala National Park"><div class="db-cap"><div class="db-cap-d">Day 11 · Wildlife</div><div class="db-cap-loc">Yala National Park</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-road"></i>Drive from Ella to Yala · 3–4 hrs<span class="act-badge t">Transfer</span></div>
+              <div class="db-act"><i class="fas fa-paw"></i>Afternoon jeep safari · leopard tracking<span class="act-badge w">Wildlife</span></div>
+              <div class="db-act"><i class="fas fa-paw"></i>Elephants, sloth bears &amp; saltwater crocodiles<span class="act-badge w">Wildlife</span></div>
+              <div class="db-act"><i class="fas fa-dove"></i>200+ bird species including painted storks<span class="act-badge w">Wildlife</span></div>
+              <div class="db-act"><i class="fas fa-binoculars"></i>World's highest density of wild leopards — 979 km² park<span class="act-badge w">Wildlife</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>Wild Leopards</div><div class="db-hl"><i class="fas fa-circle"></i>Jeep Safari</div><div class="db-hl"><i class="fas fa-circle"></i>Sloth Bears</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Yala / Tissamaharama</strong>Eco lodge near the park · 1 night</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 12 -->
+    <div class="day" style="--dc:#3580b8" id="day-12">
+      <div class="day-box">12</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(12)">
+          <span class="day-num">DAY 12</span>
+          <div class="day-info"><div class="day-title">Bentota Beach Arrival</div><div class="day-sub">Golden Beach · Bentota River Boat Safari · Sunset · Mangroves</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Bentota</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-12"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Bentota.webp" loading="lazy" alt="Bentota Beach"><div class="db-cap"><div class="db-cap-d">Day 12 · Beach</div><div class="db-cap-loc">Bentota</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-road"></i>Drive from Yala to Bentota · approx. 3 hrs<span class="act-badge t">Transfer</span></div>
+              <div class="db-act"><i class="fas fa-umbrella-beach"></i>Arrive at golden Bentota beachfront hotel<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-ship"></i>Bentota River boat safari · mangroves &amp; bird sanctuaries<span class="act-badge e">Experience</span></div>
+              <div class="db-act"><i class="fas fa-dove"></i>Birdwatching · kingfishers, herons &amp; river wildlife<span class="act-badge w">Wildlife</span></div>
+              <div class="db-act"><i class="fas fa-utensils"></i>Sunset beach walk &amp; seafood dinner<span class="act-badge e">Dinner</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>Golden Beach</div><div class="db-hl"><i class="fas fa-circle"></i>River Safari</div><div class="db-hl"><i class="fas fa-circle"></i>Mangroves</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Bentota</strong>Beachfront hotel · 1st of 2 nights</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 13 -->
+    <div class="day" style="--dc:#3580b8" id="day-13">
+      <div class="day-box">13</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(13)">
+          <span class="day-num">DAY 13</span>
+          <div class="day-info"><div class="day-title">Bentota Leisure Day</div><div class="day-sub">Water Sports · Ayurveda Spa · Beach Relaxation · Romantic Dinner</div></div>
+          <div class="day-night"><i class="fas fa-moon"></i>Bentota</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-13"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/cataraman-sunset.webp" loading="lazy" alt="Bentota Catamaran Sunset"><div class="db-cap"><div class="db-cap-d">Day 13 · Leisure</div><div class="db-cap-loc">Bentota</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-swimmer"></i>Optional water sports · jet ski &amp; banana boat<span class="act-badge o">Optional</span></div>
+              <div class="db-act"><i class="fas fa-spa"></i>Optional half-day Ayurveda spa treatment<span class="act-badge o">Optional</span></div>
+              <div class="db-act"><i class="fas fa-ship"></i>Optional lagoon catamaran sunset cruise<span class="act-badge o">Optional</span></div>
+              <div class="db-act"><i class="fas fa-umbrella-beach"></i>Full day beach relaxation &amp; swimming<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-utensils"></i>Romantic candlelight beach dinner<span class="act-badge e">Dinner</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>Full Leisure Day</div><div class="db-hl"><i class="fas fa-circle"></i>Water Sports</div><div class="db-hl"><i class="fas fa-circle"></i>Ayurveda Option</div></div></div>
+            <div class="db-night-row"><i class="fas fa-moon"></i><div class="db-night-t"><strong>Overnight · Bentota</strong>Beachfront hotel · 2nd of 2 nights</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- DAY 14 -->
+    <div class="day" style="--dc:#d45f4a" id="day-14">
+      <div class="day-box">14</div>
+      <div class="day-card">
+        <div class="day-hdr" onclick="tog(14)">
+          <span class="day-num">DAY 14</span>
+          <div class="day-info"><div class="day-title">Colombo City Tour · Departure</div><div class="day-sub">Galle Face Green · Gangaramaya Temple · Pettah Market · Airport</div></div>
+          <div class="day-night"><i class="fas fa-plane-departure"></i>Departure</div>
+          <div class="day-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="day-body" id="body-14"><div class="day-body-inner">
+          <div class="db-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/colombo_processed.webp" loading="lazy" alt="Colombo City"><div class="db-cap"><div class="db-cap-d">Day 14 · Farewell</div><div class="db-cap-loc">Colombo</div></div></div>
+          <div class="db-detail">
+            <div><div class="db-sec-lbl"><i class="fas fa-calendar-day" style="font-size:.46rem;color:var(--teal-d)"></i>Schedule</div>
+            <div class="db-acts">
+              <div class="db-act"><i class="fas fa-water"></i>Galle Face Green · colonial oceanfront promenade<span class="act-badge e">Experience</span></div>
+              <div class="db-act"><i class="fas fa-place-of-worship"></i>Gangaramaya Buddhist Temple — eclectic &amp; historic<span class="act-badge e">Experience</span></div>
+              <div class="db-act"><i class="fas fa-landmark"></i>Independence Square &amp; Colombo's colonial quarter<span class="act-badge e">Experience</span></div>
+              <div class="db-act"><i class="fas fa-shopping-bag"></i>Pettah Market &amp; modern shopping malls<span class="act-badge e">Leisure</span></div>
+              <div class="db-act"><i class="fas fa-plane-departure"></i>Transfer to Bandaranaike International Airport · 40 min<span class="act-badge t">Transfer</span></div>
+            </div></div>
+            <div class="db-divider"></div>
+            <div><div class="db-sec-lbl"><i class="fas fa-star" style="font-size:.44rem;color:var(--orange)"></i>Highlights</div>
+            <div class="db-hls"><div class="db-hl"><i class="fas fa-circle"></i>Galle Face Green</div><div class="db-hl"><i class="fas fa-circle"></i>Gangaramaya Temple</div><div class="db-hl"><i class="fas fa-circle"></i>Pettah Market</div></div></div>
+            <div class="db-night-row" style="background:rgba(26,184,176,.05);border-color:rgba(26,184,176,.16)">
+              <i class="fas fa-plane-departure" style="color:var(--teal-d)"></i>
+              <div class="db-night-t"><strong style="color:var(--teal-d)">Departure Day</strong>Transfer to Bandaranaike International Airport · approx. 40 min</div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+
+  <!-- INCLUSIONS -->
+  <div class="inc-section">
+    <div class="inc-header">
+      <div>
+        <div class="inc-header-eyebrow"><div class="ey-bar"></div><span class="ey-txt">Package Details</span><div class="ey-dot"></div></div>
+        <div class="inc-header-title">What's <em>Included</em></div>
+        <div class="inc-header-sub">A fully supported private journey — 6 UNESCO sites, two wildlife safaris, a scenic train ride, Ayurveda, Bentota beaches and Colombo, all seamlessly arranged.</div>
+      </div>
+      <div class="inc-tabs">
+        <button class="inc-tab tab-in inc-active" onclick="switchTab('in',this)">
+          <i class="fas fa-check-circle"></i>Included<span class="inc-tab-count">12</span>
+        </button>
+        <button class="inc-tab tab-out" onclick="switchTab('out',this)">
+          <i class="fas fa-times-circle"></i>Excluded<span class="inc-tab-count">8</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="inc-pane inc-pane-in inc-visible" id="pane-in">
+      <div class="inc-items-grid">
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>Airport transfers on arrival (Negombo) &amp; departure (Colombo → BIA)</div>
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>13 nights accommodation — beach, heritage, boutique &amp; eco lodge (breakfast daily)</div>
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>Private air-conditioned vehicle with English-speaking chauffeur-guide throughout</div>
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>All 6 UNESCO entrance fees — Anuradhapura, Sigiriya, Polonnaruwa, Dambulla, Kandy Temple &amp; Galle</div>
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>Minneriya National Park jeep safari — "The Gathering" elephant spectacle</div>
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>Yala National Park jeep safari — leopard, elephant &amp; sloth bear tracking</div>
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>Scenic train tickets: Nanu Oya → Ella (2nd class reserved)</div>
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>Pinnawala Elephant Orphanage entrance — river bathing &amp; feeding session</div>
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>Bentota River boat safari — mangroves &amp; birdwatching included</div>
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>Colombo city tour with private guide on final day</div>
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>Government taxes &amp; service charges</div>
+        <div class="inc-item"><div class="inc-ic in"><i class="fas fa-check"></i></div>24/7 WhatsApp support from Pixel Ceylon Tours team</div>
+      </div>
+    </div>
+
+    <div class="inc-pane inc-pane-out" id="pane-out">
+      <div class="inc-items-grid">
+        <div class="inc-item"><div class="inc-ic out"><i class="fas fa-times"></i></div>International flights to/from Colombo</div>
+        <div class="inc-item"><div class="inc-ic out"><i class="fas fa-times"></i></div>Sri Lanka tourist visa (ETA — online, approx. USD 35)</div>
+        <div class="inc-item"><div class="inc-ic out"><i class="fas fa-times"></i></div>Travel insurance (strongly recommended)</div>
+        <div class="inc-item"><div class="inc-ic out"><i class="fas fa-times"></i></div>Lunches &amp; personal beverages (unless stated)</div>
+        <div class="inc-item"><div class="inc-ic out"><i class="fas fa-times"></i></div>Optional activities: Ayurveda spa, cooking class, water sports, zipline</div>
+        <div class="inc-item"><div class="inc-ic out"><i class="fas fa-times"></i></div>Kandyan cultural dance show (optional, payable locally)</div>
+        <div class="inc-item"><div class="inc-ic out"><i class="fas fa-times"></i></div>Tips &amp; gratuities for guides and drivers</div>
+        <div class="inc-item"><div class="inc-ic out"><i class="fas fa-times"></i></div>Personal shopping, laundry, spa &amp; room extras</div>
+      </div>
+    </div>
+
+    <div class="inc-note">
+      <i class="fas fa-lightbulb"></i>
+      <p><strong>Good to know:</strong> All tours are fully private — you will never share vehicles or guides with other groups. Accommodation can be upgraded to luxury or 5-star properties on request. Pricing is based on twin-share; solo traveller supplements apply. The Kandy relax day is included to give European guests time to slow down and enjoy Sri Lanka's hill capital at their own pace.</p>
+    </div>
+  </div>
+
+</div><!-- /left col -->
+
+<!-- RIGHT — PRICING -->
+<div class="price-col">
+  <div class="eyebrow"><div class="ey-bar"></div><span class="ey-txt">Pricing &amp; Booking</span><div class="ey-dot"></div></div>
+  <h2 class="heading" style="font-size:clamp(1.45rem,1.9vw,1.95rem);margin-bottom:1rem">Your <em>Complete</em> Sri Lanka Awaits</h2>
+
+  <div class="ph-wrap">
+    <div class="ph-top">
+      <div class="ph-top-bar"></div>
+      <div class="ph-badge"><i class="fas fa-map-marked-alt"></i>&nbsp;Explore Sri Lanka</div>
+      <div class="ph-from">Starting from</div>
+      <div class="ph-price"><sup>$</sup>1,890</div>
+      <div class="ph-per">per person &nbsp;·&nbsp; twin share &nbsp;·&nbsp; 14 days</div>
+      <div class="ph-incl">
+        <div class="ph-tag"><i class="fas fa-check"></i>&nbsp;6 UNESCO Sites</div>
+        <div class="ph-tag"><i class="fas fa-check"></i>&nbsp;2 Safaris</div>
+        <div class="ph-tag"><i class="fas fa-check"></i>&nbsp;Scenic Train</div>
+        <div class="ph-tag"><i class="fas fa-check"></i>&nbsp;Private Guide</div>
+        <div class="ph-tag"><i class="fas fa-check"></i>&nbsp;Breakfasts</div>
+      </div>
+    </div>
+    <div class="ph-body">
+      <div class="ph-opts-lbl">Select your group size</div>
+      <div class="ph-opts">
+        <div class="ph-opt" style="--oc:#6b5fad" onclick="pickOpt(this)">
+          <div class="ph-opt-l"><div class="ph-opt-ic s"><i class="fas fa-user"></i></div><div><div class="ph-opt-name">Solo Traveller</div><div class="ph-opt-note">Private guide &amp; vehicle</div></div></div>
+          <div class="ph-opt-price">$2,490<small>/pp</small></div>
+        </div>
+        <div class="ph-opt sel" style="--oc:#1ab8b0" onclick="pickOpt(this)">
+          <div class="ph-opt-l"><div class="ph-opt-ic d"><i class="fas fa-user-friends"></i></div><div><div class="ph-opt-name">Couple / Duo</div><div class="ph-opt-note">Best value · twin share</div></div></div>
+          <div class="ph-opt-price">$1,890<small>/pp</small></div>
+        </div>
+        <div class="ph-opt" style="--oc:#1a7a5a" onclick="pickOpt(this)">
+          <div class="ph-opt-l"><div class="ph-opt-ic g"><i class="fas fa-users"></i></div><div><div class="ph-opt-name">Small Group (3–6)</div><div class="ph-opt-note">Family or friends</div></div></div>
+          <div class="ph-opt-price">$1,590<small>/pp</small></div>
+        </div>
+      </div>
+      <div class="ph-hr"></div>
+      <button class="ph-book" id="ph-book-btn"><i class="fas fa-paper-plane"></i>&nbsp;Book This Tour</button>
+      <button class="ph-enq" id="ph-enq-btn"><i class="fas fa-comments"></i>&nbsp;Send an Enquiry</button>
+      <div class="ph-secure"><i class="fas fa-shield-alt"></i>&nbsp;Free cancellation up to 30 days prior</div>
+    </div>
+  </div>
+
+  <!-- Highlights card -->
+  <div class="highlights-card">
+    <div class="highlights-head"><i class="fas fa-map-marked-alt"></i><span class="highlights-head-txt">Explore Sri Lanka — Highlights</span></div>
+    <div class="highlights-items">
+      <div class="highlights-item"><i class="fas fa-circle"></i><span><strong>6 UNESCO Sites</strong> — Anuradhapura, Sigiriya, Polonnaruwa, Dambulla, Kandy &amp; Galle</span></div>
+      <div class="highlights-item"><i class="fas fa-circle"></i><span><strong>Minneriya</strong> — "The Gathering" · hundreds of wild elephants at the ancient tank</span></div>
+      <div class="highlights-item"><i class="fas fa-circle"></i><span><strong>Yala Leopard Safari</strong> — world's highest density of wild leopards · jeep safari</span></div>
+      <div class="highlights-item"><i class="fas fa-circle"></i><span><strong>Scenic Train</strong> — Nanu Oya → Ella · 3 hrs through emerald tea valleys</span></div>
+      <div class="highlights-item"><i class="fas fa-circle"></i><span><strong>Bentota</strong> — 2 nights golden beach · river safari · Ayurveda option</span></div>
+      <div class="highlights-item"><i class="fas fa-circle"></i><span><strong>Kandy Relax Day</strong> — extra leisure day for slow travel &amp; Ayurveda spa</span></div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-head"><div class="info-head-ic"><i class="fas fa-concierge-bell"></i></div><span class="info-head-txt">Tour Essentials</span></div>
+    <div class="info-rows">
+      <div class="info-row"><i class="fas fa-calendar"></i><span><strong>Duration:</strong> 14 Days / 13 Nights</span></div>
+      <div class="info-row"><i class="fas fa-route"></i><span><strong>Route:</strong> Negombo → Colombo</span></div>
+      <div class="info-row"><i class="fas fa-award"></i><span><strong>UNESCO Sites:</strong> 6 included</span></div>
+      <div class="info-row"><i class="fas fa-users"></i><span><strong>Group:</strong> 1–6 passengers</span></div>
+      <div class="info-row"><i class="fas fa-utensils"></i><span><strong>Meals:</strong> Daily breakfast included</span></div>
+      <div class="info-row"><i class="fas fa-calendar-check"></i><span><strong>Best time:</strong> November – April</span></div>
+      <div class="info-row"><i class="fas fa-language"></i><span><strong>Guide:</strong> English-speaking, private</span></div>
+    </div>
+  </div>
+
+  <div class="dark-card">
+    <div class="dark-ic"><i class="fas fa-sliders-h"></i></div>
+    <div>
+      <div class="dark-h">Fully Customisable</div>
+      <div class="dark-p">Dates, hotel grades, pace and optional activities can all be tailored. Contact us for a bespoke quote — we specialise in crafting perfect Sri Lanka journeys for European guests.</div>
+    </div>
+  </div>
+
+</div><!-- /price-col -->
+</div><!-- /cols -->
+</div><!-- /wrap -->
+
+<script>
+(function () {
+  var wpNumber = '94777273794';
+
+  function tog(n) {
+    var day = document.getElementById('day-' + n);
+    var wasOpen = day.classList.contains('open');
+    for (var i = 1; i <= 14; i++) {
+      var d = document.getElementById('day-' + i);
+      if (d) d.classList.remove('open');
+    }
+    if (!wasOpen) day.classList.add('open');
+  }
+
+  function pickOpt(el) {
+    el.closest('.ph-opts').querySelectorAll('.ph-opt').forEach(function (o) { o.classList.remove('sel'); });
+    el.classList.add('sel');
+  }
+
+  function switchTab(which, btn) {
+    document.querySelectorAll('.inc-tab').forEach(function (t) { t.classList.remove('inc-active'); });
+    btn.classList.add('inc-active');
+    document.querySelectorAll('.inc-pane').forEach(function (p) { p.classList.remove('inc-visible'); });
+    document.getElementById('pane-' + which).classList.add('inc-visible');
+  }
+
+  document.getElementById('ph-book-btn').addEventListener('click', function () {
+    var msg = 'Hi! I would like to book the Explore Sri Lanka 14D tour package: ' + window.location.href;
+    window.open('https://wa.me/' + wpNumber + '?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+  });
+
+  document.getElementById('ph-enq-btn').addEventListener('click', function () {
+    var msg = 'Hi! I would like to know more about the Explore Sri Lanka 14D tour: ' + window.location.href;
+    window.open('https://wa.me/' + wpNumber + '?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+  });
+
+  window.tog = tog;
+  window.pickOpt = pickOpt;
+  window.switchTab = switchTab;
+})();
+</script>
+</section>
+</section>

@@ -1,0 +1,788 @@
+<div>
+<section class="footer">
+
+
+
+
+
+
+
+<!-- Single Font Awesome 6 — covers all icons including brands (tripadvisor, google, whatsapp, etc.) -->
+
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:'Poppins',sans-serif;background:#f8f6f2;-webkit-font-smoothing:antialiased}
+a{text-decoration:none!important;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* ── TOKENS ── */
+:root{
+  --d0   :#03080f;
+  --d1   :#060e16;
+  --d2   :#0a1a28;
+  --d3   :#0c2035;
+  --teal :#1ab8b0;
+  --teal-d:#1a6b7a;
+  --teal-l:#5ee8e2;
+  --orange:#f4a100;
+  --orange-l:#ffbf3c;
+  --violet:#7b6fc4;
+  --cream :#f0ede4;
+  --c85  :rgba(240,237,228,.85);
+  --c65  :rgba(240,237,228,.65);
+  --c45  :rgba(240,237,228,.45);
+  --c25  :rgba(240,237,228,.25);
+  --c12  :rgba(240,237,228,.12);
+  --c07  :rgba(240,237,228,.07);
+  --c04  :rgba(240,237,228,.04);
+  --bd   :rgba(240,237,228,.08);
+  --bd2  :rgba(240,237,228,.05);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans :'Poppins',system-ui,sans-serif;
+  --mono :'DM Mono',monospace;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --ease  :cubic-bezier(.4,0,.2,1);
+  --serif:'Bagind','Playfair Display',Georgia,serif;
+}
+
+.wrap{
+  max-width:1480px;
+  margin:0 auto;
+  padding-left :clamp(1.5rem,5vw,5.5rem);
+  padding-right:clamp(1.5rem,5vw,5.5rem);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION 1 — HERO CTA
+═══════════════════════════════════════════════════════ */
+.pf{
+  position:relative;overflow:hidden;
+  background:linear-gradient(160deg,var(--d3) 0%,var(--d2) 45%,var(--d1) 100%);
+  border-top:1px solid var(--bd);
+}
+/* Top gradient line */
+.pf::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal) 0%,var(--orange) 50%,var(--violet) 100%);
+  opacity:.9;pointer-events:none;
+}
+/* Background watermark text */
+.pf-wm{
+  position:absolute;
+  right:-2vw;bottom:-4vw;
+  font-family:var(--serif);
+  font-size:clamp(8rem,20vw,22rem);
+  line-height:.85;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(26,184,176,.07);
+  pointer-events:none;user-select:none;white-space:nowrap;
+  letter-spacing:-.02em;
+}
+.pf-inner{
+  padding-top :clamp(4rem,7vw,7rem);
+  padding-bottom:clamp(4rem,7vw,7rem);
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:clamp(3rem,6vw,8rem);
+  align-items:center;
+  position:relative;z-index:2;
+}
+.pf-ey{
+  display:inline-flex;align-items:center;gap:10px;
+  margin-bottom:1.3rem;
+}
+.pf-ey-line{width:28px;height:1px;background:var(--teal)}
+.pf-ey-txt{
+  font-family:var(--mono);font-size:.5rem;font-weight:500;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--teal);
+}
+/* Animated diamond dot */
+.pf-ey-dot{
+  width:5px;height:5px;background:var(--orange);
+  border-radius:1px;transform:rotate(45deg);
+  animation:spin45 7s linear infinite;
+}
+@keyframes spin45{to{transform:rotate(calc(45deg + 360deg))}}
+
+.pf-h{
+  font-family:var(--serif);
+  font-size:clamp(2.8rem,6vw,6rem);
+  font-weight:300;
+  color:var(--cream);line-height:.9;
+  letter-spacing:-.01em;
+  margin-bottom:1.1rem;
+}
+.pf-h em{font-style:normal;color:var(--teal)}
+
+.pf-sub{
+  font-family:var(--sans);font-size:.84rem;font-weight:300;
+  color:var(--c45);line-height:1.9;
+  max-width:500px;margin-bottom:2rem;
+}
+
+/* Stats row */
+.pf-stats{display:flex;align-items:center;gap:0;margin-bottom:2.5rem}
+.pf-stat{
+  display:flex;flex-direction:column;gap:2px;
+  padding:0 1.6rem;
+  border-right:1px solid var(--bd);
+}
+.pf-stat:first-child{padding-left:0}
+.pf-stat:last-child{border-right:none}
+.pf-stat-n{
+  font-family:var(--serif);font-size:1.5rem;color:var(--cream);line-height:1;
+}
+.pf-stat-n span{color:var(--teal);font-size:.7em}
+.pf-stat-l{
+  font-family:var(--mono);font-size:.43rem;font-weight:400;
+  letter-spacing:.06em;color:var(--c45);
+}
+
+/* CTA button column */
+.pf-btns{display:flex;flex-direction:column;gap:.75rem;min-width:260px;flex-shrink:0}
+
+/* Primary CTA */
+.pf-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:16px 36px;border-radius:2px;
+  background:linear-gradient(135deg,var(--orange) 0%,var(--orange-l) 100%);
+  color:#fff;font-family:var(--sans);font-weight:500;
+  font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;
+  box-shadow:0 0 28px rgba(244,161,0,.35),inset 0 1px 0 rgba(255,255,255,.22);
+  position:relative;overflow:hidden;white-space:nowrap;
+  transition:filter .22s,box-shadow .22s,transform .2s var(--spring);
+}
+.pf-btn::before{
+  content:'';position:absolute;top:0;left:-70%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+  transform:skewX(-18deg);transition:left .5s var(--ease);
+}
+.pf-btn:hover::before{left:130%}
+.pf-btn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(244,161,0,.45),inset 0 1px 0 rgba(255,255,255,.22)}
+.pf-btn i{font-size:.68rem;transition:transform .2s}
+.pf-btn:hover i{transform:translateX(4px)}
+
+/* Ghost / secondary CTA */
+.pf-ghost{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:15px 32px;border-radius:2px;
+  background:rgba(26,184,176,.08);
+  border:1.5px solid rgba(26,184,176,.25);
+  color:rgba(26,184,176,.88);
+  font-family:var(--sans);font-weight:600;
+  font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;
+  white-space:nowrap;
+  transition:background .2s,border-color .2s,color .2s,box-shadow .2s,transform .2s var(--spring);
+}
+.pf-ghost:hover{
+  background:rgba(26,184,176,.16);border-color:rgba(26,184,176,.45);
+  color:#fff;transform:translateY(-1px);
+}
+
+/* Trust badges below buttons */
+.pf-trust{display:flex;align-items:center;gap:1.6rem;margin-top:.4rem;flex-wrap:wrap}
+.pf-tr{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:.46rem;color:var(--c45);letter-spacing:.04em;
+}
+.pf-tr i{color:var(--teal);font-size:.46rem}
+
+/* ═══════════════════════════════════════════════════════
+   MAIN FOOTER
+═══════════════════════════════════════════════════════ */
+.ft{
+  background:var(--d0);
+  position:relative;overflow:hidden;
+  border-top:1px solid var(--bd);
+}
+/* Noise texture overlay */
+.ft::before{
+  content:'';position:absolute;inset:0;pointer-events:none;opacity:.015;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:180px;
+}
+/* Ambient glows */
+.ft-glow-a{
+  position:absolute;top:-200px;left:-150px;
+  width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(26,184,176,.04) 0%,transparent 65%);
+  pointer-events:none;
+}
+.ft-glow-b{
+  position:absolute;bottom:-150px;right:-100px;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(244,161,0,.03) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+/* Scrolling ticker */
+.ft-ticker-wrap{
+  overflow:hidden;height:36px;display:flex;align-items:center;
+  border-bottom:1px solid var(--bd);
+  position:relative;z-index:2;
+}
+.ft-ticker{display:flex;white-space:nowrap;animation:tick 60s linear infinite}
+.ft-ticker-wrap:hover .ft-ticker{animation-play-state:paused}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ft-ti{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:0 2.2rem;height:36px;border-right:1px solid var(--bd);flex-shrink:0;
+}
+.ft-ti i{color:var(--orange);font-size:.5rem}
+.ft-ti-n{font-family:var(--mono);font-size:.54rem;color:var(--c45)}
+.ft-ti-p{font-family:var(--mono);font-size:.46rem;color:var(--c25)}
+
+/* 5-column footer body */
+.ft-body{
+  padding-top:clamp(3rem,5vw,5rem);
+  padding-bottom:clamp(3rem,5vw,5rem);
+  display:grid;
+  grid-template-columns:1.8fr 1fr 1fr 1fr 1.1fr;
+  gap:0;
+  position:relative;z-index:2;
+  border-bottom:1px solid var(--bd);
+}
+.ft-col{
+  padding:0 clamp(1.4rem,2.5vw,2.8rem);
+  border-right:1px solid var(--bd);
+}
+.ft-col:first-child{padding-left:0}
+.ft-col:last-child{border-right:none;padding-right:0}
+
+/* Column heading */
+.ft-ch{
+  font-family:var(--mono);font-size:.46rem;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:8px;
+}
+.ft-ch::after{content:'';flex:1;height:1px;background:var(--bd)}
+
+/* Logo in brand column */
+.ft-logo-img{
+  height:52px;
+  width:auto;
+  max-width:160px;
+  object-fit:contain;
+  object-position:left center;
+  flex-shrink:0;
+  display:block;
+  margin-bottom:1.3rem;
+  filter:drop-shadow(0 0 6px rgba(26,184,176,.18));
+}
+
+.ft-desc{
+  font-size:.72rem;font-weight:300;color:var(--c45);
+  line-height:1.88;margin-bottom:1.5rem;
+}
+
+/* Contact items */
+.ft-cts{display:flex;flex-direction:column;gap:.42rem;margin-bottom:1.4rem}
+.ft-ct{display:flex;align-items:flex-start;gap:.6rem}
+a.ft-ct{cursor:pointer}
+.ft-ct-ic{
+  width:28px;height:28px;border-radius:2px;flex-shrink:0;
+  background:var(--c04);border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.58rem;color:var(--teal);margin-top:1px;
+  transition:background .2s,border-color .2s;
+}
+.ft-ct:hover .ft-ct-ic{background:rgba(26,184,176,.1);border-color:rgba(26,184,176,.22)}
+.ft-ct-l{
+  font-family:var(--mono);font-size:.4rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--c25);line-height:1;
+}
+.ft-ct-v{
+  font-size:.7rem;font-weight:300;color:var(--c65);
+  margin-top:2px;line-height:1.4;
+  transition:color .2s;
+}
+.ft-ct:hover .ft-ct-v{color:var(--teal)}
+
+/* Social icons */
+.ft-socs{display:flex;gap:.34rem}
+.ft-soc{
+  width:32px;height:32px;border-radius:2px;
+  background:var(--c04);border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;color:var(--c45);
+  transition:background .18s,border-color .18s,color .18s,transform .2s var(--spring);
+}
+.ft-soc:hover{transform:translateY(-2px)}
+.ft-soc.fb:hover{background:#1877f2;border-color:#1877f2;color:#fff}
+.ft-soc.ig:hover{background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);border-color:#bc1888;color:#fff}
+.ft-soc.wa:hover{background:#25d366;border-color:#25d366;color:#fff}
+.ft-soc.yt:hover{background:#ff0000;border-color:#ff0000;color:#fff}
+.ft-soc.ta:hover{background:#34e0a1;border-color:#34e0a1;color:#03080f}
+
+/* Nav link lists */
+.ft-nav{list-style:none;display:flex;flex-direction:column;gap:.3rem}
+.ft-nav a{
+  font-size:.72rem;font-weight:300;color:var(--c45);
+  display:flex;align-items:center;gap:0;padding:.5px 0;
+  transition:color .2s,gap .2s var(--ease);
+}
+.ft-nav a::before{
+  content:'';width:0;height:1px;background:var(--teal);
+  flex-shrink:0;transition:width .22s var(--ease);
+}
+.ft-nav a:hover{color:var(--cream);gap:9px}
+.ft-nav a:hover::before{width:8px}
+
+/* Rating / promise cards */
+.ft-ratings{display:flex;flex-direction:column;gap:.48rem}
+.ft-rcard{
+  display:flex;align-items:flex-start;gap:.7rem;
+  padding:.72rem .8rem;border-radius:2px;
+  border:1px solid var(--bd);
+  border-left:2px solid var(--bd);
+  background:var(--c04);
+  transition:background .2s,border-left-color .2s;
+  cursor:default;
+}
+.ft-rcard.ta{border-left-color:#34e0a1}
+.ft-rcard.go{border-left-color:#4285f4}
+.ft-rcard.ec{border-left-color:#2db87a}
+.ft-rcard:hover{background:rgba(240,237,228,.06)}
+.ft-ric{
+  width:30px;height:30px;border-radius:2px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:.72rem;
+}
+.ft-rnum{
+  font-family:var(--serif);font-size:1.2rem;
+  color:var(--cream);line-height:1;
+}
+.ft-rstars{display:flex;gap:2px;margin-top:1px}
+.ft-rstars i{color:var(--orange);font-size:.48rem}
+.ft-rtxt{font-size:.6rem;font-weight:300;color:var(--c45);margin-top:2px;line-height:1.4}
+
+/* Award badge card */
+.ft-badge{
+  display:flex;align-items:center;gap:.7rem;
+  padding:.72rem .8rem;border-radius:2px;
+  background:rgba(244,161,0,.07);
+  border:1px solid rgba(244,161,0,.14);
+  border-left:2px solid var(--orange);
+  transition:background .2s;cursor:default;
+}
+.ft-badge:hover{background:rgba(244,161,0,.11)}
+.ft-badge-ic{
+  width:30px;height:30px;border-radius:2px;
+  background:rgba(244,161,0,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;color:var(--orange);flex-shrink:0;
+}
+.ft-badge-n{font-size:.65rem;font-weight:600;color:var(--cream);margin-bottom:2px}
+.ft-badge-s{font-size:.58rem;font-weight:300;color:var(--c45);line-height:1.4}
+
+/* Stats bar */
+.ft-stats{
+  border-bottom:1px solid var(--bd);
+  position:relative;z-index:2;
+}
+.ft-stats-inner{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+.ft-stat2{
+  padding:1.6rem clamp(1.4rem,2.5vw,2.8rem);
+  border-right:1px solid var(--bd);
+  display:flex;align-items:center;gap:.9rem;
+  transition:background .2s;cursor:default;
+}
+.ft-stat2:first-child{padding-left:0}
+.ft-stat2:last-child{border-right:none;padding-right:0}
+.ft-stat2:hover{background:rgba(26,184,176,.03)}
+.ft-snum{
+  font-family:var(--serif);
+  font-size:clamp(1.8rem,2.5vw,2.5rem);
+  line-height:1;flex-shrink:0;color:#fff;
+}
+.ft-snum .u{color:var(--teal)}
+.ft-slbl{
+  font-family:var(--mono);font-size:.44rem;
+  font-weight:400;letter-spacing:.05em;
+  color:var(--c45);line-height:1.5;
+}
+.ft-ssrc{
+  font-family:var(--mono);font-size:.42rem;
+  color:var(--c25);margin-top:.2rem;
+  display:flex;align-items:center;gap:4px;
+}
+
+/* Bottom bar */
+.ft-bot{position:relative;z-index:2}
+.ft-bot-inner{
+  padding-top:1.15rem;padding-bottom:1.15rem;
+  display:flex;align-items:center;gap:1.5rem;
+  justify-content:space-between;flex-wrap:wrap;
+}
+.ft-bot-logo{
+  display:flex;align-items:center;gap:.6rem;flex-shrink:0;
+}
+.ft-bot-logo-mark{
+  width:24px;height:24px;border-radius:2px;
+  background:rgba(26,184,176,.1);border:1px solid rgba(26,184,176,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.52rem;color:var(--teal);
+}
+.ft-bot-logo-name{
+  font-family:var(--mono);font-size:.5rem;
+  color:var(--c45);letter-spacing:.1em;text-transform:uppercase;
+}
+.ft-bot-logo-name span{color:var(--teal)}
+.ft-legal{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+.ft-legal a{
+  font-family:var(--mono);font-size:.46rem;
+  color:var(--c25);letter-spacing:.04em;
+  transition:color .2s;
+}
+.ft-legal a:hover{color:var(--c65)}
+.ft-legal-sep{width:3px;height:3px;border-radius:50%;background:var(--bd);flex-shrink:0}
+.ft-copy{font-family:var(--mono);font-size:.46rem;color:var(--c25);letter-spacing:.04em}
+.ft-copy a{color:rgba(26,184,176,.5);transition:color .2s}
+.ft-copy a:hover{color:var(--teal)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1200px){
+  .ft-body{grid-template-columns:1fr 1fr;row-gap:0}
+  .ft-col{border-right:none!important;border-bottom:1px solid var(--bd);padding:1.5rem 0}
+  .ft-col:last-child{border-bottom:none}
+}
+@media(max-width:960px){
+  .pf-inner{grid-template-columns:1fr;gap:2.5rem}
+  .pf-btns{flex-direction:row;min-width:0}
+  .pf-btn,.pf-ghost{flex:1;justify-content:center}
+}
+@media(max-width:760px){
+  .ft-body{grid-template-columns:1fr}
+  .ft-stats-inner{grid-template-columns:repeat(2,1fr)}
+  .ft-stat2{border-bottom:1px solid var(--bd);border-right:none!important;padding-left:0!important}
+  .ft-stat2:nth-child(odd){border-right:1px solid var(--bd)!important}
+  .ft-stat2:nth-last-child(-n+2){border-bottom:none}
+}
+@media(max-width:540px){
+  .pf-btns{flex-direction:column}
+  .pf-stats{flex-wrap:wrap;gap:.8rem}
+  .pf-stat{border-right:none;padding-left:0!important}
+  .ft-bot-inner{flex-direction:column;align-items:flex-start;gap:.75rem}
+}
+</style>
+
+
+<!-- ═══════════ HERO CTA ═══════════ -->
+<section class="pf">
+  <div class="pf-wm" aria-hidden="true">Ceylon</div>
+  <div class="wrap">
+    <div class="pf-inner">
+
+      <div class="pf-left">
+        <div class="pf-ey">
+          <div class="pf-ey-line"></div>
+          <span class="pf-ey-txt">Begin Your Journey</span>
+          <div class="pf-ey-dot"></div>
+        </div>
+        <h2 class="pf-h">
+          Ready to Discover<br><em>Sri Lanka's</em><br>Best-Kept Secrets?
+        </h2>
+        <p class="pf-sub">
+          Tell us your dates and dreams — we'll craft a bespoke, fully private itinerary and send it to your inbox within 48 hours. No commitment. Completely free.
+        </p>
+        <div class="pf-stats">
+          <div class="pf-stat">
+            <div class="pf-stat-n">4.9<span>★</span></div>
+            <div class="pf-stat-l">Rated on<br>TripAdvisor</div>
+          </div>
+          <div class="pf-stat">
+            <div class="pf-stat-n">200<span>+</span></div>
+            <div class="pf-stat-l">Happy<br>Travellers</div>
+          </div>
+          <div class="pf-stat">
+            <div class="pf-stat-n">48<span>h</span></div>
+            <div class="pf-stat-l">Itinerary<br>Turnaround</div>
+          </div>
+          <div class="pf-stat">
+            <div class="pf-stat-n">100<span>%</span></div>
+            <div class="pf-stat-l">Fully<br>Private</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pf-btns">
+        <a href="/trip-planner" class="pf-btn">
+          <i class="fas fa-calendar-check"></i>Plan My Trip — Free
+        </a>
+        <a href="/tours" class="pf-ghost">
+          <i class="fas fa-compass"></i>Browse All Tours
+        </a>
+        <div class="pf-trust">
+          <div class="pf-tr"><i class="fas fa-check-circle"></i>Free itinerary</div>
+          <div class="pf-tr"><i class="fas fa-check-circle"></i>No payment needed</div>
+          <div class="pf-tr"><i class="fas fa-check-circle"></i>24 h reply</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════ MAIN FOOTER ═══════════ -->
+<footer class="ft">
+  <div class="ft-glow-a" aria-hidden="true"></div>
+  <div class="ft-glow-b" aria-hidden="true"></div>
+
+  <!-- Scrolling destination ticker -->
+  <div class="ft-ticker-wrap" aria-hidden="true">
+    <div class="ft-ticker" id="ft-ticker"></div>
+  </div>
+
+  <div class="wrap">
+    <div class="ft-body">
+
+      <!-- COL 1: BRAND -->
+      <div class="ft-col">
+        <div class="ft-ch">Company</div>
+        <img
+          src="https://pixelceylontours.com/wp-content/uploads/2026/03/5-scaled.png"
+          alt="Pixel Ceylon Tours"
+          class="ft-logo-img"
+        >
+        <p class="ft-desc">A small, passionate team of Sri Lankans crafting private, unhurried journeys for the most extraordinary island on Earth.</p>
+        <div class="ft-cts">
+          <div class="ft-ct">
+            <div class="ft-ct-ic"><i class="fas fa-map-marker-alt"></i></div>
+            <div>
+              <div class="ft-ct-l">Based in</div>
+              <div class="ft-ct-v">Colombo, Sri Lanka 🇱🇰</div>
+            </div>
+          </div>
+          <a href="mailto:info@pixelceylontours.com" class="ft-ct">
+            <div class="ft-ct-ic"><i class="fas fa-envelope"></i></div>
+            <div>
+              <div class="ft-ct-l">Email</div>
+              <div class="ft-ct-v">info@pixelceylontours.com</div>
+            </div>
+          </a>
+          <a href="https://wa.me/94777273794" class="ft-ct" target="_blank" rel="noopener">
+            <div class="ft-ct-ic"><i class="fab fa-whatsapp"></i></div>
+            <div>
+              <div class="ft-ct-l">WhatsApp</div>
+              <div class="ft-ct-v">+94 77 727 3794</div>
+            </div>
+          </a>
+          <div class="ft-ct">
+            <div class="ft-ct-ic"><i class="fas fa-clock"></i></div>
+            <div>
+              <div class="ft-ct-l">Response Time</div>
+              <div class="ft-ct-v">Within 24 h · 7 days a week</div>
+            </div>
+          </div>
+        </div>
+        <div class="ft-socs">
+          <a href="#" class="ft-soc fb" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="ft-soc ig" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://wa.me/94777273794" class="ft-soc wa" aria-label="WhatsApp" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" class="ft-soc yt" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="ft-soc ta" aria-label="TripAdvisor"><i class="fa fa-tripadvisor"></i></a>
+        </div>
+      </div>
+
+      <!-- COL 2: EXPLORE -->
+      <div class="ft-col">
+        <div class="ft-ch">Explore</div>
+        <ul class="ft-nav">
+          <li><a href="/destinations">Destinations</a></li>
+          <li><a href="/tours">Tour Packages</a></li>
+          <li><a href="/experiences">Experiences</a></li>
+          <li><a href="/experiences">Food &amp; Culture</a></li>
+          <li><a href="/about-us">How It Works</a></li>
+          <li><a href="/blog">Why Sri Lanka</a></li>
+          <li><a href="/about-us">Reviews</a></li>
+          <li><a href="/trip-planner">Plan My Trip</a></li>
+        </ul>
+      </div>
+
+      <!-- COL 3: DESTINATIONS -->
+      <div class="ft-col">
+        <div class="ft-ch">Destinations</div>
+        <ul class="ft-nav">
+          <li><a href="/destinations/">Sigiriya &amp; Cultural Triangle</a></li>
+          <li><a href="/destinations/">Kandy &amp; Highlands</a></li>
+          <li><a href="/destinations/">Ella &amp; Nine Arches</a></li>
+          <li><a href="/destinations/">Yala Safari</a></li>
+          <li><a href="/destinations/">Mirissa &amp; South Coast</a></li>
+          <li><a href="/destinations/">Galle Fort</a></li>
+          <li><a href="/destinations/">Nuwara Eliya Tea Country</a></li>
+          <li><a href="/destinations/">Arugam Bay</a></li>
+        </ul>
+      </div>
+
+      <!-- COL 4: PLAN -->
+      <div class="ft-col">
+        <div class="ft-ch">Plan &amp; Info</div>
+        <ul class="ft-nav">
+          <li><a href="/experiences">Best Time to Visit</a></li>
+          <li><a href="#">Visa &amp; Entry</a></li>
+          <li><a href="#">Climate Guide</a></li>
+          <li><a href="#">Packing Tips</a></li>
+          <li><a href="#">Budget Guide</a></li>
+          <li><a href="#">Travel Insurance</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- COL 5: RATINGS / PROMISE -->
+      <div class="ft-col">
+        <div class="ft-ch">Our Promise</div>
+        <div class="ft-ratings">
+          <div class="ft-rcard ta">
+            <div class="ft-ric" style="background:rgba(52,224,161,.1)">
+              <i class="fa fa-tripadvisor" style="color:#34e0a1"></i>
+            </div>
+            <div>
+              <div class="ft-rnum">5.0</div>
+              <div class="ft-rstars">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="ft-rtxt">Certificate of Excellence</div>
+            </div>
+          </div>
+          <div class="ft-rcard go">
+            <div class="ft-ric" style="background:rgba(66,133,244,.1)">
+              <i class="fab fa-google" style="color:#4285f4"></i>
+            </div>
+            <div>
+              <div class="ft-rnum">4.9</div>
+              <div class="ft-rstars">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+              <div class="ft-rtxt">128 verified reviews</div>
+            </div>
+          </div>
+          <div class="ft-rcard ec">
+            <div class="ft-ric" style="background:rgba(45,184,122,.1)">
+              <i class="fas fa-leaf" style="color:#2db87a"></i>
+            </div>
+            <div>
+              <div class="ft-rnum">100%</div>
+              <div class="ft-rtxt">Responsible &amp; sustainable travel</div>
+            </div>
+          </div>
+          <div class="ft-badge">
+            <div class="ft-badge-ic"><i class="fas fa-user-shield"></i></div>
+            <div>
+              <div class="ft-badge-n">Always Private &amp; Bespoke</div>
+              <div class="ft-badge-s">No shared groups, ever. Just you.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.ft-body -->
+
+    <!-- STATS ROW -->
+    <div class="ft-stats">
+      <div class="ft-stats-inner">
+        <div class="ft-stat2">
+          <div class="ft-snum">4.9<span class="u">★</span></div>
+          <div>
+            <div class="ft-slbl">Average across all platforms</div>
+            <div class="ft-ssrc"><i class="fab fa-tripadvisor"></i> TripAdvisor · <i class="fab fa-google"></i> Google</div>
+          </div>
+        </div>
+        <div class="ft-stat2">
+          <div class="ft-snum">200<span class="u">+</span></div>
+          <div>
+            <div class="ft-slbl">Happy travellers · 32 countries</div>
+            <div class="ft-ssrc"><i class="fas fa-globe"></i> Since 2019</div>
+          </div>
+        </div>
+        <div class="ft-stat2">
+          <div class="ft-snum">48<span class="u">h</span></div>
+          <div>
+            <div class="ft-slbl">Bespoke itinerary in your inbox</div>
+            <div class="ft-ssrc"><i class="fas fa-bolt"></i> Free, no commitment</div>
+          </div>
+        </div>
+        <div class="ft-stat2">
+          <div class="ft-snum">100<span class="u">%</span></div>
+          <div>
+            <div class="ft-slbl">Private tours — no groups, ever</div>
+            <div class="ft-ssrc"><i class="fas fa-user-shield"></i> Always bespoke</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="ft-bot">
+      <div class="ft-bot-inner">
+
+        <div class="ft-bot-logo">
+          <div class="ft-bot-logo-mark"><i class="fas fa-compass"></i></div>
+          <span class="ft-bot-logo-name">Pixel <span>Ceylon</span> Tours</span>
+        </div>
+
+        <div class="ft-copy">
+          © <span id="ft-year"></span>
+          <a href="https://www.facebook.com/profile.php?id=61567913782607&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer">Codewave Innovations</a>
+          &nbsp;·&nbsp; All rights reserved.
+        </div>
+
+        <div class="ft-legal">
+          <a href="#">Privacy Policy</a>
+          <div class="ft-legal-sep"></div>
+          <a href="#">Terms of Service</a>
+          <div class="ft-legal-sep"></div>
+          <a href="#">Cancellation Policy</a>
+          <div class="ft-legal-sep"></div>
+          <a href="#">Cookie Policy</a>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /.wrap -->
+</footer>
+
+<script>
+(function(){
+  // Set copyright year
+  document.getElementById('ft-year').textContent = new Date().getFullYear();
+
+  // Ticker destinations
+  var TICKS = [
+    {n:'Sigiriya Lion Rock',           p:'Central Province'},
+    {n:'Yala National Park',           p:'Southern Province'},
+    {n:'Nine Arches Bridge',           p:'Ella · Uva Province'},
+    {n:'Galle Dutch Fort',             p:'Southern Province'},
+    {n:'Temple of the Tooth',          p:'Kandy · Hill Capital'},
+    {n:'Mirissa Beach',                p:'Southern Province'},
+    {n:'Nuwara Eliya Tea Country',     p:'Central Province'},
+    {n:'Dambulla Cave Temple',         p:'Central Province'},
+    {n:'Arugam Bay',                   p:'Eastern Province'},
+    {n:'Anuradhapura',                 p:'North Central Province'},
+    {n:'Minneriya Elephant Gathering', p:'North Central Province'},
+    {n:"Horton Plains & World's End",  p:'Central Province'},
+  ];
+  var el = document.getElementById('ft-ticker');
+  // Duplicate array so seamless loop works
+  el.innerHTML = [...TICKS, ...TICKS].map(function(x){
+    return '<span class="ft-ti"><i class="fas fa-map-marker-alt"></i>'
+      + '<span class="ft-ti-n">' + x.n + '</span>'
+      + '<span class="ft-ti-p">' + x.p + '</span>'
+      + '</span>';
+  }).join('');
+})();
+</script>
+</section>
+</div>

@@ -1,0 +1,830 @@
+<section class="pct-contact-wrap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/bagind" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+/* ── SCOPE: all styles under .pct-contact-wrap to avoid Elementor conflicts ── */
+.pct-contact-wrap *,
+.pct-contact-wrap *::before,
+.pct-contact-wrap *::after{box-sizing:border-box;margin:0;padding:0}
+.pct-contact-wrap{
+  font-family:'Poppins',sans-serif;
+  background:#071527;
+  color:#fff;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  width:100%;
+  position:relative;
+}
+.pct-contact-wrap a{text-decoration:none;color:inherit}
+.pct-contact-wrap button{cursor:pointer;font-family:'Poppins',sans-serif;border:none;background:none}
+.pct-contact-wrap input,
+.pct-contact-wrap textarea,
+.pct-contact-wrap select{font-family:'Poppins',sans-serif}
+.pct-contact-wrap img{display:block;max-width:100%;object-fit:cover}
+.pct-contact-wrap ul{list-style:none}
+
+/* ── TOKENS ── */
+.pct-contact-wrap{
+  --navy:#071527;
+  --navy2:#0c1e30;
+  --navy3:#0f2540;
+  --teal:#0e9aaa;
+  --tealb:#12c8d8;
+  --teald:#0a7a85;
+  --amber:#f5a623;
+  --amberd:#d9870c;
+  --cream:#faf7f2;
+  --muted:#556070;
+  --muted2:#8494a6;
+  --border:rgba(255,255,255,.08);
+  --teal06:rgba(14,154,170,.06);
+  --teal12:rgba(14,154,170,.12);
+  --teal20:rgba(14,154,170,.20);
+  --ease:cubic-bezier(.4,0,.2,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --reveal:cubic-bezier(.16,1,.3,1);
+}
+
+/* ── KEYFRAMES ── */
+@keyframes pct-fadeUp  {from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes pct-fadeIn  {from{opacity:0}to{opacity:1}}
+@keyframes pct-spinDia {to{transform:rotate(405deg)}}
+@keyframes pct-gridFlow{0%{background-position:0 0}100%{background-position:52px 52px}}
+@keyframes pct-shimmer {0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes pct-dotPulse{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+@keyframes pct-scanLine{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+@keyframes pct-bob     {0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* ── BACKGROUND ── */
+.pct-bg{
+  position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 20%,rgba(14,154,170,.12) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 80%,rgba(245,166,35,.07) 0%,transparent 55%),
+    #071527;
+}
+.pct-bg-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(18,200,216,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(18,200,216,.04) 1px,transparent 1px);
+  background-size:52px 52px;
+  animation:pct-gridFlow 8s linear infinite;
+}
+.pct-bg-scan{
+  position:absolute;left:0;right:0;height:160px;
+  background:linear-gradient(to bottom,transparent,rgba(18,200,216,.025),transparent);
+  animation:pct-scanLine 7s linear infinite;
+}
+.pct-px-cluster{position:absolute;display:grid;gap:4px;opacity:.12;pointer-events:none}
+.pct-px-cluster span{display:block;border-radius:1px}
+
+/* ── PAGE SHELL ── */
+.pct-page{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;align-items:center;
+  padding:clamp(3rem,7vw,6rem) clamp(1.5rem,5vw,4rem);
+  width:100%;
+}
+
+/* ── EYEBROW ── */
+.pct-eyebrow{
+  display:flex;align-items:center;gap:10px;margin-bottom:1rem;
+  animation:pct-fadeUp .7s var(--reveal) forwards;
+}
+.pct-eyebrow-line{width:28px;height:1.5px;background:var(--teal);border-radius:2px;flex-shrink:0}
+.pct-eyebrow-txt{font-size:.55rem;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--tealb)}
+.pct-eyebrow-pip{width:5px;height:5px;border-radius:1px;background:var(--amber);transform:rotate(45deg);animation:pct-spinDia 8s linear infinite;flex-shrink:0}
+
+/* ── HERO TEXT ── */
+.pct-hero-txt{
+  text-align:center;margin-bottom:clamp(2.5rem,5vw,4.5rem);
+  animation:pct-fadeUp .9s .06s var(--reveal) both;
+}
+.pct-hero-txt h1{
+  font-family:'Bagind',serif;
+  font-size:clamp(2.4rem,6vw,5.5rem);
+  font-weight:400;line-height:.9;
+  color:#fff;letter-spacing:-.01em;margin-bottom:.8rem;
+}
+.pct-hero-txt h1 .pct-teal{color:var(--teal)}
+.pct-hero-txt h1 .pct-amber{color:var(--amber)}
+.pct-hero-txt p{
+  font-size:clamp(.78rem,.9vw,.92rem);font-weight:300;
+  color:rgba(255,255,255,.45);max-width:480px;margin:0 auto;line-height:1.9;
+}
+
+/* ── QUICK PILLS ── */
+.pct-qpills{
+  display:flex;align-items:center;justify-content:center;
+  gap:.65rem;flex-wrap:wrap;
+  margin-bottom:clamp(2.5rem,5vw,4rem);
+  animation:pct-fadeUp .8s .12s var(--reveal) both;
+}
+.pct-qpill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:2px;padding:9px 18px;
+  font-size:.67rem;font-weight:500;color:rgba(255,255,255,.6);
+  transition:all .25s var(--ease);cursor:pointer;white-space:nowrap;
+}
+.pct-qpill i{font-size:.72rem;color:var(--teal);transition:color .2s}
+.pct-qpill:hover{background:var(--teal20);border-color:var(--teal);color:#fff;transform:translateY(-2px)}
+.pct-qpill:hover i{color:var(--tealb)}
+.pct-qpill.pct-amber-pill i{color:var(--amber)}
+.pct-qpill.pct-amber-pill:hover{background:rgba(245,166,35,.12);border-color:var(--amber)}
+.pct-qpill.pct-amber-pill:hover i{color:var(--amber)}
+
+/* ── MAIN GRID ── */
+.pct-grid{
+  width:100%;max-width:1200px;
+  display:grid;grid-template-columns:1fr 1.4fr;gap:1.5rem;
+  animation:pct-fadeUp .9s .18s var(--reveal) both;
+}
+
+/* ── LEFT PANEL ── */
+.pct-left{display:flex;flex-direction:column;gap:1rem}
+
+/* info card */
+.pct-info-card{
+  background:rgba(12,30,48,.7);border:1px solid var(--border);
+  border-radius:2px;padding:2rem;position:relative;overflow:hidden;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+}
+.pct-info-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--tealb),var(--teal));
+  background-size:200%;animation:pct-shimmer 3s linear infinite;
+}
+.pct-info-logo{display:flex;align-items:center;gap:.75rem;margin-bottom:1.8rem}
+.pct-logo-pixels{
+  display:grid;grid-template-columns:repeat(3,9px);
+  grid-template-rows:repeat(3,9px);gap:2px;flex-shrink:0;
+}
+.pct-logo-pixels span{border-radius:1px;display:block;width:9px;height:9px}
+.pct-logo-name{font-family:'Bagind',serif;font-size:1.2rem;color:#fff;line-height:1}
+.pct-logo-sub{font-size:.48rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--tealb);margin-top:.12rem}
+
+.pct-info-tagline{
+  font-family:'Bagind',serif;font-size:clamp(1.1rem,1.8vw,1.55rem);
+  font-weight:400;color:#fff;line-height:1.05;margin-bottom:.7rem;
+}
+.pct-info-tagline span{color:var(--teal)}
+.pct-info-sub{font-size:.78rem;font-weight:300;color:rgba(255,255,255,.4);line-height:1.85;margin-bottom:1.8rem}
+
+.pct-info-rows{display:flex;flex-direction:column;gap:.75rem}
+.pct-info-row{
+  display:flex;align-items:flex-start;gap:1rem;padding:.85rem 1rem;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);
+  border-radius:2px;transition:background .2s,border-color .2s;
+}
+.pct-info-row:hover{background:var(--teal06);border-color:var(--teal20)}
+.pct-row-icon{
+  width:36px;height:36px;min-width:36px;border-radius:2px;
+  background:var(--teal12);border:1px solid var(--teal20);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.78rem;color:var(--tealb);flex-shrink:0;
+  transition:background .2s,color .2s;
+}
+.pct-info-row:hover .pct-row-icon{background:var(--teal);color:#fff}
+.pct-row-txt{display:flex;flex-direction:column;gap:.15rem}
+.pct-row-lbl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted2)}
+.pct-row-val{font-size:.78rem;font-weight:500;color:rgba(255,255,255,.85)}
+.pct-row-val a{color:inherit;transition:color .2s}
+.pct-row-val a:hover{color:var(--tealb)}
+
+.pct-avail{
+  display:flex;align-items:center;gap:.65rem;
+  margin-top:1.6rem;padding-top:1.2rem;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+.pct-avail-dot{
+  width:8px;height:8px;border-radius:50%;background:#22d65a;flex-shrink:0;
+  animation:pct-dotPulse 2s ease-in-out infinite;
+}
+.pct-avail-txt{font-size:.62rem;font-weight:400;color:rgba(255,255,255,.4)}
+.pct-avail-txt strong{color:rgba(255,255,255,.7);font-weight:600}
+
+/* promise */
+.pct-promise{
+  background:linear-gradient(135deg,rgba(245,166,35,.08),rgba(245,166,35,.04));
+  border:1px solid rgba(245,166,35,.2);border-radius:2px;
+  padding:1.2rem 1.4rem;display:flex;align-items:center;gap:1rem;
+}
+.pct-promise-icon{
+  width:40px;height:40px;min-width:40px;border-radius:2px;
+  background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;color:var(--amber);flex-shrink:0;
+}
+.pct-promise-txt strong{display:block;font-size:.75rem;font-weight:600;color:var(--amber);margin-bottom:.2rem}
+.pct-promise-txt span{font-size:.68rem;font-weight:300;color:rgba(255,255,255,.4);line-height:1.6}
+
+/* social strip */
+.pct-social-strip{
+  background:rgba(12,30,48,.7);border:1px solid var(--border);
+  border-radius:2px;padding:1.4rem 1.6rem;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  flex-wrap:wrap;
+}
+.pct-social-lbl{font-size:.52rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted2)}
+.pct-social-icons{display:flex;gap:.5rem}
+.pct-soc{
+  width:36px;height:36px;border-radius:2px;
+  border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.78rem;color:rgba(255,255,255,.4);
+  transition:all .25s var(--spring);
+}
+.pct-soc:hover{transform:translateY(-3px);border-color:var(--teal);color:var(--tealb);background:var(--teal12)}
+.pct-soc.pct-wa:hover{border-color:#25d366;color:#25d366;background:rgba(37,211,102,.1)}
+
+/* ── RIGHT PANEL — FORM ── */
+.pct-form-card{
+  background:rgba(12,30,48,.7);border:1px solid var(--border);
+  border-radius:2px;padding:clamp(1.8rem,3.5vw,2.8rem);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  position:relative;overflow:hidden;
+}
+.pct-form-card::after{
+  content:'';position:absolute;bottom:-80px;right:-80px;
+  width:260px;height:260px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(14,154,170,.09) 0%,transparent 70%);
+}
+
+.pct-form-head{margin-bottom:1.8rem}
+.pct-kicker{
+  display:flex;align-items:center;gap:8px;margin-bottom:.6rem;
+  font-size:.52rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);
+}
+.pct-kicker::before{content:'';width:16px;height:1.5px;background:currentColor;border-radius:2px;flex-shrink:0}
+.pct-form-head h2{font-family:'Bagind',serif;font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:400;color:#fff;line-height:.95;margin-bottom:.5rem}
+.pct-form-head p{font-size:.76rem;font-weight:300;color:rgba(255,255,255,.35);line-height:1.75}
+
+/* trip type */
+.pct-trip-types{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1.6rem;
+}
+.pct-tt{
+  display:flex;flex-direction:column;align-items:center;gap:.4rem;
+  padding:.75rem .5rem;border-radius:2px;
+  border:1.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);
+  font-size:.57rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);cursor:pointer;
+  transition:all .22s var(--ease);user-select:none;text-align:center;
+}
+.pct-tt i{font-size:.95rem;transition:color .2s;display:block;margin-bottom:.2rem}
+.pct-tt:hover{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)}
+.pct-tt.on{border-color:var(--teal);background:var(--teal12);color:var(--tealb)}
+.pct-tt.on i{color:var(--tealb)}
+
+/* form fields */
+.pct-frow{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+.pct-frow.pct-solo{grid-template-columns:1fr}
+.pct-fg{display:flex;flex-direction:column;gap:.4rem}
+.pct-fg label{font-size:.54rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted2);display:block}
+.pct-fg label span{color:var(--teal);margin-left:2px}
+
+.pct-fi,
+.pct-fta,
+.pct-fsel{
+  width:100%;background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.1);
+  border-radius:2px;color:#fff;
+  font-family:'Poppins',sans-serif;font-size:.76rem;font-weight:400;
+  padding:.7rem .9rem;outline:none;
+  transition:border-color .22s,background .22s,box-shadow .22s;
+  -webkit-appearance:none;appearance:none;
+  display:block;
+}
+.pct-fi::placeholder,.pct-fta::placeholder{color:rgba(255,255,255,.2)}
+.pct-fi:focus,.pct-fta:focus,.pct-fsel:focus{
+  border-color:var(--teal);background:rgba(14,154,170,.07);
+  box-shadow:0 0 0 3px rgba(14,154,170,.12);
+}
+.pct-fta{resize:vertical;min-height:110px;line-height:1.65}
+.pct-fsel{color:rgba(255,255,255,.55)}
+.pct-fsel option{background:#0c1e30;color:#fff}
+
+.pct-date-wrap{position:relative}
+.pct-date-wrap i{
+  position:absolute;right:.85rem;top:50%;transform:translateY(-50%);
+  font-size:.7rem;color:var(--muted2);pointer-events:none;
+}
+.pct-fi[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.3);cursor:pointer}
+
+/* budget */
+.pct-budget-wrap{display:flex;flex-direction:column;gap:.6rem}
+.pct-budget-track{
+  -webkit-appearance:none;appearance:none;width:100%;height:3px;
+  background:rgba(255,255,255,.1);border-radius:2px;outline:none;cursor:pointer;
+  background-image:linear-gradient(var(--teal),var(--teal));
+  background-size:50% 100%;background-repeat:no-repeat;
+  display:block;
+}
+.pct-budget-track::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--teal);border:3px solid #071527;
+  box-shadow:0 0 0 1.5px var(--teal);cursor:pointer;transition:transform .2s;
+}
+.pct-budget-track::-webkit-slider-thumb:hover{transform:scale(1.2)}
+.pct-budget-labels{display:flex;justify-content:space-between;font-size:.53rem;color:rgba(255,255,255,.25)}
+.pct-budget-val{
+  display:inline-block;font-size:.75rem;font-weight:600;color:var(--amber);
+  background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);
+  border-radius:2px;padding:3px 10px;align-self:flex-start;
+}
+
+/* submit */
+.pct-form-footer{
+  margin-top:1.5rem;display:flex;align-items:center;
+  justify-content:space-between;gap:1rem;flex-wrap:wrap;
+}
+.pct-form-note{font-size:.62rem;font-weight:300;color:rgba(255,255,255,.25);max-width:220px;line-height:1.65}
+.pct-form-note i{color:var(--teal);margin-right:4px}
+.pct-btn-submit{
+  display:inline-flex;align-items:center;gap:9px;
+  background: #d9870c!important;
+  font-family:'Poppins',sans-serif;
+  font-size:.76rem;font-weight:700;letter-spacing:.04em;
+  padding:14px 32px;border-radius:2px;
+  color: #fff;
+  transition:background .22s,transform .22s,box-shadow .22s;
+  white-space:nowrap;border:none;cursor:pointer;
+}
+.pct-btn-submit:hover{background:var(--teald);transform:translateY(-2px);color: #fff;}
+.pct-btn-submit i{font-size:.7rem}
+
+/* WhatsApp CTA Bar */
+.pct-wa-bar{
+  margin-top:1rem;
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  padding:16px 20px;
+  border-radius:2px;
+
+  background:rgba(37,211,102,0.06);
+  border:1px solid rgba(37,211,102,0.18);
+
+  text-decoration:none;
+  cursor:pointer;
+
+  transition:all .25s ease;
+}
+
+.pct-wa-bar:hover{
+  background:rgba(37,211,102,0.12);
+  border-color:rgba(37,211,102,0.35);
+  transform:translateY(-2px);
+}
+
+/* WhatsApp icon */
+.pct-wa-icon{
+  font-size:1.35rem;
+  color:#25d366;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+/* Text container */
+.pct-wa-txt{
+  display:flex;
+  flex-direction:column;
+  line-height:1.2;
+}
+
+/* Main text */
+.pct-wa-txt strong{
+  font-size:0.95rem;
+  font-weight:600;
+  color:rgba(255,255,255,0.9);
+}
+
+/* Small description */
+.pct-wa-txt span{
+  font-size:0.72rem;
+  font-weight:400;
+  color:rgba(255,255,255,0.55);
+  margin-top:2px;
+}
+
+/* Arrow icon */
+.pct-wa-arrow{
+  margin-left:auto;
+  font-size:0.8rem;
+  color:rgba(255,255,255,0.35);
+  transition:all .25s ease;
+  flex-shrink:0;
+}
+
+.pct-wa-bar:hover .pct-wa-arrow{
+  transform:translateX(6px);
+  color:#25d366;
+}
+/* success overlay */
+.pct-success-overlay{
+  position:absolute;inset:0;z-index:10;
+  background:rgba(7,21,39,.96);border-radius:2px;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:3rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.pct-success-overlay.show{display:flex;animation:pct-fadeIn .4s var(--ease)}
+.pct-success-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:rgba(14,154,170,.15);border:2px solid var(--teal);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;color:var(--teal);margin-bottom:1.5rem;
+  animation:pct-bob 3s ease-in-out infinite;
+}
+.pct-success-h{font-family:'Bagind',serif;font-size:clamp(1.8rem,3vw,2.4rem);font-weight:400;color:#fff;margin-bottom:.6rem}
+.pct-success-p{font-size:.8rem;font-weight:300;color:rgba(255,255,255,.4);max-width:320px;margin:0 auto 1.8rem;line-height:1.85}
+.pct-btn-reset{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1.5px solid rgba(255,255,255,.14);color:rgba(255,255,255,.6);
+  font-family:'Poppins',sans-serif;
+  font-size:.7rem;font-weight:500;padding:11px 24px;border-radius:2px;
+  transition:all .22s;cursor:pointer;background:none;
+}
+.pct-btn-reset:hover{border-color:var(--teal);color:var(--tealb);background:var(--teal12)}
+
+/* validation */
+.pct-fi.pct-err,.pct-fta.pct-err,.pct-fsel.pct-err{border-color:rgba(239,83,80,.6);background:rgba(239,83,80,.05)}
+.pct-err-msg{font-size:.58rem;color:#ef5350;margin-top:2px;display:none}
+.pct-fg.pct-has-err .pct-err-msg{display:block}
+.pct-fg.pct-has-err label{color:#ef5350}
+
+/* ── STATS BAR ── */
+.pct-stats-bar{
+  width:100%;max-width:1200px;margin-top:1.5rem;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.06);border-radius:2px;overflow:hidden;
+  animation:pct-fadeUp .9s .28s var(--reveal) both;
+}
+.pct-stat{
+  background:#071527;padding:1.2rem 1.4rem;
+  display:flex;flex-direction:column;gap:.25rem;
+  transition:background .22s;
+}
+.pct-stat:hover{background:rgba(14,154,170,.07)}
+.pct-stat-n{font-family:'Bagind',serif;font-size:clamp(1.3rem,2.2vw,1.9rem);color:#fff;line-height:1}
+.pct-stat-n span{color:var(--teal)}
+.pct-stat-l{font-size:.52rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.25)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .pct-grid{grid-template-columns:1fr}
+  .pct-stats-bar{grid-template-columns:repeat(2,1fr)}
+  .pct-frow{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .pct-form-footer{flex-direction:column;align-items:stretch}
+  .pct-btn-submit{justify-content:center;width:100%}
+  .pct-stats-bar{grid-template-columns:1fr 1fr}
+  .pct-qpills{gap:.45rem}
+}
+@media(max-width:400px){
+  .pct-trip-types{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+
+<!-- BACKGROUND -->
+<div class="pct-bg">
+  <div class="pct-bg-grid"></div>
+  <div class="pct-bg-scan"></div>
+  <div class="pct-px-cluster" style="top:8%;left:2%" id="pct-pcA"></div>
+  <div class="pct-px-cluster" style="bottom:12%;right:3%" id="pct-pcB"></div>
+  <div class="pct-px-cluster" style="top:45%;left:.5%" id="pct-pcC"></div>
+</div>
+
+<!-- PAGE -->
+<div class="pct-page">
+
+  <!-- Eyebrow -->
+  <div class="pct-eyebrow">
+    <div class="pct-eyebrow-line"></div>
+    <div class="pct-eyebrow-txt">Get In Touch</div>
+    <div class="pct-eyebrow-pip"></div>
+  </div>
+
+  <!-- Hero -->
+  <div class="pct-hero-txt">
+    <h1>Let's Build Your<br><span class="pct-amber">Sri Lanka</span> <span class="pct-amber">Story.</span></h1>
+    <p>Tell us your dream — a private safari at dawn, a cooking class with a village family, or a full 14-day bespoke itinerary. We respond within 48 hours, completely free.</p>
+  </div>
+
+  <!-- Pills -->
+  <div class="pct-qpills">
+    <a href="https://wa.me/94777273794" class="pct-qpill pct-amber-pill" target="_blank" rel="noopener">
+      <i class="fab fa-whatsapp"></i>Chat on WhatsApp
+    </a>
+    <a href="mailto:info@pixelceylontours.com" class="pct-qpill">
+      <i class="fas fa-envelope"></i>Send an Email
+    </a>
+    <a href="tel:+94777273794" class="pct-qpill">
+      <i class="fas fa-phone"></i>Call Us
+    </a>
+    <div class="pct-qpill" style="cursor:default">
+      <i class="fas fa-clock"></i><span>Mon–Sun · 8 AM – 9 PM IST</span>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="pct-grid">
+
+    <!-- LEFT -->
+    <div class="pct-left">
+
+      <div class="pct-info-card">
+        
+        <div class="pct-info-tagline">Private. Bespoke.<br><span>Unforgettable.</span></div>
+        <p class="pct-info-sub">Every experience we offer is fully private — no groups, no strangers. Just you, expert local guides, and the real Sri Lanka.</p>
+
+        <div class="pct-info-rows">
+          <div class="pct-info-row">
+            <div class="pct-row-icon"><i class="fab fa-whatsapp"></i></div>
+            <div class="pct-row-txt">
+              <span class="pct-row-lbl">WhatsApp (Fastest)</span>
+              <span class="pct-row-val"><a href="https://wa.me/94777273794" target="_blank">+94 77 727 3794</a></span>
+            </div>
+          </div>
+          <div class="pct-info-row">
+            <div class="pct-row-icon"><i class="fas fa-envelope"></i></div>
+            <div class="pct-row-txt">
+              <span class="pct-row-lbl">Email</span>
+              <span class="pct-row-val"><a href="mailto:info@pixelceylontours.com">info@pixelceylontours.com</a></span>
+            </div>
+          </div>
+          <div class="pct-info-row">
+            <div class="pct-row-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="pct-row-txt">
+              <span class="pct-row-lbl">Based In</span>
+              <span class="pct-row-val">Colombo, Sri Lanka 🇱🇰</span>
+            </div>
+          </div>
+          <div class="pct-info-row">
+            <div class="pct-row-icon"><i class="fas fa-clock"></i></div>
+            <div class="pct-row-txt">
+              <span class="pct-row-lbl">Operating Hours</span>
+              <span class="pct-row-val">Mon – Sun · 8:00 AM – 9:00 PM IST</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pct-avail">
+          <div class="pct-avail-dot"></div>
+          <div class="pct-avail-txt">We're <strong>online now</strong> and ready to help plan your trip</div>
+        </div>
+      </div>
+
+      <div class="pct-promise">
+        <div class="pct-promise-icon"><i class="fas fa-bolt"></i></div>
+        <div class="pct-promise-txt">
+          <strong>48-Hour Itinerary Promise</strong>
+          <span>Send us your ideas and we'll build a full, personalised Sri Lanka itinerary within 48 hours — completely free, zero obligation.</span>
+        </div>
+      </div>
+
+      <div class="pct-social-strip">
+        <div class="pct-social-lbl">Follow our journey</div>
+        <div class="pct-social-icons">
+          <a href="#" class="pct-soc" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="pct-soc" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://wa.me/94777273794" class="pct-soc pct-wa" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" class="pct-soc" aria-label="TripAdvisor"><i class="fab fa-tripadvisor"></i></a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT — FORM -->
+    <div class="pct-form-card">
+
+      <div class="pct-success-overlay" id="pct-successOverlay">
+        <div class="pct-success-icon"><i class="fas fa-paper-plane"></i></div>
+        <h2 class="pct-success-h">Message Sent!</h2>
+        <p class="pct-success-p">We've received your enquiry and will get back to you within 48 hours with a personalised itinerary. Check your email too!</p>
+        <button class="pct-btn-reset" id="pct-resetBtn"><i class="fas fa-arrow-left"></i>Send Another</button>
+      </div>
+
+      <div class="pct-form-head">
+        <div class="pct-kicker">Plan Your Trip</div>
+        <h2>Start Your<br>Enquiry</h2>
+        <p>Fill in a few details and we'll craft something extraordinary for you.</p>
+      </div>
+
+      <div class="pct-trip-types" id="pct-tripTypes">
+        <div class="pct-tt on" data-type="bespoke"><i class="fas fa-map"></i>Bespoke Trip</div>
+        <div class="pct-tt" data-type="experience"><i class="fas fa-compass"></i>Day Experience</div>
+        <div class="pct-tt" data-type="honeymoon"><i class="fas fa-heart"></i>Honeymoon</div>
+        <div class="pct-tt" data-type="family"><i class="fas fa-users"></i>Family Tour</div>
+        <div class="pct-tt" data-type="wildlife"><i class="fas fa-paw"></i>Wildlife Safari</div>
+        <div class="pct-tt" data-type="wellness"><i class="fas fa-spa"></i>Wellness</div>
+      </div>
+
+      <form id="pct-contactForm" novalidate>
+
+        <div class="pct-frow">
+          <div class="pct-fg" id="pct-fg-name">
+            <label>Full Name <span>*</span></label>
+            <input class="pct-fi" type="text" id="pct-f-name" placeholder="e.g. Sarah &amp; James" required>
+            <span class="pct-err-msg">Please enter your name</span>
+          </div>
+          <div class="pct-fg" id="pct-fg-email">
+            <label>Email Address <span>*</span></label>
+            <input class="pct-fi" type="email" id="pct-f-email" placeholder="you@example.com" required>
+            <span class="pct-err-msg">Please enter a valid email</span>
+          </div>
+        </div>
+
+        <div class="pct-frow">
+          <div class="pct-fg">
+            <label>WhatsApp / Phone</label>
+            <input class="pct-fi" type="tel" id="pct-f-phone" placeholder="+1 234 567 8900">
+          </div>
+          <div class="pct-fg">
+            <label>Number of Travellers</label>
+            <select class="pct-fsel" id="pct-f-pax">
+              <option value="">Select…</option>
+              <option>1 (Solo)</option>
+              <option>2 (Couple)</option>
+              <option>3–4</option>
+              <option>5–8</option>
+              <option>9+ (Group)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pct-frow">
+          <div class="pct-fg">
+            <label>Arrival Date</label>
+            <div class="pct-date-wrap">
+              <input class="pct-fi" type="date" id="pct-f-arrive">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+          </div>
+          <div class="pct-fg">
+            <label>Trip Duration</label>
+            <select class="pct-fsel" id="pct-f-dur">
+              <option value="">Select…</option>
+              <option>1–3 days</option>
+              <option>4–7 days</option>
+              <option>8–10 days</option>
+              <option>11–14 days</option>
+              <option>14+ days</option>
+            </select>
+          </div>
+        </div>
+
+
+        <div class="pct-frow pct-solo">
+          <div class="pct-fg" id="pct-fg-msg">
+            <label>Tell Us Your Dream <span>*</span></label>
+            <textarea class="pct-fta" id="pct-f-msg" placeholder="e.g. We'd love a mix of wildlife and beaches, preferably staying in boutique jungle villas. We're celebrating our 10th anniversary and want something truly special…" required></textarea>
+            <span class="pct-err-msg">Please tell us a bit about your dream trip</span>
+          </div>
+        </div>
+
+        <div class="pct-form-footer">
+          <div class="pct-form-note"><i class="fas fa-lock"></i>Your details are kept private and never shared. No spam, ever.</div>
+          <button type="submit" class="pct-btn-submit" id="pct-submitBtn">
+            <i class="fas fa-paper-plane"></i>Send My Enquiry
+          </button>
+        </div>
+
+      </form>
+
+      <a href="https://wa.me/94777273794" class="pct-wa-bar" target="_blank" rel="noopener">
+        <i class="fab fa-whatsapp pct-wa-icon"></i>
+        <div class="pct-wa-txt">
+          <strong>Prefer WhatsApp?</strong>
+          <span>Chat with us directly — we reply within minutes</span>
+        </div>
+        <i class="fas fa-arrow-right pct-wa-arrow"></i>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="pct-stats-bar">
+    <div class="pct-stat"><div class="pct-stat-n">22<span>+</span></div><div class="pct-stat-l">Curated Experiences</div></div>
+    <div class="pct-stat"><div class="pct-stat-n">4.9<span>★</span></div><div class="pct-stat-l">Google Rating</div></div>
+    <div class="pct-stat"><div class="pct-stat-n">100<span>%</span></div><div class="pct-stat-l">Private Tours</div></div>
+    <div class="pct-stat"><div class="pct-stat-n">32<span>+</span></div><div class="pct-stat-l">Countries Served</div></div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  /* Pixel clusters */
+  var clusterDefs=[
+    {id:'pct-pcA',cols:4,rows:4},
+    {id:'pct-pcB',cols:5,rows:5},
+    {id:'pct-pcC',cols:3,rows:6}
+  ];
+  var palette=['#12c8d8','#0e9aaa','#f5a623','transparent','#0e9aaa','transparent','#12c8d8'];
+  clusterDefs.forEach(function(c){
+    var el=document.getElementById(c.id);
+    if(!el)return;
+    el.style.gridTemplateColumns='repeat('+c.cols+',8px)';
+    el.style.gridTemplateRows='repeat('+c.rows+',8px)';
+    for(var i=0;i<c.cols*c.rows;i++){
+      var s=document.createElement('span');
+      s.style.cssText='display:block;border-radius:1px;width:8px;height:8px;background:'+palette[i%palette.length];
+      el.appendChild(s);
+    }
+  });
+
+  /* Logo pixels */
+  var lp=document.getElementById('pct-logoPx');
+  if(lp){
+    var lc=['#0e9aaa','#f5a623','#12c8d8','transparent','#0e9aaa','#f5a623','#12c8d8','#0e9aaa','#f5a623'];
+    lc.forEach(function(c){
+      var s=document.createElement('span');
+      s.style.cssText='background:'+c+';border-radius:1px;width:9px;height:9px;display:block';
+      lp.appendChild(s);
+    });
+  }
+
+  /* Trip type selector */
+  document.querySelectorAll('.pct-tt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.pct-tt').forEach(function(b){b.classList.remove('on');});
+      btn.classList.add('on');
+    });
+  });
+
+
+  /* Validation */
+  function validate(){
+    var ok=true;
+    var fields=[
+      {id:'pct-f-name', fgId:'pct-fg-name', check:function(v){return v.trim().length>=2}},
+      {id:'pct-f-email',fgId:'pct-fg-email',check:function(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}},
+      {id:'pct-f-msg',  fgId:'pct-fg-msg',  check:function(v){return v.trim().length>=10}}
+    ];
+    fields.forEach(function(f){
+      var el=document.getElementById(f.id);
+      var fg=document.getElementById(f.fgId);
+      if(!el||!fg)return;
+      var valid=f.check(el.value);
+      el.classList.toggle('pct-err',!valid);
+      fg.classList.toggle('pct-has-err',!valid);
+      if(!valid)ok=false;
+    });
+    return ok;
+  }
+
+  ['pct-f-name','pct-f-email','pct-f-msg'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.addEventListener('input',function(){
+      el.classList.remove('pct-err');
+      var fg=el.closest('.pct-fg');
+      if(fg)fg.classList.remove('pct-has-err');
+    });
+  });
+
+  /* Form submit */
+  var form=document.getElementById('pct-contactForm');
+  var overlay=document.getElementById('pct-successOverlay');
+  var submitBtn=document.getElementById('pct-submitBtn');
+
+  if(form)form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!validate())return;
+    submitBtn.disabled=true;
+    submitBtn.innerHTML='<i class="fas fa-spinner fa-spin"></i>Sending…';
+    setTimeout(function(){
+      if(overlay)overlay.classList.add('show');
+    },1400);
+  });
+
+  var resetBtn=document.getElementById('pct-resetBtn');
+  if(resetBtn)resetBtn.addEventListener('click',function(){
+    if(overlay)overlay.classList.remove('show');
+    if(form)form.reset();
+    updateSlider();
+    submitBtn.disabled=false;
+    submitBtn.innerHTML='<i class="fas fa-paper-plane"></i>Send My Enquiry';
+    document.querySelectorAll('.pct-tt').forEach(function(b,i){b.classList.toggle('on',i===0);});
+  });
+
+  /* Min date = today */
+  var dateIn=document.getElementById('pct-f-arrive');
+  if(dateIn)dateIn.min=new Date().toISOString().split('T')[0];
+})();
+</script>
+</section>

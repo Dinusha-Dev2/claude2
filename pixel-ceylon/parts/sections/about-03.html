@@ -1,0 +1,1615 @@
+<div>
+<section class="services">
+
+
+
+
+
+<style>
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:#fff;color:#071527;
+     -webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════ */
+:root{
+  --navy:    #071527;
+  --navy2:   #0c1e30;
+  --navy3:   #112540;
+  --teal:    #0e9aaa;
+  --tealb:   #12c8d8;
+  --teald:   #0b7d8c;
+  --teal-5:  rgba(14,154,170,.05);
+  --teal-10: rgba(14,154,170,.10);
+  --teal-20: rgba(14,154,170,.20);
+  --amber:   #f5a623;
+  --amberd:  #d9870c;
+  --amber-8: rgba(245,166,35,.08);
+  --amber-20:rgba(245,166,35,.20);
+  --cream:   #faf7f2;
+  --cream2:  #f3ede3;
+  --cream3:  #ede5d8;
+  --white:   #ffffff;
+  --ink:     #071527;
+  --ink2:    #1a3040;
+  --muted:   #556070;
+  --muted2:  #8494a6;
+  --border:  #e4e8ed;
+  --border2: #edf0f4;
+  --ease:    cubic-bezier(.4,0,.2,1);
+  --spring:  cubic-bezier(.34,1.56,.64,1);
+  --reveal:  cubic-bezier(.16,1,.3,1);
+}
+
+/* ═══════════════════════════════════════════
+   KEYFRAMES
+═══════════════════════════════════════════ */
+@keyframes fadeUp   {from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes fadeLeft {from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:none}}
+@keyframes fadeRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+@keyframes scalIn   {from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
+@keyframes lineH    {from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes lineV    {from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes spinDia  {to{transform:rotate(calc(45deg + 360deg))}}
+@keyframes pulse    {0%,100%{box-shadow:0 0 0 0 rgba(245,166,35,.5)}55%{box-shadow:0 0 0 8px rgba(245,166,35,0)}}
+@keyframes floatA   {0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-10px) rotate(.3deg)}}
+@keyframes floatB   {0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes barGrow  {to{width:97%}}
+@keyframes shimmer  {0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes revealClip{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0% 0 0)}}
+@keyframes imgReveal{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0% 0)}}
+
+.anim{animation-fill-mode:forwards;animation-timing-function:var(--reveal);}
+.anim.up    {animation-name:fadeUp;   animation-duration:.8s}
+.anim.left  {animation-name:fadeLeft; animation-duration:.8s}
+.anim.right {animation-name:fadeRight;animation-duration:.8s}
+.anim.scal  {animation-name:scalIn;   animation-duration:.85s}
+
+/* ═══════════════════════════════════════════
+   ██ SECTION SHELL
+═══════════════════════════════════════════ */
+.os{
+  background:var(--white);
+  position:relative;overflow:hidden;
+}
+
+/* ── Layered background textures ── */
+/* Cream sweep — top right */
+.os-bg-sweep{
+  position:absolute;top:-5%;right:-10%;
+  width:clamp(500px,62vw,940px);height:clamp(500px,62vw,940px);
+  border-radius:50%;
+  background:conic-gradient(from 200deg at 60% 45%,
+    var(--cream2) 0deg, var(--cream) 60deg, transparent 160deg);
+  opacity:.7;pointer-events:none;z-index:0;
+}
+/* Fine mesh grid */
+.os-bg-mesh{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(14,154,170,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(14,154,170,.028) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 75% 65% at 72% 30%,black 0%,transparent 75%);
+  pointer-events:none;z-index:0;
+}
+/* Teal radial glow — bottom left */
+.os-bg-glow{
+  position:absolute;bottom:-8%;left:-6%;
+  width:clamp(280px,38vw,560px);height:clamp(280px,38vw,560px);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(14,154,170,.07) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+/* Amber glow — far right mid */
+.os-bg-amber{
+  position:absolute;top:35%;right:0%;
+  width:clamp(180px,24vw,360px);height:clamp(180px,24vw,360px);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(245,166,35,.06) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+/* Dot grid — bottom right */
+.os-dots{
+  position:absolute;bottom:14%;right:2%;
+  display:grid;grid-template-columns:repeat(12,1fr);gap:6px;
+  opacity:.08;pointer-events:none;z-index:0;
+}
+.os-dots span{width:3px;height:3px;border-radius:50%;background:var(--teal);display:block}
+
+
+/* ═══════════════════════════════════════════
+   ██ MINI TICKER (above section)
+═══════════════════════════════════════════ */
+.os-ticker{
+  background:var(--cream);
+  border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+  padding:.5rem 0;overflow:hidden;
+  position:relative;z-index:2;
+}
+.os-ticker-track{
+  display:flex;gap:0;white-space:nowrap;
+  animation:tickerScroll 30s linear infinite;
+}
+.os-ticker-item{
+  display:inline-flex;align-items:center;gap:.65rem;
+  padding:0 2.2rem;
+  font-family:'Poppins',sans-serif;font-size:.6rem;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted2);flex-shrink:0;
+}
+.os-ticker-item i{font-size:.65rem;color:var(--teal)}
+.os-ticker-sep{width:4px;height:4px;border-radius:1px;background:var(--border);
+               transform:rotate(45deg);flex-shrink:0}
+
+
+/* ═══════════════════════════════════════════
+   ██ MAIN GRID
+═══════════════════════════════════════════ */
+.os-inner{
+  max-width:1360px;margin:0 auto;
+  padding:clamp(6rem,10vw,10rem) clamp(1.5rem,5vw,4.5rem) clamp(3rem,5vw,5rem);
+  display:grid;
+  grid-template-columns:1fr 1.14fr;
+  gap:clamp(3.5rem,7vw,9rem);
+  align-items:start;
+  position:relative;z-index:1;
+}
+
+/* ═══════════════════════════════════════════
+   ██ LEFT — COPY
+═══════════════════════════════════════════ */
+.os-left{}
+
+/* ── Ayubowan badge ── */
+.os-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,rgba(245,166,35,.09),rgba(245,166,35,.05));
+  border:1px solid rgba(245,166,35,.22);
+  border-radius:2px;
+  padding:7px 18px 7px 12px;
+  margin-bottom:1.75rem;
+  box-shadow:0 2px 14px rgba(245,166,35,.08);
+}
+.os-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);
+              flex-shrink:0;animation:pulse 2.3s ease-in-out infinite}
+.os-badge-en{font-family:'Poppins',sans-serif;font-size:.6rem;font-weight:700;
+             letter-spacing:.2em;text-transform:uppercase;color:var(--amber)}
+.os-badge-sep{width:1px;height:13px;background:rgba(245,166,35,.25);flex-shrink:0}
+.os-badge-si{font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:300;
+             color:rgba(245,166,35,.65)}
+
+/* ── Kicker ── */
+.os-kicker{
+  display:flex;align-items:center;gap:9px;
+  font-family:'Poppins',sans-serif;font-size:.56rem;font-weight:600;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--teal);
+  margin-bottom:.6rem;
+}
+.os-kicker::before{content:'';width:22px;height:1.5px;background:currentColor;
+                   border-radius:2px;flex-shrink:0;
+                   transform-origin:left;animation:lineH .55s .5s var(--ease) forwards}
+.os-kicker-pip{width:5px;height:5px;border-radius:1px;background:var(--amber);
+               transform:rotate(45deg);flex-shrink:0;animation:spinDia 8s linear infinite}
+
+/* ── Heading ── */
+.os-h{margin-bottom:1.5rem}
+.os-h-line1{
+  font-family:'Poppins',sans-serif;font-size:clamp(.85rem,1.1vw,.95rem);
+  font-weight:300;color:var(--muted);letter-spacing:.04em;
+  display:block;margin-bottom:.3rem;
+}
+.os-h-main{
+  font-family:'Bagind',serif;
+  font-size:clamp(2.6rem,5vw,4.5rem);
+  font-weight:400;line-height:.88;
+  color:var(--ink);display:block;
+}
+.os-h-teal{
+  font-family:'Bagind',serif;
+  font-size:clamp(2.6rem,5vw,4.5rem);
+  font-weight:400;line-height:.88;
+  color:var(--teal);display:block;
+  position:relative;
+}
+/* Underline swipe on teal heading */
+.os-h-teal::after{
+  content:'';position:absolute;bottom:1px;left:0;
+  height:2.5px;width:0;
+  background:linear-gradient(90deg,var(--teal),var(--tealb));
+  border-radius:2px;
+  animation:lineH .9s 1.2s var(--ease) forwards;
+}
+.os-h-detail{
+  display:block;margin-top:.8rem;
+  font-family:'Poppins',sans-serif;
+  font-size:clamp(.78rem,.92vw,.93rem);font-weight:300;
+  color:var(--muted);line-height:1.72;letter-spacing:.01em;
+}
+
+/* ── Accent rule ── */
+.os-rule{
+  display:flex;align-items:center;gap:10px;
+  margin:1.7rem 0;
+}
+.os-rule-dia{width:6px;height:6px;border-radius:1px;background:var(--amber);
+             transform:rotate(45deg);flex-shrink:0}
+.os-rule-line{
+  height:1px;flex:1;
+  background:linear-gradient(90deg,var(--teal) 0%,rgba(14,154,170,0) 100%);
+  transform-origin:left;animation:lineH .75s .8s var(--ease) forwards;
+}
+.os-rule-dot{width:4px;height:4px;border-radius:50%;
+             background:rgba(245,166,35,.35);flex-shrink:0}
+
+/* ── Body text ── */
+.os-text-block{margin-bottom:1.5rem}
+.os-p{
+  font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:300;
+  color:var(--muted);line-height:1.95;margin-bottom:1.05rem;
+}
+.os-p:last-child{margin-bottom:0}
+.os-p strong{font-weight:500;color:var(--ink2)}
+.os-p em{font-style:italic;color:var(--teal)}
+
+/* ── Pull quote ── */
+.os-quote{
+  position:relative;
+  margin:1.65rem 0;
+  padding:1.4rem 1.6rem 1.4rem 2rem;
+  background:linear-gradient(135deg,var(--cream) 0%,var(--cream2) 100%);
+  border-left:3px solid var(--teal);
+  border-radius:0 2px 2px 0;
+  overflow:hidden;
+}
+.os-quote::before{
+  content:'\201C';
+  position:absolute;top:-.8rem;left:.6rem;
+  font-family:'Bagind',serif;font-size:6.5rem;
+  color:rgba(14,154,170,.09);line-height:1;pointer-events:none;
+}
+/* Shimmer accent */
+.os-quote::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+  opacity:.3;
+}
+.os-quote p{
+  font-family:'Poppins',sans-serif;font-size:.86rem;font-weight:300;
+  font-style:italic;color:var(--ink2);line-height:1.82;
+  position:relative;z-index:1;
+}
+.os-quote p strong{font-weight:600;font-style:normal;color:var(--ink)}
+
+/* ── Origin chips ── */
+.os-chips{
+  display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.9rem;
+}
+.os-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:2px;padding:5px 13px;
+  font-family:'Poppins',sans-serif;font-size:.62rem;font-weight:500;
+  color:var(--muted);
+  transition:border-color .22s,background .22s,color .22s,
+             transform .22s var(--spring),box-shadow .22s;
+}
+.os-chip:hover{border-color:rgba(14,154,170,.4);background:var(--teal-5);
+               color:var(--teal);transform:translateY(-2px);
+               box-shadow:0 4px 14px rgba(14,154,170,.12)}
+.os-chip i{font-size:.6rem;color:var(--teal);transition:transform .22s}
+.os-chip:hover i{transform:scale(1.2)}
+
+/* ── Stat strip ── */
+.os-stats{
+  display:flex;margin-bottom:2rem;
+  border:1px solid var(--border2);border-radius:2px;overflow:hidden;
+  background:var(--cream);
+  box-shadow:0 2px 16px rgba(7,21,39,.04);
+}
+.os-stat{
+  flex:1;padding:1.2rem .9rem;text-align:center;
+  border-right:1px solid var(--border2);
+  position:relative;overflow:hidden;cursor:default;
+  transition:background .25s;
+}
+.os-stat:last-child{border-right:none}
+.os-stat::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--st-c,var(--teal));
+  transform:scaleX(0);transform-origin:center;
+  transition:transform .35s var(--ease);
+}
+.os-stat:hover{background:rgba(14,154,170,.04)}
+.os-stat:hover::before{transform:scaleX(1)}
+.os-sn{
+  font-family:'Bagind',serif;
+  font-size:clamp(1.6rem,2.6vw,2.1rem);
+  font-weight:400;color:var(--ink);line-height:1;
+  display:block;margin-bottom:.25rem;
+}
+.os-sn .ac{color:var(--teal)}
+.os-sn .ao{color:var(--amber)}
+.os-sl{
+  font-family:'Poppins',sans-serif;font-size:.5rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);
+}
+
+/* ── CTA row ── */
+.os-ctas{
+  display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;
+  margin-bottom:1.4rem;
+}
+.os-btn-p{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--teal);color:#fff;
+  font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:500;
+  padding:13px 28px;border-radius:2px;
+  box-shadow:0 6px 22px rgba(14,154,170,.3),0 2px 6px rgba(14,154,170,.2);
+  transition:background .22s,transform .22s,box-shadow .22s;
+  position:relative;overflow:hidden;
+}
+.os-btn-p::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  background-size:200% 100%;background-position:-200% 0;
+  transition:background-position .5s;
+}
+.os-btn-p:hover{background:var(--teald);transform:translateY(-2px);
+                box-shadow:0 14px 32px rgba(14,154,170,.35)}
+.os-btn-p:hover::after{background-position:200% 0}
+.os-btn-s{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1.5px solid var(--border);color:var(--ink);
+  font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:500;
+  padding:12px 24px;border-radius:2px;
+  transition:border-color .22s,background .22s,color .22s,transform .22s;
+}
+.os-btn-s:hover{border-color:var(--navy);background:var(--navy);
+                color:#fff;transform:translateY(-2px)}
+.os-btn-p i,.os-btn-s i{font-size:.7rem}
+
+/* ── Trust row ── */
+.os-trust{
+  display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;
+}
+.os-ti{display:flex;align-items:center;gap:5px;
+        font-family:'Poppins',sans-serif;font-size:.6rem;color:var(--muted2)}
+.os-ti i{font-size:.58rem;color:var(--teal)}
+.os-tsep{width:3px;height:3px;border-radius:50%;background:var(--border);flex-shrink:0}
+
+
+/* ═══════════════════════════════════════════
+   ██ RIGHT — VISUAL COLUMN
+═══════════════════════════════════════════ */
+.os-right{position:relative}
+
+/* ── Main image frame ── */
+.os-frame{
+  position:relative;border-radius:2px;overflow:hidden;
+  aspect-ratio:5/6;max-height:660px;
+  box-shadow:0 50px 100px rgba(7,21,39,.16),0 12px 30px rgba(7,21,39,.1);
+  /* Clip reveal on load */
+  animation:imgReveal .9s .3s var(--reveal) forwards;
+}
+.os-frame img{
+  width:100%;height:100%;object-fit:cover;
+  transform:scale(1.06);
+  transition:transform 10s linear;
+  will-change:transform;
+}
+.os-frame:hover img{transform:scale(1.0)}
+/* Inner teal border */
+.os-frame::after{
+  content:'';position:absolute;inset:0;
+  border:1.5px solid rgba(14,154,170,.15);
+  border-radius:inherit;z-index:2;pointer-events:none;
+}
+/* Gradient overlay */
+.os-frame-grad{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(to top,rgba(7,21,39,.65) 0%,transparent 50%),
+    linear-gradient(to right,rgba(7,21,39,.08) 0%,transparent 30%);
+}
+/* Image caption */
+.os-frame-cap{
+  position:absolute;bottom:1.6rem;left:1.6rem;right:1.6rem;
+  z-index:3;display:flex;align-items:flex-end;justify-content:space-between;gap:.8rem;
+}
+.os-cap-name{
+  font-family:'Bagind',serif;
+  font-size:clamp(1.05rem,1.9vw,1.35rem);font-weight:400;color:#fff;line-height:1.1;
+}
+.os-cap-loc{
+  display:flex;align-items:center;gap:4px;
+  font-family:'Poppins',sans-serif;font-size:.57rem;font-weight:300;
+  color:rgba(255,255,255,.56);margin-top:4px;
+}
+.os-cap-loc i{font-size:.52rem;color:var(--tealb)}
+.os-cap-tag{
+  background:rgba(14,154,170,.22);
+  border:1px solid rgba(18,200,216,.35);
+  backdrop-filter:blur(12px);
+  border-radius:100px;
+  padding:4px 13px;
+  font-family:'Poppins',sans-serif;font-size:.52rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--tealb);flex-shrink:0;
+}
+
+/* ── Vertical accent bar ── */
+.os-vbar{
+  position:absolute;left:-1.8rem;top:10%;
+  width:2px;height:68%;
+  background:linear-gradient(to bottom,var(--tealb) 0%,rgba(14,154,170,0) 100%);
+  border-radius:2px;
+  transform-origin:top;animation:lineV .85s .5s var(--ease) forwards;
+}
+/* Teal dot on bar */
+.os-vbar::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:8px;height:8px;border-radius:50%;background:var(--tealb);
+  box-shadow:0 0 0 3px rgba(18,200,216,.2);
+}
+
+/* ── Year badge ── */
+.os-yr{
+  position:absolute;top:1.6rem;left:-1.4rem;z-index:6;
+  background:var(--amber);color:var(--navy);
+  border-radius:2px;padding:.38rem .95rem;
+  font-family:'Bagind',serif;font-size:.95rem;
+  box-shadow:0 8px 28px rgba(245,166,35,.42);white-space:nowrap;
+}
+
+/* ── Corner SVG ── */
+.os-corner{
+  position:absolute;top:-1.5rem;left:1.5rem;
+  width:60px;height:60px;pointer-events:none;z-index:3;
+}
+
+/* ── Floating secondary image ── */
+.os-img-b{
+  position:absolute;bottom:-2.8rem;left:-3rem;
+  width:50%;aspect-ratio:4/3;
+  border-radius:2px;overflow:hidden;
+  border:3px solid var(--white);
+  box-shadow:0 24px 60px rgba(7,21,39,.22);
+  z-index:5;
+  animation:floatB 7s ease-in-out infinite;
+  transition:transform .4s var(--spring);
+}
+.os-img-b:hover{transform:scale(1.04) rotate(-1.2deg)}
+.os-img-b img{width:100%;height:100%;object-fit:cover}
+/* amber corner triangle */
+.os-img-b::after{
+  content:'';position:absolute;bottom:0;right:0;
+  width:40px;height:40px;
+  background:var(--amber);
+  clip-path:polygon(100% 0,100% 100%,0 100%);
+  opacity:.38;z-index:2;
+}
+/* Label on secondary image */
+.os-img-b-lbl{
+  position:absolute;top:.65rem;left:.65rem;z-index:3;
+  background:rgba(7,21,39,.78);backdrop-filter:blur(10px);
+  border-radius:2px;padding:3px 10px;
+  font-family:'Poppins',sans-serif;font-size:.54rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.8);
+}
+
+/* ── Review card ── */
+.os-rev{
+  position:absolute;top:2rem;right:-2.4rem;
+  background:var(--white);
+  border:1px solid var(--border2);
+  border-radius:2px;
+  padding:1.15rem 1.35rem;
+  box-shadow:0 18px 52px rgba(7,21,39,.13),0 4px 12px rgba(7,21,39,.06);
+  z-index:7;min-width:192px;max-width:218px;
+  animation:floatA 5.5s ease-in-out infinite;
+}
+/* Top teal line */
+.os-rev::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--tealb));
+  border-radius:2px 2px 0 0;
+}
+.os-rev-top{display:flex;align-items:center;gap:8px;margin-bottom:.7rem}
+.os-rev-av{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bagind',serif;font-size:.92rem;color:#fff;
+  background:linear-gradient(135deg,var(--teal),var(--navy2));
+}
+.os-rev-name{font-family:'Poppins',sans-serif;font-size:.7rem;font-weight:600;
+             color:var(--ink);line-height:1.2}
+.os-rev-from{font-size:.56rem;color:var(--muted2)}
+.os-rev-stars{display:flex;gap:2px;margin-bottom:.45rem}
+.os-rev-stars i{font-size:.62rem;color:var(--amber)}
+.os-rev-q{
+  font-family:'Poppins',sans-serif;font-size:.65rem;font-weight:300;
+  color:var(--muted);line-height:1.62;font-style:italic;
+}
+.os-rev-tour{
+  margin-top:.6rem;
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--teal-5);border:1px solid var(--teal-10);
+  border-radius:2px;padding:2px 8px;
+  font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;
+  color:var(--teal);
+}
+
+/* ── Rating pill (dark) ── */
+.os-pill{
+  position:absolute;bottom:8rem;right:-2.6rem;
+  background:var(--navy);border-radius:2px;
+  padding:1rem 1.35rem;
+  box-shadow:0 16px 42px rgba(7,21,39,.35);
+  z-index:7;min-width:135px;
+  animation:floatA 7s 1.5s ease-in-out infinite;
+}
+.os-pill-n{
+  font-family:'Bagind',serif;font-size:2.1rem;
+  color:var(--amber);line-height:1;
+}
+.os-pill-l{
+  font-family:'Poppins',sans-serif;font-size:.49rem;font-weight:400;
+  letter-spacing:.13em;text-transform:uppercase;
+  color:rgba(240,236,226,.38);margin-top:3px;
+}
+.os-pill-bar{
+  width:88px;height:2px;background:rgba(255,255,255,.1);
+  border-radius:2px;margin-top:.6rem;overflow:hidden;
+}
+.os-pill-fill{
+  height:100%;width:0;
+  background:linear-gradient(90deg,var(--teal),var(--amber));
+  border-radius:2px;animation:barGrow 1.5s .9s var(--ease) forwards;
+}
+/* Stars row inside pill */
+.os-pill-stars{display:flex;gap:2px;margin-top:.35rem}
+.os-pill-stars i{font-size:.5rem;color:var(--amber)}
+
+/* ── Image count badge ── */
+.os-img-count{
+  position:absolute;bottom:-2.8rem;right:0;z-index:6;
+  display:flex;align-items:center;gap:.5rem;
+  background:var(--cream);border:1px solid var(--border);
+  border-radius:2px;padding:.45rem .85rem;
+  font-family:'Poppins',sans-serif;font-size:.58rem;font-weight:500;color:var(--muted);
+  box-shadow:0 4px 14px rgba(7,21,39,.06);
+}
+.os-img-count i{font-size:.56rem;color:var(--teal)}
+
+
+/* ═══════════════════════════════════════════
+   ██ PLATFORM STRIP
+═══════════════════════════════════════════ */
+.os-strip-outer{
+  max-width:1360px;margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,4.5rem) clamp(2rem,3.5vw,3rem);
+  position:relative;z-index:1;
+}
+.os-strip{
+  display:flex;align-items:center;gap:clamp(.8rem,2vw,2rem);
+  flex-wrap:wrap;
+  padding:1.3rem 2rem;
+  background:var(--cream);
+  border:1px solid var(--border2);
+  border-radius:2px;
+  position:relative;overflow:hidden;
+  animation:fadeUp .65s 1.2s var(--reveal) forwards;
+}
+.os-strip.visible{/* kept for JS compat */}
+/* Shimmer on strip */
+.os-strip::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.5) 50%,transparent 100%);
+  background-size:200% 100%;
+  animation:shimmer 4s 2s linear infinite;
+}
+.os-strip-lbl{
+  font-family:'Poppins',sans-serif;font-size:.51rem;font-weight:700;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);
+  flex-shrink:0;position:relative;z-index:1;
+}
+.os-strip-div{width:1px;height:18px;background:var(--border);flex-shrink:0}
+.os-pill-sm{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--white);border:1px solid var(--border);
+  border-radius:100px;padding:6px 15px;
+  font-family:'Poppins',sans-serif;font-size:.6rem;font-weight:500;color:var(--muted);
+  transition:border-color .2s,background .2s,transform .2s var(--spring);
+  flex-shrink:0;position:relative;z-index:1;cursor:default;
+}
+.os-pill-sm:hover{border-color:rgba(14,154,170,.3);background:var(--teal-5);
+                  transform:translateY(-2px)}
+.os-pill-sm i{font-size:.8rem}
+.os-pill-score{font-weight:700;color:var(--amber);margin-left:1px}
+.os-strip-spacer{flex:1}
+.os-strip-cta{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(37,211,102,.08);
+  border:1px solid rgba(37,211,102,.22);
+  border-radius:100px;padding:6px 16px;
+  font-family:'Poppins',sans-serif;font-size:.6rem;font-weight:600;
+  color:#16a34a;flex-shrink:0;position:relative;z-index:1;
+  transition:background .2s,border-color .2s,transform .2s var(--spring);
+}
+.os-strip-cta:hover{background:rgba(37,211,102,.15);transform:translateY(-2px)}
+
+
+/* ═══════════════════════════════════════════
+   ██ DIVIDER LABEL
+═══════════════════════════════════════════ */
+.os-divrow{
+  max-width:1360px;margin:0 auto;
+  padding:clamp(2.5rem,4vw,4rem) clamp(1.5rem,5vw,4.5rem) clamp(1.2rem,2vw,2rem);
+  display:flex;align-items:center;gap:1.3rem;
+  position:relative;z-index:1;
+}
+.os-divline{flex:1;height:1px;background:var(--border2)}
+.os-divtxt{
+  font-family:'Poppins',sans-serif;font-size:.51rem;font-weight:700;
+  letter-spacing:.26em;text-transform:uppercase;color:var(--muted2);
+  flex-shrink:0;display:flex;align-items:center;gap:7px;
+}
+.os-divdia{width:5px;height:5px;border-radius:1px;background:var(--amber);
+           transform:rotate(45deg);flex-shrink:0}
+
+
+/* ═══════════════════════════════════════════
+   ██ WHY CARDS
+═══════════════════════════════════════════ */
+.os-why{
+  max-width:1360px;margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,4.5rem) clamp(5rem,9vw,8rem);
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:1rem;position:relative;z-index:1;
+}
+.os-wc{
+  background:var(--white);
+  border:1px solid var(--border2);
+  border-radius:2px;padding:1.8rem 1.45rem 1.6rem;
+  position:relative;overflow:hidden;cursor:default;
+  animation:fadeUp .65s var(--reveal) forwards;
+  transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;
+}
+.os-wc:nth-child(1){animation-delay:.05s}
+.os-wc:nth-child(2){animation-delay:.13s}
+.os-wc:nth-child(3){animation-delay:.21s}
+.os-wc:nth-child(4){animation-delay:.29s}
+.os-wc:nth-child(5){animation-delay:.37s}
+.os-wc.visible{/* kept for JS compat */}
+.os-wc:hover{
+  transform:translateY(-8px);
+  box-shadow:0 22px 56px rgba(7,21,39,.1),0 4px 14px rgba(7,21,39,.06);
+  border-color:rgba(14,154,170,.28);
+}
+/* Top accent bar */
+.os-wc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--wc-bar,var(--teal));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .4s var(--ease);
+}
+.os-wc:hover::before{transform:scaleX(1)}
+/* Side glow on hover */
+.os-wc::after{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:0;
+  background:linear-gradient(to right,rgba(14,154,170,.04),transparent);
+  transition:width .3s;
+}
+.os-wc:hover::after{width:100%}
+
+/* Ghost number */
+.os-wnum{
+  font-family:'Bagind',serif;font-size:4.2rem;font-weight:400;
+  color:var(--cream2);line-height:1;margin-bottom:.2rem;
+  user-select:none;transition:color .25s;
+}
+.os-wc:hover .os-wnum{color:rgba(14,154,170,.07)}
+
+.os-wico{
+  width:46px;height:46px;border-radius:2px;
+  display:flex;align-items:center;justify-content:center;font-size:.95rem;
+  margin-bottom:1rem;
+  transition:transform .3s var(--spring),box-shadow .3s;
+  position:relative;z-index:1;
+}
+.os-wc:hover .os-wico{transform:scale(1.1) rotate(-4deg);
+  box-shadow:0 6px 18px rgba(14,154,170,.18)}
+
+.os-wtitle{
+  font-family:'Bagind',serif;font-size:1.05rem;font-weight:400;
+  color:var(--ink);margin-bottom:.45rem;
+  transition:color .22s;position:relative;z-index:1;
+}
+.os-wc:hover .os-wtitle{color:var(--teal)}
+.os-wdesc{
+  font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:300;
+  color:var(--muted);line-height:1.78;position:relative;z-index:1;
+}
+
+/* ── Cards bottom row: micro feature list ── */
+.os-wfeats{
+  display:flex;flex-direction:column;gap:.3rem;
+  margin-top:.85rem;padding-top:.85rem;
+  border-top:1px solid var(--border2);
+  position:relative;z-index:1;
+}
+.os-wfeat{
+  display:flex;align-items:center;gap:6px;
+  font-family:'Poppins',sans-serif;font-size:.62rem;font-weight:300;color:var(--muted2);
+}
+.os-wfeat i{font-size:.55rem;color:var(--teal);flex-shrink:0}
+
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:1160px){
+  .os-inner{grid-template-columns:1fr;gap:4rem}
+  .os-right{max-width:600px;margin:0 auto}
+  .os-vbar{display:none}
+  .os-why{grid-template-columns:repeat(3,1fr)}
+  .os-rev{top:1rem;right:-.4rem}
+  .os-pill{right:-.3rem}
+  .os-img-b{left:-.9rem;bottom:-1.5rem}
+}
+@media(max-width:860px){
+  .os-rev{display:none}
+  .os-why{grid-template-columns:repeat(2,1fr)}
+  .os-pill{right:0;bottom:5.5rem}
+}
+@media(max-width:580px){
+  .os-stats{flex-wrap:wrap}
+  .os-stat{min-width:48%}
+  .os-img-b{width:44%}
+  .os-pill{display:none}
+  .os-why{grid-template-columns:1fr 1fr}
+  .os-ctas{flex-direction:column;align-items:stretch}
+  .os-btn-p,.os-btn-s{justify-content:center}
+  .os-strip{flex-direction:column;align-items:flex-start}
+  .os-strip-div{display:none}
+  .os-img-count{display:none}
+}
+@media(max-width:420px){
+  .os-why{grid-template-columns:1fr}
+  .os-stats{flex-direction:column}
+  .os-stat{border-right:none;border-bottom:1px solid var(--border2)}
+  .os-stat:last-child{border-bottom:none}
+}
+</style>
+
+<style>
+/* ═══════════════════════════════════════
+   SV — SERVICES SECTION
+═══════════════════════════════════════ */
+.sv{
+  background:var(--navy);
+  position:relative;overflow:hidden;
+}
+
+/* BG layers */
+.sv-bg-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(18,200,216,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(18,200,216,.04) 1px,transparent 1px);
+  background-size:56px 56px;
+  pointer-events:none;z-index:0;
+}
+.sv-bg-glow-l{
+  position:absolute;top:-10%;left:-8%;
+  width:clamp(300px,42vw,620px);height:clamp(300px,42vw,620px);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(14,154,170,.12) 0%,transparent 68%);
+  pointer-events:none;z-index:0;
+}
+.sv-bg-glow-r{
+  position:absolute;bottom:-5%;right:-6%;
+  width:clamp(220px,30vw,460px);height:clamp(220px,30vw,460px);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(245,166,35,.08) 0%,transparent 68%);
+  pointer-events:none;z-index:0;
+}
+/* Pixel motif top-right */
+.sv-pixel{
+  position:absolute;top:3rem;right:4rem;
+  display:grid;grid-template-columns:repeat(6,1fr);gap:5px;
+  opacity:.07;pointer-events:none;z-index:0;
+}
+.sv-pixel span{
+  width:7px;height:7px;border-radius:1px;
+  background:var(--tealb);display:block;
+}
+.sv-pixel span:nth-child(7n+3){background:var(--amber)}
+.sv-pixel span:nth-child(5n+1){opacity:.4}
+
+/* ── Header ── */
+.sv-head{
+  max-width:1360px;margin:0 auto;
+  padding:clamp(5rem,8vw,8rem) clamp(1.5rem,5vw,4.5rem) clamp(2rem,3vw,3rem);
+  display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;
+  flex-wrap:wrap;
+  position:relative;z-index:1;
+}
+.sv-head-left{}
+.sv-kicker{
+  display:flex;align-items:center;gap:9px;
+  font-family:'Poppins',sans-serif;font-size:.56rem;font-weight:600;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--tealb);
+  margin-bottom:.7rem;
+}
+.sv-kicker::before{
+  content:'';width:22px;height:1.5px;background:currentColor;
+  border-radius:2px;flex-shrink:0;
+}
+.sv-kicker-pip{
+  width:5px;height:5px;border-radius:1px;background:var(--amber);
+  transform:rotate(45deg);flex-shrink:0;
+  animation:spinDia 8s linear infinite;
+}
+.sv-h{
+  font-family:'Bagind',serif;
+  font-size:clamp(2.2rem,4.5vw,3.8rem);
+  font-weight:400;line-height:.92;color:#fff;
+  margin-bottom:.7rem;
+}
+.sv-h span{color:var(--teal)}
+.sv-sub{
+  font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:300;
+  color:rgba(255,255,255,.42);max-width:420px;line-height:1.72;
+}
+.sv-head-right{
+  display:flex;align-items:center;gap:.75rem;
+  flex-shrink:0;
+}
+.sv-btn-all{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1.5px solid rgba(255,255,255,.14);color:rgba(255,255,255,.7);
+  background:rgba(255,255,255,.04);
+  font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:500;
+  padding:11px 24px;border-radius:2px;
+  transition:border-color .22s,background .22s,color .22s,transform .22s;
+}
+.sv-btn-all:hover{border-color:var(--teal);background:rgba(14,154,170,.1);
+                  color:var(--tealb);transform:translateY(-2px)}
+.sv-btn-all i{font-size:.65rem}
+
+/* ═══════════════════════════════════════
+   FEATURED — HERO CARD (full width)
+═══════════════════════════════════════ */
+.sv-featured{
+  max-width:1360px;margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,4.5rem) clamp(1.5rem,2.5vw,2rem);
+  position:relative;z-index:1;
+  animation:fadeUp .8s .05s var(--reveal) forwards;
+}
+.sv-hero-card{
+  position:relative;overflow:hidden;border-radius:2px;
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:340px;
+  border:1px solid rgba(255,255,255,.07);
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
+  cursor:pointer;
+  transition:transform .35s var(--ease),box-shadow .35s;
+}
+.sv-hero-card:hover{transform:translateY(-5px);
+  box-shadow:0 42px 96px rgba(0,0,0,.42)}
+
+/* image side */
+.sv-hc-img{
+  position:relative;overflow:hidden;
+}
+.sv-hc-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 8s linear;
+  transform:scale(1.06);
+}
+.sv-hero-card:hover .sv-hc-img img{transform:scale(1.0)}
+.sv-hc-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(7,21,39,0) 60%,var(--navy2) 100%);
+}
+/* Amber badge top-left of image */
+.sv-hc-badge{
+  position:absolute;top:1.4rem;left:1.4rem;
+  background:var(--amber);color:var(--navy);
+  border-radius:2px;padding:5px 14px;
+  font-family:'Poppins',sans-serif;font-size:.58rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  box-shadow:0 6px 18px rgba(245,166,35,.38);
+  display:flex;align-items:center;gap:6px;
+}
+.sv-hc-badge i{font-size:.55rem}
+
+/* content side */
+.sv-hc-body{
+  padding:2.5rem 2.4rem 2.5rem 2rem;
+  display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(135deg,var(--navy2) 0%,var(--navy3) 100%);
+  position:relative;
+}
+/* Vertical teal line */
+.sv-hc-body::before{
+  content:'';position:absolute;left:0;top:15%;bottom:15%;
+  width:2px;
+  background:linear-gradient(to bottom,transparent,var(--teal),transparent);
+  opacity:.35;
+}
+.sv-hc-cat{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--tealb);margin-bottom:.9rem;
+}
+.sv-hc-cat i{font-size:.6rem}
+.sv-hc-title{
+  font-family:'Bagind',serif;
+  font-size:clamp(1.5rem,2.8vw,2.3rem);
+  font-weight:400;color:#fff;line-height:1.0;
+  margin-bottom:.8rem;
+}
+.sv-hc-desc{
+  font-family:'Poppins',sans-serif;font-size:.8rem;font-weight:300;
+  color:rgba(255,255,255,.5);line-height:1.82;margin-bottom:1.4rem;
+  max-width:340px;
+}
+/* Feature pills */
+.sv-hc-feats{
+  display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:1.6rem;
+}
+.sv-hc-feat{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(14,154,170,.1);border:1px solid rgba(14,154,170,.2);
+  border-radius:2px;padding:4px 11px;
+  font-family:'Poppins',sans-serif;font-size:.59rem;font-weight:500;
+  color:var(--tealb);
+}
+.sv-hc-feat i{font-size:.54rem}
+.sv-hc-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--teal);color:#fff;
+  font-family:'Poppins',sans-serif;font-size:.7rem;font-weight:500;
+  padding:11px 24px;border-radius:2px;width:fit-content;
+  
+  transition:background .22s,transform .22s,box-shadow .22s;
+}
+.sv-hc-cta:hover{background:var(--teald);transform:translateY(-2px);
+                 color:#fff;}
+.sv-hc-cta i{font-size:.65rem}
+
+/* ═══════════════════════════════════════
+   SERVICES GRID — 3 cols
+═══════════════════════════════════════ */
+.sv-grid{
+  max-width:1360px;margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,4.5rem) clamp(1.5rem,2.5vw,2rem);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+  position:relative;z-index:1;
+}
+.sv-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:2px;
+  overflow:hidden;
+  position:relative;
+  cursor:pointer;
+  animation:fadeUp .7s var(--reveal) forwards;
+  transition:transform .3s var(--ease),box-shadow .3s,border-color .3s,background .3s;
+}
+.sv-card:nth-child(1){animation-delay:.06s}
+.sv-card:nth-child(2){animation-delay:.13s}
+.sv-card:nth-child(3){animation-delay:.20s}
+.sv-card:nth-child(4){animation-delay:.27s}
+.sv-card:hover{
+  transform:translateY(-7px);
+  background:rgba(255,255,255,.07);
+  border-color:rgba(14,154,170,.28);
+  box-shadow:0 24px 60px rgba(0,0,0,.35),0 0 0 1px rgba(14,154,170,.12);
+}
+/* Top colour bar */
+.sv-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--sc-bar,var(--teal));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .4s var(--ease);
+}
+.sv-card:hover::before{transform:scaleX(1)}
+
+/* Card image */
+.sv-card-img{
+  height:175px;overflow:hidden;position:relative;
+}
+.sv-card-img img{
+  width:100%;height:100%;object-fit:cover;
+  transform:scale(1.07);
+  transition:transform 7s linear;
+  filter:brightness(.82) saturate(.9);
+}
+.sv-card:hover .sv-card-img img{transform:scale(1.0);
+  filter:brightness(.92) saturate(1.0)}
+.sv-card-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,var(--navy) 0%,transparent 55%);
+}
+/* Category tag on image */
+.sv-card-cat{
+  position:absolute;bottom:.85rem;left:.85rem;
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(7,21,39,.75);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.1);border-radius:2px;
+  padding:3px 10px;
+  font-family:'Poppins',sans-serif;font-size:.52rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.75);
+}
+.sv-card-cat i{font-size:.5rem;color:var(--sc-bar,var(--teal))}
+/* Price badge top-right */
+.sv-card-price{
+  position:absolute;top:.85rem;right:.85rem;
+  background:var(--sc-bar,var(--teal));
+  border-radius:2px;padding:3px 10px;
+  font-family:'Poppins',sans-serif;font-size:.58rem;font-weight:700;
+  color:#fff;white-space:nowrap;
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+
+/* Card body */
+.sv-card-body{
+  padding:1.3rem 1.4rem 1.5rem;
+}
+.sv-card-title{
+  font-family:'Bagind',serif;
+  font-size:clamp(1rem,1.5vw,1.25rem);
+  font-weight:400;color:#fff;line-height:1.1;
+  margin-bottom:.5rem;
+  transition:color .22s;
+}
+.sv-card:hover .sv-card-title{color:var(--tealb)}
+.sv-card-desc{
+  font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:300;
+  color:rgba(255,255,255,.42);line-height:1.76;margin-bottom:1rem;
+}
+/* Feature list inside card */
+.sv-card-feats{
+  display:flex;flex-direction:column;gap:.28rem;
+  margin-bottom:1.15rem;
+  padding-bottom:1.05rem;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.sv-card-feat{
+  display:flex;align-items:center;gap:7px;
+  font-family:'Poppins',sans-serif;font-size:.63rem;font-weight:300;
+  color:rgba(255,255,255,.48);
+}
+.sv-card-feat i{font-size:.55rem;color:var(--sc-bar,var(--teal));flex-shrink:0}
+/* Card footer */
+.sv-card-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+}
+.sv-card-link{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'Poppins',sans-serif;font-size:.62rem;font-weight:600;
+  color:var(--sc-bar,var(--teal));
+  transition:gap .2s;
+}
+.sv-card:hover .sv-card-link{gap:9px}
+.sv-card-link i{font-size:.58rem}
+.sv-card-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  border-radius:100px;padding:3px 10px;
+  font-family:'Poppins',sans-serif;font-size:.55rem;color:rgba(255,255,255,.38);
+}
+.sv-card-tag i{font-size:.52rem;color:var(--amber)}
+
+/* ═══════════════════════════════════════
+   TICKETING SPECIAL CARD — WIDE
+═══════════════════════════════════════ */
+.sv-ticket-row{
+  max-width:1360px;margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,4.5rem) clamp(1.5rem,2.5vw,2rem);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1rem;
+  position:relative;z-index:1;
+  animation:fadeUp .75s .32s var(--reveal) forwards;
+}
+
+/* Ticket card */
+.sv-ticket{
+  background:linear-gradient(135deg,rgba(245,166,35,.09) 0%,rgba(245,166,35,.04) 100%);
+  border:1px solid rgba(245,166,35,.2);
+  border-radius:2px;
+  padding:2rem 2.2rem;
+  position:relative;overflow:hidden;
+  cursor:pointer;
+  transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;
+}
+.sv-ticket:hover{transform:translateY(-6px);border-color:rgba(245,166,35,.42);
+  box-shadow:0 24px 56px rgba(0,0,0,.35),0 0 0 1px rgba(245,166,35,.15)}
+/* Dashed ticket edge */
+.sv-ticket::after{
+  content:'';
+  position:absolute;top:0;bottom:0;right:3.2rem;
+  width:1px;
+  border-right:2px dashed rgba(245,166,35,.15);
+  pointer-events:none;
+}
+/* Top amber bar */
+.sv-ticket::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--amber),var(--amberd));
+  border-radius:2px 2px 0 0;
+}
+/* BG watermark */
+.sv-ticket-wm{
+  position:absolute;right:-1rem;bottom:-1.5rem;
+  font-family:'Bagind',serif;font-size:7rem;
+  color:rgba(245,166,35,.04);line-height:1;
+  pointer-events:none;user-select:none;white-space:nowrap;
+}
+.sv-ticket-top{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;
+  margin-bottom:1.1rem;
+}
+.sv-ticket-ico{
+  width:52px;height:52px;border-radius:2px;flex-shrink:0;
+  background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.25rem;color:var(--amber);
+  transition:transform .3s var(--spring);
+}
+.sv-ticket:hover .sv-ticket-ico{transform:scale(1.1) rotate(-5deg)}
+.sv-ticket-badge{
+  background:var(--amber);color:var(--navy);
+  border-radius:2px;padding:4px 12px;
+  font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;
+  align-self:flex-start;
+}
+.sv-ticket-title{
+  font-family:'Bagind',serif;
+  font-size:clamp(1.15rem,2vw,1.55rem);
+  font-weight:400;color:#fff;line-height:1.05;margin-bottom:.5rem;
+}
+.sv-ticket-desc{
+  font-family:'Poppins',sans-serif;font-size:.74rem;font-weight:300;
+  color:rgba(255,255,255,.45);line-height:1.8;margin-bottom:1.1rem;
+}
+.sv-ticket-feats{
+  display:flex;flex-wrap:wrap;gap:.35rem .85rem;
+  margin-bottom:1.3rem;
+}
+.sv-ticket-feat{
+  display:flex;align-items:center;gap:6px;
+  font-family:'Poppins',sans-serif;font-size:.63rem;font-weight:300;
+  color:rgba(255,255,255,.5);
+}
+.sv-ticket-feat i{font-size:.55rem;color:var(--amber);flex-shrink:0}
+.sv-ticket-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--amber);color:var(--navy);
+  font-family:'Poppins',sans-serif;font-size:.7rem;font-weight:700;
+  padding:11px 24px;border-radius:2px;
+  color: #fff;
+  transition:background .22s,transform .22s,box-shadow .22s;
+}
+.sv-ticket-cta:hover{background:var(--amberd);transform:translateY(-2px);
+  color: #fff;}
+.sv-ticket-cta i{font-size:.65rem}
+
+/* Contact card (second column) */
+.sv-contact{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:2px;
+  padding:2rem 2.2rem;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;
+  cursor:pointer;
+  transition:transform .3s var(--ease),border-color .3s,background .3s;
+}
+.sv-contact:hover{transform:translateY(-6px);border-color:rgba(14,154,170,.25);
+  background:rgba(14,154,170,.04)}
+.sv-contact::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--tealb));
+  border-radius:2px 2px 0 0;
+}
+.sv-contact-wm{
+  position:absolute;right:1rem;bottom:-1.5rem;
+  font-family:'Bagind',serif;font-size:7rem;
+  color:rgba(14,154,170,.04);line-height:1;
+  pointer-events:none;user-select:none;
+}
+.sv-contact-ico{
+  width:52px;height:52px;border-radius:2px;
+  background:rgba(14,154,170,.1);border:1px solid rgba(14,154,170,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.25rem;color:var(--tealb);
+  margin-bottom:1.2rem;
+  transition:transform .3s var(--spring);
+}
+.sv-contact:hover .sv-contact-ico{transform:scale(1.1) rotate(-5deg)}
+.sv-contact-title{
+  font-family:'Bagind',serif;
+  font-size:clamp(1.15rem,2vw,1.55rem);
+  font-weight:400;color:#fff;line-height:1.05;margin-bottom:.5rem;
+}
+.sv-contact-desc{
+  font-family:'Poppins',sans-serif;font-size:.74rem;font-weight:300;
+  color:rgba(255,255,255,.45);line-height:1.8;margin-bottom:1.3rem;
+}
+.sv-channels{
+  display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.4rem;
+}
+.sv-ch{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:2px;padding:6px 14px;
+  font-family:'Poppins',sans-serif;font-size:.62rem;font-weight:500;
+  color:rgba(255,255,255,.55);
+  transition:border-color .2s,background .2s,color .2s,transform .2s var(--spring);
+}
+.sv-ch:hover{border-color:rgba(14,154,170,.4);background:rgba(14,154,170,.08);
+  color:var(--tealb);transform:translateY(-2px)}
+.sv-ch i{font-size:.7rem}
+.sv-contact-cta{
+  display:inline-flex;align-items:center;gap:8px;width:fit-content;
+  background:rgba(14,154,170,.12);border:1.5px solid rgba(14,154,170,.3);
+  color:var(--tealb);
+  font-family:'Poppins',sans-serif;font-size:.7rem;font-weight:600;
+  padding:11px 24px;border-radius:2px;
+  transition:background .22s,border-color .22s,transform .22s;
+}
+.sv-contact-cta:hover{background:var(--teal);border-color:var(--teal);
+  color:#fff;transform:translateY(-2px)}
+.sv-contact-cta i{font-size:.65rem}
+
+/* ═══════════════════════════════════════
+   BOTTOM CTA STRIP
+═══════════════════════════════════════ */
+.sv-bottom{
+  max-width:1360px;margin:0 auto;
+  padding:clamp(1.5rem,2.5vw,2.5rem) clamp(1.5rem,5vw,4.5rem) clamp(4rem,6vw,6rem);
+  display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+  flex-wrap:wrap;
+  position:relative;z-index:1;
+  animation:fadeUp .7s .4s var(--reveal) forwards;
+}
+.sv-bottom-left{
+  display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;
+}
+.sv-bottom-stat{
+  display:flex;align-items:center;gap:.6rem;
+  padding-right:1.4rem;
+  border-right:1px solid rgba(255,255,255,.08);
+}
+.sv-bottom-stat:last-child{border-right:none}
+.sv-bottom-stat-ico{
+  width:36px;height:36px;border-radius:2px;flex-shrink:0;
+  background:rgba(14,154,170,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;color:var(--tealb);
+}
+.sv-bottom-stat-n{
+  font-family:'Bagind',serif;font-size:1.25rem;color:#fff;line-height:1;
+}
+.sv-bottom-stat-l{
+  font-family:'Poppins',sans-serif;font-size:.5rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);
+}
+.sv-cta-big{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--teal);color:#fff;
+  font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:600;
+  padding:14px 32px;border-radius:2px;
+  box-shadow:0 8px 28px rgba(14,154,170,.32);
+  transition:background .22s,transform .22s,box-shadow .22s;
+  white-space:nowrap;
+}
+.sv-cta-big:hover{background:var(--teald);transform:translateY(-3px);
+  color: #fff;}
+.sv-cta-big i{font-size:.72rem}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:1060px){
+  .sv-hero-card{grid-template-columns:1fr}
+  .sv-hc-img{height:240px}
+  .sv-hc-img-overlay{background:linear-gradient(to top,var(--navy2) 0%,transparent 70%)}
+  .sv-grid{grid-template-columns:repeat(2,1fr)}
+  .sv-ticket-row{grid-template-columns:1fr}
+}
+@media(max-width:680px){
+  .sv-head{flex-direction:column;align-items:flex-start}
+  .sv-grid{grid-template-columns:1fr}
+  .sv-bottom{flex-direction:column;align-items:flex-start}
+  .sv-bottom-left{flex-direction:column;align-items:flex-start}
+  .sv-bottom-stat{border-right:none;padding-right:0}
+}
+</style>
+
+<section class="sv" id="services">
+
+  <!-- BG decor -->
+  <div class="sv-bg-grid"   aria-hidden="true"></div>
+  <div class="sv-bg-glow-l" aria-hidden="true"></div>
+  <div class="sv-bg-glow-r" aria-hidden="true"></div>
+  <div class="sv-pixel" id="svPixel" aria-hidden="true"></div>
+
+  <!-- ── Section Header ── -->
+  <div class="sv-head">
+    <div class="sv-head-left">
+      <div class="sv-kicker">
+        Our Services <div class="sv-kicker-pip"></div>
+      </div>
+      <h2 class="sv-h">What We<br><span>Craft For You</span></h2>
+      <p class="sv-sub">Every experience, every transfer, every ticket — handled with precision so you can simply arrive and be present.</p>
+    </div>
+    <div class="sv-head-right">
+      <a href="/Contact-us/" class="sv-btn-all">
+        View All Services <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── Featured Hero Card — Private Tours ── -->
+  <div class="sv-featured">
+    <div class="sv-hero-card">
+      <!-- Image -->
+      <div class="sv-hc-img">
+        <img
+          src="https://pixelceylontours.com/wp-content/uploads/2026/03/pixel-model_converted-e1773651487174.webp"
+          alt="Private Custom Tours Sri Lanka"
+          loading="lazy"
+          onerror="this.src='https://pixelceylontours.com/wp-content/uploads/2026/03/pixel-model_converted-e1773651487174.webp'">
+        <div class="sv-hc-img-overlay"></div>
+        <div class="sv-hc-badge"><i class="fas fa-crown"></i>Most Popular</div>
+      </div>
+      <!-- Body -->
+      <div class="sv-hc-body">
+        <div class="sv-hc-cat"><i class="fas fa-route"></i>Signature Service</div>
+        <h3 class="sv-hc-title">Private Custom<br>Tours & Itineraries</h3>
+        <p class="sv-hc-desc">Your Sri Lanka, entirely on your own terms. We design every day from scratch — from ancient temples and misty tea hills to hidden beaches and local family meals no guidebook will ever mention.</p>
+        <div class="sv-hc-feats">
+          <div class="sv-hc-feat"><i class="fas fa-user-shield"></i>100% Private, No groups</div>
+          <div class="sv-hc-feat"><i class="fas fa-pencil-ruler"></i>Fully bespoke itinerary</div>
+          <div class="sv-hc-feat"><i class="fas fa-car"></i>Private A/C vehicle</div>
+          <div class="sv-hc-feat"><i class="fas fa-clock"></i>Free plan in 48h</div>
+          <div class="sv-hc-feat"><i class="fas fa-hotel"></i>Curated hotel options</div>
+          <div class="sv-hc-feat"><i class="fas fa-undo"></i>Free cancellation</div>
+        </div>
+        <a href="/trip-planner" class="sv-hc-cta">
+          <i class="fas fa-calendar-check"></i>Plan My Trip — It's Free
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4 Services Grid ── -->
+  <div class="sv-grid">
+
+    <!-- Card 1: Air Ticketing ✈ NEW FIRST -->
+    <div class="sv-card" style="--sc-bar:var(--amber)">
+      <div class="sv-card-img">
+        <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/air-ticket-service.webp"
+             alt="Air Ticketing Services" loading="lazy"
+             onerror="this.src='https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=600&auto=format&fit=crop&q=75'">
+        <div class="sv-card-img-overlay"></div>
+        <div class="sv-card-cat"><i class="fas fa-plane"></i>Air Ticketing</div>
+        <div class="sv-card-price" style="background:var(--amber);color:var(--navy)">Best Fares</div>
+      </div>
+      <div class="sv-card-body">
+        <div class="sv-card-title">Flight Ticket<br>Booking</div>
+        <p class="sv-card-desc">We search and secure the best available airfares for your journey to Sri Lanka — international and domestic — so you don't have to.</p>
+        <div class="sv-card-feats">
+          <div class="sv-card-feat"><i class="fas fa-check"></i>International &amp; domestic flights</div>
+          <div class="sv-card-feat"><i class="fas fa-check"></i>Multi-airline fare comparison</div>
+          <div class="sv-card-feat"><i class="fas fa-check"></i>Seat selection &amp; special meals</div>
+        </div>
+        <div class="sv-card-foot">
+          <a href="/contact-us" class="sv-card-link" style="color:var(--amber)">Get Best Fare <i class="fas fa-arrow-right"></i></a>
+          <div class="sv-card-tag"><i class="fas fa-bolt" style="color:var(--amber)"></i>Fast booking</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Airport Transfers -->
+    <div class="sv-card" style="--sc-bar:var(--tealb)">
+      <div class="sv-card-img">
+        <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=600&auto=format&fit=crop&q=75"
+             alt="Airport Transfer Sri Lanka" loading="lazy"
+             onerror="this.src='https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&auto=format&fit=crop&q=75'">
+        <div class="sv-card-img-overlay"></div>
+        <div class="sv-card-cat"><i class="fas fa-plane-arrival"></i>Transfers</div>
+       
+      </div>
+      <div class="sv-card-body">
+        <div class="sv-card-title">Airport Transfers</div>
+        <p class="sv-card-desc">Seamless door-to-door transport between Bandaranaike International Airport and any hotel, villa or resort islandwide.</p>
+        <div class="sv-card-feats">
+          <div class="sv-card-feat"><i class="fas fa-check"></i>Meet &amp; greet with name board</div>
+          <div class="sv-card-feat"><i class="fas fa-check"></i>Private A/C vehicle, all sizes</div>
+          <div class="sv-card-feat"><i class="fas fa-check"></i>Flight monitoring — no wait charges</div>
+        </div>
+        <div class="sv-card-foot">
+          <a href="/contact-us" class="sv-card-link">Book Transfer <i class="fas fa-arrow-right"></i></a>
+          <div class="sv-card-tag"><i class="fas fa-clock"></i>24/7 available</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Day Excursions -->
+    <div class="sv-card" style="--sc-bar:#1eb577">
+      <div class="sv-card-img">
+        <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Ella-Nine-Arch-Bridge_processed.webp"
+             alt="Day Excursions Sri Lanka" loading="lazy"
+             onerror="this.src='https://images.unsplash.com/photo-1559628233-100c798642c5?w=600&auto=format&fit=crop&q=75'">
+        <div class="sv-card-img-overlay"></div>
+        <div class="sv-card-cat"><i class="fas fa-binoculars"></i>Excursions</div>
+       
+      </div>
+      <div class="sv-card-body">
+        <div class="sv-card-title">Day Excursions</div>
+        <p class="sv-card-desc">Single-day private journeys to Sri Lanka's most iconic sites — Sigiriya, Ella, Kandy, Mirissa and beyond.</p>
+        <div class="sv-card-feats">
+          <div class="sv-card-feat"><i class="fas fa-check"></i>Certified guide included</div>
+          <div class="sv-card-feat"><i class="fas fa-check"></i>Flexible departure time</div>
+          <div class="sv-card-feat"><i class="fas fa-check"></i>Entrance fees arranged</div>
+        </div>
+        <div class="sv-card-foot">
+          <a href="/contact-us" class="sv-card-link">Book Day Trip <i class="fas fa-arrow-right"></i></a>
+          <div class="sv-card-tag"><i class="fas fa-star"></i>Highly rated</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Photography & Sunset Tours -->
+    <div class="sv-card" style="--sc-bar:#b48cf5">
+      <div class="sv-card-img">
+        <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/cataraman-sunset.webp"
+             alt="Sunrise Photography Tour" loading="lazy"
+             onerror="this.src='https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&auto=format&fit=crop&q=75'">
+        <div class="sv-card-img-overlay"></div>
+        <div class="sv-card-cat"><i class="fas fa-camera"></i>Photography</div>
+     
+      </div>
+      <div class="sv-card-body">
+        <div class="sv-card-title">Sunrise &amp; Photography Tours</div>
+        <p class="sv-card-desc">Chase the perfect light at Sigiriya at dawn, Ella Rock at sunrise or Galle Fort at golden hour — guided for the best shots.</p>
+        <div class="sv-card-feats">
+          <div class="sv-card-feat"><i class="fas fa-check"></i>Photography-timed routing</div>
+          <div class="sv-card-feat"><i class="fas fa-check"></i>Hidden viewpoints included</div>
+          <div class="sv-card-feat"><i class="fas fa-check"></i>Early access arrangements</div>
+        </div>
+        <div class="sv-card-foot">
+          <a href="/contact-us" class="sv-card-link">Book Tour <i class="fas fa-arrow-right"></i></a>
+          <div class="sv-card-tag"><i class="fas fa-heart"></i>Guest favourite</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /sv-grid -->
+
+
+  <!-- ── Ticketing + Contact Row ── -->
+  <div class="sv-ticket-row">
+
+    <!-- TICKETING CARD -->
+    <div class="sv-ticket">
+      <div class="sv-ticket-wm">Tickets</div>
+      <div class="sv-ticket-top">
+        <div class="sv-ticket-ico"><i class="fas fa-ticket-alt"></i></div>
+        <div class="sv-ticket-badge">New Service</div>
+      </div>
+      <div class="sv-ticket-title">Attraction Ticket<br>Booking &amp; Reservations</div>
+      <p class="sv-ticket-desc">
+        Skip the queues and the uncertainty — we pre-book all entrance tickets, safari permits, train reservations and cultural event passes on your behalf, well in advance. From Sigiriya Rock to Yala National Park and the famous Ella train, we handle every booking so nothing is left to chance.
+      </p>
+      <div class="sv-ticket-feats">
+        <div class="sv-ticket-feat"><i class="fas fa-check-circle"></i>Sigiriya Rock &amp; Pidurangala</div>
+        <div class="sv-ticket-feat"><i class="fas fa-check-circle"></i>Yala &amp; Wilpattu Safari Permits</div>
+        <div class="sv-ticket-feat"><i class="fas fa-check-circle"></i>Ella / Kandy Scenic Train</div>
+        <div class="sv-ticket-feat"><i class="fas fa-check-circle"></i>Tooth Relic Temple, Kandy</div>
+        <div class="sv-ticket-feat"><i class="fas fa-check-circle"></i>Whale Watching, Mirissa</div>
+        <div class="sv-ticket-feat"><i class="fas fa-check-circle"></i>Cultural Perahera Events</div>
+        <div class="sv-ticket-feat"><i class="fas fa-check-circle"></i>National Park Entry Permits</div>
+        <div class="sv-ticket-feat"><i class="fas fa-check-circle"></i>All UNESCO World Heritage Sites</div>
+      </div>
+      <a href="/contact-us" class="sv-ticket-cta">
+        <i class="fas fa-ticket-alt"></i>Request Ticket Booking
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- CUSTOM REQUEST CARD -->
+    <div class="sv-contact">
+      <div class="sv-contact-wm">Plan</div>
+      <div class="sv-contact-ico"><i class="fas fa-paper-plane"></i></div>
+      <div class="sv-contact-title">Can't Find<br>Your Service?</div>
+      <p class="sv-contact-desc">
+        Have something specific in mind — a surprise proposal on a Sri Lankan clifftop, a private cooking class with a local family, a chartered catamaran to watch blue whales, or a wellness retreat in the hills? We'll make it happen. Just ask.
+      </p>
+      <div class="sv-channels">
+        <div class="sv-ch"><i class="fab fa-whatsapp" style="color:#25d366"></i>WhatsApp</div>
+        <div class="sv-ch"><i class="fas fa-envelope" style="color:var(--tealb)"></i>Email</div>
+        <div class="sv-ch"><i class="fas fa-phone" style="color:var(--amber)"></i>Call Us</div>
+        <div class="sv-ch"><i class="fab fa-instagram" style="color:#e1306c"></i>Instagram</div>
+      </div>
+      <a href="/contact-us/" class="sv-contact-cta">
+        <i class="fas fa-comment-dots"></i>Send Us Your Idea
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+  </div><!-- /sv-ticket-row -->
+
+
+  <!-- ── Bottom Stats + CTA ── -->
+  <div class="sv-bottom">
+    <div class="sv-bottom-left">
+      <div class="sv-bottom-stat">
+        <div class="sv-bottom-stat-ico"><i class="fas fa-route"></i></div>
+        <div>
+          <div class="sv-bottom-stat-n">9+</div>
+          <div class="sv-bottom-stat-l">Services Offered</div>
+        </div>
+      </div>
+      <div class="sv-bottom-stat">
+        <div class="sv-bottom-stat-ico"><i class="fas fa-map-marked-alt"></i></div>
+        <div>
+          <div class="sv-bottom-stat-n">60+</div>
+          <div class="sv-bottom-stat-l">Destinations</div>
+        </div>
+      </div>
+      <div class="sv-bottom-stat">
+        <div class="sv-bottom-stat-ico"><i class="fas fa-ticket-alt"></i></div>
+        <div>
+          <div class="sv-bottom-stat-n">15+</div>
+          <div class="sv-bottom-stat-l">Tickets We Book</div>
+        </div>
+      </div>
+      <div class="sv-bottom-stat">
+        <div class="sv-bottom-stat-ico"><i class="fas fa-headset"></i></div>
+        <div>
+          <div class="sv-bottom-stat-n">24/7</div>
+          <div class="sv-bottom-stat-l">Support</div>
+        </div>
+      </div>
+    </div>
+    <a href="/trip-planner" class="sv-cta-big">
+      <i class="fas fa-calendar-check"></i>Start Planning — Free Consultation
+      <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  /* Pixel grid decoration */
+  const p = document.getElementById('svPixel');
+  if(p){ for(let i=0;i<48;i++){const s=document.createElement('span');p.appendChild(s)} }
+})();
+</script>
+</section>
+</div>

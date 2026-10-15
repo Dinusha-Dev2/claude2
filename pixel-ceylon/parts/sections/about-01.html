@@ -1,0 +1,655 @@
+<div>
+<section class="aboutushero">
+
+
+
+
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #04111e;
+  color: #f0ece2;
+  overflow-x: hidden;          /* ✅ scroll works — only X clipped */
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+
+:root {
+  --navy:     #04111e;
+  --navy2:    #071929;
+  --navy-lt:  #0f2d47;
+  --teal:     #0e9aaa;
+  --tealb:    #12c8d8;
+  --teald:    #0b7d8c;
+  --teal-bd:  rgba(14,154,170,.22);
+  --amber:    #f5a623;
+  --amberd:   #d9870c;
+  --d-text:   #f0ece2;
+  --d-muted:  rgba(240,236,226,.58);
+  --d-faint:  rgba(240,236,226,.28);
+  --d-bdr:    rgba(240,236,226,.07);
+  --d-glass:  rgba(255,255,255,.04);
+  --d-glass2: rgba(255,255,255,.075);
+  --border-m: rgba(240,236,226,.14);
+  --bag:  'Bagind', serif;
+  --pop:  'Poppins', sans-serif;
+  --ease:   cubic-bezier(.4,0,.2,1);
+  --spring: cubic-bezier(.34,1.56,.64,1);
+  --r: 2px;
+}
+
+/* ── KEYFRAMES ── */
+@keyframes upFade     { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:none} }
+@keyframes rtFade     { from{opacity:0;transform:translateX(22px)} to{opacity:1;transform:none} }
+@keyframes pulseDot   { 0%,100%{box-shadow:0 0 0 0 rgba(18,200,216,.5)} 60%{box-shadow:0 0 0 6px rgba(18,200,216,0)} }
+@keyframes pulseGreen { 0%,100%{box-shadow:0 0 0 0 rgba(94,196,110,.5)} 60%{box-shadow:0 0 0 5px rgba(94,196,110,0)} }
+@keyframes driftBg    { 0%,100%{transform:scale(1.07) translateY(0)} 50%{transform:scale(1.07) translateY(-9px)} }
+@keyframes grain      { 0%,100%{transform:translate(0,0)} 25%{transform:translate(-2%,-1%)} 50%{transform:translate(1%,2%)} 75%{transform:translate(-1%,1%)} }
+@keyframes lineGrow   { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+@keyframes progressBar{ from{width:0%} to{width:100%} }
+@keyframes scrollBob  { 0%,100%{transform:translateY(0) translateX(-50%)} 50%{transform:translateY(5px) translateX(-50%)} }
+@keyframes shimmer    { from{left:-80%} to{left:150%} }
+
+/* ── ANIM ── */
+.anim { opacity:0; animation-duration:.72s; animation-timing-function:var(--ease); animation-fill-mode:both; animation-play-state:paused; }
+.anim.up    { animation-name:upFade; }
+.anim.right { animation-name:rtFade; }
+
+/* ══════════════════════════════
+   HERO — 100vw × 100vh, scrolls
+══════════════════════════════ */
+.about-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;          /* exactly one screen tall */
+  display: flex;
+  align-items: center;
+  overflow: hidden;       /* clip bg layers to section only */
+  background: var(--navy);
+  isolation: isolate;
+}
+
+/* ── BG LAYERS ── */
+.ah-bg {
+  position:absolute; inset:0; z-index:0;
+  
+  filter: brightness(.23) saturate(1.3);
+  transform: scale(1.07);
+  animation: driftBg 24s ease-in-out infinite;
+}
+.ah-grain {
+  position:absolute; inset:-50%; width:200%; height:200%;
+  z-index:1; pointer-events:none; opacity:.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 10s steps(10) infinite;
+}
+.ah-gradient {
+  position:absolute; inset:0; z-index:2;
+  background:
+    linear-gradient(180deg, rgba(4,17,30,.8) 0%, rgba(4,17,30,0) 38%, rgba(4,17,30,.94) 100%),
+    linear-gradient(112deg, rgba(4,17,30,.96) 0%, rgba(4,17,30,.28) 50%, transparent 68%);
+}
+.ah-glow {
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:
+    radial-gradient(ellipse 52% 58% at -2% 102%, rgba(14,154,170,.13) 0%, transparent 62%),
+    radial-gradient(ellipse 38% 38% at 102%  -2%, rgba(245,166,35,.07) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50%  110%, rgba(14,154,170,.06) 0%, transparent 60%);
+}
+.ah-grid {
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(14,154,170,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14,154,170,.028) 1px, transparent 1px);
+  background-size: 62px 62px;
+  mask-image: radial-gradient(ellipse 82% 80% at 50% 50%, black, transparent 72%);
+}
+
+/* Thin teal-to-transparent bottom fade — draws eye downward */
+.ah-bottom-fade {
+  position:absolute; bottom:0; left:0; right:0; height:80px; z-index:3; pointer-events:none;
+  background: linear-gradient(to bottom, transparent, rgba(4,17,30,.85));
+}
+
+/* ── INNER LAYOUT ── */
+.ah-inner {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  padding: 0 5vw;
+  display: grid;
+  grid-template-columns: 1.12fr 0.92fr;
+  gap: clamp(2rem, 4vw, 5rem);
+  align-items: center;
+}
+
+/* ══════════
+   LEFT
+══════════ */
+.ah-left { display:flex; flex-direction:column; }
+
+.ah-badge {
+  display:inline-flex; align-items:center; gap:7px; align-self:flex-start;
+  background:rgba(14,154,170,.08); border:1px solid var(--teal-bd);
+  border-radius:var(--r); padding:4px 12px; margin-bottom:.9rem;
+}
+.ah-badge-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:var(--tealb); flex-shrink:0;
+  animation: pulseDot 2.6s ease-in-out infinite;
+}
+.ah-badge span {
+  font-family:var(--pop); font-size:.54rem; font-weight:600;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--tealb);
+}
+
+.ah-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--pop); font-size:.54rem; font-weight:600;
+  letter-spacing:.26em; text-transform:uppercase; color:var(--d-faint);
+  margin-bottom:.55rem;
+}
+.ah-eyebrow::before {
+  content:''; display:block; width:20px; height:1.5px;
+  background:var(--tealb); border-radius:2px;
+  transform-origin:left; animation:lineGrow .5s var(--ease) .3s both;
+}
+
+.ah-h1 {
+  font-family: var(--bag);
+  font-weight: 400;
+  font-size: clamp(2.7rem, 4.8vw, 5.2rem);
+  line-height: .86;
+  color: var(--d-text);
+  letter-spacing: -.01em;
+  margin-bottom: 1rem;
+}
+.ah-h1 em   { font-style:normal; color:var(--tealb); }
+.ah-h1 mark { font-style:normal; color:var(--amber); background:none; }
+
+.ah-lead {
+  font-family:var(--pop); font-size:.79rem; font-weight:300;
+  color:var(--d-muted); line-height:1.8; max-width:460px; margin-bottom:1rem;
+}
+.ah-lead strong { color:var(--d-text); font-weight:500; }
+
+.ah-pills { display:flex; flex-wrap:wrap; gap:.3rem; margin-bottom:1.2rem; }
+.ah-pill {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 9px; border-radius:var(--r);
+  border:1px solid var(--d-bdr); background:var(--d-glass);
+  font-family:var(--pop); font-size:.53rem; font-weight:500;
+  color:var(--d-muted); letter-spacing:.02em;
+  transition: border-color .22s, background .22s, color .22s;
+}
+.ah-pill:hover { background:var(--d-glass2); border-color:var(--teal-bd); color:var(--d-text); }
+.ah-pill i { font-size:.46rem; }
+.teal  { color:var(--tealb); }
+.amber { color:var(--amber); }
+.green { color:#5ec46e; }
+
+/* Buttons */
+.ah-btns { display:flex; flex-direction:column; max-width:290px; gap:0; }
+
+.btn-primary {
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  width:100%; padding:10px 20px;
+  background: linear-gradient(135deg, var(--teal), var(--teald));
+  color:#fff; font-family:var(--pop); font-size:.74rem; font-weight:600;
+  letter-spacing:.02em; border-radius:var(--r); border:none;
+  cursor:pointer; text-decoration:none;
+  position:relative; overflow:hidden;
+  transition: transform .22s var(--spring), box-shadow .22s var(--ease);
+}
+.btn-primary::after {
+  content:''; position:absolute; top:0; left:-80%; width:50%; height:100%;
+  background:linear-gradient(to right, transparent, rgba(255,255,255,.22), transparent);
+  transition: left .55s;
+}
+.btn-primary:hover::after { left:150%; }
+.btn-primary:hover { transform:translateY(-2px) scale(1.015);  color:#fff; }
+
+.btn-secondary {
+  display:flex; align-items:center; justify-content:center; gap:7px;
+  width:100%; padding:10px 20px; margin-top:.35rem;
+  background:rgba(255,255,255,.04); color:var(--d-text);
+  font-family:var(--pop); font-weight:600; font-size:.72rem;
+  border-radius:var(--r); border:1.5px solid var(--border-m);
+  cursor:pointer; text-decoration:none;
+  transition: border-color .22s, color .22s, background .22s, transform .22s var(--spring);
+}
+.btn-secondary:hover { border-color:var(--tealb); color:#fff; background:#0f2d47; transform:translateY(-2px); }
+
+/* ══════════
+   RIGHT
+══════════ */
+.ah-right { display:flex; flex-direction:column; gap:.52rem; }
+
+.stat-card {
+  background: var(--d-glass);
+  border: 1px solid var(--d-bdr);
+  border-radius: var(--r);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  transition: background .25s, border-color .25s, transform .25s var(--ease);
+}
+.stat-card:hover { background:var(--d-glass2); border-color:rgba(14,154,170,.2); transform:translateY(-2px); }
+
+/* ─── CARD A — Rating ─── */
+.card-rating { padding:.95rem 1.2rem; }
+
+.rating-header {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:.75rem; margin-bottom:.7rem;
+}
+.rating-lhs { display:flex; flex-direction:column; gap:.28rem; }
+.rating-label-row { display:flex; align-items:center; gap:7px; }
+.card-icon {
+  width:26px; height:26px; border-radius:var(--r);
+  display:flex; align-items:center; justify-content:center; font-size:.66rem; flex-shrink:0;
+}
+.icon-amber { background:rgba(245,166,35,.12); color:var(--amber); }
+.card-title { font-family:var(--pop); font-size:.67rem; font-weight:600; color:var(--d-text); }
+
+.stars { display:flex; align-items:center; gap:2px; }
+.stars i { color:var(--amber); font-size:.55rem; }
+.stars span { font-family:var(--pop); font-size:.57rem; font-weight:600; color:var(--d-text); margin-left:4px; }
+.stars small { font-family:var(--pop); font-size:.53rem; font-weight:300; color:var(--d-faint); }
+
+.rating-rhs { text-align:right; flex-shrink:0; }
+.rating-score { font-family:var(--bag); font-size:2.45rem; line-height:1; color:var(--d-text); }
+.rating-score sub { font-size:.85rem; color:var(--d-faint); font-family:var(--bag); vertical-align:baseline; }
+.rating-count { font-family:var(--pop); font-size:.5rem; font-weight:300; color:var(--d-faint); margin-top:1px; }
+
+.platform-row { display:flex; gap:.26rem; flex-wrap:wrap; margin-bottom:.6rem; }
+.platform-tag {
+  font-family:var(--pop); font-size:.48rem; font-weight:500; color:var(--d-faint);
+  background:rgba(255,255,255,.04); border:1px solid var(--d-bdr); border-radius:var(--r);
+  padding:2px 7px; letter-spacing:.04em;
+}
+
+.card-divider { height:1px; background:var(--d-bdr); margin:.55rem 0; }
+
+/* Review widget */
+.review-live-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--pop); font-size:.49rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--d-faint); margin-bottom:.45rem;
+}
+.live-dot { width:5px; height:5px; border-radius:50%; background:#5ec46e; flex-shrink:0; animation:pulseGreen 2s ease-in-out infinite; }
+
+.review-stage { position:relative; min-height:85px; overflow:hidden; }
+.review-slide {
+  position:absolute; inset:0; opacity:0; transform:translateY(8px);
+  transition:opacity .4s var(--ease), transform .4s var(--ease); pointer-events:none;
+}
+.review-slide.active { opacity:1; transform:none; pointer-events:auto; position:relative; }
+
+.review-quote-mark { font-family:var(--bag); font-size:2rem; line-height:.35; color:var(--tealb); opacity:.2; margin-bottom:.18rem; display:block; user-select:none; }
+.review-text { font-family:var(--pop); font-size:.64rem; font-weight:300; color:var(--d-muted); line-height:1.7; margin-bottom:.55rem; font-style:italic; }
+.review-text strong { color:var(--d-text); font-weight:500; font-style:normal; }
+
+.review-meta { display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
+.reviewer-id { display:flex; align-items:center; gap:7px; }
+.reviewer-av {
+  width:28px; height:28px; border-radius:50%; border:1.5px solid var(--d-bdr); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--pop); font-size:.58rem; font-weight:600; color:var(--d-text); overflow:hidden;
+}
+.reviewer-name   { font-family:var(--pop); font-size:.62rem; font-weight:600; color:var(--d-text); line-height:1.2; }
+.reviewer-sub    { display:flex; align-items:center; gap:4px; margin-top:1px; }
+.reviewer-origin { font-family:var(--pop); font-size:.52rem; font-weight:300; color:var(--d-faint); }
+.reviewer-flag   { font-size:.56rem; }
+
+.review-rhs { display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
+.verified-badge {
+  display:inline-flex; align-items:center; gap:3px; padding:1px 7px; border-radius:var(--r);
+  background:rgba(94,196,110,.08); border:1px solid rgba(94,196,110,.18);
+  font-family:var(--pop); font-size:.47rem; font-weight:600; color:#5ec46e; letter-spacing:.04em;
+}
+.verified-badge i { font-size:.42rem; }
+.review-source { display:inline-flex; align-items:center; gap:3px; font-family:var(--pop); font-size:.47rem; font-weight:300; color:var(--d-faint); }
+.review-source i { font-size:.43rem; color:var(--tealb); }
+
+.review-progress { margin-top:.55rem; display:flex; align-items:center; gap:.5rem; }
+.progress-track  { flex:1; height:1.5px; background:var(--d-bdr); border-radius:2px; overflow:hidden; }
+.progress-fill   { height:100%; background:linear-gradient(90deg,var(--teal),var(--tealb)); width:0%; }
+.progress-fill.animate { animation:progressBar 5s linear forwards; }
+.review-dots { display:flex; gap:4px; flex-shrink:0; }
+.review-dot {
+  width:5px; height:5px; border-radius:50%; background:var(--d-bdr);
+  border:none; cursor:pointer; padding:0; transition:background .22s, transform .22s;
+}
+.review-dot.active { background:var(--tealb); transform:scale(1.35); }
+
+/* ─── CARD B — Stats ─── */
+.card-stats { padding:.78rem 1rem; }
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; }
+.stat-cell {
+  padding:.52rem .45rem; display:flex; flex-direction:column;
+  align-items:center; text-align:center; position:relative;
+}
+.stat-cell:nth-child(2)::before,
+.stat-cell:nth-child(4)::before {
+  content:''; position:absolute; left:0; top:14%; bottom:14%; width:1px; background:var(--d-bdr);
+}
+.stat-cell:nth-child(3)::after,
+.stat-cell:nth-child(4)::after {
+  content:''; position:absolute; top:0; left:8%; right:8%; height:1px; background:var(--d-bdr);
+}
+.stat-num  { font-family:var(--bag); font-size:1.7rem; color:var(--d-text); line-height:1; margin-bottom:.14rem; }
+.unit-teal { font-size:.76rem; color:var(--tealb); }
+.unit-amber{ font-size:.76rem; color:var(--amber); }
+.unit-faint{ font-size:.74rem; color:var(--d-faint); }
+.stat-lbl  { font-family:var(--pop); font-size:.5rem; font-weight:300; color:var(--d-faint); line-height:1.3; }
+
+/* ─── CARD C — Trust ─── */
+.card-trust {
+  padding:.58rem .95rem; display:flex;
+  align-items:center; justify-content:space-between; gap:.7rem;
+}
+.trust-text { font-family:var(--pop); font-size:.58rem; font-weight:300; color:var(--d-muted); white-space:nowrap; }
+.trust-pills { display:flex; gap:.25rem; flex-shrink:0; }
+.trust-pill {
+  display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:var(--r);
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  font-family:var(--pop); font-size:.48rem; font-weight:500; color:var(--d-muted);
+}
+.trust-pill i { font-size:.4rem; }
+
+/* ─── Scroll cue ─── */
+.ah-scroll {
+  position:absolute; bottom:1.4rem; left:50%;
+  transform:translateX(-50%); z-index:6;
+  display:flex; flex-direction:column; align-items:center; gap:.32rem;
+  animation: scrollBob 2.4s ease-in-out infinite;
+}
+.ah-scroll-label { font-family:var(--pop); font-size:.46rem; letter-spacing:.26em; text-transform:uppercase; color:var(--d-faint); }
+.ah-scroll-track { width:1px; height:26px; background:linear-gradient(to bottom, var(--teal), transparent); border-radius:2px; }
+
+
+/* ── RESPONSIVE ── */
+@media (max-width:1024px) {
+  .about-hero { height:auto; min-height:100vh; }
+  .ah-inner { grid-template-columns:1fr; padding:5.5rem 6vw 5rem; height:auto; }
+  .ah-right { flex-direction:row; flex-wrap:wrap; }
+  .card-rating { flex:1 1 280px; }
+  .card-stats  { flex:1 1 220px; }
+  .card-trust  { flex:1 1 100%; }
+  .ah-btns { max-width:100%; }
+}
+@media (max-width:640px) {
+  .ah-h1 { font-size:clamp(2.5rem,12vw,3.6rem); }
+  .ah-right { flex-direction:column; }
+}
+
+</style>
+
+<!-- ════════════════════════
+     ABOUT HERO SECTION
+════════════════════════ -->
+<section class="about-hero" aria-label="About Pixel Ceylon Tours">
+
+  <div class="ah-bg"          aria-hidden="true"></div>
+  <div class="ah-grain"       aria-hidden="true"></div>
+  <div class="ah-gradient"    aria-hidden="true"></div>
+  <div class="ah-glow"        aria-hidden="true"></div>
+  <div class="ah-grid"        aria-hidden="true"></div>
+  <div class="ah-bottom-fade" aria-hidden="true"></div>
+
+  <div class="ah-inner">
+
+    <!-- ════ LEFT ════ -->
+    <div class="ah-left">
+
+      <div class="ah-badge anim up" style="animation-delay:.04s">
+        <div class="ah-badge-dot"></div>
+        <span>Est. 2019 · Colombo, Sri Lanka 🇱🇰</span>
+      </div>
+
+      <div class="ah-eyebrow anim up" style="animation-delay:.1s">Our Story</div>
+
+      <h1 class="ah-h1 anim up" style="animation-delay:.15s">
+        We Are<br><mark>Pixel</mark> <mark>Ceylon</mark>
+      </h1>
+
+      <p class="ah-lead anim up" style="animation-delay:.22s">
+        A passionate Sri Lankan team crafting
+        <strong>private, unhurried journeys</strong> — deeply
+        connected to the true heart of this
+        <strong>extraordinary island.</strong>
+      </p>
+
+      <div class="ah-pills anim up" style="animation-delay:.29s">
+        <span class="ah-pill"><i class="fas fa-lock teal"></i> 100% Private</span>
+        <span class="ah-pill"><i class="fas fa-leaf green"></i> Responsible</span>
+        <span class="ah-pill"><i class="fas fa-clock amber"></i> 48h Turnaround</span>
+        <span class="ah-pill"><i class="fas fa-globe teal"></i> 32+ Countries</span>
+      </div>
+
+      <div class="ah-btns anim up" style="animation-delay:.36s">
+        <a href="/tours" class="btn-primary">
+          <i class="fas fa-compass"></i> Tour Packages
+        </a>
+        <a href="/contact-us" class="btn-secondary">
+          <i class="fas fa-phone"></i> Contact Us
+        </a>
+      </div>
+
+    </div>
+
+    <!-- ════ RIGHT ════ -->
+    <div class="ah-right anim right" style="animation-delay:.18s">
+
+      <!-- Card A: Rating + reviews -->
+      <div class="stat-card card-rating">
+        <div class="rating-header">
+          <div class="rating-lhs">
+            <div class="rating-label-row">
+              <div class="card-icon icon-amber"><i class="fas fa-star"></i></div>
+              <div class="card-title">Traveller Rating</div>
+            </div>
+            <div class="stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <span>4.9</span><small>&nbsp;· Exceptional</small>
+            </div>
+          </div>
+          <div class="rating-rhs">
+            <div class="rating-score">4.9<sub>&thinsp;/5</sub></div>
+            <div class="rating-count">128 verified reviews</div>
+          </div>
+        </div>
+
+        <div class="platform-row">
+          <span class="platform-tag">Google</span>
+          <span class="platform-tag">TripAdvisor</span>
+          <span class="platform-tag">Airbnb Experiences</span>
+        </div>
+
+        <div class="card-divider"></div>
+
+        <div class="review-widget">
+          <div class="review-live-badge">
+            <span class="live-dot"></span> What travellers say
+          </div>
+
+          <div class="review-stage" id="reviewStage">
+
+            <div class="review-slide active">
+              <span class="review-quote-mark">"</span>
+              <p class="review-text">Honestly the <strong>best travel experience I've had in Asia.</strong> Chamara knew exactly which temples to visit at sunrise — no crowds, just pure magic.</p>
+              <div class="review-meta">
+                <div class="reviewer-id">
+                  <div class="reviewer-av" style="background:linear-gradient(135deg,#1a3347,#0f2d47)">S</div>
+                  <div>
+                    <div class="reviewer-name">Sarah M.</div>
+                    <div class="reviewer-sub"><span class="reviewer-flag">🇩🇪</span><span class="reviewer-origin">Munich, Germany</span></div>
+                  </div>
+                </div>
+                <div class="review-rhs">
+                  <span class="verified-badge"><i class="fas fa-circle-check"></i> Verified</span>
+                  <span class="review-source"><i class="fas fa-star"></i> Google Review</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="review-slide">
+              <span class="review-quote-mark">"</span>
+              <p class="review-text">We wanted <strong>off the beaten path</strong>, and Pixel Ceylon delivered beyond expectations. The tea country route was <strong>breathtaking — completely tailored</strong> to our pace.</p>
+              <div class="review-meta">
+                <div class="reviewer-id">
+                  <div class="reviewer-av" style="background:linear-gradient(135deg,#0b2035,#071929)">J</div>
+                  <div>
+                    <div class="reviewer-name">James & Priya T.</div>
+                    <div class="reviewer-sub"><span class="reviewer-flag">🇬🇧</span><span class="reviewer-origin">London, UK</span></div>
+                  </div>
+                </div>
+                <div class="review-rhs">
+                  <span class="verified-badge"><i class="fas fa-circle-check"></i> Verified</span>
+                  <span class="review-source"><i class="fas fa-star"></i> TripAdvisor</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="review-slide">
+              <span class="review-quote-mark">"</span>
+              <p class="review-text">As a solo traveller, <strong>genuine local connection</strong> mattered most. This team felt like friends by day two. The Mirissa coastal drive alone was worth every cent.</p>
+              <div class="review-meta">
+                <div class="reviewer-id">
+                  <div class="reviewer-av" style="background:linear-gradient(135deg,#1a3347,#0b2035)">A</div>
+                  <div>
+                    <div class="reviewer-name">Aiko N.</div>
+                    <div class="reviewer-sub"><span class="reviewer-flag">🇯🇵</span><span class="reviewer-origin">Tokyo, Japan</span></div>
+                  </div>
+                </div>
+                <div class="review-rhs">
+                  <span class="verified-badge"><i class="fas fa-circle-check"></i> Verified</span>
+                  <span class="review-source"><i class="fas fa-star"></i> Airbnb Experiences</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="review-slide">
+              <span class="review-quote-mark">"</span>
+              <p class="review-text">We had 10 days and <strong>zero idea where to start.</strong> The itinerary built in 48h was perfect — cultural, adventurous, never rushed. <strong>Already planning our return.</strong></p>
+              <div class="review-meta">
+                <div class="reviewer-id">
+                  <div class="reviewer-av" style="background:linear-gradient(135deg,#0f2d47,#071929)">R</div>
+                  <div>
+                    <div class="reviewer-name">René & Claire D.</div>
+                    <div class="reviewer-sub"><span class="reviewer-flag">🇫🇷</span><span class="reviewer-origin">Paris, France</span></div>
+                  </div>
+                </div>
+                <div class="review-rhs">
+                  <span class="verified-badge"><i class="fas fa-circle-check"></i> Verified</span>
+                  <span class="review-source"><i class="fas fa-star"></i> Google Review</span>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /review-stage -->
+
+          <div class="review-progress">
+            <div class="progress-track">
+              <div class="progress-fill animate" id="progressFill"></div>
+            </div>
+            <div class="review-dots" id="reviewDots">
+              <button class="review-dot active" data-target="0"></button>
+              <button class="review-dot"        data-target="1"></button>
+              <button class="review-dot"        data-target="2"></button>
+              <button class="review-dot"        data-target="3"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card B: Stats 2×2 -->
+      <div class="stat-card card-stats">
+        <div class="stats-grid">
+          <div class="stat-cell">
+            <div class="stat-num">200<span class="unit-faint">+</span></div>
+            <div class="stat-lbl">Happy Travellers</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">32<span class="unit-faint">+</span></div>
+            <div class="stat-lbl">Countries Served</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">100<span class="unit-amber">%</span></div>
+            <div class="stat-lbl">Private Tours</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">48<span class="unit-teal">h</span></div>
+            <div class="stat-lbl">Itinerary Turnaround</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card C: Trust bar -->
+      <div class="stat-card card-trust">
+        <span class="trust-text">No group tours — ever.</span>
+        <div class="trust-pills">
+          <span class="trust-pill"><i class="fas fa-lock" style="color:var(--tealb)"></i> Private</span>
+          <span class="trust-pill"><i class="fas fa-leaf" style="color:#5ec46e"></i> Responsible</span>
+          <span class="trust-pill"><i class="fas fa-shield-halved" style="color:var(--amber)"></i> Trusted</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll cue -->
+  <div class="ah-scroll" aria-hidden="true">
+    <span class="ah-scroll-label">Scroll</span>
+    <div class="ah-scroll-track"></div>
+  </div>
+
+</section>
+
+
+<script>
+/* Entrance animations */
+const animEls = document.querySelectorAll('.anim');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){ e.target.style.animationPlayState='running'; io.unobserve(e.target); }
+  });
+}, { threshold:0.04 });
+animEls.forEach(el => { el.style.animationPlayState='paused'; io.observe(el); });
+
+/* Review rotator */
+(function(){
+  const slides = document.querySelectorAll('.review-slide');
+  const dots   = document.querySelectorAll('.review-dot');
+  const fill   = document.getElementById('progressFill');
+  let current  = 0, timer = null;
+  const DUR    = 5000;
+
+  function goTo(i){
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (i + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    fill.classList.remove('animate');
+    void fill.offsetWidth;
+    fill.classList.add('animate');
+  }
+
+  function startAuto(){ clearInterval(timer); timer = setInterval(()=>goTo(current+1), DUR); }
+
+  dots.forEach(d => d.addEventListener('click', ()=>{ goTo(+d.dataset.target); startAuto(); }));
+  const stage = document.getElementById('reviewStage');
+  stage.addEventListener('mouseenter', ()=>clearInterval(timer));
+  stage.addEventListener('mouseleave', startAuto);
+  startAuto();
+})();
+</script>
+</section>
+</div>

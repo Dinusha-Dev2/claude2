@@ -1,0 +1,517 @@
+<section class="navmain">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:'DM Sans',sans-serif;background:#060f1a;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+ul{list-style:none}
+
+:root{
+  --ink:#060f1a;--ink2:#091a2e;--ink3:#0d2036;
+  --teal:#0ba5b8;--teal2:#0dd4e8;--teal3:#065d68;--teal-d:#098fa0;
+  --gold:#c9963a;--gold2:#e8b455;
+  --ivory:#f4efe5;
+  --orange:#e8943a;--orange-d:#c9752a;
+  --c90:rgba(244,239,229,.90);
+  --c75:rgba(244,239,229,.75);
+  --c55:rgba(244,239,229,.55);
+  --c35:rgba(244,239,229,.35);
+  --c20:rgba(244,239,229,.20);
+  --c10:rgba(244,239,229,.10);
+  --c05:rgba(244,239,229,.05);
+  --c02:rgba(244,239,229,.02);
+  --tl:rgba(11,165,184,.14);
+  --tb:rgba(11,165,184,.22);
+  --bm:rgba(244,239,229,.14);
+  --bl:rgba(244,239,229,.06);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --nav-dur:.75s;
+  --nav-ease:cubic-bezier(.16,1,.3,1);
+  --r:2px;
+  --rs:2px;
+  --nh:78px;
+  --nh-sm:66px;
+}
+
+/* BUTTONS */
+.nbtn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 22px;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;font-family:var(--sans);font-size:.75rem;font-weight:600;letter-spacing:.03em;border-radius:var(--rs);border:none;cursor:pointer;text-decoration:none;white-space:nowrap;position:relative;overflow:hidden;transition:transform .25s var(--spring)}
+.nbtn::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(to right,transparent,rgba(255,255,255,.22),transparent);transition:left .55s}
+.nbtn:hover::after{left:150%}
+.nbtn:hover{transform:translateY(-2px) scale(1.02);color:#fff}
+.nbtn-g{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 18px;background:transparent;color:var(--c55);font-family:var(--sans);font-size:.72rem;font-weight:500;border-radius:var(--rs);border:1.5px solid var(--bm);cursor:pointer;white-space:nowrap;text-decoration:none;transition:border-color .2s,color .2s,background .2s}
+.nbtn-g:hover{border-color:var(--teal-d);color:var(--ivory);background:rgba(9,143,160,.10)}
+
+/* PROGRESS BAR */
+#nprog{position:fixed;top:0;left:0;right:0;height:2px;z-index:1010;pointer-events:none}
+#nprog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--orange));transition:width .12s linear}
+
+/* NAV WRAPPER */
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0;will-change:padding;transition:padding var(--nav-dur) var(--nav-ease)}
+
+/* INNER ROW */
+.ni{margin:0 auto;display:flex;align-items:center;position:relative;z-index:4;will-change:height,max-width,background,border-radius,box-shadow,border-color,padding,margin-top;transition:height var(--nav-dur) var(--nav-ease),max-width var(--nav-dur) var(--nav-ease),background var(--nav-dur) var(--nav-ease),border-radius var(--nav-dur) var(--nav-ease),border-color var(--nav-dur) var(--nav-ease),box-shadow var(--nav-dur) var(--nav-ease),padding var(--nav-dur) var(--nav-ease),margin-top var(--nav-dur) var(--nav-ease)}
+
+/* STATE 1: transparent */
+#nav.transparent{padding:0}
+#nav.transparent .ni{max-width:100%;height:var(--nh);margin-top:0;padding:0 2rem;background:transparent;border-radius:0;border:1px solid transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+
+/* STATE 2: scrolled floating pill */
+#nav.scrolled{padding:0 1.8rem}
+#nav.scrolled .ni{max-width:1320px;height:var(--nh-sm);margin-top:12px;padding:0 1.6rem;border-radius:var(--r);background:rgba(6,15,26,.84);backdrop-filter:blur(48px) saturate(200%) brightness(1.08);-webkit-backdrop-filter:blur(48px) saturate(200%) brightness(1.08);border:1px solid rgba(244,239,229,.08);box-shadow:0 0 0 1px rgba(11,165,184,.06),0 8px 24px rgba(0,0,0,.35),0 24px 64px rgba(0,0,0,.40),inset 0 1px 0 rgba(244,239,229,.07)}
+
+/* STATE 3: light */
+#nav.light{padding:0 1.8rem}
+#nav.light .ni{max-width:1320px;height:var(--nh-sm);margin-top:12px;padding:0 1.6rem;border-radius:var(--r);background:rgba(255,255,255,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(6,15,26,.06);box-shadow:0 4px 32px rgba(6,15,26,.09)}
+
+/* LOGO */
+.nlogo{display:flex;align-items:center;flex-shrink:0;text-decoration:none;transition:opacity .22s;position:relative}
+.nlogo:hover{opacity:.80}
+.nlogo-img{height:58px;max-height:58px;width:auto;max-width:180px;object-fit:contain;display:block;flex-shrink:0;will-change:height,opacity;transition:height var(--nav-dur) var(--nav-ease),opacity .35s ease}
+#nav.scrolled .nlogo-img,#nav.light .nlogo-img{height:44px;max-height:44px}
+.nlogo-dark{opacity:1;position:relative}
+.nlogo-light{opacity:0;position:absolute;top:50%;left:0;transform:translateY(-50%);pointer-events:none}
+#nav.light .nlogo-dark{opacity:0;pointer-events:none}
+#nav.light .nlogo-light{opacity:1;pointer-events:auto}
+
+/* NAV LINKS */
+.nlinks{display:flex;align-items:center;height:100%;margin:0 auto;flex:1;justify-content:center}
+.nitem{position:relative;height:100%;display:flex;align-items:center}
+.nitem>.nlink+*::before,.nitem>.nlink-btn+*::before{content:'';position:absolute;top:100%;left:-20px;right:-20px;height:16px}
+.nlink,.nlink-btn{display:flex;align-items:center;gap:5px;height:100%;padding:0 .92rem;font-family:var(--sans);font-size:.77rem;font-weight:400;white-space:nowrap;cursor:pointer;text-decoration:none;position:relative;user-select:none;transition:color .25s var(--nav-ease)}
+.nlink::before,.nlink-btn::before{content:'';position:absolute;inset:15px 3px;border-radius:var(--rs);background:var(--tl);opacity:0;transform:scale(.88);transition:opacity .22s,transform .22s}
+.nlink:hover::before,.nlink-btn:hover::before,.nitem.on>.nlink-btn::before{opacity:1;transform:scale(1)}
+.nitem.active>.nlink::after,.nitem.active>.nlink-btn::after{content:'';position:absolute;bottom:11px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:0;background:var(--orange)}
+.nch{font-size:.48rem;opacity:.4;transition:transform .28s var(--nav-ease),opacity .22s}
+.nitem:hover>.nlink-btn .nch,.nitem.on>.nlink-btn .nch{transform:rotate(180deg);opacity:.9}
+
+/* Link colours */
+#nav.transparent .nlink,#nav.transparent .nlink-btn{color:var(--c75)}
+#nav.transparent .nlink:hover,#nav.transparent .nlink-btn:hover,#nav.transparent .nitem.active>.nlink{color:#fff}
+#nav.scrolled .nlink,#nav.scrolled .nlink-btn{color:var(--c55)}
+#nav.scrolled .nlink:hover,#nav.scrolled .nlink-btn:hover,#nav.scrolled .nitem.active>.nlink{color:var(--ivory)}
+#nav.light .nlink,#nav.light .nlink-btn{color:rgba(6,15,26,.50)}
+#nav.light .nlink:hover,#nav.light .nlink-btn:hover,#nav.light .nitem.active>.nlink{color:var(--ink)}
+#nav.scrolled .nlink,#nav.scrolled .nlink-btn,#nav.light .nlink,#nav.light .nlink-btn{height:var(--nh-sm)}
+
+/* DROPDOWN */
+.ndrop{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(8px);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:400;padding-top:4px}
+.nitem:hover>.ndrop{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0)}
+.nitem:nth-child(-n+3)>.ndrop{left:0;transform:translateX(0) translateY(8px)}
+.nitem:nth-child(-n+3):hover>.ndrop{transform:translateX(0) translateY(0)}
+.nitem:nth-last-child(-n+2)>.ndrop{left:auto;right:0;transform:translateX(0) translateY(8px)}
+.nitem:nth-last-child(-n+2):hover>.ndrop{transform:translateX(0) translateY(0)}
+.ndrop-panel{background:rgba(7,17,30,.97);border:1px solid var(--bl);border-radius:var(--r);padding:.45rem;min-width:205px;box-shadow:0 2px 0 var(--bl),0 18px 52px rgba(0,0,0,.55);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px)}
+.ndrop-sec{display:block;font-family:var(--sans);font-size:.49rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--c35);padding:.48rem .82rem .18rem}
+.ndrop-row{display:flex;align-items:center;gap:.62rem;padding:.52rem .82rem;border-radius:var(--rs);font-family:var(--sans);font-size:.76rem;font-weight:300;color:var(--c55);cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .15s,color .15s}
+.ndrop-row:hover{background:var(--tl);color:var(--ivory)}
+.ndrop-row:hover .nic{color:var(--teal);border-color:var(--tb)}
+.nic{width:24px;height:24px;border-radius:var(--rs);background:var(--c02);border:1px solid var(--bl);display:flex;align-items:center;justify-content:center;font-size:.61rem;color:var(--c35);flex-shrink:0;transition:color .15s,border-color .15s}
+.ndrop-sep{height:1px;background:var(--bl);margin:.3rem .38rem}
+.nbadge{margin-left:auto;background:var(--tl);border:1px solid var(--tb);border-radius:var(--rs);padding:1px 6px;font-size:.49rem;font-weight:600;color:var(--teal2);flex-shrink:0}
+
+/* MEGA MENU */
+.nmega{position:fixed;top:var(--nh);left:0;right:0;z-index:300;background:rgba(6,15,26,.97);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);border-bottom:1px solid var(--bl);padding:2.4rem 0 2.8rem;opacity:0;pointer-events:none;transform:translateY(-10px);transition:opacity .28s,transform .28s}
+.nitem:hover>.nmega{opacity:1;pointer-events:all;transform:translateY(0)}
+#nav.scrolled .nmega,#nav.light .nmega{top:calc(var(--nh-sm) + 12px)}
+.nmega-in{max-width:1320px;margin:0 auto;padding:0 2.8rem;display:grid;gap:3rem;align-items:start}
+.nmega-eye{display:flex;align-items:center;gap:8px;margin-bottom:.5rem}
+.nmega-eye::before{content:'';width:12px;height:1px;background:var(--teal);flex-shrink:0}
+.nmega-eye span{font-family:var(--sans);font-size:.49rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--teal)}
+.nmega-h{font-family:var(--serif);font-size:1.8rem;font-weight:300;font-style:italic;color:rgba(244,239,229,.40);line-height:1.1;margin-bottom:.48rem}
+.nmega-h strong{font-weight:600;font-style:normal;color:rgba(244,239,229,.82)}
+.nmega-p{font-family:var(--sans);font-size:.72rem;font-weight:300;color:var(--c35);line-height:1.85;margin-bottom:1.3rem;max-width:215px}
+.nmega-stat{display:flex;align-items:center;gap:6px;margin-top:.85rem;font-family:var(--sans);font-size:.62rem;font-weight:300;color:var(--c35)}
+.nmega-stat i{color:var(--gold);font-size:.56rem}
+.ng4{display:grid;grid-template-columns:repeat(4,1fr);gap:.78rem}
+.ng5{display:grid;grid-template-columns:repeat(5,1fr);gap:.68rem}
+
+/* Tour card */
+.ntc{border-radius:var(--r);overflow:hidden;border:1px solid var(--bl);background:var(--c02);text-decoration:none;display:flex;flex-direction:column;transition:border-color .22s,transform .25s var(--spring),box-shadow .22s}
+.ntc:hover{border-color:var(--tb);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.45)}
+.ntc-img{height:92px;overflow:hidden;position:relative;flex-shrink:0}
+.ntc-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.6);transition:transform .4s,filter .3s}
+.ntc:hover .ntc-img img{transform:scale(1.07);filter:brightness(.78)}
+.ntc-img-ov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(6,15,26,.72) 100%)}
+.ntc-pill{position:absolute;top:.45rem;left:.55rem;font-family:var(--sans);font-size:.49rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:var(--rs);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.1)}
+.ntc-body{padding:.6rem .7rem .72rem;flex:1;display:flex;flex-direction:column;gap:.32rem}
+.ntc-name{font-family:var(--sans);font-size:.72rem;font-weight:500;color:var(--c75);line-height:1.3}
+.ntc-row{display:flex;align-items:center;justify-content:space-between}
+.ntc-nights{font-size:.59rem;font-weight:300;color:var(--c35);display:flex;align-items:center;gap:3px}
+.ntc-nights i{color:var(--teal);font-size:.52rem}
+.ntc-price{font-family:var(--serif);font-size:.87rem;font-weight:600;color:var(--gold2)}
+.ntc-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;padding:6px 10px;margin-top:auto;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;font-family:var(--sans);font-size:.58rem;font-weight:600;border-radius:var(--rs);border:none;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;white-space:nowrap;transition:transform .22s var(--spring)}
+.ntc-btn::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(to right,transparent,rgba(255,255,255,.2),transparent);transition:left .5s}
+.ntc-btn:hover::after{left:150%}
+.ntc-btn:hover{transform:translateY(-1px) scale(1.01);color:#fff}
+
+/* Destination card */
+.ndc{border-radius:var(--r);overflow:hidden;position:relative;aspect-ratio:3/4;text-decoration:none;border:1px solid var(--bl);transition:transform .25s var(--spring),box-shadow .22s}
+.ndc:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.5)}
+.ndc img{width:100%;height:100%;object-fit:cover;filter:brightness(.58);transition:transform .4s,filter .3s}
+.ndc:hover img{transform:scale(1.07);filter:brightness(.74)}
+.ndc-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,15,26,.92) 0%,transparent 56%)}
+.ndc-body{position:absolute;bottom:0;left:0;right:0;padding:.6rem .72rem}
+.ndc-tag{font-family:var(--sans);font-size:.46rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:.17rem}
+.ndc-name{font-family:var(--serif);font-size:.9rem;font-weight:400;color:var(--ivory);line-height:1.2}
+
+/* RIGHT CLUSTER */
+.nright{display:flex;align-items:center;gap:.55rem;flex-shrink:0;margin-left:1.8rem}
+.nwa{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:transparent;color:var(--c55);font-family:var(--sans);font-size:.7rem;font-weight:500;border-radius:var(--rs);border:1.5px solid var(--bm);cursor:pointer;white-space:nowrap;text-decoration:none;transition:border-color .25s,color .25s,background .25s}
+#nav.transparent .nwa{color:var(--c75);border-color:rgba(244,239,229,.22)}
+#nav.light .nwa{color:rgba(6,15,26,.48);border-color:rgba(6,15,26,.14)}
+.nwa i{color:#25d366;font-size:.75rem}
+.nwa:hover{border-color:var(--teal-d);color:var(--ivory)!important;background:rgba(9,143,160,.10)}
+.nbook{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;font-family:var(--sans);font-size:.73rem;font-weight:600;letter-spacing:.025em;border-radius:var(--rs);border:none;cursor:pointer;white-space:nowrap;text-decoration:none;position:relative;overflow:hidden;transition:transform .25s var(--spring)}
+.nbook::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(to right,transparent,rgba(255,255,255,.22),transparent);transition:left .55s}
+.nbook:hover::after{left:150%}
+.nbook:hover{transform:translateY(-2px) scale(1.02);color:#fff}
+.nbook i{font-size:.62rem}
+
+/* HAMBURGER */
+.nham{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;padding:4px;margin-left:.9rem;cursor:pointer;flex-shrink:0}
+.nham-l{height:1.5px;border-radius:0;background:var(--c75);transition:transform .3s,opacity .25s,width .3s;transform-origin:center}
+#nav.light .nham-l{background:rgba(6,15,26,.6)}
+.nham-l:nth-child(1){width:20px}
+.nham-l:nth-child(2){width:14px}
+.nham-l:nth-child(3){width:20px}
+.nham.open .nham-l:nth-child(1){transform:translateY(6.5px) rotate(45deg);width:20px}
+.nham.open .nham-l:nth-child(2){opacity:0;transform:scaleX(0)}
+.nham.open .nham-l:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);width:20px}
+
+/* ═══════════════════════════════
+   MOBILE OVERLAY — clean flat nav
+═══════════════════════════════ */
+.nmob{
+  position:fixed;inset:0;z-index:1200;
+  background:rgba(5,12,22,.99);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform .4s cubic-bezier(.77,0,.175,1);
+}
+.nmob.open{transform:translateX(0)}
+
+/* Top bar: logo + close */
+.nmob-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 1.4rem;
+  border-bottom:1px solid var(--bl);
+  flex-shrink:0;
+  background:rgba(5,12,22,.99);
+}
+.nmob-brand{display:flex;align-items:center}
+.nmob-logo-img{height:32px;max-height:32px;width:auto;max-width:140px;object-fit:contain;display:block}
+.nmob-close{
+  display:flex;align-items:center;justify-content:center;
+  width:34px;height:34px;flex-shrink:0;
+  border-radius:var(--rs);
+  background:var(--c05);border:1.5px solid var(--bm);
+  color:var(--c55);cursor:pointer;font-size:.78rem;
+  transition:background .2s,color .2s,border-color .2s;
+}
+.nmob-close:hover{background:var(--tl);color:var(--teal2);border-color:var(--tb)}
+
+/* Scrollable body */
+.nmob-body{
+  flex:1;overflow-y:auto;
+  padding:.6rem 0;
+}
+
+/* Each nav link row */
+.nmob-nav-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 1.4rem;
+  height:56px;
+  font-family:var(--sans);font-size:.95rem;font-weight:400;
+  color:var(--c75);
+  text-decoration:none;cursor:pointer;
+  border-bottom:1px solid var(--bl);
+  transition:background .15s,color .15s;
+  position:relative;
+}
+.nmob-nav-row:last-child{border-bottom:none}
+.nmob-nav-row:hover{background:var(--tl);color:var(--ivory)}
+.nmob-nav-row:active{background:rgba(11,165,184,.2)}
+
+/* Arrow icon */
+.nmob-nav-row .nmob-arr{
+  display:flex;align-items:center;justify-content:center;
+  width:28px;height:28px;flex-shrink:0;
+  border-radius:var(--rs);
+  background:var(--c05);border:1px solid var(--bl);
+  font-size:.5rem;color:var(--c35);
+  transition:background .15s,color .15s,border-color .15s;
+}
+.nmob-nav-row:hover .nmob-arr{background:var(--tl);color:var(--teal2);border-color:var(--tb)}
+
+/* Active dot */
+.nmob-nav-row.active::before{
+  content:'';
+  position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:28px;border-radius:0 2px 2px 0;
+  background:var(--orange);
+}
+.nmob-nav-row.active{color:var(--ivory)}
+
+/* Slide-in stagger */
+.nmob-nav-row{
+  opacity:0;transform:translateX(16px);
+  transition:background .15s,color .15s,opacity .3s,transform .3s;
+}
+.nmob.open .nmob-nav-row{opacity:1;transform:translateX(0)}
+.nmob.open .nmob-nav-row:nth-child(1){transition-delay:.06s}
+.nmob.open .nmob-nav-row:nth-child(2){transition-delay:.11s}
+.nmob.open .nmob-nav-row:nth-child(3){transition-delay:.16s}
+.nmob.open .nmob-nav-row:nth-child(4){transition-delay:.21s}
+.nmob.open .nmob-nav-row:nth-child(5){transition-delay:.26s}
+.nmob.open .nmob-nav-row:nth-child(6){transition-delay:.31s}
+
+/* CTA footer */
+.nmob-ctas{
+  padding:.9rem 1.2rem 1.4rem;
+  display:flex;flex-direction:column;gap:.42rem;
+  border-top:1px solid var(--bl);
+  flex-shrink:0;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .3s .34s,transform .3s .34s;
+}
+.nmob.open .nmob-ctas{opacity:1;transform:translateY(0)}
+
+.nmob-pri{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 22px;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;font-family:var(--sans);font-size:.8rem;font-weight:600;letter-spacing:.025em;border-radius:var(--rs);border:none;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;transition:transform .25s var(--spring)}
+.nmob-pri::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(to right,transparent,rgba(255,255,255,.22),transparent);transition:left .55s}
+.nmob-pri:hover::after{left:150%}
+.nmob-pri:hover{transform:translateY(-1px) scale(1.01);color:#fff}
+
+.nmob-sec{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:transparent;color:var(--c55);font-family:var(--sans);font-size:.76rem;font-weight:500;border-radius:var(--rs);border:1.5px solid var(--bm);cursor:pointer;text-decoration:none;transition:border-color .25s,color .25s,background .25s}
+.nmob-sec i{color:#25d366;font-size:.82rem}
+.nmob-sec:hover{border-color:var(--teal-d);color:var(--ivory);background:rgba(9,143,160,.08)}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.ng4{grid-template-columns:repeat(3,1fr)}.ng5{grid-template-columns:repeat(4,1fr)}.nmega-in{padding:0 2rem}}
+@media(max-width:880px){.nlinks,.nwa,.nright,.nbook-desktop{display:none!important}.nham{display:flex}.nmega,.ndrop{display:none!important}.nbook{display:inline-flex!important;padding:8px 16px!important;font-size:.7rem!important;margin-left:auto!important}}
+@media(min-width:881px){.nbook:not(.nbook-desktop){display:none!important}}
+@media(max-width:480px){
+  #nav.transparent .ni,#nav.scrolled .ni,#nav.light .ni{padding:0 1.2rem}
+  .nbook{padding:8px 14px;font-size:.68rem}
+  .nmob-nav-row{height:52px;font-size:.88rem}
+}
+</style>
+
+<div id="nprog" aria-hidden="true"><div id="nprog-fill"></div></div>
+
+<nav id="nav" class="transparent" aria-label="Primary navigation">
+  <div class="ni">
+    <a href="/home" class="nlogo" aria-label="Pixel Ceylon Tours — home">
+      <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/5-scaled.png" alt="Pixel Ceylon Tours" class="nlogo-img nlogo-dark">
+      <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Logo-v2-scaled.png" alt="Pixel Ceylon Tours" class="nlogo-img nlogo-light">
+    </a>
+
+    <ul class="nlinks" role="list">
+      <li class="nitem"><a class="nlink" href="/home">Home</a></li>
+      <li class="nitem">
+        <div class="nlink-btn" role="button" tabindex="0" onclick="window.location.href='/about-us'">About Us</div>
+      </li>
+      <li class="nitem">
+        <div class="nlink-btn" role="button" tabindex="0" onclick="window.location.href='/tours'">
+          Tours <i class="fas fa-chevron-down nch"></i>
+        </div>
+        <div class="nmega" role="region" aria-label="Tours">
+          <div class="nmega-in" style="grid-template-columns:220px 1fr">
+            <div class="nmega-side">
+              <div class="nmega-eye"><span>Packages</span></div>
+              <div class="nmega-h">Our<br><strong>Tour Packages</strong></div>
+              <p class="nmega-p">10 + private, bespoke journeys crafted around your interests and pace.</p>
+              <a href="/tours" class="nbtn"><i class="fas fa-compass"></i> Browse All Tours</a>
+              <div class="nmega-stat"><i class="fas fa-star"></i> 4.9 avg &middot; 128 verified reviews</div>
+            </div>
+            <div class="ng4">
+              <a href="https://pixelceylontours.com/ancient-heritage-hill-country/" class="ntc">
+                <div class="ntc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/polonnaruwa_processed.webp" alt="Heritage"><div class="ntc-img-ov"></div><span class="ntc-pill" style="background:rgba(11,165,184,.15);color:#0dd4e8">Signature</span></div>
+                <div class="ntc-body"><div class="ntc-name">Ancient Heritage &amp; Hill Country</div><div class="ntc-row"><span class="ntc-nights"><i class="fas fa-moon"></i> 10 Nights</span><span class="ntc-price">$1,850</span></div><span class="ntc-btn"><i class="fas fa-arrow-right"></i> View Tour</span></div>
+              </a>
+              <a href="/tours" class="ntc">
+                <div class="ntc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/willpattu.webp" alt="Wildlife"><div class="ntc-img-ov"></div><span class="ntc-pill" style="background:rgba(232,148,58,.15);color:#e8b455">Wildlife</span></div>
+                <div class="ntc-body"><div class="ntc-name">Leopards, Elephants &amp; Whales</div><div class="ntc-row"><span class="ntc-nights"><i class="fas fa-moon"></i> 6 Nights</span><span class="ntc-price">$1,190</span></div><span class="ntc-btn"><i class="fas fa-arrow-right"></i> View Tour</span></div>
+              </a>
+              <a href="/tours" class="ntc">
+                <div class="ntc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/alla-hike.webp" alt="Highlands"><div class="ntc-img-ov"></div><span class="ntc-pill" style="background:rgba(26,158,104,.15);color:#1eb577">Highlands</span></div>
+                <div class="ntc-body"><div class="ntc-name">Tea Country &amp; Scenic Train</div><div class="ntc-row"><span class="ntc-nights"><i class="fas fa-moon"></i> 4 Nights</span><span class="ntc-price">$750</span></div><span class="ntc-btn"><i class="fas fa-arrow-right"></i> View Tour</span></div>
+              </a>
+              <a href="/tours" class="ntc">
+                <div class="ntc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Nuwara-Eliya_processed.webp" alt="Odyssey"><div class="ntc-img-ov"></div><span class="ntc-pill" style="background:rgba(11,165,184,.15);color:#0dd4e8">Complete</span></div>
+                <div class="ntc-body"><div class="ntc-name">Complete Sri Lanka Odyssey</div><div class="ntc-row"><span class="ntc-nights"><i class="fas fa-moon"></i> 14 Nights</span><span class="ntc-price">$2,850</span></div><span class="ntc-btn"><i class="fas fa-arrow-right"></i> View Tour</span></div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="nitem">
+        <div class="nlink-btn" role="button" tabindex="0" onclick="window.location.href='/destinations'">
+          Destinations <i class="fas fa-chevron-down nch"></i>
+        </div>
+        <div class="nmega" role="region" aria-label="Destinations">
+          <div class="nmega-in" style="grid-template-columns:210px 1fr">
+            <div class="nmega-side">
+              <div class="nmega-eye"><span>Explore</span></div>
+              <div class="nmega-h">Discover<br><strong>Sri Lanka</strong></div>
+              <p class="nmega-p">22 handpicked destinations — ancient UNESCO citadels to golden southern shores.</p>
+              <a href="/trip-planner" class="nbtn"><i class="fas fa-map-marked-alt"></i> View All Destinations</a>
+              <div class="nmega-stat"><i class="fas fa-award"></i> 5 UNESCO &middot; 4 Parks &middot; 5 Coasts</div>
+            </div>
+            <div class="ng5">
+              <a href="/destinations/" class="ndc"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya_processed.webp" alt="Sigiriya"><div class="ndc-ov"></div><div class="ndc-body"><span class="ndc-tag" style="color:rgba(11,165,184,.85)">UNESCO</span><div class="ndc-name">Sigiriya</div></div></a>
+              <a href="/destinations/" class="ndc"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/temple-of-tooth_processed.webp" alt="Kandy"><div class="ndc-ov"></div><div class="ndc-body"><span class="ndc-tag" style="color:rgba(224,92,122,.85)">UNESCO</span><div class="ndc-name">Kandy</div></div></a>
+              <a href="/destinations/" class="ndc"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Ella-Nine-Arch-Bridge_processed.webp" alt="Ella"><div class="ndc-ov"></div><div class="ndc-body"><span class="ndc-tag" style="color:rgba(26,158,104,.85)">Highlands</span><div class="ndc-name">Ella</div></div></a>
+              <a href="/destinations/" class="ndc"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Mirissa-Beach_processed.webp" alt="Mirissa"><div class="ndc-ov"></div><div class="ndc-body"><span class="ndc-tag" style="color:rgba(155,114,232,.85)">Coast</span><div class="ndc-name">Mirissa</div></div></a>
+              <a href="/destinations/" class="ndc"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Yala-National-Park_processed.webp" alt="Yala"><div class="ndc-ov"></div><div class="ndc-body"><span class="ndc-tag" style="color:rgba(232,148,58,.85)">Wildlife</span><div class="ndc-name">Yala NP</div></div></a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="nitem">
+        <div class="nlink-btn" role="button" tabindex="0" onclick="window.location.href='/experiences'">
+          Experiences <i class="fas fa-chevron-down nch"></i>
+        </div>
+        <div class="ndrop">
+          <div class="ndrop-panel">
+            <span class="ndrop-sec">By Category</span>
+            <a href="/experiences/" class="ndrop-row"><div class="nic"><i class="fas fa-award"></i></div>UNESCO Heritage Sites</a>
+            <a href="/experiences/" class="ndrop-row"><div class="nic"><i class="fas fa-paw"></i></div>Wildlife &amp; Safaris</a>
+            <a href="/experiences/" class="ndrop-row"><div class="nic"><i class="fas fa-leaf"></i></div>Tea Country &amp; Highlands</a>
+            <a href="/experiences/" class="ndrop-row"><div class="nic"><i class="fas fa-water"></i></div>Coastal &amp; Ocean</a>
+            <a href="/experiences/" class="ndrop-row"><div class="nic"><i class="fas fa-torii-gate"></i></div>Culture &amp; Temples</a>
+            <div class="ndrop-sep"></div>
+            <span class="ndrop-sec">Bucket List</span>
+            <a href="/experiences/" class="ndrop-row"><div class="nic"><i class="fas fa-train"></i></div>Scenic Highland Train</a>
+            <a href="/experiences/" class="ndrop-row"><div class="nic"><i class="fas fa-fish"></i></div>Blue Whale Watching</a>
+            <a href="/experiences/" class="ndrop-row"><div class="nic"><i class="fas fa-mountain"></i></div>Sigiriya Sunrise Climb</a>
+            <div class="ndrop-sep"></div>
+            <a href="/experiences" class="nbtn" style="width:calc(100% - .88rem);margin:.36rem .44rem .32rem;font-size:.68rem;padding:8px 12px"><i class="fas fa-compass"></i> All Experiences</a>
+          </div>
+        </div>
+      </li>
+      <li class="nitem"><a class="nlink" href="/contact-us">Contact</a></li>
+    </ul>
+
+    <a href="/trip-planner" class="nbook">
+        <i class="fas fa-calendar-check"></i> Plan My Trip
+      </a>
+
+    <div class="nright">
+      <a href="https://wa.me/94777273794" class="nwa" target="_blank" rel="noopener" aria-label="WhatsApp us">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </a>
+      <a href="/trip-planner" class="nbook nbook-desktop">
+        <i class="fas fa-calendar-check"></i> Plan My Trip
+      </a>
+    </div>
+
+    <button class="nham" id="nham" aria-label="Open menu" aria-expanded="false">
+      <span class="nham-l"></span><span class="nham-l"></span><span class="nham-l"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE OVERLAY — clean flat links, same order as desktop -->
+<div class="nmob" id="nmob" role="dialog" aria-modal="true" aria-label="Site navigation">
+
+  <!-- Header -->
+  <div class="nmob-top">
+    <div class="nmob-brand">
+      <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/5-scaled.png" alt="Pixel Ceylon Tours" class="nmob-logo-img">
+    </div>
+    <button id="nmob-close" class="nmob-close" type="button" aria-label="Close menu"><i class="fas fa-times"></i></button>
+  </div>
+
+  <!-- Nav links — flat, no accordions -->
+  <div class="nmob-body">
+    <a href="/home"         class="nmob-nav-row"><span>Home</span>         <span class="nmob-arr"><i class="fas fa-chevron-right"></i></span></a>
+    <a href="/about-us"     class="nmob-nav-row"><span>About Us</span>     <span class="nmob-arr"><i class="fas fa-chevron-right"></i></span></a>
+    <a href="/tours"        class="nmob-nav-row"><span>Tours</span>        <span class="nmob-arr"><i class="fas fa-chevron-right"></i></span></a>
+    <a href="/destinations" class="nmob-nav-row"><span>Destinations</span> <span class="nmob-arr"><i class="fas fa-chevron-right"></i></span></a>
+    <a href="/experiences"  class="nmob-nav-row"><span>Experiences</span>  <span class="nmob-arr"><i class="fas fa-chevron-right"></i></span></a>
+    <a href="/contact-us"   class="nmob-nav-row"><span>Contact</span>      <span class="nmob-arr"><i class="fas fa-chevron-right"></i></span></a>
+  </div>
+
+  <!-- CTAs -->
+  <div class="nmob-ctas">
+    <a href="/trip-planner" class="nmob-pri"><i class="fas fa-calendar-check"></i> Plan My Trip &mdash; Free Itinerary</a>
+    <a href="https://wa.me/94777273794" class="nmob-sec" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var nav=document.getElementById('nav'),
+      prog=document.getElementById('nprog-fill'),
+      ham=document.getElementById('nham'),
+      mob=document.getElementById('nmob'),
+      closeBtn=document.getElementById('nmob-close'),
+      ticking=false,lastState='';
+
+  function tick(){
+    var y=window.scrollY,max=document.documentElement.scrollHeight-window.innerHeight;
+    if(prog&&max>0) prog.style.width=(y/max*100)+'%';
+    var newState;
+    if(y<55){
+      newState='transparent';
+    } else {
+      var el=document.elementFromPoint(window.innerWidth/2,nav.offsetHeight+28);
+      var isLight=false;
+      if(el){var node=el;while(node&&node!==document.body){var bg=getComputedStyle(node).backgroundColor;if(bg&&bg!=='rgba(0, 0, 0, 0)'&&bg!=='transparent'){var m=bg.match(/\d+/g);if(m&&(+m[0]*299 + +m[1]*587 + +m[2]*114)/1000>180)isLight=true;break;}node=node.parentElement;}}
+      newState=isLight?'light':'scrolled';
+    }
+    if(newState!==lastState){nav.className=newState;lastState=newState;}
+    ticking=false;
+  }
+  window.addEventListener('scroll',function(){if(!ticking){requestAnimationFrame(tick);ticking=true;}},{passive:true});
+  tick();
+
+  function lockScroll(){document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';}
+  function unlockScroll(){document.documentElement.style.overflow='';document.body.style.overflow='';}
+  function openMob(){if(!mob)return;mob.classList.add('open');if(ham){ham.classList.add('open');ham.setAttribute('aria-expanded','true');}lockScroll();}
+  function closeMob(){if(!mob)return;mob.classList.remove('open');if(ham){ham.classList.remove('open');ham.setAttribute('aria-expanded','false');}unlockScroll();}
+
+  if(ham) ham.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openMob();});
+  if(closeBtn) closeBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();closeMob();});
+  if(mob) mob.addEventListener('click',function(e){if(e.target===mob)closeMob();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMob();});
+
+  /* Active nav */
+  function setActiveNav(){
+    var path=window.location.pathname.replace(/\/$/,'')||'home';
+    document.querySelectorAll('.nmob-nav-row').forEach(function(el){
+      el.classList.remove('active');
+      var href=(el.getAttribute('href')||'').replace(/\/$/,'');
+      if(href&&(path===href||path.startsWith(href+'/'))){el.classList.add('active');}
+    });
+    document.querySelectorAll('.nitem').forEach(function(i){i.classList.remove('active');});
+    document.querySelectorAll('.nitem > .nlink[href]').forEach(function(el){
+      var href=el.getAttribute('href').replace(/\/$/,'');
+      if(href&&(path===href||path.startsWith(href+'/'))){el.closest('.nitem').classList.add('active');}
+    });
+    document.querySelectorAll('.nitem > .nlink-btn[onclick]').forEach(function(btn){
+      var match=btn.getAttribute('onclick').match(/href='([^']+)'/);
+      if(match){var href=match[1].replace(/\/$/,'');if(path===href||path.startsWith(href+'/')){btn.closest('.nitem').classList.add('active');}}
+    });
+  }
+  setActiveNav();
+
+  document.querySelectorAll('.nlink-btn').forEach(function(btn){
+    btn.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();var item=btn.closest('.nitem');if(item)item.classList.toggle('on');}
+      if(e.key==='Escape'){var item=btn.closest('.nitem');if(item)item.classList.remove('on');}
+    });
+  });
+})();
+</script>
+</section>

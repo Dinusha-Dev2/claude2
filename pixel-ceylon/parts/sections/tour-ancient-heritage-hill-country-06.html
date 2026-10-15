@@ -1,0 +1,711 @@
+<section>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/bagind" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ══════════ TOKENS ══════════ */
+:root{
+  --navy:#0c1f2c;--navy-mid:#102536;--navy-soft:#163044;--navy-x:#091820;
+  --teal-d:#1a6b7a;--teal:#1ab8b0;--teal-lt:rgba(26,184,176,.09);--teal-m:rgba(26,184,176,.2);
+  --cream:#f0ede4;--cream-w:#e8e3d8;--cream-pale:#f8f6f2;
+  --orange:#f4a100;--orange-l:#ffbf3c;--orange-lt:rgba(244,161,0,.09);--orange-m:rgba(244,161,0,.2);
+  --jade:#1a7a5a;--jade-lt:rgba(26,122,90,.09);
+  --violet:#6b5fad;
+  --white:#fff;--ink:#0c1f2c;
+  --muted:rgba(12,31,44,.4);--border:rgba(12,31,44,.07);--border-m:rgba(12,31,44,.12);
+  --serif:'Bagind',serif;--sans:'Poppins',system-ui,sans-serif;--mono:'DM Mono',monospace;
+  --r:4px;--r-sm:2px;
+  --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1);
+  --sh:0 1px 6px rgba(12,31,44,.06);--sh-md:0 6px 24px rgba(12,31,44,.1);--sh-lg:0 16px 56px rgba(12,31,44,.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:#f7f6f5 !important;color:#f7f6f5 !important;-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* ══════════ SECTION SHELL ══════════ */
+.cta-section{
+  position:relative;overflow:hidden;
+  padding:5rem 2.5rem 5.5rem;
+  background: #f7f6f5 !important;
+}
+/* ambient background orbs */
+.cta-section::before{
+  content:'';position:absolute;top:-120px;left:-120px;
+  width:560px;height:560px;border-radius:50%;
+  background:radial-gradient(circle,rgba(244,161,0,.05) 0%,transparent 65%);
+  pointer-events:none;
+}
+.cta-section::after{
+  content:'';position:absolute;bottom:-80px;right:-80px;
+  width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle,rgba(26,184,176,.06) 0%,transparent 65%);
+  pointer-events:none;
+}
+.cta-inner{max-width:1440px;margin:0 auto;position:relative;z-index:2}
+
+/* ══════════ TOP EYEBROW ══════════ */
+.cta-eyebrow-row{
+  display:flex;align-items:center;justify-content:center;
+  gap:10px;margin-bottom:2rem;
+}
+.ey-bar{width:28px;height:1.5px;background:var(--orange);flex-shrink:0}
+.ey-txt{font-family:var(--mono);font-size:.54rem;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);font-weight:500}
+.ey-dot{width:5px;height:5px;background:var(--teal);border-radius:50%;flex-shrink:0}
+
+/* ══════════ STATS STRIP ══════════ */
+.cta-stats{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:1px;background:var(--border-m);
+  border:1px solid var(--border-m);border-radius:var(--r);overflow:hidden;
+  margin-bottom:2.5rem;box-shadow:var(--sh);
+}
+.cta-stat{
+  background:var(--white);padding:1.1rem 1rem;
+  display:flex;align-items:center;gap:.75rem;
+  transition:background .2s;
+}
+.cta-stat:hover{background:var(--cream-pale)}
+.cta-stat-ic{
+  width:36px;height:36px;border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;flex-shrink:0;
+}
+.cta-stat-ic.o{background:var(--orange-lt);color:var(--orange)}
+.cta-stat-ic.t{background:var(--teal-lt);color:var(--teal-d)}
+.cta-stat-ic.g{background:var(--jade-lt);color:var(--jade)}
+.cta-stat-ic.v{background:rgba(107,95,173,.09);color:var(--violet)}
+.cta-stat-val{
+  font-family:var(--serif);font-size:1.5rem;color:var(--ink);
+  line-height:.95;margin-bottom:2px;
+}
+.cta-stat-lbl{font-size:.57rem;color:var(--muted);line-height:1.35;font-weight:400}
+
+/* ══════════ MAIN BANNER ══════════ */
+.cta-banner{
+  background:linear-gradient(145deg,var(--navy-x) 0%,var(--navy) 45%,var(--navy-soft) 100%);
+  border-radius:var(--r);overflow:hidden;
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:var(--sh-lg);
+  display:grid;grid-template-columns:1fr 420px;
+  position:relative;
+}
+/* gradient top accent */
+.cta-banner::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--orange) 0%,var(--teal) 55%,transparent 100%);
+  z-index:5;
+}
+/* ambient glow orbs inside banner */
+.bn-blob1{
+  position:absolute;top:-80px;right:380px;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(244,161,0,.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.bn-blob2{
+  position:absolute;bottom:-60px;left:-60px;
+  width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(26,184,176,.08) 0%,transparent 65%);
+  pointer-events:none;
+}
+/* subtle grid texture overlay */
+.bn-texture{
+  position:absolute;inset:0;opacity:.025;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.5) 0 1px,transparent 1px 48px),
+                   repeating-linear-gradient(90deg,rgba(255,255,255,.5) 0 1px,transparent 1px 48px);
+  pointer-events:none;
+}
+/* pixel mark decoration */
+.bn-pixel{
+  position:absolute;bottom:1.6rem;left:3.8rem;
+  display:flex;gap:3px;opacity:.1;
+}
+.px-col{display:flex;flex-direction:column;gap:3px}
+.px-sq{width:7px;height:7px;border-radius:1px}
+
+/* ── LEFT CONTENT ── */
+.cta-left{
+  padding:3.5rem 3.8rem 3.5rem 3.5rem;
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;gap:0;
+}
+.cta-heading{
+  font-family:var(--serif);
+  font-size:clamp(2rem,3.4vw,3.4rem);
+  color:var(--cream);font-weight:400;
+  line-height:1.05;margin-bottom:.6rem;
+  letter-spacing:-.01em;
+}
+.cta-heading em{font-style:normal;color:var(--teal)}
+.cta-heading .hi{color:var(--orange-l)}
+.cta-sub{
+  font-size:.78rem;font-weight:300;
+  color:rgba(240,237,228,.45);line-height:1.85;
+  max-width:430px;margin-bottom:2rem;
+}
+/* trust row */
+.cta-trust{
+  display:flex;flex-wrap:wrap;gap:.55rem;
+  margin-bottom:2rem;
+}
+.trust-item{
+  display:flex;align-items:center;gap:7px;
+  padding:.5rem .9rem;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r-sm);
+  font-size:.64rem;color:rgba(240,237,228,.7);
+  transition:background .2s,border-color .2s;
+}
+.trust-item:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18)}
+.trust-item i{font-size:.6rem;flex-shrink:0}
+.trust-item.stars i{color:#FFD700}
+.trust-item.green i{color:var(--teal)}
+.trust-item.orange i{color:var(--orange)}
+/* divider */
+.cta-divider{
+  height:1px;background:rgba(255,255,255,.08);
+  margin-bottom:1.8rem;
+}
+/* contact channels */
+.cta-channels-lbl{
+  font-family:var(--mono);font-size:.46rem;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(240,237,228,.28);margin-bottom:.7rem;
+}
+.cta-channels{display:flex;flex-wrap:wrap;gap:.5rem}
+.ch-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:.62rem 1.1rem;border-radius:var(--r-sm);
+  font-size:.69rem;font-weight:500;
+  border:1px solid;cursor:pointer;
+  transition:all .22s var(--ease);
+  position:relative;overflow:hidden;
+}
+.ch-btn::before{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity .2s;
+  background:currentColor;
+}
+.ch-btn:hover::before{opacity:.1}
+.ch-btn i{font-size:.65rem;flex-shrink:0;position:relative}
+.ch-btn span{position:relative}
+.ch-wa{
+  background:rgba(37,211,102,.12);border-color:rgba(37,211,102,.22);
+  color:#4cd475;
+}
+.ch-wa:hover{background:rgba(37,211,102,.18);border-color:rgba(37,211,102,.35)}
+.ch-mail{
+  background:rgba(26,184,176,.1);border-color:rgba(26,184,176,.22);
+  color:var(--teal);
+}
+.ch-mail:hover{background:rgba(26,184,176,.18);border-color:rgba(26,184,176,.35)}
+.ch-ph{
+  background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);
+  color:rgba(240,237,228,.6);
+}
+.ch-ph:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:var(--cream)}
+/* route chip bottom */
+.cta-route{
+  margin-top:auto;padding-top:1.8rem;
+  display:flex;align-items:center;gap:.5rem;
+  flex-wrap:wrap;
+}
+.route-dot{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:.52rem;
+  color:rgba(240,237,228,.35);
+}
+.route-dot::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--orange);opacity:.7;flex-shrink:0;
+}
+.route-arrow{
+  font-family:var(--mono);font-size:.52rem;
+  color:rgba(240,237,228,.18);padding:0 .2rem;
+}
+
+/* ── RIGHT BOOKING CARD ── */
+.cta-right{
+  padding:2.5rem 2.5rem 2.5rem 0;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:2;
+}
+.bk-card{
+  background:var(--white);
+  border-radius:var(--r);
+  box-shadow:0 24px 72px rgba(0,0,0,.32),0 4px 16px rgba(0,0,0,.18);
+  width:100%;overflow:hidden;
+  border:1px solid rgba(255,255,255,.2);
+}
+/* card header - navy */
+.bk-hd{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-soft) 100%);
+  padding:1.5rem 1.6rem 1.4rem;
+  position:relative;overflow:hidden;
+}
+.bk-hd::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(26,184,176,.14) 0%,transparent 65%);
+}
+.bk-hd-top{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--orange))}
+.bk-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(244,161,0,.12);border:1px solid rgba(244,161,0,.22);
+  border-radius:var(--r-sm);padding:2px 10px;
+  font-family:var(--mono);font-size:.46rem;color:var(--orange-l);
+  margin-bottom:.65rem;position:relative;z-index:1;
+}
+.bk-badge i{font-size:.42rem}
+.bk-from{font-size:.56rem;color:rgba(240,237,228,.32);position:relative;z-index:1}
+.bk-price-row{display:flex;align-items:flex-end;gap:.4rem;margin:.1rem 0 .05rem;position:relative;z-index:1}
+.bk-price{font-family:var(--serif);font-size:2.8rem;color:var(--cream);line-height:.88}
+.bk-price sup{font-size:1.1rem;color:var(--orange-l)}
+.bk-per{font-size:.55rem;color:rgba(240,237,228,.28);margin-bottom:.25rem;position:relative;z-index:1}
+.bk-tags{
+  display:flex;flex-wrap:wrap;gap:.2rem;
+  margin-top:.65rem;padding-top:.65rem;
+  border-top:1px solid rgba(255,255,255,.07);
+  position:relative;z-index:1;
+}
+.bk-tag{
+  display:flex;align-items:center;gap:4px;
+  font-family:var(--mono);font-size:.46rem;color:rgba(240,237,228,.3);
+}
+.bk-tag i{color:var(--teal);font-size:.43rem}
+
+/* card body */
+.bk-body{padding:1.2rem 1.4rem 1.3rem}
+/* group picker label */
+.bk-pick-lbl{
+  font-family:var(--mono);font-size:.46rem;font-weight:500;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--muted);
+  margin-bottom:.6rem;
+}
+/* group options */
+.bk-opts{display:flex;gap:.4rem;margin-bottom:.9rem}
+.bk-opt{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:.6rem .3rem;border-radius:var(--r);
+  border:1.5px solid var(--border-m);cursor:pointer;
+  background:var(--cream-pale);
+  transition:all .22s var(--ease);position:relative;overflow:hidden;
+}
+.bk-opt::before{content:'';position:absolute;inset:0;background:var(--oc,var(--teal));opacity:0;transition:opacity .2s}
+.bk-opt:hover::before{opacity:.04}
+.bk-opt.sel{border-color:var(--oc,var(--teal));box-shadow:0 0 0 3px color-mix(in srgb, var(--oc,var(--teal)) 20%, transparent)}
+.bk-opt.sel::before{opacity:.05}
+.bk-opt-ic{
+  width:26px;height:26px;border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.62rem;margin-bottom:.3rem;position:relative;z-index:1;
+}
+.bk-opt-ic.s{background:rgba(107,95,173,.1);color:var(--violet)}
+.bk-opt-ic.d{background:var(--teal-lt);color:var(--teal-d)}
+.bk-opt-ic.g{background:var(--jade-lt);color:var(--jade)}
+.bk-opt-lbl{font-size:.54rem;font-weight:600;color:var(--ink);position:relative;z-index:1;white-space:nowrap}
+.bk-opt-price{font-family:var(--serif);font-size:.92rem;color:var(--ink);position:relative;z-index:1;line-height:1}
+.bk-opt-price small{font-family:var(--sans);font-size:.44rem;color:var(--muted)}
+.bk-opt.sel .bk-opt-price{color:var(--oc,var(--teal-d));font-weight:600}
+
+/* availability indicator */
+.bk-avail{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(26,122,90,.07);border:1px solid rgba(26,122,90,.14);
+  border-radius:var(--r-sm);padding:.55rem .8rem;
+  margin-bottom:.9rem;
+}
+.avail-pulse{
+  position:relative;width:8px;height:8px;flex-shrink:0;
+}
+.avail-pulse::before{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  background:var(--jade);
+  animation:pulse 2s ease-in-out infinite;
+}
+.avail-pulse::after{
+  content:'';position:absolute;inset:-3px;border-radius:50%;
+  background:rgba(26,122,90,.25);
+  animation:pulse 2s ease-in-out infinite .3s;
+}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.6}}
+.avail-txt{font-size:.6rem;color:rgba(12,31,44,.6)}
+.avail-txt strong{color:var(--jade);font-weight:600}
+.avail-date{font-family:var(--mono);font-size:.5rem;color:var(--muted);margin-left:auto;white-space:nowrap}
+
+/* CTA buttons */
+.bk-book{
+ display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+
+  width:100%;
+  padding:11px 24px;
+
+  background: linear-gradient(135deg, var(--orange), var(--orange-d));
+  color:#fff;
+
+  font-family: var(--sans);
+  font-size:.78rem;
+  font-weight:600;
+  letter-spacing:.02em;
+
+  border-radius:2px;
+  border:none;
+
+  cursor:pointer;
+  text-decoration:none;
+  position:relative;
+  overflow:hidden;
+
+  transition: transform .22s var(--ease-b);
+
+}
+
+
+.bk-book::after{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-80%;
+  width:50%;
+  height:100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,.2), transparent);
+  transition:left .55s;
+}
+
+.bk-book:hover{background:var(--orange-l);transform:translateY(-1px);box-shadow:0 6px 22px rgba(244,161,0,.35)}
+
+
+.bk-book:hover::after{ left:150%; }
+.bk-book:hover{
+  transform: translateY(-2px) scale(1.02);
+  color:#fff;
+}
+
+
+
+.bk-enq{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;background:var(--white);color:var(--ink);font-family:var(--sans);font-weight:600;font-size:.72rem;border-radius:var(--r-sm);border:1.5px solid var(--border-m);cursor:pointer;margin-top:.42rem;transition:border-color .2s,color .2s}
+.bk-enq:hover{border-color:var(--teal-d);color:#fff; background:#163044;}
+
+/* secure note */
+.bk-secure{
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  font-family:var(--mono);font-size:.49rem;color:var(--muted);
+  margin-top:.6rem;
+}
+.bk-secure i{color:var(--jade);font-size:.49rem}
+
+/* card footer - contact quick row */
+.bk-foot{
+  display:flex;align-items:stretch;
+  border-top:1px solid var(--border);
+}
+.bk-contact{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:.7rem .5rem;font-size:.63rem;font-weight:500;color:var(--muted);
+  border-right:1px solid var(--border);cursor:pointer;
+  transition:background .18s,color .18s;
+  text-decoration:none;
+}
+.bk-contact:last-child{border-right:none}
+.bk-contact:hover{background:var(--cream-pale)}
+.bk-contact.wa:hover{background:rgba(37,211,102,.06);color:#22a855}
+.bk-contact.mail:hover{background:var(--teal-lt);color:var(--teal-d)}
+.bk-contact i{font-size:.6rem}
+.bk-contact.wa i{color:#25d366}
+.bk-contact.mail i{color:var(--teal-d)}
+
+/* ══════════ RESPONSIVE ══════════ */
+@media(max-width:1100px){
+  .cta-banner{grid-template-columns:1fr 390px}
+  .cta-stats{grid-template-columns:repeat(3,1fr)}
+  .cta-stats .cta-stat:nth-child(4),.cta-stats .cta-stat:nth-child(5){display:none}
+}
+@media(max-width:860px){
+  .cta-banner{grid-template-columns:1fr}
+  .cta-right{padding:0 2rem 2.5rem;justify-content:flex-start}
+  .bk-card{max-width:420px}
+  .cta-left{padding:3rem 2rem 2rem}
+}
+@media(max-width:640px){
+  .cta-section{padding:3.5rem 1.2rem}
+  .cta-stats{grid-template-columns:1fr 1fr}
+  .cta-stats .cta-stat:nth-child(5){display:none}
+  .cta-heading{font-size:1.9rem}
+  .cta-channels{flex-direction:column}
+  .ch-btn{justify-content:center}
+}
+</style>
+
+
+<section class="cta-section">
+  <div class="cta-inner">
+
+    <!-- EYEBROW -->
+    <div class="cta-eyebrow-row">
+      <div class="ey-bar"></div>
+      <span class="ey-txt">Ready to Explore Sri Lanka</span>
+      <div class="ey-dot"></div>
+    </div>
+
+    <!-- ══ STATS STRIP ══ -->
+    <div class="cta-stats">
+      <div class="cta-stat">
+        <div class="cta-stat-ic o"><i class="fas fa-moon"></i></div>
+        <div>
+          <div class="cta-stat-val">10</div>
+          <div class="cta-stat-lbl">Days · 09 Nights</div>
+        </div>
+      </div>
+      <div class="cta-stat">
+        <div class="cta-stat-ic t"><i class="fas fa-award"></i></div>
+        <div>
+          <div class="cta-stat-val">5</div>
+          <div class="cta-stat-lbl">UNESCO World Heritage Sites</div>
+        </div>
+      </div>
+      <div class="cta-stat">
+        <div class="cta-stat-ic g"><i class="fas fa-paw"></i></div>
+        <div>
+          <div class="cta-stat-val">2</div>
+          <div class="cta-stat-lbl">Wildlife Encounters</div>
+        </div>
+      </div>
+      <div class="cta-stat">
+        <div class="cta-stat-ic o"><i class="fas fa-star"></i></div>
+        <div>
+          <div class="cta-stat-val">4.9</div>
+          <div class="cta-stat-lbl">Guest Rating · 200+ Reviews</div>
+        </div>
+      </div>
+      <div class="cta-stat">
+        <div class="cta-stat-ic t"><i class="fas fa-dollar-sign"></i></div>
+        <div>
+          <div class="cta-stat-val">1,490</div>
+          <div class="cta-stat-lbl">From · per person</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MAIN DARK BANNER ══ -->
+    <div class="cta-banner">
+      <!-- decorative layers -->
+      <div class="bn-blob1"></div>
+      <div class="bn-blob2"></div>
+      <div class="bn-texture"></div>
+      <div class="bn-pixel">
+        <div class="px-col">
+          <div class="px-sq" style="background:var(--orange)"></div>
+          <div class="px-sq" style="background:var(--teal)"></div>
+          <div class="px-sq" style="background:var(--teal)"></div>
+        </div>
+        <div class="px-col">
+          <div class="px-sq" style="background:var(--teal)"></div>
+          <div class="px-sq" style="background:transparent;border:1px solid rgba(255,255,255,.15)"></div>
+          <div class="px-sq" style="background:var(--orange)"></div>
+        </div>
+        <div class="px-col">
+          <div class="px-sq" style="background:var(--orange)"></div>
+          <div class="px-sq" style="background:var(--orange)"></div>
+          <div class="px-sq" style="background:var(--teal)"></div>
+        </div>
+      </div>
+
+      <!-- LEFT CONTENT -->
+      <div class="cta-left">
+        <div class="cta-heading">
+          Start Your<br>
+          Sri Lanka <em>Adventure</em><br>
+          <span class="hi">Today</span>
+        </div>
+        <p class="cta-sub">
+          10 days · 09 nights · 5 UNESCO sites · fully private · customisable dates.<br>
+          Free cancellation up to 30 days before departure.
+        </p>
+
+        <!-- Trust indicators -->
+        <div class="cta-trust">
+          <div class="trust-item stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span style="margin-left:2px">4.9 · 200+ Guests</span>
+          </div>
+          <div class="trust-item green">
+            <i class="fas fa-user-shield"></i>
+            <span>Fully Private Tour</span>
+          </div>
+          <div class="trust-item green">
+            <i class="fas fa-shield-alt"></i>
+            <span>Free Cancellation</span>
+          </div>
+          <div class="trust-item orange">
+            <i class="fas fa-sliders-h"></i>
+            <span>Fully Customisable</span>
+          </div>
+          <div class="trust-item green">
+            <i class="fas fa-check-circle"></i>
+            <span>All Inclusive</span>
+          </div>
+        </div>
+
+        <div class="cta-divider"></div>
+
+        <!-- Contact channels -->
+        <div class="cta-channels-lbl">Get in touch</div>
+        <div class="cta-channels">
+          <button class="ch-btn ch-wa">
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp Us</span>
+          </button>
+          <button class="ch-btn ch-mail">
+            <i class="fas fa-envelope"></i>
+            <span>info@pixelceylon.com</span>
+          </button>
+          <button class="ch-btn ch-ph">
+            <i class="fas fa-phone"></i>
+            <span>+94 77 123 4567</span>
+          </button>
+        </div>
+
+        <!-- Route chips -->
+        <div class="cta-route">
+          <div class="route-dot">Negombo</div>
+          <span class="route-arrow">→</span>
+          <div class="route-dot">Anuradhapura</div>
+          <span class="route-arrow">→</span>
+          <div class="route-dot">Sigiriya</div>
+          <span class="route-arrow">→</span>
+          <div class="route-dot">Kandy</div>
+          <span class="route-arrow">→</span>
+          <div class="route-dot">Ella</div>
+          <span class="route-arrow">→</span>
+          <div class="route-dot">Mirissa</div>
+        </div>
+      </div>
+
+      <!-- RIGHT BOOKING CARD -->
+      <div class="cta-right">
+        <div class="bk-card">
+
+          <!-- Card header -->
+          <div class="bk-hd">
+            <div class="bk-hd-top"></div>
+            <div class="bk-badge"><i class="fas fa-star"></i>&nbsp;All-Inclusive Package</div>
+            <div class="bk-from">Starting from</div>
+            <div class="bk-price-row">
+              <div class="bk-price"><sup>$</sup><span id="bk-val">1,490</span></div>
+            </div>
+            <div class="bk-per">per person &nbsp;·&nbsp; twin share &nbsp;·&nbsp; 10 days</div>
+            <div class="bk-tags">
+              <div class="bk-tag"><i class="fas fa-check"></i>&nbsp;Accommodation</div>
+              <div class="bk-tag"><i class="fas fa-check"></i>&nbsp;Entrances</div>
+              <div class="bk-tag"><i class="fas fa-check"></i>&nbsp;Transport</div>
+              <div class="bk-tag"><i class="fas fa-check"></i>&nbsp;Private Guide</div>
+              <div class="bk-tag"><i class="fas fa-check"></i>&nbsp;Breakfasts</div>
+            </div>
+          </div>
+
+          <!-- Card body -->
+          <div class="bk-body">
+            <div class="bk-pick-lbl">Select your group</div>
+            <div class="bk-opts" id="bk-opts">
+              <div class="bk-opt" style="--oc:#6b5fad" onclick="pickOpt(this,'$1,890')">
+                <div class="bk-opt-ic s"><i class="fas fa-user"></i></div>
+                <div class="bk-opt-lbl">Solo</div>
+                <div class="bk-opt-price">$1,890<small>/pp</small></div>
+              </div>
+              <div class="bk-opt sel" style="--oc:#1ab8b0" onclick="pickOpt(this,'$1,490')">
+                <div class="bk-opt-ic d"><i class="fas fa-user-friends"></i></div>
+                <div class="bk-opt-lbl">Duo</div>
+                <div class="bk-opt-price">$1,490<small>/pp</small></div>
+              </div>
+              <div class="bk-opt" style="--oc:#1a7a5a" onclick="pickOpt(this,'$1,250')">
+                <div class="bk-opt-ic g"><i class="fas fa-users"></i></div>
+                <div class="bk-opt-lbl">Group</div>
+                <div class="bk-opt-price">$1,250<small>/pp</small></div>
+              </div>
+            </div>
+
+          <!-- Availability -->
+<div class="bk-avail">
+  <div class="avail-pulse"></div>
+  <div class="avail-txt"><strong>Spaces Available</strong> for this departure</div>
+  <div class="avail-date" id="currentMonthYear">March 2026</div>
+</div>
+
+            <button class="bk-book"><i class="fas fa-paper-plane"></i>&nbsp;Book This Tour</button>
+            <button class="bk-enq"><i class="fas fa-comments"></i>&nbsp;Send an Enquiry</button>
+            <div class="bk-secure"><i class="fas fa-shield-alt"></i>&nbsp;Free cancellation · No hidden fees · Secure payment</div>
+          </div>
+
+          <!-- Card footer contacts -->
+          <div class="bk-foot">
+            <a href="https://wa.me/94777273794?" class="bk-contact wa">
+              <i class="fab fa-whatsapp"></i>
+              <span>WhatsApp</span>
+            </a>
+            <a href="mailto:info@pixelceylon.com" class="bk-contact mail">
+              <i class="fas fa-envelope"></i>
+              <span>Email Us</span>
+            </a>
+            <a href="tel:+94771234567" class="bk-contact">
+              <i class="fas fa-phone"></i>
+              <span>Call</span>
+            </a>
+          </div>
+
+        </div><!-- /bk-card -->
+      </div><!-- /cta-right -->
+
+    </div><!-- /cta-banner -->
+  </div><!-- /cta-inner -->
+</section>
+
+<script>
+function pickOpt(el, val){
+  el.closest('#bk-opts').querySelectorAll('.bk-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('bk-val').textContent = val.replace('$','');
+}
+
+
+const wpNumber = "94777273794";
+
+  document.querySelector(".bk-book").addEventListener("click", function () {
+    const pageUrl = window.location.href;
+    const msg = "Hi! I like to book this tour package " + pageUrl;
+    const waLink = "https://wa.me/" + wpNumber + "?text=" + encodeURIComponent(msg);
+    window.open(waLink, "_blank");
+  });
+
+  document.querySelector(".bk-enq").addEventListener("click", function () {
+    const pageUrl = window.location.href;
+    const msg = "Hi! I like to know more details about this trip " + pageUrl;
+    const waLink = "https://wa.me/" + wpNumber + "?text=" + encodeURIComponent(msg);
+    window.open(waLink, "_blank");
+  });
+  
+  document.addEventListener('DOMContentLoaded', function() {
+  const now = new Date();
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  
+  const currentMonth = months[now.getMonth()];
+  const currentYear = now.getFullYear();
+  
+  document.getElementById('currentMonthYear').textContent = 
+    currentMonth + ' ' + currentYear;
+});
+  
+</script>
+</section>

@@ -1,0 +1,665 @@
+<div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tour Packages — Pixel Ceylon Tours</title>
+
+
+
+
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:#fff;color:#1a1a2e;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+ul{list-style:none}
+em,strong{font-style:normal;font-weight:400}
+
+:root{
+  --offwhite:#f7f8fb;--ink:#1a1a2e;--muted:#6b7280;--muted2:#9ca3af;
+  --teal:#0ba5b8;--teal2:#0dd4e8;
+  --teal-l:rgba(11,165,184,.08);--teal-b:rgba(11,165,184,.2);
+  --orange:#e8943a;--orange-d:#c9752a;
+  --orange-l:rgba(232,148,58,.08);--orange-b:rgba(232,148,58,.25);
+  --gold:#c9963a;--gold2:#e8b455;--green:#16a34a;
+  --border:#e5e7eb;--border2:#d1d5db;
+  --sh:0 4px 16px rgba(0,0,0,.07),0 2px 6px rgba(0,0,0,.04);
+  --shlg:0 20px 48px rgba(0,0,0,.09),0 8px 20px rgba(0,0,0,.05);
+  --shxl:0 32px 80px rgba(0,0,0,.11),0 12px 32px rgba(0,0,0,.07);
+  --r:3px;
+  --sans:'Poppins',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+  --sp:cubic-bezier(.34,1.56,.64,1);
+  --ez:cubic-bezier(.16,1,.3,1);
+}
+
+/* ══ HERO ══ */
+.tours-hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:#080d1a}
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.3) saturate(1.3);opacity:0;animation:hSlide 25s linear infinite}
+.hero-bg img:nth-child(1){animation-delay:0s}
+.hero-bg img:nth-child(2){animation-delay:5s}
+.hero-bg img:nth-child(3){animation-delay:10s}
+.hero-bg img:nth-child(4){animation-delay:15s}
+.hero-bg img:nth-child(5){animation-delay:20s}
+@keyframes hSlide{0%{opacity:0;transform:scale(1.04)}4%{opacity:1}20%{opacity:1;transform:scale(1.11)}24%{opacity:0;transform:scale(1.12)}100%{opacity:0;transform:scale(1.04)}}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,13,26,.15) 0%,transparent 30%,transparent 55%,rgba(8,13,26,.95) 100%),linear-gradient(to right,rgba(8,13,26,.88) 0%,rgba(8,13,26,.3) 55%,transparent 100%)}
+.hero-glow{position:absolute;top:15%;left:-8%;z-index:1;pointer-events:none;width:65vw;height:65vw;max-width:860px;max-height:860px;border-radius:50%;background:radial-gradient(circle,rgba(11,165,184,.13) 0%,transparent 62%);animation:glowP 7s ease-in-out infinite}
+@keyframes glowP{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+.hero-glow2{position:absolute;top:-8%;right:-5%;z-index:1;pointer-events:none;width:45vw;height:45vw;max-width:560px;max-height:560px;border-radius:50%;background:radial-gradient(circle,rgba(232,148,58,.07) 0%,transparent 60%)}
+.hero-deco{position:absolute;inset:0;z-index:1;pointer-events:none}
+.hero-deco::before{content:'';position:absolute;top:0;left:50%;width:1px;height:100%;background:linear-gradient(to bottom,transparent,rgba(11,165,184,.1) 40%,transparent)}
+.hero-deco::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(11,165,184,.4) 30%,rgba(232,148,58,.25) 70%,transparent)}
+.hero-inner{position:relative;z-index:2;max-width:1320px;margin:0 auto;width:100%;padding:clamp(6rem,12vh,10rem) clamp(1.5rem,6vw,5rem) clamp(4rem,8vh,7rem);display:grid;grid-template-columns:1fr 360px;gap:3rem;align-items:end}
+@media(max-width:1000px){.hero-inner{grid-template-columns:1fr}}
+.hero-kicker{display:inline-flex!important;align-items:center!important;gap:10px!important;background:rgba(11,165,184,.14)!important;border:1px solid rgba(11,165,184,.28)!important;border-radius:var(--r)!important;padding:6px 14px!important;font-size:.6rem!important;letter-spacing:.18em!important;text-transform:uppercase!important;color:#0dd4e8!important;margin-bottom:1.6rem!important;opacity:0;animation:fadeUp .7s var(--ez) .2s forwards;width:auto!important;flex:0 0 auto!important}
+.kicker-dot{width:7px!important;height:7px!important;border-radius:50%!important;background:var(--teal2)!important;box-shadow:0 0 8px rgba(13,212,232,.6);animation:blink 2s ease-in-out infinite;display:inline-block!important;flex-shrink:0!important}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 8px rgba(13,212,232,.6)}50%{opacity:.4;box-shadow:none}}
+.hero-title{font-family:'Bagind','Poppins',sans-serif;font-weight:400;font-style:normal;font-size:clamp(2rem,4.5vw,4.8rem);line-height:.93;letter-spacing:-.02em;margin-bottom:1.4rem;opacity:0;animation:fadeUp .8s var(--ez) .35s forwards}
+.hero-title .line1{display:block;font-family:'Poppins',sans-serif;font-weight:300;color:rgba(255,255,255,.55);font-size:.2em;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.25em}
+.hero-title .line2{display:block;color:#fff}
+.hero-title .line3{display:block;color:#ea9133;font-size:.52em;margin-top:.08em}
+.hero-desc{font-size:.82rem;font-weight:300;color:rgba(255,255,255,.55);line-height:1.9;max-width:500px;margin-bottom:2rem;opacity:0;animation:fadeUp .8s var(--ez) .5s forwards}
+.hero-ctas{display:flex!important;align-items:center!important;gap:.8rem!important;flex-wrap:wrap!important;margin-bottom:2.8rem;opacity:0;animation:fadeUp .8s var(--ez) .65s forwards}
+.hero-btn-pri{display:inline-flex!important;align-items:center!important;gap:9px!important;padding:13px 30px!important;background:linear-gradient(135deg,#e8943a,#c9752a)!important;color:#fff!important;font-size:.78rem!important;border-radius:var(--r)!important;box-shadow:0 8px 28px rgba(232,148,58,.38);position:relative;overflow:hidden;transition:transform .25s var(--sp),box-shadow .25s;width:auto!important}
+.hero-btn-pri::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(to right,transparent,rgba(255,255,255,.22),transparent);transition:left .55s}
+.hero-btn-pri:hover::after{left:150%}
+.hero-btn-pri:hover{transform:translateY(-2px) scale(1.03);color:#fff!important}
+.hero-btn-sec{display:inline-flex!important;align-items:center!important;gap:8px!important;padding:12px 24px!important;background:rgba(255,255,255,.07)!important;backdrop-filter:blur(10px);color:rgba(255,255,255,.8)!important;font-size:.78rem!important;border:1.5px solid rgba(255,255,255,.16)!important;border-radius:var(--r)!important;transition:border-color .25s,color .25s,background .25s;width:auto!important}
+.hero-btn-sec:hover{border-color:rgba(11,165,184,.55)!important;color:#fff!important;background:rgba(11,165,184,.1)!important}
+.hero-stat-row{display:flex;gap:2rem;flex-wrap:wrap;opacity:0;animation:fadeUp .8s var(--ez) .8s forwards}
+.hero-stat-item{display:flex;flex-direction:column;gap:2px}
+.hero-stat-n{font-family:'Bagind','Poppins',sans-serif;font-size:1.25rem;font-weight:400;color:#fff;line-height:1}
+.hero-stat-n span{color:var(--teal2)}
+.hero-stat-l{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.hero-stat-sep{width:1px;align-self:stretch;background:rgba(255,255,255,.09);margin:4px 0}
+.hero-rhs{display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;gap:1.2rem}
+@media(max-width:1000px){.hero-rhs{display:none}}
+.hero-float-cards{display:flex;flex-direction:column;gap:.75rem;opacity:0;animation:fadeUp .8s var(--ez) .9s forwards}
+.hero-fcard{background:rgba(255,255,255,.06);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:.85rem 1.2rem;display:flex;align-items:center;gap:.9rem;min-width:230px}
+.hero-fcard-ico{width:38px;height:38px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.hero-fcard-ico.tl{background:rgba(11,165,184,.2);color:#0dd4e8}
+.hero-fcard-ico.og{background:rgba(232,148,58,.2);color:#e8943a}
+.hero-fcard-ico.gr{background:rgba(22,163,74,.2);color:#16a34a}
+.hero-fcard-n{font-size:.76rem;color:#fff;line-height:1.25}
+.hero-fcard-s{font-size:.58rem;font-weight:300;color:rgba(255,255,255,.42)}
+.hero-scroll-cue{display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0;animation:fadeUp .8s var(--ez) 1.1s forwards}
+.hero-scroll-cue span{font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);writing-mode:vertical-rl}
+.hero-scroll-line{width:1px;height:56px;background:linear-gradient(to bottom,rgba(11,165,184,.6),transparent);animation:scrlLine 2.2s ease-in-out infinite}
+@keyframes scrlLine{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ══════════════════════════════════════
+   PACKAGES SECTION
+══════════════════════════════════════ */
+.tours-section{padding:clamp(3rem,7vw,8rem) 0 clamp(4rem,8vw,9rem);position:relative;background:#fff}
+.tours-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),var(--orange),transparent)}
+.tours-dots{position:absolute;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle,rgba(0,0,0,.03) 1px,transparent 1px);background-size:28px 28px}
+.tours-wrap{max-width:1380px;margin:0 auto;padding:0 clamp(1.25rem,5vw,4rem);position:relative;z-index:1}
+
+/* ── Section Header ── */
+.tours-head{display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;margin-bottom:2.5rem;flex-wrap:wrap}
+.tours-head-lhs{max-width:580px}
+
+@media(max-width:640px){
+  .tours-head{flex-direction:column;align-items:flex-start;gap:1rem}
+  .tours-view-all{align-self:stretch;justify-content:center!important}
+}
+
+/* KICKER */
+.tours-kicker{
+  display:inline-flex!important;align-items:center!important;gap:8px!important;
+  background:rgba(11,165,184,.08)!important;border:1px solid rgba(11,165,184,.2)!important;
+  border-radius:3px!important;padding:5px 13px!important;
+  font-size:.58rem!important;letter-spacing:.18em!important;text-transform:uppercase!important;
+  color:#0ba5b8!important;margin-bottom:1rem!important;
+  width:auto!important;max-width:none!important;flex:0 0 auto!important;
+  line-height:1.4!important;font-weight:500!important;cursor:default!important;
+  font-family:'Poppins',sans-serif!important;
+}
+.tours-kicker::before{
+  content:''!important;display:inline-block!important;
+  width:6px!important;height:6px!important;border-radius:50%!important;
+  background:#0ba5b8!important;flex-shrink:0!important;
+  border:none!important;padding:0!important;margin:0!important;
+}
+.tours-title{font-family:'Bagind','Poppins',sans-serif;font-weight:400;font-size:clamp(1.8rem,5vw,3.4rem);line-height:.97;color:var(--ink);letter-spacing:-.02em;margin-bottom:.8rem}
+.tours-title .sub-label{display:block;font-family:'Bagind',sans-serif;font-weight:300;color:var(--muted);font-size:.62em;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.15em}
+.tours-title .accent{display:block;color:var(--teal);font-weight:400}
+.tours-sub{font-size:.8rem;font-weight:300;color:var(--muted);line-height:1.85}
+.tours-view-all{display:inline-flex!important;align-items:center!important;gap:7px!important;padding:10px 20px!important;background:var(--offwhite)!important;color:var(--muted)!important;font-size:.7rem!important;border:1.5px solid var(--border2)!important;border-radius:var(--r)!important;transition:border-color .25s,color .25s,background .25s;white-space:nowrap!important;flex-shrink:0!important;width:auto!important}
+.tours-view-all:hover{border-color:var(--teal)!important;color:var(--teal)!important;background:rgba(11,165,184,.08)!important}
+
+/* ── FILTER TABS ── */
+.tours-filters{
+  display:flex!important;align-items:center!important;gap:.4rem!important;
+  margin-bottom:2.5rem!important;flex-wrap:wrap!important;
+}
+.tf{
+  display:inline-flex!important;align-items:center!important;gap:6px!important;
+  font-size:.68rem!important;padding:8px 16px!important;border-radius:3px!important;
+  cursor:pointer!important;border:1.5px solid #e5e7eb!important;
+  background:#fff!important;color:#6b7280!important;
+  transition:background .2s,border-color .2s,color .2s;user-select:none;
+  width:auto!important;flex:0 0 auto!important;white-space:nowrap!important;
+  line-height:1.4!important;font-family:'Poppins',sans-serif!important;font-weight:400!important;
+}
+.tf i,.tf .fas{font-size:.6rem!important;background:none!important;border:none!important;padding:0!important;width:auto!important;height:auto!important}
+.tf:hover{border-color:#0ba5b8!important;color:#0ba5b8!important;background:rgba(11,165,184,.08)!important}
+.tf.on{background:#0ba5b8!important;border-color:#0ba5b8!important;color:#fff!important;transform:translateY(-1px);box-shadow:0 5px 18px rgba(11,165,184,.28)!important}
+
+@media(max-width:480px){
+  .tf{font-size:.62rem!important;padding:7px 12px!important}
+}
+
+/* ── CATEGORY DIVIDERS ── */
+.cat-divider{
+  display:flex!important;align-items:center!important;flex-direction:row!important;
+  gap:1rem!important;margin:3rem 0 1.75rem!important;
+  width:100%!important;
+  opacity:0;transform:translateY(14px);transition:opacity .55s var(--ez),transform .55s var(--ez);
+}
+.cat-divider.in{opacity:1;transform:none}
+.cat-div-line{
+  flex:1!important;height:1px!important;background:#e5e7eb!important;
+  display:block!important;border:none!important;padding:0!important;margin:0!important;min-width:10px!important;
+}
+.cat-div-label{
+  display:inline-flex!important;align-items:center!important;gap:8px!important;
+  padding:6px 15px!important;border-radius:3px!important;
+  font-size:.58rem!important;font-weight:500!important;letter-spacing:.12em!important;
+  text-transform:uppercase!important;white-space:nowrap!important;
+  border-style:solid!important;border-width:1.5px!important;
+  width:auto!important;max-width:none!important;flex:0 0 auto!important;
+  line-height:1.4!important;cursor:default!important;font-family:'Poppins',sans-serif!important;
+}
+.cat-div-label i,.cat-div-label .fas{
+  display:inline-block!important;background:none!important;border:none!important;
+  padding:0!important;margin:0!important;width:auto!important;height:auto!important;
+  font-size:.6rem!important;flex-shrink:0!important;
+}
+.cat-div-label.sl{background:rgba(11,165,184,.08)!important;border-color:rgba(11,165,184,.2)!important;color:#0ba5b8!important}
+.cat-div-label.sl i{color:#0ba5b8!important}
+.cat-div-label.biz{background:rgba(232,148,58,.08)!important;border-color:rgba(232,148,58,.25)!important;color:#e8943a!important}
+.cat-div-label.biz i{color:#e8943a!important}
+.cat-div-label.asia{background:rgba(201,150,58,.08)!important;border-color:rgba(201,150,58,.22)!important;color:#c9963a!important}
+.cat-div-label.asia i{color:#c9963a!important}
+
+/* ── GRID ── */
+.tours-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.25rem;
+}
+@media(max-width:1100px){ .tours-grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:600px)  { .tours-grid{grid-template-columns:1fr;gap:1rem} }
+
+/* ── CARD ── */
+.tc{
+  background:#fff;border:1.5px solid var(--border);border-radius:var(--r);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .32s var(--sp),box-shadow .32s,border-color .32s;
+  position:relative;
+}
+.tc:hover{transform:translateY(-7px);box-shadow:var(--shxl);border-color:rgba(11,165,184,.3)}
+
+/* Card image */
+.tc-img{position:relative;height:210px;overflow:hidden;flex-shrink:0}
+@media(max-width:600px){ .tc-img{height:220px} }
+.tc-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.85) saturate(1.1);transition:transform .65s var(--ez),filter .4s}
+.tc:hover .tc-img img{transform:scale(1.07);filter:brightness(.7) saturate(1.25)}
+.tc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65) 0%,rgba(0,0,0,.06) 52%,transparent 100%)}
+.tc-img-ov2{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.18) 0%,transparent 35%)}
+
+/* BADGE */
+.tc-badge{
+  position:absolute!important;top:.85rem!important;left:.85rem!important;z-index:2!important;
+  display:inline-flex!important;align-items:center!important;gap:5px!important;
+  padding:4px 11px!important;border-radius:3px!important;font-size:.56rem!important;
+  width:auto!important;max-width:none!important;flex:0 0 auto!important;
+  white-space:nowrap!important;font-family:'Poppins',sans-serif!important;
+}
+.tc-badge.sig{background:rgba(11,165,184,.9)!important;color:#fff!important}
+.tc-badge.wild{background:rgba(22,163,74,.9)!important;color:#fff!important}
+.tc-badge.pop{background:rgba(232,148,58,.95)!important;color:#fff!important}
+.tc-badge.hero{background:rgba(255,255,255,.92)!important;color:#1a1a2e!important;border:1px solid rgba(0,0,0,.08)!important}
+.tc-badge.biz{background:rgba(11,165,184,.9)!important;color:#fff!important}
+.tc-badge.gold{background:rgba(201,150,58,.92)!important;color:#fff!important}
+.tc-badge i,.tc-badge .fas{background:none!important;border:none!important;padding:0!important;width:auto!important;height:auto!important}
+
+/* DURATION chip */
+.tc-dur{
+  position:absolute!important;top:.85rem!important;right:.85rem!important;z-index:2!important;
+  display:inline-flex!important;align-items:center!important;gap:5px!important;
+  background:rgba(0,0,0,.52)!important;backdrop-filter:blur(10px);
+  padding:4px 10px!important;border-radius:3px!important;font-size:.56rem!important;
+  color:rgba(255,255,255,.9)!important;width:auto!important;white-space:nowrap!important;
+}
+.tc-dur i{color:#0dd4e8!important;font-size:.48rem!important;background:none!important;border:none!important;padding:0!important}
+
+/* CATEGORY dots */
+.tc-cats{
+  position:absolute!important;bottom:.85rem!important;left:.85rem!important;z-index:2!important;
+  display:flex!important;flex-direction:row!important;gap:.28rem!important;flex-wrap:wrap!important;
+}
+.tc-cat{
+  display:inline-flex!important;align-items:center!important;gap:4px!important;
+  background:rgba(0,0,0,.48)!important;backdrop-filter:blur(8px);
+  padding:3px 9px!important;border-radius:3px!important;font-size:.54rem!important;
+  color:rgba(240,237,228,.8)!important;width:auto!important;flex:0 0 auto!important;
+  white-space:nowrap!important;
+}
+.tc-cat i{font-size:.46rem!important;background:none!important;border:none!important;padding:0!important;width:auto!important;height:auto!important}
+
+/* CARD BODY */
+.tc-body{padding:1.2rem 1.3rem .9rem;flex:1;display:flex;flex-direction:column;gap:.48rem}
+
+.tc-region{
+  display:flex!important;align-items:center!important;gap:5px!important;
+  font-size:.58rem!important;letter-spacing:.06em!important;text-transform:uppercase!important;
+  color:#0ba5b8!important;width:auto!important;
+}
+.tc-region i{font-size:.48rem!important;background:none!important;border:none!important;padding:0!important}
+
+.tc-name{font-family:'Bagind','Poppins',sans-serif;font-weight:400;font-size:1.28rem;color:var(--ink);line-height:1.1;transition:color .25s}
+.tc:hover .tc-name{color:var(--teal)}
+.tc-desc{font-size:.72rem;font-weight:300;color:var(--muted);line-height:1.8;flex:1}
+
+/* HIGHLIGHT PILLS */
+.tc-highlights{
+  display:flex!important;flex-wrap:wrap!important;gap:.28rem!important;
+  margin-top:.1rem!important;align-items:flex-start!important;
+}
+.tc-hl{
+  display:inline-flex!important;align-items:center!important;gap:5px!important;
+  background:rgba(11,165,184,.07)!important;border:1px solid rgba(11,165,184,.2)!important;
+  padding:3px 10px 3px 8px!important;border-radius:3px!important;
+  font-size:.57rem!important;font-weight:400!important;line-height:1.4!important;
+  color:#0ba5b8!important;white-space:nowrap!important;
+  width:auto!important;max-width:none!important;flex:0 0 auto!important;
+  font-family:'Poppins',sans-serif!important;cursor:default!important;
+}
+.tc-hl i,.tc-hl .fas{
+  font-size:.46rem!important;color:#0ba5b8!important;flex-shrink:0!important;
+  background:none!important;border:none!important;padding:0!important;
+  margin:0!important;width:auto!important;height:auto!important;display:inline-block!important;
+}
+
+/* META ROW */
+.tc-meta{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;padding-top:.5rem;border-top:1.5px solid var(--border);margin-top:.2rem}
+.tc-stars{display:flex;align-items:center;gap:2px}
+.tc-stars i{color:#e8b455!important;font-size:.52rem!important;background:none!important;border:none!important;padding:0!important}
+.tc-rv{font-size:.62rem;color:var(--ink)}
+.tc-rc{font-size:.58rem;color:var(--muted2)}
+.tc-dot{width:3px;height:3px;border-radius:50%;background:var(--border2)}
+.tc-priv{display:flex!important;align-items:center!important;gap:4px!important;font-size:.56rem!important;color:var(--muted2)!important;margin-left:auto!important}
+.tc-priv i{color:#0ba5b8!important;font-size:.52rem!important;background:none!important;border:none!important;padding:0!important}
+
+/* CARD FOOTER */
+.tc-foot{
+  padding:.9rem 1.3rem 1.1rem;
+  border-top:1.5px solid var(--border);
+  background:var(--offwhite);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.75rem;
+  flex-wrap:wrap;          /* ← key fix: allows wrap on tiny screens */
+}
+.tc-price-from{font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);margin-bottom:2px}
+.tc-price{font-family:'Bagind','Poppins',sans-serif;font-size:1.55rem;font-weight:400;color:var(--ink);line-height:1;letter-spacing:-.01em}
+.tc-price.custom{font-size:1.2rem}
+.tc-price span{font-family:var(--sans);font-size:.56rem;font-weight:400;color:var(--muted2)}
+.tc-price-note{font-size:.58rem;color:var(--muted2);margin-top:2px}
+
+/* VIEW TOUR BUTTON */
+.tc-book{
+  display:inline-flex!important;align-items:center!important;gap:7px!important;
+  padding:11px 20px!important;background:linear-gradient(135deg,#e8943a,#c9752a)!important;
+  color:#fff!important;font-size:.7rem!important;border-radius:3px!important;
+  white-space:nowrap!important;flex-shrink:0!important;
+  box-shadow:0 4px 14px rgba(232,148,58,.28);position:relative;overflow:hidden;
+  transition:transform .25s var(--sp),box-shadow .25s;
+  width:auto!important;border:none!important;font-family:'Poppins',sans-serif!important;
+}
+.tc-book::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(to right,transparent,rgba(255,255,255,.22),transparent);transition:left .5s}
+.tc-book:hover::after{left:150%}
+.tc-book:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 8px 22px rgba(232,148,58,.4);color:#fff!important}
+.tc-book i{font-size:.6rem!important;background:none!important;border:none!important;padding:0!important}
+
+/* Full-width button on very small screens */
+@media(max-width:380px){
+  .tc-foot{flex-direction:column;align-items:stretch}
+  .tc-book{justify-content:center!important;width:100%!important}
+}
+
+.tc.hidden{display:none!important}
+.tours-empty{grid-column:1/-1;display:none;flex-direction:column;align-items:center;justify-content:center;padding:4rem 2rem;text-align:center;gap:1rem}
+.tours-empty-ico{width:52px;height:52px;border-radius:var(--r);background:rgba(11,165,184,.08);border:1px solid rgba(11,165,184,.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--teal)}
+.tours-empty p{font-size:.8rem;font-weight:300;color:var(--muted)}
+
+/* ══════════════════════════════════════
+   TRUST STRIP
+══════════════════════════════════════ */
+.tours-trust{
+  margin-top:3rem;
+  padding:1.75rem clamp(1.25rem,4vw,3rem);
+  background:#fff;
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.25rem;
+  position:relative;overflow:hidden;
+  box-shadow:var(--sh);
+}
+.tours-trust::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),var(--orange),transparent)}
+
+/* Trust strip breakpoints */
+@media(max-width:900px){ .tours-trust{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:480px){ .tours-trust{grid-template-columns:1fr;gap:1rem} }
+
+.tt-item{display:flex;align-items:flex-start;gap:.85rem}
+.tt-ico{width:40px;height:40px;border-radius:var(--r);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.88rem}
+.tt-ico.tl{background:rgba(11,165,184,.08);border:1px solid rgba(11,165,184,.2);color:var(--teal)}
+.tt-ico.og{background:rgba(232,148,58,.08);border:1px solid rgba(232,148,58,.25);color:var(--orange)}
+.tt-ico.gd{background:rgba(201,150,58,.08);border:1px solid rgba(201,150,58,.2);color:var(--gold)}
+.tt-ico.gr{background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.18);color:var(--green)}
+.tt-ttl{font-size:.76rem;color:var(--ink);margin-bottom:3px;font-weight:600}
+.tt-sub{font-size:.64rem;font-weight:300;color:var(--muted);line-height:1.6}
+
+/* ══════════════════════════════════════
+   BOTTOM CTA BANNER
+══════════════════════════════════════ */
+.tours-cta{
+  margin-top:3rem;
+  padding:clamp(2rem,5vw,4rem) clamp(1.5rem,5vw,4rem);
+  background:linear-gradient(135deg,#0b1829 0%,#0d2036 50%,#091a28 100%);
+  border-radius:var(--r);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:2rem;
+  flex-wrap:wrap;          /* ← allows it to stack */
+  position:relative;overflow:hidden;
+  box-shadow:var(--shlg);
+}
+.tours-cta::before{content:'';position:absolute;top:-30%;left:-10%;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(11,165,184,.11) 0%,transparent 65%);pointer-events:none}
+.tours-cta::after{content:'';position:absolute;bottom:-30%;right:-5%;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(232,148,58,.09) 0%,transparent 65%);pointer-events:none}
+.tours-cta-lhs{position:relative;z-index:1;flex:1;min-width:0}
+.tours-cta-eyebrow{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal2);margin-bottom:.7rem;display:flex;align-items:center;gap:8px}
+.tours-cta-eyebrow::before{content:'';width:18px;height:2px;background:var(--teal2);flex-shrink:0}
+.tours-cta-h{font-family:'Bagind','Poppins',sans-serif;font-weight:400;font-size:clamp(1.5rem,4vw,2.8rem);color:#fff;line-height:1;letter-spacing:-.02em;margin-bottom:.6rem}
+.tours-cta-h strong{color:var(--teal2)}
+.tours-cta-p{font-size:.78rem;font-weight:300;color:rgba(255,255,255,.48);line-height:1.85;max-width:460px}
+.tours-cta-btns{
+  display:flex;
+  align-items:center;
+  gap:.8rem;
+  flex-wrap:wrap;
+  flex-shrink:0;
+  position:relative;z-index:1;
+}
+
+/* Stack CTA buttons on mobile */
+@media(max-width:640px){
+  .tours-cta{flex-direction:column;align-items:stretch}
+  .tours-cta-btns{flex-direction:column;align-items:stretch}
+  .cta-btn-pri,.cta-btn-sec{justify-content:center!important;width:100%!important}
+}
+
+.cta-btn-pri{display:inline-flex!important;align-items:center!important;gap:8px!important;padding:13px 28px!important;background:linear-gradient(135deg,var(--orange),var(--orange-d))!important;color:#fff!important;font-size:.78rem!important;border-radius:var(--r)!important;position:relative;overflow:hidden;box-shadow:0 8px 28px rgba(232,148,58,.38);transition:transform .25s var(--sp),box-shadow .25s;width:auto!important}
+.cta-btn-pri::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(to right,transparent,rgba(255,255,255,.22),transparent);transition:left .55s}
+.cta-btn-pri:hover::after{left:150%}
+.cta-btn-pri:hover{transform:translateY(-2px) scale(1.02);color:#fff!important}
+.cta-btn-sec{display:inline-flex!important;align-items:center!important;gap:7px!important;padding:12px 22px!important;background:rgba(255,255,255,.06)!important;backdrop-filter:blur(10px);color:rgba(255,255,255,.72)!important;font-size:.78rem!important;border:1.5px solid rgba(255,255,255,.13)!important;border-radius:var(--r)!important;transition:border-color .25s,color .25s,background .25s;width:auto!important}
+.cta-btn-sec i{color:#25d366!important;background:none!important;border:none!important;padding:0!important}
+.cta-btn-sec:hover{border-color:rgba(37,211,102,.38)!important;color:#fff!important;background:rgba(37,211,102,.07)!important}
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .65s var(--ez),transform .65s var(--ez)}
+.reveal.in{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}
+.d4{transition-delay:.24s}.d5{transition-delay:.30s}.d6{transition-delay:.36s}
+.tc{opacity:0;transform:translateY(26px);transition:opacity .6s var(--ez),transform .6s var(--ez),box-shadow .32s,border-color .32s}
+.tc.in{opacity:1;transform:translateY(0)}
+.tc:hover{transform:translateY(-7px)!important}
+.tc.d1{transition-delay:.05s}.tc.d2{transition-delay:.11s}.tc.d3{transition-delay:.17s}
+.tc.d4{transition-delay:.23s}.tc.d5{transition-delay:.29s}.tc.d6{transition-delay:.35s}
+
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#f0f4ff}::-webkit-scrollbar-thumb{background:var(--teal);border-radius:2px}
+
+@media(max-width:768px){
+  .hero-inner{padding-top:5rem;padding-bottom:3rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section class="tours-hero">
+  <div class="hero-bg">
+    <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya_processed.webp" alt="Sigiriya Rock">
+    <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Mirissa-Beach_processed.webp" alt="Mirissa Beach">
+    <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Yala-National-Park_processed.webp" alt="Yala National Park">
+    <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Ella-Nine-Arch-Bridge_processed.webp" alt="Nine Arches Bridge Ella">
+    <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/serf13.webp" alt="Surf">
+  </div>
+  <div class="hero-glow"></div><div class="hero-glow2"></div><div class="hero-deco"></div>
+  <div class="hero-inner">
+    <div class="hero-lhs">
+      <div class="hero-kicker"><div class="kicker-dot"></div>10 Private Journeys &middot; Sri Lanka &middot; China &middot; Asia</div>
+      <h1 class="hero-title">
+        <span class="line1">Discover Sri Lanka &amp; Beyond</span>
+        <span class="line2">Private Tours</span>
+        <span class="line3">Built For You</span>
+      </h1>
+      <p class="hero-desc">No group buses, no compromises. Every itinerary is crafted around your pace, interests and travel style — fully private, fully yours. Sri Lanka sightseeing tours, China business sourcing tours, and Asian family holidays.</p>
+      <div class="hero-ctas">
+        <a href="#packages" class="hero-btn-pri"><i class="fas fa-compass"></i> Browse All Tours</a>
+        <a href="https://wa.me/94777273794" target="_blank" rel="noopener noreferrer" class="hero-btn-sec"><i class="fab fa-whatsapp"></i> Plan a Custom Trip</a>
+      </div>
+      <div class="hero-stat-row">
+        <div class="hero-stat-item"><div class="hero-stat-n">4.9<span>&#9733;</span></div><div class="hero-stat-l">Rating</div></div>
+        <div class="hero-stat-sep"></div>
+        <div class="hero-stat-item"><div class="hero-stat-n">280<span>+</span></div><div class="hero-stat-l">Travellers</div></div>
+        <div class="hero-stat-sep"></div>
+        <div class="hero-stat-item"><div class="hero-stat-n">10<span>+</span></div><div class="hero-stat-l">Packages</div></div>
+        <div class="hero-stat-sep"></div>
+        <div class="hero-stat-item"><div class="hero-stat-n">100<span>%</span></div><div class="hero-stat-l">Private</div></div>
+      </div>
+    </div>
+    <div class="hero-rhs">
+      <div class="hero-float-cards">
+        <div class="hero-fcard"><div class="hero-fcard-ico tl"><i class="fas fa-user-shield"></i></div><div><div class="hero-fcard-n">100% Private Tours</div><div class="hero-fcard-s">Your own driver-guide</div></div></div>
+        <div class="hero-fcard"><div class="hero-fcard-ico og"><i class="fas fa-sliders-h"></i></div><div><div class="hero-fcard-n">Fully Customisable</div><div class="hero-fcard-s">Built around your pace</div></div></div>
+        <div class="hero-fcard"><div class="hero-fcard-ico gr"><i class="fas fa-shield-alt"></i></div><div><div class="hero-fcard-n">Free Cancellation</div><div class="hero-fcard-s">Up to 7 days before</div></div></div>
+      </div>
+      <div class="hero-scroll-cue"><div class="hero-scroll-line"></div><span>Scroll</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PACKAGES ══ -->
+<section class="tours-section" id="packages">
+  <div class="tours-dots"></div>
+  <div class="tours-wrap">
+
+    <div class="tours-head reveal">
+      <div class="tours-head-lhs">
+        <div class="tours-kicker">Curated Packages</div>
+        <h2 class="tours-title"><span class="sub-label">Our Signature</span><span class="accent">Journeys</span></h2>
+        <p class="tours-sub">Sri Lanka sightseeing tours, China business sourcing tours and Malaysia family holidays &mdash; all private, all-inclusive and fully customisable.</p>
+      </div>
+      <a href="/trip-planner" target="_blank" rel="noopener noreferrer" class="tours-view-all reveal d1"><i class="fas fa-paper-plane"></i> Build a Custom Tour</a>
+    </div>
+
+    <div class="tours-filters reveal d2">
+      <button class="tf on"  data-f="all"      onclick="doFilter(this,'all')"><i class="fas fa-globe"></i> All Tours</button>
+      <button class="tf"     data-f="cultural" onclick="doFilter(this,'cultural')"><i class="fas fa-award"></i> Cultural</button>
+      <button class="tf"     data-f="wildlife" onclick="doFilter(this,'wildlife')"><i class="fas fa-paw"></i> Wildlife</button>
+      <button class="tf"     data-f="beach"    onclick="doFilter(this,'beach')"><i class="fas fa-umbrella-beach"></i> Beach</button>
+      <button class="tf"     data-f="highland" onclick="doFilter(this,'highland')"><i class="fas fa-mountain"></i> Highlands</button>
+      <button class="tf"     data-f="business" onclick="doFilter(this,'business')"><i class="fas fa-briefcase"></i> Business</button>
+      <button class="tf"     data-f="family"   onclick="doFilter(this,'family')"><i class="fas fa-child"></i> Family</button>
+    </div>
+
+    <!-- SRI LANKA -->
+    <div class="cat-divider" id="div-sl"><div class="cat-div-line"></div><div class="cat-div-label sl"><i class="fas fa-map-marker-alt"></i>&ensp;Sri Lanka Tours</div><div class="cat-div-line"></div></div>
+    <div class="tours-grid" id="grid-sl">
+
+      <div class="tc d1" data-cat="cultural wildlife highland" data-group="sl">
+        <div class="tc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/02/sigirija1.webp" alt="Ancient Heritage"><div class="tc-img-ov2"></div><div class="tc-img-ov"></div><span class="tc-badge hero"><i class="fas fa-star"></i> Most Popular</span><span class="tc-dur"><i class="fas fa-moon"></i> 10 Days / 9 Nights</span><div class="tc-cats"><span class="tc-cat"><i class="fas fa-award" style="color:#e8b455"></i> 5 UNESCO</span><span class="tc-cat"><i class="fas fa-bicycle" style="color:#5ec46e"></i> Village Cycling</span></div></div>
+        <div class="tc-body"><div class="tc-region"><i class="fas fa-map-marker-alt"></i> Island-Wide &middot; Ancient Cities to South Coast</div><h3 class="tc-name">Ancient Heritage<br><strong>&amp; Hill Country</strong></h3><p class="tc-desc">5 UNESCO sites, Pinnawala elephants, village cycling, scenic train, Kandy puja ceremony and Mirissa beach finale.</p><div class="tc-highlights"><span class="tc-hl"><i class="fas fa-check"></i> Sigiriya Rock</span><span class="tc-hl"><i class="fas fa-check"></i> Anuradhapura</span><span class="tc-hl"><i class="fas fa-check"></i> Polonnaruwa</span><span class="tc-hl"><i class="fas fa-check"></i> Scenic Train</span><span class="tc-hl"><i class="fas fa-check"></i> Kandy Temple</span><span class="tc-hl"><i class="fas fa-check"></i> Mirissa Beach</span></div><div class="tc-meta"><div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><span class="tc-rv">5.0</span><span class="tc-rc">(84 reviews)</span><div class="tc-dot"></div><span class="tc-priv"><i class="fas fa-user-shield"></i> 100% Private</span></div></div>
+        <div class="tc-foot"><div><div class="tc-price-from">From</div><div class="tc-price">$1,850 <span>/ person</span></div><div class="tc-price-note">All-inclusive &middot; Private guide</div></div><a href="https://pixelceylontours.com/ancient-heritage-hill-country/" class="tc-book"><i class="fas fa-arrow-right"></i> View Tour</a></div>
+      </div>
+
+      <div class="tc d2" data-cat="cultural wildlife highland beach" data-group="sl">
+        <div class="tc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Ella-Nine-Arch-Bridge_processed.webp" alt="First Time Sri Lanka"><div class="tc-img-ov2"></div><div class="tc-img-ov"></div><span class="tc-badge sig"><i class="fas fa-globe-asia"></i> First Timer</span><span class="tc-dur"><i class="fas fa-moon"></i> 8 Days / 7 Nights</span><div class="tc-cats"><span class="tc-cat"><i class="fas fa-award" style="color:#e8b455"></i> UNESCO</span><span class="tc-cat"><i class="fas fa-paw" style="color:#16a34a"></i> Wildlife</span></div></div>
+        <div class="tc-body"><div class="tc-region"><i class="fas fa-map-marker-alt"></i> Island-Wide &middot; All Highlights</div><h3 class="tc-name">First Time<br><strong>in Sri Lanka</strong></h3><p class="tc-desc">The perfect introduction &mdash; 3 UNESCO sites, Yala leopard safari, scenic highland train, whale watching and golden beaches.</p><div class="tc-highlights"><span class="tc-hl"><i class="fas fa-check"></i> Galle Fort</span><span class="tc-hl"><i class="fas fa-check"></i> Yala Safari</span><span class="tc-hl"><i class="fas fa-check"></i> Scenic Train</span><span class="tc-hl"><i class="fas fa-check"></i> Whale Watching</span><span class="tc-hl"><i class="fas fa-check"></i> Mirissa Beach</span><span class="tc-hl"><i class="fas fa-check"></i> Kandy</span></div><div class="tc-meta"><div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><span class="tc-rv">4.9</span><span class="tc-rc">(72 reviews)</span><div class="tc-dot"></div><span class="tc-priv"><i class="fas fa-user-shield"></i> 100% Private</span></div></div>
+        <div class="tc-foot"><div><div class="tc-price-from">From</div><div class="tc-price">$1,390 <span>/ person</span></div><div class="tc-price-note">All-inclusive &middot; Private guide</div></div><a href="https://pixelceylontours.com/first-time-in-sri-lanka/" class="tc-book"><i class="fas fa-arrow-right"></i> View Tour</a></div>
+      </div>
+
+      <div class="tc d3" data-cat="cultural wildlife beach" data-group="sl">
+        <div class="tc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/02/50e9e8f5-f1ca-4a08-9b7f-18b15c011582.webp" alt="Heritage Wildlife Beaches"><div class="tc-img-ov2"></div><div class="tc-img-ov"></div><span class="tc-badge wild"><i class="fas fa-paw"></i> Heritage + Wild</span><span class="tc-dur"><i class="fas fa-moon"></i> 10 Days / 9 Nights</span><div class="tc-cats"><span class="tc-cat"><i class="fas fa-award" style="color:#e8b455"></i> UNESCO</span><span class="tc-cat"><i class="fas fa-paw" style="color:#16a34a"></i> Wildlife</span></div></div>
+        <div class="tc-body"><div class="tc-region"><i class="fas fa-map-marker-alt"></i> Cultural Triangle &middot; Hill Country &middot; South Coast</div><h3 class="tc-name">Heritage, Wildlife<br><strong>&amp; Sunset Beaches</strong></h3><p class="tc-desc">Ancient citadels, Yala leopards, emerald tea estates, scenic train and Mirissa &mdash; the complete Sri Lanka in one seamless tour.</p><div class="tc-highlights"><span class="tc-hl"><i class="fas fa-check"></i> Sigiriya</span><span class="tc-hl"><i class="fas fa-check"></i> Yala Leopards</span><span class="tc-hl"><i class="fas fa-check"></i> Nine Arches</span><span class="tc-hl"><i class="fas fa-check"></i> Scenic Train</span><span class="tc-hl"><i class="fas fa-check"></i> Whale Watching</span><span class="tc-hl"><i class="fas fa-check"></i> Galle Fort</span></div><div class="tc-meta"><div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><span class="tc-rv">5.0</span><span class="tc-rc">(61 reviews)</span><div class="tc-dot"></div><span class="tc-priv"><i class="fas fa-user-shield"></i> 100% Private</span></div></div>
+        <div class="tc-foot"><div><div class="tc-price-from">From</div><div class="tc-price">$1,690 <span>/ person</span></div><div class="tc-price-note">All-inclusive &middot; Private guide</div></div><a href="https://pixelceylontours.com/heritage-wildlife-sunset-beaches/" class="tc-book"><i class="fas fa-arrow-right"></i> View Tour</a></div>
+      </div>
+
+      <div class="tc d4" data-cat="highland beach wildlife" data-group="sl">
+        <div class="tc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/rafting.webp" alt="Adventure Explorer"><div class="tc-img-ov2"></div><div class="tc-img-ov"></div><span class="tc-badge pop"><i class="fas fa-bolt"></i> Adventure</span><span class="tc-dur"><i class="fas fa-moon"></i> 8 Days / 7 Nights</span><div class="tc-cats"><span class="tc-cat"><i class="fas fa-water" style="color:#0dd4e8"></i> Rafting</span><span class="tc-cat"><i class="fas fa-mountain" style="color:#5ec46e"></i> Highlands</span></div></div>
+        <div class="tc-body"><div class="tc-region"><i class="fas fa-map-marker-alt"></i> Kitulgala &middot; Ella &middot; Sigiriya &middot; Mirissa</div><h3 class="tc-name">Sri Lanka<br><strong>Adventure Explorer</strong></h3><p class="tc-desc">White water rafting, tea estate cycling, Sigiriya Rock climb, scenic train, whale watching and a dramatic south coast finale.</p><div class="tc-highlights"><span class="tc-hl"><i class="fas fa-check"></i> Grade 3 Rafting</span><span class="tc-hl"><i class="fas fa-check"></i> Sigiriya Rock</span><span class="tc-hl"><i class="fas fa-check"></i> Scenic Train</span><span class="tc-hl"><i class="fas fa-check"></i> Nine Arches</span><span class="tc-hl"><i class="fas fa-check"></i> Whale Watching</span><span class="tc-hl"><i class="fas fa-check"></i> Mirissa</span></div><div class="tc-meta"><div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><span class="tc-rv">4.9</span><span class="tc-rc">(55 reviews)</span><div class="tc-dot"></div><span class="tc-priv"><i class="fas fa-user-shield"></i> 100% Private</span></div></div>
+        <div class="tc-foot"><div><div class="tc-price-from">From</div><div class="tc-price">$1,390 <span>/ person</span></div><div class="tc-price-note">All-inclusive &middot; Private guide</div></div><a href="https://pixelceylontours.com/sri-lanka-adventure-explorer/" class="tc-book"><i class="fas fa-arrow-right"></i> View Tour</a></div>
+      </div>
+
+      <div class="tc d5" data-cat="beach highland" data-group="sl">
+        <div class="tc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/serf13.webp" alt="Coastal Surf Tour"><div class="tc-img-ov2"></div><div class="tc-img-ov"></div><span class="tc-badge sig"><i class="fas fa-water"></i> Coastal &amp; Surf</span><span class="tc-dur"><i class="fas fa-moon"></i> 10 Days / 9 Nights</span><div class="tc-cats"><span class="tc-cat"><i class="fas fa-water" style="color:#0dd4e8"></i> Surfing</span><span class="tc-cat"><i class="fas fa-umbrella-beach" style="color:#5ec46e"></i> 6 Beaches</span></div></div>
+        <div class="tc-body"><div class="tc-region"><i class="fas fa-map-marker-alt"></i> Mirissa &middot; Galle &middot; Hikkaduwa &middot; Arugam Bay &middot; Pasikudah</div><h3 class="tc-name">Sri Lanka<br><strong>Coastal &amp; Surf Tour</strong></h3><p class="tc-desc">6 stunning beaches, world-class surfing at Arugam Bay, Galle Fort UNESCO, whale watching and Colombo nightlife.</p><div class="tc-highlights"><span class="tc-hl"><i class="fas fa-check"></i> Arugam Bay Surf</span><span class="tc-hl"><i class="fas fa-check"></i> Galle Fort UNESCO</span><span class="tc-hl"><i class="fas fa-check"></i> Hikkaduwa Reef</span><span class="tc-hl"><i class="fas fa-check"></i> Whale Watching</span><span class="tc-hl"><i class="fas fa-check"></i> Pasikudah Lagoon</span><span class="tc-hl"><i class="fas fa-check"></i> Colombo</span></div><div class="tc-meta"><div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><span class="tc-rv">4.9</span><span class="tc-rc">(38 reviews)</span><div class="tc-dot"></div><span class="tc-priv"><i class="fas fa-user-shield"></i> 100% Private</span></div></div>
+        <div class="tc-foot"><div><div class="tc-price-from">From</div><div class="tc-price">$1,490 <span>/ person</span></div><div class="tc-price-note">All-inclusive &middot; Private guide</div></div><a href="https://pixelceylontours.com/sri-lanka-coastal-surf-map/" class="tc-book"><i class="fas fa-arrow-right"></i> View Tour</a></div>
+      </div>
+
+      <div class="tc d6" data-cat="wildlife beach" data-group="sl">
+        <div class="tc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/willpattu.webp" alt="Wildlife Safari"><div class="tc-img-ov2"></div><div class="tc-img-ov"></div><span class="tc-badge wild"><i class="fas fa-paw"></i> Wildlife</span><span class="tc-dur"><i class="fas fa-moon"></i> 6 Days / 5 Nights</span><div class="tc-cats"><span class="tc-cat"><i class="fas fa-paw" style="color:#16a34a"></i> Leopards</span><span class="tc-cat"><i class="fas fa-fish" style="color:#0dd4e8"></i> Whales</span></div></div>
+        <div class="tc-body"><div class="tc-region"><i class="fas fa-map-marker-alt"></i> Wilpattu &middot; Udawalawe &middot; Mirissa</div><h3 class="tc-name">Wildlife<br><strong>Safari Adventure</strong></h3><p class="tc-desc">Sri Lanka's ultimate wildlife trio &mdash; spot leopards at Wilpattu, elephant herds at Udawalawe, and blue whales off Mirissa.</p><div class="tc-highlights"><span class="tc-hl"><i class="fas fa-check"></i> Wilpattu Leopards</span><span class="tc-hl"><i class="fas fa-check"></i> Blue Whales</span><span class="tc-hl"><i class="fas fa-check"></i> Udawalawe</span><span class="tc-hl"><i class="fas fa-check"></i> Mirissa Beach</span><span class="tc-hl"><i class="fas fa-check"></i> Jeep Safaris</span><span class="tc-hl"><i class="fas fa-check"></i> Pinnawala</span></div><div class="tc-meta"><div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><span class="tc-rv">4.9</span><span class="tc-rc">(52 reviews)</span><div class="tc-dot"></div><span class="tc-priv"><i class="fas fa-user-shield"></i> 100% Private</span></div></div>
+        <div class="tc-foot"><div><div class="tc-price-from">From</div><div class="tc-price">$1,190 <span>/ person</span></div><div class="tc-price-note">All-inclusive &middot; Private guide</div></div><a href="https://pixelceylontours.com/wildlife-safari-adventure/" class="tc-book"><i class="fas fa-arrow-right"></i> View Tour</a></div>
+      </div>
+
+    </div>
+
+    <!-- BUSINESS -->
+    <div class="cat-divider" id="div-biz"><div class="cat-div-line"></div><div class="cat-div-label biz"><i class="fas fa-briefcase"></i>&ensp;Business Sourcing Tours &mdash; China</div><div class="cat-div-line"></div></div>
+    <div class="tours-grid" id="grid-biz">
+
+      <div class="tc d1" data-cat="business" data-group="biz">
+        <div class="tc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/phase-04.webp" alt="Canton Fair Yiwu"><div class="tc-img-ov2"></div><div class="tc-img-ov"></div><span class="tc-badge biz"><i class="fas fa-briefcase"></i> Business Tour</span><span class="tc-dur"><i class="fas fa-moon"></i> 12 Days / 11 Nights</span><div class="tc-cats"><span class="tc-cat"><i class="fas fa-building" style="color:#e8b455"></i> Canton Fair</span><span class="tc-cat"><i class="fas fa-store" style="color:#0dd4e8"></i> Yiwu Markets</span></div></div>
+        <div class="tc-body"><div class="tc-region"><i class="fas fa-map-marker-alt"></i> Guangzhou &middot; Yiwu &middot; China</div><h3 class="tc-name">Canton Fair<br><strong>&amp; Yiwu Business Tour</strong></h3><p class="tc-desc">4 days at Canton Fair Phase 1 + 5 days sourcing all 5 Yiwu districts. 75,000+ suppliers. Specially arranged for Sri Lankan importers.</p><div class="tc-highlights"><span class="tc-hl"><i class="fas fa-check"></i> Canton Fair Phase 1</span><span class="tc-hl"><i class="fas fa-check"></i> Yiwu All 5 Districts</span><span class="tc-hl"><i class="fas fa-check"></i> 75,000+ Shops</span><span class="tc-hl"><i class="fas fa-check"></i> High-Speed Rail</span><span class="tc-hl"><i class="fas fa-check"></i> FOB / CIF Options</span><span class="tc-hl"><i class="fas fa-check"></i> &#127473;&#127472; SL Special</span></div><div class="tc-meta"><div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><span class="tc-rv">4.9</span><span class="tc-rc">(48 reviews)</span><div class="tc-dot"></div><span class="tc-priv"><i class="fas fa-users"></i> Group Tour</span></div></div>
+        <div class="tc-foot"><div><div class="tc-price-from">Pricing</div><div class="tc-price custom">Custom <span>/ group</span></div><div class="tc-price-note">Quote based on group size</div></div><a href="https://pixelceylontours.com/canton-fair-yiwu-business-tour/" class="tc-book"><i class="fas fa-arrow-right"></i> View Tour</a></div>
+      </div>
+
+      <div class="tc d2" data-cat="business" data-group="biz">
+        <div class="tc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Trade-city-08.webp" alt="Yiwu Shanghai"><div class="tc-img-ov2"></div><div class="tc-img-ov"></div><span class="tc-badge pop"><i class="fas fa-train"></i> Business + Leisure</span><span class="tc-dur"><i class="fas fa-moon"></i> 12 Days / 11 Nights</span><div class="tc-cats"><span class="tc-cat"><i class="fas fa-store" style="color:#e8b455"></i> 75K+ Shops</span><span class="tc-cat"><i class="fas fa-city" style="color:#0dd4e8"></i> 2 Cities</span></div></div>
+        <div class="tc-body"><div class="tc-region"><i class="fas fa-map-marker-alt"></i> Yiwu &middot; Shanghai &middot; China</div><h3 class="tc-name">Yiwu &amp;<br><strong>Shanghai Business Tour</strong></h3><p class="tc-desc">3 days across all 5 Yiwu districts + 6 days of Shanghai &mdash; The Bund, Zhujiajiao, Shanghai Tower and optional Disneyland.</p><div class="tc-highlights"><span class="tc-hl"><i class="fas fa-check"></i> All 5 Yiwu Districts</span><span class="tc-hl"><i class="fas fa-check"></i> 75,000+ Shops</span><span class="tc-hl"><i class="fas fa-check"></i> Bullet Train</span><span class="tc-hl"><i class="fas fa-check"></i> The Bund Night</span><span class="tc-hl"><i class="fas fa-check"></i> Shanghai Tower</span><span class="tc-hl"><i class="fas fa-check"></i> 50% Leisure</span></div><div class="tc-meta"><div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><span class="tc-rv">4.9</span><span class="tc-rc">(42 reviews)</span><div class="tc-dot"></div><span class="tc-priv"><i class="fas fa-users"></i> Group Tour</span></div></div>
+        <div class="tc-foot"><div><div class="tc-price-from">Pricing</div><div class="tc-price custom">Custom <span>/ group</span></div><div class="tc-price-note">Year-round availability</div></div><a href="https://pixelceylontours.com/yiwu-shanghai-business-tour/" class="tc-book"><i class="fas fa-arrow-right"></i> View Tour</a></div>
+      </div>
+
+      <div class="tc d3" data-cat="business" data-group="biz">
+        <div class="tc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/cantoon-fair.webp" alt="Canton Fair Phase 1"><div class="tc-img-ov2"></div><div class="tc-img-ov"></div><span class="tc-badge sig"><i class="fas fa-flag"></i> &#127473;&#127472; SL Special</span><span class="tc-dur"><i class="fas fa-moon"></i> 8 Days / 7 Nights</span><div class="tc-cats"><span class="tc-cat"><i class="fas fa-building" style="color:#e8b455"></i> 4 Fair Days</span><span class="tc-cat"><i class="fas fa-fish" style="color:#0dd4e8"></i> Aquarium Night</span></div></div>
+        <div class="tc-body"><div class="tc-region"><i class="fas fa-map-marker-alt"></i> Guangzhou &middot; China</div><h3 class="tc-name">Canton Fair<br><strong>Phase 1 Business Tour</strong></h3><p class="tc-desc">4 full days at Canton Fair Phase 1 + wholesale shopping day + Ocean Aquarium night. Specially arranged for Sri Lankan guests.</p><div class="tc-highlights"><span class="tc-hl"><i class="fas fa-check"></i> 4 Fair Days</span><span class="tc-hl"><i class="fas fa-check"></i> Electronics &amp; Hardware</span><span class="tc-hl"><i class="fas fa-check"></i> Shopping Day</span><span class="tc-hl"><i class="fas fa-check"></i> Ocean Aquarium Night</span><span class="tc-hl"><i class="fas fa-check"></i> Sinhala Leader Option</span><span class="tc-hl"><i class="fas fa-check"></i> Badge Registration</span></div><div class="tc-meta"><div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><span class="tc-rv">4.9</span><span class="tc-rc">(35 reviews)</span><div class="tc-dot"></div><span class="tc-priv"><i class="fas fa-users"></i> Group Tour</span></div></div>
+        <div class="tc-foot"><div><div class="tc-price-from">Pricing</div><div class="tc-price custom">Custom <span>/ group</span></div><div class="tc-price-note">April &amp; October &middot; Canton Fair</div></div><a href="https://pixelceylontours.com/canton-fair-phase-1-business-tour/" class="tc-book"><i class="fas fa-arrow-right"></i> View Tour</a></div>
+      </div>
+
+    </div>
+
+    <!-- ASIAN TOURS -->
+    <div class="cat-divider" id="div-asia"><div class="cat-div-line"></div><div class="cat-div-label asia"><i class="fas fa-globe-asia"></i>&ensp;Asian Family &amp; Leisure Tours</div><div class="cat-div-line"></div></div>
+    <div class="tours-grid" id="grid-asia">
+
+      <div class="tc d1" data-cat="family beach" data-group="asia">
+        <div class="tc-img"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/city-night.webp" alt="Malaysia Family Tour"><div class="tc-img-ov2"></div><div class="tc-img-ov"></div><span class="tc-badge gold"><i class="fas fa-child"></i> Kids Friendly</span><span class="tc-dur"><i class="fas fa-moon"></i> 5 Days / 4 Nights</span><div class="tc-cats"><span class="tc-cat"><i class="fas fa-hat-wizard" style="color:#e8b455"></i> 3+ Theme Parks</span><span class="tc-cat"><i class="fas fa-mountain" style="color:#5ec46e"></i> Genting 1,800m</span></div></div>
+        <div class="tc-body"><div class="tc-region"><i class="fas fa-map-marker-alt"></i> Kuala Lumpur &middot; Genting Highlands &middot; Malaysia</div><h3 class="tc-name">Kuala Lumpur<br><strong>&amp; Genting Family Tour</strong></h3><p class="tc-desc">Petronas Towers, Aquaria KLCC, Batu Caves, Genting Highlands SkyWay cable car and Sunway Lagoon &mdash; 6 attractions in 5 days.</p><div class="tc-highlights"><span class="tc-hl"><i class="fas fa-check"></i> Petronas Towers</span><span class="tc-hl"><i class="fas fa-check"></i> Aquaria KLCC</span><span class="tc-hl"><i class="fas fa-check"></i> Batu Caves</span><span class="tc-hl"><i class="fas fa-check"></i> Genting SkyWay</span><span class="tc-hl"><i class="fas fa-check"></i> Sunway Lagoon</span><span class="tc-hl"><i class="fas fa-check"></i> Jalan Alor Food</span></div><div class="tc-meta"><div class="tc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><span class="tc-rv">4.9</span><span class="tc-rc">(38 reviews)</span><div class="tc-dot"></div><span class="tc-priv"><i class="fas fa-user-friends"></i> Family Package</span></div></div>
+        <div class="tc-foot"><div><div class="tc-price-from">Pricing</div><div class="tc-price custom">Custom <span>/ family</span></div><div class="tc-price-note">2 Adults + Children &middot; Year-round</div></div><a href="https://pixelceylontours.com/kuala-lumpur-genting-family-tour/" class="tc-book"><i class="fas fa-arrow-right"></i> View Tour</a></div>
+      </div>
+
+      <div class="tc d2" data-cat="family" data-group="asia" style="border-style:dashed;opacity:.55;pointer-events:none;">
+        <div class="tc-img" style="background:linear-gradient(135deg,#0d1e30,#0f2540);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.75rem;"><i class="fas fa-plus-circle" style="font-size:2.2rem;color:rgba(255,255,255,.16)"></i><span style="font-family:var(--mono);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.2)">Coming Soon</span></div>
+        <div class="tc-body"><div class="tc-region"><i class="fas fa-globe-asia"></i> Asia &middot; New Destinations</div><h3 class="tc-name" style="color:var(--muted2)">More Asian Tours<br><strong>In the Pipeline</strong></h3><p class="tc-desc">Thailand, Bali, Singapore and beyond. Contact us for a fully bespoke Asian family or leisure itinerary.</p><div class="tc-highlights"><span class="tc-hl"><i class="fas fa-check"></i> Thailand</span><span class="tc-hl"><i class="fas fa-check"></i> Bali</span><span class="tc-hl"><i class="fas fa-check"></i> Singapore</span><span class="tc-hl"><i class="fas fa-check"></i> Maldives</span></div></div>
+        <div class="tc-foot" style="background:var(--offwhite)"><div><div class="tc-price-from">Enquire</div><div class="tc-price custom" style="color:var(--muted)">Bespoke</div><div class="tc-price-note">Custom Asian journeys</div></div><a href="https://wa.me/94777273794" class="tc-book" style="pointer-events:all;opacity:1" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> Chat</a></div>
+      </div>
+
+    </div>
+
+    <div class="tours-empty" id="emptyState">
+      <div class="tours-empty-ico"><i class="fas fa-compass"></i></div>
+      <p>No tours match this filter. Try another category or <a href="https://wa.me/94777273794" style="color:var(--teal)">build a custom trip on WhatsApp</a>.</p>
+    </div>
+
+    <!-- ── TRUST STRIP ── -->
+    <div class="tours-trust reveal" style="margin-top:3rem">
+      <div class="tt-item"><div class="tt-ico tl"><i class="fas fa-user-tie"></i></div><div><div class="tt-ttl">Expert Local Guides</div><div class="tt-sub">English-speaking, licensed &amp; vetted</div></div></div>
+      <div class="tt-item"><div class="tt-ico og"><i class="fas fa-edit"></i></div><div><div class="tt-ttl">Fully Customisable</div><div class="tt-sub">Every detail adjusted to you</div></div></div>
+      <div class="tt-item"><div class="tt-ico gr"><i class="fas fa-shield-alt"></i></div><div><div class="tt-ttl">Free Cancellation</div><div class="tt-sub">Cancel up to 7 days &mdash; no charge</div></div></div>
+      <div class="tt-item"><div class="tt-ico gd"><i class="fas fa-headset"></i></div><div><div class="tt-ttl">24/7 On-Tour Support</div><div class="tt-sub">Always reachable on the road</div></div></div>
+    </div>
+
+    <!-- ── BOTTOM CTA BANNER ── -->
+    <div class="tours-cta reveal">
+      <div class="tours-cta-lhs">
+        <div class="tours-cta-eyebrow">Not sure which tour?</div>
+        <h3 class="tours-cta-h">Build Your <strong>Own Itinerary</strong></h3>
+        <p class="tours-cta-p">Tell us your travel dates, interests and budget &mdash; our local team will craft a fully bespoke Sri Lanka or Asia journey just for you, at no extra cost.</p>
+      </div>
+      <div class="tours-cta-btns">
+        <a href="/trip-planner" class="cta-btn-pri" target="_blank" rel="noopener noreferrer"><i class="fas fa-calendar-check"></i> Start Planning &mdash; Free</a>
+        <a href="https://wa.me/94777273794" class="cta-btn-sec" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+function doFilter(btn, f) {
+  document.querySelectorAll('.tf').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  var groups = ['sl','biz','asia'];
+  var cnt = {sl:0,biz:0,asia:0};
+  var total = 0;
+  groups.forEach(function(g) {
+    var grid = document.getElementById('grid-'+g);
+    if (!grid) return;
+    grid.querySelectorAll('.tc').forEach(function(card) {
+      var cats = (card.dataset.cat || '').split(' ');
+      var show = (f === 'all') || cats.includes(f);
+      if (show) {
+        card.classList.remove('hidden');
+        card.classList.remove('in');
+        var d = total;
+        setTimeout(function(){ card.classList.add('in'); }, d * 65 + 20);
+        cnt[g]++; total++;
+      } else { card.classList.add('hidden'); }
+    });
+  });
+  setDiv('div-sl',   cnt.sl   > 0);
+  setDiv('div-biz',  cnt.biz  > 0);
+  setDiv('div-asia', cnt.asia > 0);
+  document.getElementById('emptyState').style.display = total === 0 ? 'flex' : 'none';
+}
+function setDiv(id, show) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  if (show) { el.classList.remove('hidden'); setTimeout(function(){ el.classList.add('in'); }, 30); }
+  else { el.classList.add('hidden'); el.classList.remove('in'); }
+}
+var io = new IntersectionObserver(function(e){ e.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }); },{threshold:.08});
+document.querySelectorAll('.reveal, .cat-divider').forEach(function(el){ io.observe(el); });
+var io2 = new IntersectionObserver(function(e){ e.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('in'); io2.unobserve(x.target); } }); },{threshold:.06});
+document.querySelectorAll('.tc').forEach(function(el){ io2.observe(el); });
+</script>
+</body>
+</html>
+</div>

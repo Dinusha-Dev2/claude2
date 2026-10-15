@@ -1,0 +1,185 @@
+<section>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/bagind" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --navy:#0c1f2c;--navy-mid:#102536;--navy-soft:#163044;
+  --teal-d:#1a6b7a;--teal:#1ab8b0;--teal-pale:rgba(26,184,176,.12);
+  --cream:#f0ede4;--cream-warm:#e8e3d8;
+  --orange:#f4a100;--orange-l:#ffbf3c;--orange-pale:rgba(244,161,0,.1);
+  --jade:#1a7a5a;--jade-pale:rgba(26,122,90,.1);
+  --violet:#6b5fad;--white:#ffffff;--ink:#0c1f2c;
+  --muted:rgba(12,31,44,.45);--muted-lt:rgba(240,237,228,.45);
+  --border:rgba(12,31,44,.09);--border-lt:rgba(240,237,228,.1);
+  --serif:'Bagind','Playfair Display',Georgia,serif;
+  --sans:'Poppins',system-ui,sans-serif;
+  --mono:'DM Mono','Courier New',monospace;
+  --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--cream);color:var(--ink);overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;object-fit:cover}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+a{text-decoration:none;color:inherit}
+
+.sec{position:relative;overflow:hidden}
+.sec.on-navy{background:var(--navy)}
+.sec::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;z-index:5;background:linear-gradient(90deg,transparent 0%,var(--orange) 35%,var(--teal) 70%,transparent 100%)}
+.sec::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.018;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.inner{position:relative;z-index:2;max-width:1440px;margin:0 auto;padding:5rem 2.4rem}
+
+.blob{position:absolute;border-radius:50%;pointer-events:none;z-index:0}
+.b1{top:-18%;left:-8%;width:65vw;height:65vw;max-width:720px;max-height:720px;background:radial-gradient(circle,rgba(244,161,0,.05) 0%,transparent 65%)}
+.b2{bottom:-12%;right:-6%;width:52vw;height:52vw;max-width:600px;max-height:600px;background:radial-gradient(circle,rgba(26,184,176,.06) 0%,transparent 65%)}
+
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.ey-line{width:32px;height:1px;background:var(--orange);flex-shrink:0}
+.ey-txt{font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);font-weight:500}
+.ey-dot{width:5px;height:5px;background:var(--teal);border-radius:50%;flex-shrink:0}
+
+.sec-h{font-family:var(--serif);font-size:clamp(2rem,3.6vw,3.8rem);font-weight:400;line-height:1.05;color:var(--ink);margin-bottom:.7rem}
+.sec-h em{font-style:italic;color:var(--teal-d)}
+.sec-sub{font-size:.82rem;font-weight:300;color:var(--muted);line-height:1.9;max-width:480px}
+</style>
+
+<style>
+/* ── TESTIMONIAL GRID ── */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:3rem}
+.testi-card{
+  background:rgba(255,255,255,.04);border:1px solid var(--border-lt);border-radius:4px;
+  padding:1.5rem 1.4rem;display:flex;flex-direction:column;
+  transition:background .2s,border-color .2s;
+}
+.testi-card:hover{background:rgba(255,255,255,.07);border-color:rgba(240,237,228,.16)}
+
+.testi-stars{display:flex;gap:3px;margin-bottom:.8rem}
+.testi-stars i{color:var(--orange);font-size:.63rem}
+
+.testi-q{
+  font-size:.72rem;font-weight:300;color:rgba(240,237,228,.62);line-height:1.8;
+  flex:1;margin-bottom:1.2rem;position:relative;padding-left:.95rem;
+}
+.testi-q::before{
+  content:'"';font-family:var(--serif);font-size:2.8rem;color:var(--orange);
+  opacity:.22;position:absolute;top:-.9rem;left:-.2rem;line-height:1;
+}
+
+.testi-bottom{display:flex;align-items:center;gap:10px}
+.testi-init{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,.08);border:1px solid rgba(240,237,228,.12);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:.9rem;color:rgba(240,237,228,.55);
+}
+.testi-name{font-size:.69rem;font-weight:600;color:var(--cream)}
+.testi-meta{font-size:.57rem;color:rgba(240,237,228,.32)}
+.testi-badge{
+  margin-left:auto;flex-shrink:0;
+  background:rgba(26,184,176,.1);border:1px solid rgba(26,184,176,.2);
+  border-radius:2px;padding:2px 9px;font-size:.51rem;color:var(--teal);
+  font-family:var(--mono);
+}
+
+/* ── TRUST BAR ── */
+.trust-bar{
+  display:flex;align-items:center;justify-content:center;gap:2.5rem;
+  margin-top:3rem;padding-top:2.5rem;
+  border-top:1px solid rgba(240,237,228,.07);
+  flex-wrap:wrap;
+}
+.trust-item{display:flex;align-items:center;gap:9px;font-size:.64rem;color:rgba(240,237,228,.38)}
+.trust-item i{color:var(--orange);font-size:.74rem}
+.trust-item strong{color:rgba(240,237,228,.72);font-weight:600}
+
+@media(max-width:900px){.testi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:580px){.testi-grid{grid-template-columns:1fr}}
+</style>
+
+<section class="sec on-navy" id="reviews">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="inner">
+
+    <div class="eyebrow">
+      <div class="ey-line" style="background:var(--orange-l)"></div>
+      <span class="ey-txt" style="color:var(--orange-l)">Traveller Reviews</span>
+      <div class="ey-dot"></div>
+    </div>
+    <h2 class="sec-h" style="color:var(--cream)">
+      What Our Guests<br>
+      <em style="color:var(--teal)">Say About This Tour</em>
+    </h2>
+    <p class="sec-sub" style="color:var(--muted-lt)">Over 96 European travellers have completed this wildlife & adventure journey. Here's what they told us.</p>
+
+    <div class="testi-grid">
+
+      <!-- Card 1 — Yala leopard sighting -->
+      <div class="testi-card">
+        <div class="testi-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="testi-q">Spotting a leopard at Yala on our very first safari was beyond anything we imagined. Then Sigiriya at sunrise the next day — Pixel Ceylon packed more into 8 days than we thought possible.</div>
+        <div class="testi-bottom">
+          <div class="testi-init">MH</div>
+          <div>
+            <div class="testi-name">Marcus &amp; Hannah</div>
+            <div class="testi-meta">Germany · February 2026</div>
+          </div>
+          <div class="testi-badge">Verified</div>
+        </div>
+      </div>
+
+      <!-- Card 2 — Minneriya gathering + rafting -->
+      <div class="testi-card">
+        <div class="testi-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="testi-q">The elephant gathering at Minneriya was the most spectacular wildlife moment of my life — hundreds of elephants at once. Then white-water rafting the next morning. The contrast was extraordinary.</div>
+        <div class="testi-bottom">
+          <div class="testi-init">SV</div>
+          <div>
+            <div class="testi-name">Sophie &amp; Vincent</div>
+            <div class="testi-meta">Netherlands · January 2026</div>
+          </div>
+          <div class="testi-badge">Verified</div>
+        </div>
+      </div>
+
+      <!-- Card 3 — Wilpattu + Pinnawala -->
+      <div class="testi-card">
+        <div class="testi-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="testi-q">Wilpattu felt like we had the whole jungle to ourselves — saw two leopards and a sloth bear. Then Pinnawala elephants bathing in the river. A perfect farewell before Negombo. Flawlessly organised.</div>
+        <div class="testi-bottom">
+          <div class="testi-init">LB</div>
+          <div>
+            <div class="testi-name">Lars &amp; Bianca</div>
+            <div class="testi-meta">Sweden · December 2025</div>
+          </div>
+          <div class="testi-badge">Verified</div>
+        </div>
+      </div>
+
+    </div><!-- /testi-grid -->
+
+    <div class="trust-bar">
+      <div class="trust-item"><i class="fas fa-star"></i><span><strong>4.9 / 5.0</strong> Average rating</span></div>
+      <div class="trust-item"><i class="fas fa-users"></i><span><strong>96+</strong> European guests</span></div>
+      <div class="trust-item"><i class="fas fa-shield-alt"></i><span><strong>100%</strong> Private tours</span></div>
+      <div class="trust-item"><i class="fas fa-headset"></i><span><strong>24/7</strong> WhatsApp support</span></div>
+      <div class="trust-item"><i class="fas fa-undo"></i><span><strong>Free</strong> cancellation 30 days</span></div>
+    </div>
+
+  </div>
+</section>
+
+</section>

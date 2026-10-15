@@ -1,0 +1,799 @@
+<div>
+<section class="welcomeabout"> 
+
+
+
+
+
+
+<style>
+/* ═══════════════════════════════════════════
+   Pixel Ceylon Tours — About Us / Welcome Section
+   Mobile-First Responsive Rewrite
+   Prefix: .aboutuswelcome  /  .aw-*
+═══════════════════════════════════════════ */
+
+/* ── Reset & Box-sizing ── */
+.aboutuswelcome *,
+.aboutuswelcome *::before,
+.aboutuswelcome *::after { box-sizing: border-box; }
+.aboutuswelcome img { display: block; max-width: 100%; }
+.aboutuswelcome a { text-decoration: none; color: inherit; }
+
+/* ── Design Tokens ── */
+.aboutuswelcome {
+  --navy: #071527; --navy2: #0c1e30; --navy3: #112540;
+  --teal: #0e9aaa; --tealb: #12c8d8; --teald: #0b7d8c;
+  --teal-5: rgba(14,154,170,.05); --teal-10: rgba(14,154,170,.10); --teal-20: rgba(14,154,170,.20);
+  --amber: #f5a623; --amberd: #d9870c;
+  --amber-8: rgba(245,166,35,.08); --amber-20: rgba(245,166,35,.20);
+  --cream: #faf7f2; --cream2: #f3ede3; --cream3: #ede5d8;
+  --white: #ffffff; --ink: #071527; --ink2: #1a3040;
+  --muted: #556070; --muted2: #8494a6;
+  --border: #e4e8ed; --border2: #edf0f4;
+  --ease: cubic-bezier(.4,0,.2,1);
+  --spring: cubic-bezier(.34,1.56,.64,1);
+  --reveal: cubic-bezier(.16,1,.3,1);
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #071527;
+}
+
+/* ── Keyframes ── */
+@keyframes aw-fadeUp    { from { opacity:0; transform:translateY(30px) } to { opacity:1; transform:none } }
+@keyframes aw-fadeLeft  { from { opacity:0; transform:translateX(-30px) } to { opacity:1; transform:none } }
+@keyframes aw-fadeRight { from { opacity:0; transform:translateX(30px) } to { opacity:1; transform:none } }
+@keyframes aw-scalIn    { from { opacity:0; transform:scale(.93) } to { opacity:1; transform:none } }
+@keyframes aw-lineH     { from { transform:scaleX(0) } to { transform:scaleX(1) } }
+@keyframes aw-lineV     { from { transform:scaleY(0) } to { transform:scaleY(1) } }
+@keyframes aw-spinDia   { to { transform: rotate(calc(45deg + 360deg)) } }
+@keyframes aw-pulse     { 0%,100% { box-shadow:0 0 0 0 rgba(245,166,35,.5) } 55% { box-shadow:0 0 0 8px rgba(245,166,35,0) } }
+@keyframes aw-floatA    { 0%,100% { transform:translateY(0) rotate(0) } 50% { transform:translateY(-10px) rotate(.3deg) } }
+@keyframes aw-floatB    { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-7px) } }
+@keyframes aw-barGrow   { to { width:97% } }
+@keyframes aw-shimmer   { 0% { background-position:-200% 0 } 100% { background-position:200% 0 } }
+@keyframes aw-ticker    { 0% { transform:translateX(0) } 100% { transform:translateX(-50%) } }
+@keyframes aw-imgReveal { from { clip-path:inset(0 0 100% 0) } to { clip-path:inset(0 0 0% 0) } }
+
+/* Anim base */
+.aboutuswelcome .anim { opacity:1; transform:none; transition:none }
+.aboutuswelcome .anim.aw-run.up    { animation: aw-fadeUp    .8s var(--reveal) both }
+.aboutuswelcome .anim.aw-run.left  { animation: aw-fadeLeft  .8s var(--reveal) both }
+.aboutuswelcome .anim.aw-run.right { animation: aw-fadeRight .8s var(--reveal) both }
+.aboutuswelcome .anim.aw-run.scal  { animation: aw-scalIn   .85s var(--reveal) both }
+
+/* ── Section Shell ── */
+.aboutuswelcome { background: var(--white); position: relative; overflow: hidden; }
+
+/* BG layers */
+.aw-bg-sweep  { position:absolute; top:-5%; right:-10%; width:clamp(300px,62vw,940px); height:clamp(300px,62vw,940px); border-radius:50%; background:conic-gradient(from 200deg at 60% 45%,var(--cream2) 0deg,var(--cream) 60deg,transparent 160deg); opacity:.7; pointer-events:none; z-index:0 }
+.aw-bg-mesh   { position:absolute; inset:0; background-image:linear-gradient(rgba(14,154,170,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(14,154,170,.028) 1px,transparent 1px); background-size:48px 48px; mask-image:radial-gradient(ellipse 75% 65% at 72% 30%,black 0%,transparent 75%); pointer-events:none; z-index:0 }
+.aw-bg-glow   { position:absolute; bottom:-8%; left:-6%; width:clamp(180px,38vw,560px); height:clamp(180px,38vw,560px); border-radius:50%; background:radial-gradient(circle,rgba(14,154,170,.07) 0%,transparent 70%); pointer-events:none; z-index:0 }
+.aw-bg-amber  { position:absolute; top:35%; right:0%; width:clamp(120px,24vw,360px); height:clamp(120px,24vw,360px); border-radius:50%; background:radial-gradient(circle,rgba(245,166,35,.06) 0%,transparent 70%); pointer-events:none; z-index:0 }
+.aw-dots      { position:absolute; bottom:14%; right:2%; display:grid; grid-template-columns:repeat(12,1fr); gap:6px; opacity:.08; pointer-events:none; z-index:0 }
+.aw-dots span { width:3px; height:3px; border-radius:50%; background:var(--teal); display:block }
+
+/* ── Ticker ── */
+.aw-ticker { background:var(--cream); border-top:1px solid var(--border2); border-bottom:1px solid var(--border2); padding:.5rem 0; overflow:hidden; position:relative; z-index:2 }
+.aw-ticker-track { display:flex; gap:0; white-space:nowrap; animation:aw-ticker 30s linear infinite }
+.aw-ticker-item { display:inline-flex; align-items:center; gap:.65rem; padding:0 2.2rem; font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--muted2); flex-shrink:0 }
+.aw-ticker-item i { font-size:.65rem; color:var(--teal) }
+.aw-ticker-sep { width:4px; height:4px; border-radius:1px; background:var(--border); transform:rotate(45deg); flex-shrink:0 }
+
+/* ══════════════════════════════════
+   MAIN GRID — Mobile First
+══════════════════════════════════ */
+.aw-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: clamp(3rem,8vw,10rem) clamp(1.25rem,5vw,4.5rem) clamp(2.5rem,5vw,5rem);
+  display: grid;
+  grid-template-columns: 1fr;          /* single column on mobile */
+  gap: clamp(2.5rem,6vw,9rem);
+  align-items: start;
+  position: relative;
+  z-index: 1;
+}
+
+/* Mobile: images first, text second */
+.aw-right { order: -1; }
+.aw-left  { order:  1; }
+
+/* Two-column on large screens — restore natural order */
+@media (min-width: 1024px) {
+  .aw-inner  { grid-template-columns: 1fr 1.14fr; }
+  .aw-left   { order: 1; }
+  .aw-right  { order: 2; }
+}
+
+/* ── Ayubowan Badge ── */
+.aw-badge { display:inline-flex; align-items:center; gap:10px; background:linear-gradient(135deg,rgba(245,166,35,.09),rgba(245,166,35,.05)); border:1px solid rgba(245,166,35,.22); border-radius:2px; padding:7px 18px 7px 12px; margin-bottom:1.75rem; box-shadow:0 2px 14px rgba(245,166,35,.08) }
+.aw-badge-dot { width:7px; height:7px; border-radius:50%; background:var(--amber); flex-shrink:0; animation:aw-pulse 2.3s ease-in-out infinite }
+.aw-badge-en  { font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--amber) }
+.aw-badge-sep { width:1px; height:13px; background:rgba(245,166,35,.25); flex-shrink:0 }
+.aw-badge-si  { font-family:'Poppins',sans-serif; font-size:.72rem; font-weight:300; color:rgba(245,166,35,.65) }
+
+/* ── Kicker ── */
+.aw-kicker { display:flex; align-items:center; gap:9px; font-family:'Poppins',sans-serif; font-size:.56rem; font-weight:600; letter-spacing:.28em; text-transform:uppercase; color:var(--teal); margin-bottom:.6rem }
+.aw-kicker::before { content:''; width:22px; height:1.5px; background:currentColor; border-radius:2px; flex-shrink:0; transform-origin:left; animation:aw-lineH .55s .5s var(--ease) forwards }
+.aw-kicker-pip { width:5px; height:5px; border-radius:1px; background:var(--amber); transform:rotate(45deg); flex-shrink:0; animation:aw-spinDia 8s linear infinite }
+
+/* ── Heading ── */
+.aw-h { margin-bottom:1.5rem }
+.aw-h-line1 { font-family:'Poppins',sans-serif; font-size:clamp(.8rem,1.1vw,.95rem); font-weight:300; color:var(--muted); letter-spacing:.04em; display:block; margin-bottom:.3rem }
+.aw-h-main  { font-family:'Bagind',serif; font-size:clamp(2.2rem,8vw,4.5rem); font-weight:400; line-height:.88; color:var(--ink); display:block }
+.aw-h-teal  { font-family:'Bagind',serif; font-size:clamp(2.2rem,8vw,4.5rem); font-weight:400; line-height:.88; color:var(--teal); display:block; position:relative }
+.aw-h-teal::after { content:''; position:absolute; bottom:1px; left:0; height:2.5px; width:0; background:linear-gradient(90deg,var(--teal),var(--tealb)); border-radius:2px; animation:aw-lineH .9s 1.2s var(--ease) forwards }
+.aw-h-detail { display:block; margin-top:.8rem; font-family:'Poppins',sans-serif; font-size:clamp(.78rem,.92vw,.93rem); font-weight:300; color:var(--muted); line-height:1.72; letter-spacing:.01em }
+
+/* ── Accent Rule ── */
+.aw-rule { display:flex; align-items:center; gap:10px; margin:1.7rem 0 }
+.aw-rule-dia  { width:6px; height:6px; border-radius:1px; background:var(--amber); transform:rotate(45deg); flex-shrink:0 }
+.aw-rule-line { height:1px; flex:1; background:linear-gradient(90deg,var(--teal) 0%,rgba(14,154,170,0) 100%); transform-origin:left; animation:aw-lineH .75s .8s var(--ease) forwards }
+.aw-rule-dot  { width:4px; height:4px; border-radius:50%; background:rgba(245,166,35,.35); flex-shrink:0 }
+
+/* ── Body Text ── */
+.aw-text-block { margin-bottom:1.5rem }
+.aw-p { font-family:'Poppins',sans-serif; font-size:clamp(.82rem,.9rem,1rem); font-weight:300; color:var(--muted); line-height:1.95; margin-bottom:1.05rem }
+.aw-p:last-child { margin-bottom:0 }
+.aw-p strong { font-weight:500; color:var(--ink2) }
+.aw-p em { font-style:italic; color:var(--teal) }
+
+/* ── Pull Quote ── */
+.aw-quote { position:relative; margin:1.65rem 0; padding:1.4rem 1.4rem 1.4rem 1.8rem; background:linear-gradient(135deg,var(--cream) 0%,var(--cream2) 100%); border-left:3px solid var(--teal); border-radius:0 2px 2px 0; overflow:hidden }
+.aw-quote::after { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--teal),transparent); opacity:.3 }
+.aw-quote p { font-family:'Poppins',sans-serif; font-size:clamp(.8rem,.86rem,1rem); font-weight:300; font-style:italic; color:var(--ink2); line-height:1.82; position:relative; z-index:1 }
+.aw-quote p strong { font-weight:600; font-style:normal; color:var(--ink) }
+
+/* ── Chips ── */
+.aw-chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:1.9rem }
+.aw-chip { display:inline-flex; align-items:center; gap:6px; background:var(--white); border:1px solid var(--border); border-radius:2px; padding:5px 13px; font-family:'Poppins',sans-serif; font-size:.62rem; font-weight:500; color:var(--muted); transition:border-color .22s,background .22s,color .22s,transform .22s var(--spring),box-shadow .22s }
+.aw-chip:hover { border-color:rgba(14,154,170,.4); background:var(--teal-5); color:var(--teal); transform:translateY(-2px); box-shadow:0 4px 14px rgba(14,154,170,.12) }
+.aw-chip i { font-size:.6rem; color:var(--teal); transition:transform .22s }
+.aw-chip:hover i { transform:scale(1.2) }
+
+/* ── Stats Strip ── */
+.aw-stats {
+  display: flex;
+  flex-wrap: wrap;               /* allow wrapping on tiny screens */
+  margin-bottom: 2rem;
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--cream);
+  box-shadow: 0 2px 16px rgba(7,21,39,.04);
+}
+.aw-stat {
+  flex: 1 1 calc(33.333% - 2px); /* 3-up on mobile */
+  min-width: 80px;
+  padding: 1rem .7rem;
+  text-align: center;
+  border-right: 1px solid var(--border2);
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition: background .25s;
+}
+.aw-stat:nth-child(3) { border-right: none; }          /* end of first row of 3 */
+.aw-stat:nth-child(4) { border-right: 1px solid var(--border2); border-top: 1px solid var(--border2); }
+.aw-stat:nth-child(5) { border-right: none; border-top: 1px solid var(--border2); }
+
+@media (min-width: 480px) {
+  /* 5 items in one row when space allows */
+  .aw-stat { flex: 1 1 0; border-right: 1px solid var(--border2) !important; border-top: none !important; }
+  .aw-stat:last-child { border-right: none !important; }
+}
+
+.aw-stat::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--st-c,var(--teal)); transform:scaleX(0); transform-origin:center; transition:transform .35s var(--ease) }
+.aw-stat:hover { background:rgba(14,154,170,.04) }
+.aw-stat:hover::before { transform:scaleX(1) }
+.aw-sn { font-family:'Bagind',serif; font-size:clamp(1.3rem,3vw,2.1rem); font-weight:400; color:var(--ink); line-height:1; display:block; margin-bottom:.25rem }
+.aw-sn .ac { color:var(--teal) }
+.aw-sn .ao { color:var(--amber) }
+.aw-sl { font-family:'Poppins',sans-serif; font-size:.48rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted2) }
+
+/* ── CTAs ── */
+.aw-ctas { display:flex; align-items:center; gap:.85rem; flex-wrap:wrap; margin-bottom:1.4rem }
+
+/* Stack buttons on small screens */
+@media (max-width: 480px) {
+  .aw-ctas { flex-direction:column; align-items:stretch; }
+  .aw-btn-p, .aw-btn-s { justify-content:center; width:100%; }
+}
+
+.aw-btn-p { display:inline-flex; align-items:center; gap:8px; background:var(--teal); color:#fff !important; font-family:'Poppins',sans-serif; font-size:.72rem; font-weight:500; padding:13px 28px; border-radius:2px; transition:background .22s,transform .22s,box-shadow .22s; position:relative; overflow:hidden }
+.aw-btn-p:hover { background:var(--teald); transform:translateY(-2px) }
+.aw-btn-s { display:inline-flex; align-items:center; gap:8px; border:1.5px solid var(--border); color:var(--ink); font-family:'Poppins',sans-serif; font-size:.72rem; font-weight:500; padding:12px 24px; border-radius:2px; transition:border-color .22s,background .22s,color .22s,transform .22s }
+.aw-btn-s:hover { border-color:var(--navy); background:var(--navy); color:#fff; transform:translateY(-2px) }
+.aw-btn-p i, .aw-btn-s i { font-size:.7rem }
+
+/* ── Trust Row ── */
+.aw-trust { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap }
+.aw-ti { display:flex; align-items:center; gap:5px; font-family:'Poppins',sans-serif; font-size:.6rem; color:var(--muted2) }
+.aw-ti i { font-size:.58rem; color:var(--teal) }
+.aw-tsep { width:3px; height:3px; border-radius:50%; background:var(--border); flex-shrink:0 }
+
+/* ── Right Visual Column ── */
+.aw-right {
+  position: relative;
+  /* On mobile, enough bottom padding for floated secondary image */
+  padding-bottom: clamp(3.5rem, 12vw, 5rem);
+}
+
+/* Main image frame */
+.aw-frame {
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+  aspect-ratio: 5/6;
+  max-height: 580px;
+  box-shadow: 0 30px 70px rgba(7,21,39,.14), 0 8px 22px rgba(7,21,39,.08);
+  animation: aw-imgReveal .9s .3s var(--reveal) forwards;
+}
+.aw-frame img { width:100%; height:100%; object-fit:cover; transform:scale(1.06); transition:transform 10s linear; will-change:transform }
+.aw-frame:hover img { transform:scale(1.0) }
+.aw-frame::after { content:''; position:absolute; inset:0; border:1.5px solid rgba(14,154,170,.15); border-radius:inherit; z-index:2; pointer-events:none }
+.aw-frame-grad { position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(to top,rgba(7,21,39,.65) 0%,transparent 50%),linear-gradient(to right,rgba(7,21,39,.08) 0%,transparent 30%) }
+.aw-frame-cap  { position:absolute; bottom:1.2rem; left:1.2rem; right:1.2rem; z-index:3; display:flex; align-items:flex-end; justify-content:space-between; gap:.8rem }
+.aw-cap-name   { font-family:'Bagind',serif; font-size:clamp(.9rem,2.5vw,1.35rem); font-weight:400; color:#fff; line-height:1.1 }
+.aw-cap-loc    { display:flex; align-items:center; gap:4px; font-family:'Poppins',sans-serif; font-size:.55rem; font-weight:300; color:rgba(255,255,255,.56); margin-top:4px }
+.aw-cap-loc i  { font-size:.52rem; color:var(--tealb) }
+
+/* Floating secondary image — anchored to bottom of .aw-right */
+.aw-img-b {
+  position: absolute;
+  bottom: 0;
+  left: -1rem;
+  width: 52%;
+  max-width: 220px;
+  aspect-ratio: 4/3;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 3px solid var(--white);
+  box-shadow: 0 16px 44px rgba(7,21,39,.2);
+  z-index: 5;
+  animation: aw-floatB 7s ease-in-out infinite;
+  transition: transform .4s var(--spring);
+}
+.aw-img-b:hover { transform: scale(1.04) rotate(-1.2deg) }
+.aw-img-b img   { width:100%; height:100%; object-fit:cover }
+.aw-img-b::after { content:''; position:absolute; bottom:0; right:0; width:32px; height:32px; background:var(--amber); clip-path:polygon(100% 0,100% 100%,0 100%); opacity:.38; z-index:2 }
+
+/* Review card — right side floating */
+.aw-rev {
+  position: absolute;
+  top: 1.5rem;
+  right: -1.5rem;
+  background: var(--white);
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  padding: 1.1rem 1.2rem;
+  box-shadow: 0 16px 44px rgba(7,21,39,.12), 0 4px 12px rgba(7,21,39,.06);
+  z-index: 7;
+  min-width: 176px;
+  max-width: 210px;
+  animation: aw-floatA 5.5s ease-in-out infinite;
+}
+.aw-rev::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--teal),var(--tealb)); border-radius:2px 2px 0 0 }
+.aw-rev-top     { display:flex; align-items:center; gap:8px; margin-bottom:.7rem }
+.aw-rev-av      { width:34px; height:34px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:'Bagind',serif; font-size:.9rem; color:#fff; background:linear-gradient(135deg,var(--teal),var(--navy2)) }
+.aw-rev-name    { font-family:'Poppins',sans-serif; font-size:.7rem; font-weight:600; color:var(--ink); line-height:1.2 }
+.aw-rev-from    { font-size:.56rem; color:var(--muted2) }
+.aw-rev-stars   { display:flex; gap:2px; margin-bottom:.45rem }
+.aw-rev-stars i { font-size:.62rem; color:var(--amber) }
+.aw-rev-q       { font-family:'Poppins',sans-serif; font-size:.65rem; font-weight:300; color:var(--muted); line-height:1.62; font-style:italic }
+.aw-rev-tour    { margin-top:.6rem; display:inline-flex; align-items:center; gap:4px; background:var(--teal-5); border:1px solid var(--teal-10); border-radius:2px; padding:2px 8px; font-family:'Poppins',sans-serif; font-size:.55rem; font-weight:500; color:var(--teal) }
+
+/* Rating pill */
+.aw-pill {
+  position: absolute;
+  bottom: 5rem;
+  right: -1.8rem;
+  background: var(--navy);
+  border-radius: 2px;
+  padding: .9rem 1.2rem;
+  box-shadow: 0 14px 36px rgba(7,21,39,.32);
+  z-index: 7;
+  min-width: 120px;
+  animation: aw-floatA 7s 1.5s ease-in-out infinite;
+}
+.aw-pill-n { font-family:'Bagind',serif; font-size:1.9rem; color:var(--amber); line-height:1 }
+.aw-pill-l { font-family:'Poppins',sans-serif; font-size:.45rem; font-weight:400; letter-spacing:.13em; text-transform:uppercase; color:rgba(240,236,226,.38); margin-top:3px }
+.aw-pill-bar  { width:80px; height:2px; background:rgba(255,255,255,.1); border-radius:2px; margin-top:.5rem; overflow:hidden }
+.aw-pill-fill { height:100%; width:0; background:linear-gradient(90deg,var(--teal),var(--amber)); border-radius:2px; animation:aw-barGrow 1.5s .9s var(--ease) forwards }
+.aw-pill-stars { display:flex; gap:2px; margin-top:.3rem }
+.aw-pill-stars i { font-size:.5rem; color:var(--amber) }
+
+/* Image count badge */
+.aw-img-count {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: .4rem .75rem;
+  font-family: 'Poppins',sans-serif;
+  font-size: .58rem;
+  font-weight: 500;
+  color: var(--muted);
+  box-shadow: 0 4px 14px rgba(7,21,39,.06);
+}
+.aw-img-count i { font-size:.56rem; color:var(--teal) }
+
+/* ══════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════ */
+
+/* ─── 768px and below: hide review & pill, pull secondary closer ─── */
+@media (max-width: 768px) {
+  .aw-rev  { display: none; }
+  .aw-pill { display: none; }
+  .aw-img-count { display: none; }
+  .aw-img-b { left: -.5rem; width: 46%; max-width: 180px; }
+  .aw-right { padding-bottom: clamp(4rem, 14vw, 6rem); }
+}
+
+/* ─── 480px and below ─── */
+@media (max-width: 480px) {
+  .aw-img-b { left: -.25rem; width: 42%; max-width: 160px; }
+  .aw-frame { aspect-ratio: 4/5; max-height: 420px; }
+}
+
+/* ─── 360px and below ─── */
+@media (max-width: 360px) {
+  .aw-frame { aspect-ratio: 3/4; }
+  .aw-img-b { width: 38%; max-width: 130px; }
+}
+
+/* ── Platform Strip ── */
+.aw-strip-outer { max-width:1360px; margin:0 auto; padding:0 clamp(1.25rem,5vw,4.5rem) clamp(2rem,3.5vw,3rem); position:relative; z-index:1 }
+.aw-strip {
+  display: flex;
+  align-items: center;
+  gap: clamp(.6rem,2vw,2rem);
+  flex-wrap: wrap;
+  padding: 1.2rem 1.5rem;
+  background: var(--cream);
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  animation: aw-fadeUp .65s 1.2s var(--reveal) forwards;
+}
+.aw-strip::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.5) 50%,transparent 100%); background-size:200% 100%; animation:aw-shimmer 4s 2s linear infinite }
+.aw-strip-lbl { font-family:'Poppins',sans-serif; font-size:.51rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--muted2); flex-shrink:0; position:relative; z-index:1 }
+.aw-strip-div { width:1px; height:18px; background:var(--border); flex-shrink:0 }
+.aw-pill-sm { display:inline-flex; align-items:center; gap:7px; background:var(--white); border:1px solid var(--border); border-radius:100px; padding:6px 14px; font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:500; color:var(--muted); transition:border-color .2s,background .2s,transform .2s var(--spring); flex-shrink:0; position:relative; z-index:1; cursor:default }
+.aw-pill-sm:hover { border-color:rgba(14,154,170,.3); background:var(--teal-5); transform:translateY(-2px) }
+.aw-pill-sm i { font-size:.8rem }
+.aw-pill-score { font-weight:700; color:var(--amber); margin-left:1px }
+.aw-strip-spacer { flex:1; min-width:0 }
+.aw-strip-cta { display:inline-flex; align-items:center; gap:7px; background:rgba(37,211,102,.08); border:1px solid rgba(37,211,102,.22); border-radius:100px; padding:6px 16px; font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:600; color:#16a34a; flex-shrink:0; position:relative; z-index:1; transition:background .2s,border-color .2s,transform .2s var(--spring) }
+.aw-strip-cta:hover { background:rgba(37,211,102,.15); transform:translateY(-2px) }
+
+@media (max-width: 640px) {
+  .aw-strip { flex-direction: column; align-items: flex-start; gap: .75rem; }
+  .aw-strip-div { display: none; }
+  .aw-strip-spacer { display: none; }
+  .aw-strip-cta { align-self: stretch; justify-content: center; }
+}
+
+/* ── Divider ── */
+.aw-divrow { max-width:1360px; margin:0 auto; padding:clamp(2rem,4vw,4rem) clamp(1.25rem,5vw,4.5rem) clamp(1rem,2vw,2rem); display:flex; align-items:center; gap:1rem; position:relative; z-index:1 }
+.aw-divline { flex:1; height:1px; background:var(--border2) }
+.aw-divtxt  { font-family:'Poppins',sans-serif; font-size:.51rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--muted2); flex-shrink:0; display:flex; align-items:center; gap:7px; text-align:center }
+.aw-divdia  { width:5px; height:5px; border-radius:1px; background:var(--amber); transform:rotate(45deg); flex-shrink:0 }
+
+/* ── Why Cards Grid — Mobile First ── */
+.aw-why {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem,5vw,4.5rem) clamp(3.5rem,7vw,8rem);
+  display: grid;
+  grid-template-columns: 1fr;          /* 1-col on tiny */
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 400px) {
+  .aw-why { grid-template-columns: 1fr 1fr; }    /* 2-col from 400px */
+}
+@media (min-width: 700px) {
+  .aw-why { grid-template-columns: repeat(3,1fr); } /* 3-col */
+}
+@media (min-width: 1024px) {
+  .aw-why { grid-template-columns: repeat(5,1fr); } /* 5-col on desktop */
+}
+
+.aw-wc {
+  background: var(--white);
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  padding: 1.6rem 1.3rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  animation: aw-fadeUp .65s var(--reveal) forwards;
+  transition: transform .3s var(--ease), box-shadow .3s, border-color .3s;
+}
+.aw-wc:nth-child(1) { animation-delay:.05s }
+.aw-wc:nth-child(2) { animation-delay:.13s }
+.aw-wc:nth-child(3) { animation-delay:.21s }
+.aw-wc:nth-child(4) { animation-delay:.29s }
+.aw-wc:nth-child(5) { animation-delay:.37s }
+.aw-wc:hover { transform:translateY(-8px); box-shadow:0 22px 56px rgba(7,21,39,.1),0 4px 14px rgba(7,21,39,.06); border-color:rgba(14,154,170,.28) }
+.aw-wc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--wc-bar,var(--teal)); transform:scaleX(0); transform-origin:left; transition:transform .4s var(--ease) }
+.aw-wc:hover::before { transform:scaleX(1) }
+.aw-wc::after { content:''; position:absolute; left:0; top:0; bottom:0; width:0; background:linear-gradient(to right,rgba(14,154,170,.04),transparent); transition:width .3s }
+.aw-wc:hover::after { width:100% }
+.aw-wnum   { font-family:'Bagind',serif; font-size:3.8rem; font-weight:400; color:var(--cream2); line-height:1; margin-bottom:.2rem; user-select:none; transition:color .25s }
+.aw-wc:hover .aw-wnum { color:rgba(14,154,170,.07) }
+.aw-wico   { width:44px; height:44px; border-radius:2px; display:flex; align-items:center; justify-content:center; font-size:.92rem; margin-bottom:.9rem; transition:transform .3s var(--spring),box-shadow .3s; position:relative; z-index:1 }
+.aw-wc:hover .aw-wico { transform:scale(1.1) rotate(-4deg); box-shadow:0 6px 18px rgba(14,154,170,.18) }
+.aw-wtitle { font-family:'Bagind',serif; font-size:1rem; font-weight:400; color:var(--ink); margin-bottom:.45rem; transition:color .22s; position:relative; z-index:1 }
+.aw-wc:hover .aw-wtitle { color:var(--teal) }
+.aw-wdesc  { font-family:'Poppins',sans-serif; font-size:.72rem; font-weight:300; color:var(--muted); line-height:1.78; position:relative; z-index:1 }
+.aw-wfeats { display:flex; flex-direction:column; gap:.3rem; margin-top:.85rem; padding-top:.85rem; border-top:1px solid var(--border2); position:relative; z-index:1 }
+.aw-wfeat  { display:flex; align-items:center; gap:6px; font-family:'Poppins',sans-serif; font-size:.62rem; font-weight:300; color:var(--muted2) }
+.aw-wfeat i { font-size:.55rem; color:var(--teal); flex-shrink:0 }
+
+/* ── Elementor Compatibility Fixes ── */
+.elementor-widget-html .aboutuswelcome .anim,
+.elementor-widget-html .aboutuswelcome .anim.animated { animation:none !important; opacity:1 !important; transform:none !important }
+.elementor-widget-html .aboutuswelcome .anim.aw-run.up    { animation:aw-fadeUp    .8s var(--reveal) both !important }
+.elementor-widget-html .aboutuswelcome .anim.aw-run.left  { animation:aw-fadeLeft  .8s var(--reveal) both !important }
+.elementor-widget-html .aboutuswelcome .anim.aw-run.right { animation:aw-fadeRight .8s var(--reveal) both !important }
+.elementor-widget-html .aboutuswelcome .anim.aw-run.scal  { animation:aw-scalIn  .85s var(--reveal) both !important }
+.elementor-widget-html .aboutuswelcome { overflow:visible !important }
+.elementor-widget-html .aw-right       { overflow:visible !important }
+</style>
+
+<!-- ══ TICKER ══ -->
+<div class="aw-ticker" aria-hidden="true">
+  <div class="aw-ticker-track" id="awTicker"></div>
+</div>
+
+<!-- ══ OUR STORY — WELCOME SECTION ══ -->
+<section class="aboutuswelcome" id="our-story">
+
+  <!-- BG layers -->
+  
+  <div class="aw-bg-mesh"  aria-hidden="true"></div>
+  <div class="aw-bg-glow"  aria-hidden="true"></div>
+  <div class="aw-bg-amber" aria-hidden="true"></div>
+  <div class="aw-dots" id="awDots" aria-hidden="true"></div>
+
+  <div class="aw-inner">
+
+    <!-- ══ LEFT COPY ══ -->
+    <div class="aw-left">
+
+      <div data-aw-delay=".04s" class="aw-badge anim up">
+        <div class="aw-badge-dot"></div>
+        <span class="aw-badge-en">Ayubowan</span>
+        <div class="aw-badge-sep"></div>
+        <span class="aw-badge-si">ආයුබෝවන්</span>
+      </div>
+
+      <div data-aw-delay=".1s" class="aw-kicker anim up">
+        Our Story <div class="aw-kicker-pip"></div>
+      </div>
+
+      <div data-aw-delay=".18s" class="aw-h anim up">
+        <span class="aw-h-line1">Welcome to</span>
+        <span class="aw-h-main">Pixel Ceylon</span>
+        <span class="aw-h-teal">Tours</span>
+        <span class="aw-h-detail">Private, bespoke journeys through<br>the world's most extraordinary island.</span>
+      </div>
+
+      <div data-aw-delay=".26s" class="aw-rule anim up">
+        <div class="aw-rule-dia"></div>
+        <div class="aw-rule-line"></div>
+        <div class="aw-rule-dot"></div>
+      </div>
+
+      <div data-aw-delay=".32s" class="aw-text-block anim up">
+        <p class="aw-p">Pixel Ceylon was born in 2019 from a simple, unwavering belief — that travellers visiting Sri Lanka deserved <strong>something far better than crowded buses, rushed itineraries and generic experiences</strong> designed for the masses.</p>
+        <p class="aw-p">We had grown up on this island. Walked its hidden trails, eaten at tables most tourists never find, and watched dawn break over ancient citadels in complete silence. We knew its <em>real soul</em> — and we wanted to share it.</p>
+      </div>
+
+      <div data-aw-delay=".38s" class="aw-quote anim up">
+        <p><strong>'Pixel' — precision, detail, the building blocks of a beautiful image.</strong> 'Ceylon' — the old, romantic name for an island that has always been extraordinary. Together, that's exactly what we do: <strong>craft every pixel of your journey</strong> until the full picture is something truly unforgettable.</p>
+      </div>
+
+      <div data-aw-delay=".43s" class="aw-text-block anim up">
+        <p class="aw-p">Today, our small team of passionate Sri Lankan guides crafts <strong>completely private, deeply personal journeys</strong> for travellers who want to experience the island not as it is sold — but as it truly is.</p>
+      </div>
+
+      <div data-aw-delay=".48s" class="aw-chips anim up">
+        <span class="aw-chip"><i class="fas fa-flag"></i>Sri Lankan Owned</span>
+        <span class="aw-chip"><i class="fas fa-calendar-alt"></i>Est. 2019, Colombo</span>
+        <span class="aw-chip"><i class="fas fa-lock"></i>100% Private</span>
+        <span class="aw-chip"><i class="fas fa-map-marker-alt"></i>Locally Rooted</span>
+        <span class="aw-chip"><i class="fas fa-leaf"></i>Responsible Travel</span>
+        <span class="aw-chip"><i class="fas fa-star"></i>4.9&#9733; Rated</span>
+      </div>
+
+      <div data-aw-delay=".53s" class="aw-stats anim up">
+        <div class="aw-stat" style="--st-c:var(--teal)">
+          <span class="aw-sn" data-target="200" data-decimal="0">200<span class="ac">+</span></span>
+          <span class="aw-sl">Travellers</span>
+        </div>
+        <div class="aw-stat" style="--st-c:var(--amber)">
+          <span class="aw-sn" data-target="4.9" data-decimal="1">4.9<span class="ao">&#9733;</span></span>
+          <span class="aw-sl">Rating</span>
+        </div>
+        <div class="aw-stat" style="--st-c:#5ec46e">
+          <span class="aw-sn" data-target="32" data-decimal="0">32<span class="ac">+</span></span>
+          <span class="aw-sl">Countries</span>
+        </div>
+        <div class="aw-stat" style="--st-c:var(--tealb)">
+          <span class="aw-sn" data-target="100" data-decimal="0">100<span class="ac">%</span></span>
+          <span class="aw-sl">Private</span>
+        </div>
+        <div class="aw-stat" style="--st-c:#b48cf5">
+          <span class="aw-sn" data-target="48" data-decimal="0">48<span class="ac">h</span></span>
+          <span class="aw-sl">Free Itinerary</span>
+        </div>
+      </div>
+
+      <div data-aw-delay=".58s" class="aw-ctas anim up">
+        <a href="/trip-planner" class="aw-btn-p">
+          <i class="fas fa-calendar-check"></i>Plan My Trip — Free
+        </a>
+        <a href="/destinations" class="aw-btn-s">
+          <i class="fas fa-map-marked-alt"></i>Explore Destinations
+        </a>
+      </div>
+
+      <div data-aw-delay=".63s" class="aw-trust anim up">
+        <div class="aw-ti"><i class="fas fa-shield-alt"></i>No group tours, ever</div>
+        <div class="aw-tsep"></div>
+        <div class="aw-ti"><i class="fas fa-clock"></i>Free itinerary in 48h</div>
+        <div class="aw-tsep"></div>
+        <div class="aw-ti"><i class="fas fa-headset"></i>24/7 on-tour support</div>
+        <div class="aw-tsep"></div>
+        <div class="aw-ti"><i class="fas fa-undo"></i>Free cancellation</div>
+      </div>
+
+    </div><!-- /left -->
+
+    <!-- ══ RIGHT VISUALS ══ -->
+    <div data-aw-delay=".16s" class="aw-right anim right">
+
+      <div class="aw-frame">
+        <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/pixel-model_converted-e1773651487174.webp"
+             alt="Sigiriya Lion Rock Fortress — Sri Lanka"
+             loading="eager"
+             onerror="this.src='https://images.unsplash.com/photo-1594652634010-275456c808d0?w=900&auto=format&fit=crop&q=80'">
+        <div class="aw-frame-grad"></div>
+        <div class="aw-frame-cap">
+          <div>
+            <div class="aw-cap-name">Sigiriya Lion Rock</div>
+            <div class="aw-cap-loc"><i class="fas fa-map-marker-alt"></i>Cultural Triangle · Central Province</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="aw-img-b">
+        <img src="https://pixelceylontours.com/wp-content/uploads/2026/02/sigirija1.webp"
+             alt="Nine Arches Bridge, Ella"
+             loading="lazy"
+             onerror="this.src='https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=400&auto=format&fit=crop&q=80'">
+      </div>
+
+      <div class="aw-img-count"><i class="fas fa-camera"></i>Explore 60+ destinations</div>
+
+      <div class="aw-rev">
+        <div class="aw-rev-top">
+          <div class="aw-rev-av">S</div>
+          <div>
+            <div class="aw-rev-name">Sarah K.</div>
+            <div class="aw-rev-from">🇬🇧 London, United Kingdom</div>
+          </div>
+        </div>
+        <div class="aw-rev-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="aw-rev-q">"The most beautiful thing I've ever seen in forty countries of travel."</div>
+        <div class="aw-rev-tour"><i class="fas fa-route" style="font-size:.5rem"></i>Classic Sri Lanka · 10 Days</div>
+      </div>
+
+      <div class="aw-pill">
+        <div class="aw-pill-n">4.9★</div>
+        <div class="aw-pill-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="aw-pill-l">128 Verified Reviews</div>
+        <div class="aw-pill-bar"><div class="aw-pill-fill"></div></div>
+      </div>
+
+    </div><!-- /right -->
+  </div><!-- /inner -->
+
+  <!-- ══ PLATFORM STRIP ══ -->
+  <div class="aw-strip-outer">
+    <div class="aw-strip" id="awStrip">
+      <span class="aw-strip-lbl">Trusted &amp; Reviewed On</span>
+      <div class="aw-strip-div"></div>
+      <div class="aw-pill-sm"><i class="fab fa-google" style="color:#4285F4"></i>Google<span class="aw-pill-score">4.9</span></div>
+      <div class="aw-pill-sm"><i class="fab fa-tripadvisor" style="color:#34e0a1"></i>TripAdvisor<span class="aw-pill-score">5.0</span></div>
+      <div class="aw-pill-sm"><i class="fab fa-airbnb" style="color:#ff5a5f"></i>Airbnb<span class="aw-pill-score">4.98</span></div>
+      <div class="aw-pill-sm"><i class="fab fa-whatsapp" style="color:#25d366"></i>WhatsApp Verified</div>
+      <div class="aw-strip-spacer"></div>
+      <a href="https://wa.me/94777273794" class="aw-strip-cta">
+        <i class="fab fa-whatsapp"></i>Chat with us now
+        <i class="fas fa-arrow-right" style="font-size:.52rem"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- ══ DIVIDER ══ -->
+  <div class="aw-divrow">
+    <div class="aw-divline"></div>
+    <div class="aw-divtxt">
+      <div class="aw-divdia"></div>Why Choose Pixel Ceylon Tours<div class="aw-divdia"></div>
+    </div>
+    <div class="aw-divline"></div>
+  </div>
+
+  <!-- ══ WHY CARDS ══ -->
+  <div class="aw-why" id="awWhy">
+
+    <div class="aw-wc" style="--wc-bar:var(--teal)">
+      <div class="aw-wnum">01</div>
+      <div class="aw-wico" style="background:#e6f7f9;color:#0e9aaa"><i class="fas fa-user-shield"></i></div>
+      <div class="aw-wtitle">100% Private &amp; Bespoke</div>
+      <p class="aw-wdesc">No group tours, ever. Every itinerary built from scratch for you alone — your pace, your passions, your Sri Lanka.</p>
+      <div class="aw-wfeats">
+        <div class="aw-wfeat"><i class="fas fa-check"></i>Your own private guide</div>
+        <div class="aw-wfeat"><i class="fas fa-check"></i>Your own vehicle &amp; driver</div>
+      </div>
+    </div>
+
+    <div class="aw-wc" style="--wc-bar:var(--amber)">
+      <div class="aw-wnum">02</div>
+      <div class="aw-wico" style="background:#fef6e7;color:#f5a623"><i class="fas fa-map-marked-alt"></i></div>
+      <div class="aw-wtitle">Expert Sri Lankan Guides</div>
+      <p class="aw-wdesc">Born here, raised here — fluent in the hidden roads, secret viewpoints and monsoon shortcuts only locals ever find.</p>
+      <div class="aw-wfeats">
+        <div class="aw-wfeat"><i class="fas fa-check"></i>Licensed &amp; vetted guides</div>
+        <div class="aw-wfeat"><i class="fas fa-check"></i>Multi-language fluent</div>
+      </div>
+    </div>
+
+    <div class="aw-wc" style="--wc-bar:#1eb577">
+      <div class="aw-wnum">03</div>
+      <div class="aw-wico" style="background:rgba(30,181,119,.1);color:#1eb577"><i class="fas fa-pencil-ruler"></i></div>
+      <div class="aw-wtitle">Itinerary in 48 Hours</div>
+      <p class="aw-wdesc">Full day-by-day plan, hand-picked hotels and clear pricing — beautifully prepared, in your inbox within 48 hours. Free.</p>
+      <div class="aw-wfeats">
+        <div class="aw-wfeat"><i class="fas fa-check"></i>No payment required</div>
+        <div class="aw-wfeat"><i class="fas fa-check"></i>Unlimited revisions</div>
+      </div>
+    </div>
+
+    <div class="aw-wc" style="--wc-bar:#b48cf5">
+      <div class="aw-wnum">04</div>
+      <div class="aw-wico" style="background:rgba(155,114,232,.11);color:#b48cf5"><i class="fas fa-headset"></i></div>
+      <div class="aw-wtitle">24/7 On-Tour Support</div>
+      <p class="aw-wdesc">Always reachable — from the moment you land to your farewell at the airport. A real person, any hour, any situation.</p>
+      <div class="aw-wfeats">
+        <div class="aw-wfeat"><i class="fas fa-check"></i>Airport meet &amp; greet</div>
+        <div class="aw-wfeat"><i class="fas fa-check"></i>WhatsApp direct line</div>
+      </div>
+    </div>
+
+    <div class="aw-wc" style="--wc-bar:#e87a9c">
+      <div class="aw-wnum">05</div>
+      <div class="aw-wico" style="background:rgba(232,122,156,.1);color:#e87a9c"><i class="fas fa-leaf"></i></div>
+      <div class="aw-wtitle">Responsible &amp; Local</div>
+      <p class="aw-wdesc">Locally owned stays, community experiences and ethical wildlife — every decision returns benefit directly to Sri Lanka.</p>
+      <div class="aw-wfeats">
+        <div class="aw-wfeat"><i class="fas fa-check"></i>No elephant riding</div>
+        <div class="aw-wfeat"><i class="fas fa-check"></i>Family-owned partners only</div>
+      </div>
+    </div>
+
+  </div><!-- /why -->
+
+</section>
+
+<script>
+(function(){
+
+  /* ── Entrance Animations via IntersectionObserver ── */
+  var animEls = document.querySelectorAll('#our-story .anim, .aw-ticker');
+  if(animEls.length && window.IntersectionObserver){
+    var animIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          var el = e.target;
+          var d = el.getAttribute('data-aw-delay');
+          if(d){ el.style.animationDelay = d; }
+          el.classList.add('aw-run');
+          animIO.unobserve(el);
+        }
+      });
+    },{threshold:0.08, rootMargin:'0px 0px -40px 0px'});
+    animEls.forEach(function(el){ animIO.observe(el); });
+  } else {
+    animEls.forEach(function(el){ el.classList.add('aw-run'); });
+  }
+
+  /* ── Dot grid ── */
+  var dots = document.getElementById('awDots');
+  if(dots){ for(var i=0;i<96;i++){ var s=document.createElement('span'); dots.appendChild(s); } }
+
+  /* ── Ticker ── */
+  var tickerItems = [
+    {icon:'fa-star',           text:'4.9 Rated on Google'},
+    {icon:'fa-user-shield',    text:'100% Private Tours'},
+    {icon:'fa-leaf',           text:'Responsible Travel'},
+    {icon:'fa-map-marked-alt', text:'Expert Local Guides'},
+    {icon:'fa-clock',          text:'Free Itinerary in 48h'},
+    {icon:'fa-lock',           text:'No Group Tours — Ever'},
+    {icon:'fa-headset',        text:'24/7 On-Tour Support'},
+    {icon:'fa-flag',           text:'Sri Lankan Owned & Run'},
+    {icon:'fa-undo',           text:'Free 7-Day Cancellation'},
+    {icon:'fa-globe',          text:'32+ Countries Served'}
+  ];
+  var ticker = document.getElementById('awTicker');
+  if(ticker){
+    var all = tickerItems.concat(tickerItems);
+    ticker.innerHTML = all.map(function(it){
+      return '<span class="aw-ticker-item"><i class="fas '+it.icon+'"></i>'+it.text+'</span>'
+           + '<span class="aw-ticker-sep"></span>';
+    }).join('');
+  }
+
+  /* ── Stat counters ── */
+  var statEls = document.querySelectorAll('#our-story .aw-sn[data-target]');
+  if(statEls.length && window.IntersectionObserver){
+    var stio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting && !e.target.dataset.done){
+          e.target.dataset.done = '1';
+          var target  = parseFloat(e.target.dataset.target);
+          var decimal = parseInt(e.target.dataset.decimal || 0);
+          var suffix  = e.target.querySelector('span') ? e.target.querySelector('span').outerHTML : '';
+          var dur=1400, fps=60, steps=Math.round(dur/1000*fps);
+          var cur=0, f=0;
+          var t = setInterval(function(){
+            cur = Math.min(cur + target/steps, target); f++;
+            var n = decimal ? cur.toFixed(decimal) : Math.round(cur);
+            e.target.innerHTML = n + suffix;
+            if(f >= steps){ clearInterval(t); }
+          }, 1000/fps);
+        }
+      });
+    },{threshold:.4});
+    statEls.forEach(function(el){ stio.observe(el); });
+  }
+
+  /* ── Parallax on main image (desktop only) ── */
+  var frame = document.querySelector('#our-story .aw-frame');
+  if(frame && window.innerWidth > 768){
+    var img = frame.querySelector('img');
+    window.addEventListener('scroll', function(){
+      var rect = frame.getBoundingClientRect();
+      if(rect.top < window.innerHeight && rect.bottom > 0){
+        var progress = 1 - (rect.top + rect.height/2) / window.innerHeight;
+        var y = Math.max(-15, Math.min(15, progress * 20));
+        img.style.transform = 'scale(1.07) translateY('+y+'px)';
+      }
+    },{passive:true});
+  }
+})();
+</script>
+</section>
+</div>

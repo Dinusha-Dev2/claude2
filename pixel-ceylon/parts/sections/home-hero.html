@@ -1,0 +1,876 @@
+<div>
+<section class="hero">
+
+
+
+
+
+<style>
+
+/* ═══════════════════════════════════════════════════════
+   ELEMENTOR FULL NEUTRALISER
+   ═══════════════════════════════════════════════════════ */
+.elementor-section,
+.elementor-inner-section,
+.elementor-top-section,
+.elementor-container,
+.elementor-row,
+.elementor-column,
+.elementor-top-column,
+.elementor-inner-column,
+.elementor-column-wrap,
+.elementor-widget,
+.elementor-widget-wrap,
+.elementor-widget-container,
+.elementor-element,
+.e-container,
+.e-con,
+.e-con-inner,
+.elementor-element > .elementor-widget-container {
+  padding:    0 !important;
+  margin:     0 !important;
+  max-width:  none !important;
+  width:      100% !important;
+  min-height: 0 !important;
+  border:     none !important;
+  box-shadow: none !important;
+  background: none !important;
+  overflow:   visible !important;
+}
+.elementor-section,
+.elementor-inner-section,
+.elementor-column,
+.elementor-element,
+.e-container,
+.e-con {
+  position:    static !important;
+  z-index:     auto !important;
+  transform:   none !important;
+  filter:      none !important;
+  will-change: auto !important;
+}
+.elementor-widget-wrap,
+.elementor-column-wrap,
+.e-con-inner {
+  display: block !important;
+  flex:    unset !important;
+  grid:    unset !important;
+}
+.elementor-section.elementor-section-boxed > .elementor-container,
+.e-con.e-con-boxed > .e-con-inner {
+  max-width: none !important;
+  width:     100% !important;
+}
+.elementor-row {
+  display:     block !important;
+  flex-wrap:   unset !important;
+  column-gap:  0 !important;
+  align-items: unset !important;
+}
+
+/* ── Reset ─────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+img{display:block}
+button{font-family:'Poppins',sans-serif;cursor:pointer;border:none;background:none}
+a{text-decoration:none;color:inherit}
+
+/* ── Tokens ────────────────────────────────────────── */
+:root{
+  --navy:   #071527;
+  --teal:   #0e9aaa;
+  --teald:  #0b7d8c;
+  --tealb:  #12c8d8;
+  --amber:  #f5a623;
+  --amber-d:#d4891a;
+  --cream:  #f0ece2;
+  --c80:    rgba(240,236,226,.80);
+  --c60:    rgba(240,236,226,.60);
+  --c40:    rgba(240,236,226,.40);
+  --c20:    rgba(240,236,226,.20);
+  --c12:    rgba(240,236,226,.12);
+  --c05:    rgba(240,236,226,.05);
+  --tgl:    rgba(14,154,170,.15);
+  --tgl2:   rgba(14,154,170,.07);
+  --bt:     rgba(14,154,170,.22);
+  --bc:     rgba(240,236,226,.10);
+  --ease:   cubic-bezier(.4,0,.2,1);
+  --bagind: 'Bagind',serif;
+  --bot-h:  52px;
+  --r-sm:   2px;
+}
+
+/* ── Section ───────────────────────────────────────── */
+.herosection{
+  position:relative !important;
+  width:100% !important;
+  height:100dvh !important;
+  min-height:560px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important;
+  background:var(--navy) !important;
+  font-family:'Poppins',sans-serif;
+  color:var(--cream);
+  -webkit-font-smoothing:antialiased;
+  isolation:isolate;
+  box-sizing:border-box !important;
+}
+
+/* ── Slideshow ─────────────────────────────────────── */
+.hs-reel{position:absolute;inset:0;z-index:0}
+.hs-rs{position:absolute;inset:0;opacity:0;transition:opacity 1.8s var(--ease)}
+.hs-rs.on{opacity:1}
+.hs-rs-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transform:scale(1.06);
+  transition:transform 12s linear;
+  filter:brightness(.78) saturate(1.15);
+}
+.hs-rs.on .hs-rs-bg{transform:scale(1)}
+
+/* ── Overlays ──────────────────────────────────────── */
+.hs-ov{position:absolute;inset:0;z-index:1;pointer-events:none}
+.hs-ov-l{
+  background:linear-gradient(
+    108deg,
+    rgba(7,21,39,.72) 0%,
+    rgba(11,30,53,.32) 38%,
+    rgba(11,30,53,.02) 62%,
+    transparent 100%
+  );
+}
+.hs-ov-b{
+  background:linear-gradient(
+    to top,
+    rgba(7,21,39,.90) 0%,
+    rgba(7,21,39,.42) 14%,
+    rgba(7,21,39,.04) 38%,
+    transparent 100%
+  );
+}
+
+/* ── Grain ─────────────────────────────────────────── */
+.hs-grain{
+  position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.018;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px;
+}
+
+/* ── Particles ─────────────────────────────────────── */
+.hs-particles{position:absolute;inset:0;z-index:2;pointer-events:none}
+.hs-pp{
+  position:absolute;border-radius:var(--r-sm);
+  animation:hsPpFloat var(--d,8s) var(--dl,0s) ease-in-out infinite;
+}
+@keyframes hsPpFloat{
+  0%,100%{transform:translateY(0) rotate(0deg);    opacity:var(--op,.16)}
+  45%    {transform:translateY(-13px) rotate(9deg); opacity:calc(var(--op,.16)*.4)}
+  75%    {transform:translateY(-4px) rotate(-4deg); opacity:var(--op,.16)}
+}
+
+/* ── Hero body ─────────────────────────────────────── */
+.hs-body{
+  position:relative;z-index:10;flex:1;
+  display:grid;
+  grid-template-columns:1fr 360px;
+  gap:clamp(1.5rem,2.5vw,3rem);
+  align-items:end;
+  padding:clamp(1.5rem,3vh,3rem) clamp(1.5rem,4vw,4rem) clamp(1.2rem,2.5vh,2rem);
+}
+.hs-left{min-width:0}
+
+/* ── Eyebrow ───────────────────────────────────────── */
+.hs-eyebrow{
+  display:flex;align-items:center;gap:9px;
+  margin-bottom:clamp(.5rem,1.2vh,1rem);
+  opacity:0;animation:hsRiseUp .8s .05s forwards;
+}
+.hs-eyebrow-line{width:22px;height:1.5px;background:var(--teal);border-radius:var(--r-sm)}
+.hs-eyebrow-txt{font-size:.56rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--teal)}
+.hs-eyebrow-pip{
+  width:5px;height:5px;border-radius:var(--r-sm);
+  background:var(--amber);transform:rotate(45deg);
+  animation:hsSpinPip 8s linear infinite;
+}
+@keyframes hsSpinPip{to{transform:rotate(calc(45deg + 360deg))}}
+
+/* ── Headline ──────────────────────────────────────── */
+.hs-hl{
+  font-family:var(--bagind);
+  font-size:clamp(2.8rem,min(6vw,9.5vh),6.8rem);
+  font-weight:400;line-height:.93;color:var(--cream);
+  letter-spacing:-.005em;
+  margin-bottom:clamp(.6rem,1.2vh,1.2rem);
+  text-shadow:0 2px 24px rgba(7,21,39,.55),0 1px 4px rgba(7,21,39,.35);
+  opacity:0;animation:hsRiseUp .85s .15s forwards;
+}
+.hs-hl strong{font-family:var(--bagind);font-weight:500;display:block}
+.hs-hl em    {font-style:normal;color:#fff;}
+.hs-hl .o   {color:var(--amber)}
+
+/* ── Subtitle ──────────────────────────────────────── */
+.hs-sub{
+  font-size:clamp(.7rem,.95vw,.84rem);font-weight:300;
+  color:var(--c80);line-height:1.82;max-width:500px;
+  margin-bottom:clamp(.6rem,1.2vh,1.2rem);
+  text-shadow:0 1px 8px rgba(7,21,39,.4);
+  opacity:0;animation:hsRiseUp .85s .28s forwards;
+  display:-webkit-box;-webkit-box-orient:vertical;
+  -webkit-line-clamp:3;overflow:hidden;
+}
+
+/* ── Stats ─────────────────────────────────────────── */
+.hs-stats{
+  display:flex;gap:0;
+  margin-bottom:clamp(.8rem,1.6vh,1.5rem);
+  opacity:0;animation:hsRiseUp .85s .42s forwards;
+}
+.hs-stat{padding:0 clamp(.7rem,1.5vw,1.4rem);border-left:1px solid rgba(14,154,170,.28)}
+.hs-stat:first-child{padding-left:0;border-left:none}
+.hs-stat-n{
+  font-family:var(--bagind);font-size:clamp(1.3rem,2.3vw,1.9rem);
+  font-weight:700;color:var(--tealb);line-height:1;
+  text-shadow:0 2px 12px rgba(7,21,39,.5);
+}
+.hs-stat-l{font-size:.49rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--c40);margin-top:3px}
+
+/* ── CTAs ──────────────────────────────────────────── */
+.hs-ctas{
+  display:flex;align-items:center;
+  margin-top:50px;margin-bottom:20px;
+  gap:.625rem;flex-wrap:wrap;
+  opacity:0;animation:hsRiseUp .85s .56s cubic-bezier(.22,1,.36,1) forwards;
+}
+.hs-btn-p{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:clamp(11px,1.4vh,13px) clamp(22px,2vw,30px);
+  background:linear-gradient(135deg,var(--amber),var(--amber-d));
+  color:#fff;font-family:'Poppins',sans-serif;
+  font-size:clamp(.78rem,.88vw,.82rem);font-weight:600;letter-spacing:.02em;
+  border-radius:2px;border:none;cursor:pointer;
+  text-decoration:none!important;white-space:nowrap;
+  position:relative;overflow:hidden;
+  transition:transform .22s var(--ease);
+  -webkit-tap-highlight-color:transparent;outline:none;
+}
+.hs-btn-p::after{
+  content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.22),transparent);
+  transition:left .55s;
+}
+.hs-btn-p:hover::after{left:150%}
+.hs-btn-p:hover{transform:translateY(-2px) scale(1.02);color:#fff}
+.hs-btn-p:active{transform:scale(.97)!important;color:#fff}
+.hs-btn-p i{font-size:.72rem;flex-shrink:0}
+
+.hs-btn-g{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:clamp(11px,1.4vh,13px) clamp(22px,2vw,30px);
+  background:transparent;color:var(--cream);
+  font-family:'Poppins',sans-serif;
+  font-size:clamp(.76rem,.88vw,.8rem);font-weight:600;letter-spacing:.02em;
+  border-radius:2px;border:1.5px solid var(--bc);cursor:pointer;
+  text-decoration:none!important;white-space:nowrap;
+  transition:border-color .2s,color .2s,background .2s,transform .18s ease;
+  -webkit-tap-highlight-color:transparent;outline:none;
+}
+.hs-btn-g:hover{border-color:var(--teald);color:#fff;background:rgba(22,48,68,.85);transform:translateY(-1px)}
+.hs-btn-g:active{transform:scale(.97)!important}
+.hs-btn-g i{font-size:.72rem;flex-shrink:0}
+
+/* ── Right panel ───────────────────────────────────── */
+.hs-right{
+  display:flex;flex-direction:column;gap:clamp(.4rem,.8vh,.7rem);
+  min-width:0;min-height:0;
+  opacity:0;animation:hsRiseUp .85s .28s forwards;
+}
+.hs-dest-card{
+  background:rgba(7,21,39,.52);
+  border:1px solid var(--bc);border-radius:2px;
+  padding:clamp(.7rem,1.2vh,1.2rem) clamp(.9rem,1.3vw,1.4rem);
+  backdrop-filter:blur(20px) saturate(160%);
+  transition:border-color .4s;flex-shrink:0;
+}
+.hs-dest-card:hover{border-color:var(--bt)}
+.hs-dc-eye{
+  display:flex;align-items:center;gap:6px;
+  font-size:.5rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);
+  margin-bottom:.4rem;
+}
+.hs-dc-eye::before{content:'';width:10px;height:1px;background:var(--teal)}
+.hs-dc-name {font-family:var(--bagind);font-size:clamp(.95rem,1.4vw,1.2rem);color:var(--cream);line-height:1.2;margin-bottom:.25rem}
+.hs-dc-loc  {display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:.58rem;color:var(--c40);margin-bottom:.6rem}
+.hs-dc-loc i{color:var(--teal);font-size:.56rem}
+.hs-dc-bars {display:flex;gap:3px;margin-bottom:.6rem}
+.hs-dc-bar  {flex:1;height:2px;border-radius:var(--r-sm);background:var(--c12);cursor:pointer;position:relative;overflow:hidden}
+.hs-dc-bar.on{background:rgba(14,154,170,.28)}
+.hs-dc-bar-fill{position:absolute;top:0;left:0;height:100%;width:0;background:var(--teal);border-radius:var(--r-sm)}
+.hs-dc-chips{display:flex;flex-wrap:wrap;gap:.3rem}
+.hs-dc-chip {background:var(--tgl2);border:1px solid rgba(14,154,170,.2);border-radius:var(--r-sm);padding:2px 9px;font-size:.52rem;color:var(--tealb)}
+.hs-dc-chip.o{background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.22);color:var(--amber)}
+
+.hs-mosaic{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(.22rem,.38vw,.38rem);flex-shrink:0}
+.hs-mthumb{position:relative;border-radius:2px;overflow:hidden;aspect-ratio:4/3;cursor:pointer;border:1.5px solid transparent;transition:border-color .25s}
+.hs-mthumb img      {width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.hs-mthumb:hover img{transform:scale(1.1)}
+.hs-mthumb.on       {border-color:var(--teal)}
+.hs-mthumb-ov {position:absolute;inset:0;background:linear-gradient(to top,rgba(7,21,39,.7) 0%,transparent 55%)}
+.hs-mthumb-lbl{position:absolute;bottom:3px;left:0;right:0;text-align:center;font-size:.42rem;font-weight:600;color:rgba(240,236,226,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 3px}
+
+.hs-trust-row{
+  display:flex;align-items:center;gap:.75rem;
+  background:var(--c05);border:1px solid var(--bc);border-radius:2px;
+  padding:clamp(.4rem,.8vh,.7rem) clamp(.7rem,1vw,1rem);
+  flex-shrink:0;backdrop-filter:blur(16px);
+}
+.hs-tr-avs{display:flex}
+.hs-tr-av  {width:22px;height:22px;border-radius:50%;border:2px solid var(--navy);margin-left:-6px;display:flex;align-items:center;justify-content:center;font-size:.42rem;font-weight:700;color:#fff}
+.hs-tr-av:first-child{margin-left:0}
+.hs-tr-txt {font-size:.58rem;color:var(--c60);flex:1}
+.hs-tr-txt strong{color:var(--cream)}
+.hs-tr-stars{display:flex;align-items:center;gap:2px;margin-top:1px}
+.hs-tr-stars i   {font-size:.46rem;color:var(--amber)}
+.hs-tr-stars span{font-size:.52rem;color:var(--c40);margin-left:3px}
+.hs-tr-pkgs{font-family:var(--bagind);font-size:1.35rem;font-weight:700;color:var(--cream);line-height:1;flex-shrink:0;text-align:right}
+.hs-tr-pkgs span{display:block;font-size:.48rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-top:1px}
+
+/* ══════════════════════════════════════════════════════
+   BOTTOM STRIP
+   ══════════════════════════════════════════════════════ */
+.hs-bot-strip{
+  position:relative !important;
+  z-index:10;
+  height:var(--bot-h) !important;
+  min-height:var(--bot-h) !important;
+  max-height:var(--bot-h) !important;
+  flex-shrink:0;
+  background:rgba(5,12,22,.97) !important;
+  border-top:1px solid rgba(14,154,170,.12);
+  backdrop-filter:blur(24px);
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:stretch !important;
+  width:100% !important;
+  overflow:hidden !important;    /* clips children to strip height */
+  box-sizing:border-box !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   CTRL AREA — ARROW FIX (Elementor-proof)
+   Root cause: Elementor's runtime styles were letting
+   flex children STRETCH to full strip height instead of
+   centring. Fix: explicit align-self:center on EVERY
+   child + fixed height on the ctrl container itself.
+   ══════════════════════════════════════════════════════ */
+.hs-bs-ctrl{
+  display:flex !important;
+  flex-direction:row !important;      /* counter | vdiv | nav side-by-side */
+  align-items:center !important;
+  justify-content:center !important;
+  gap:7px;
+  padding:0 14px;
+  border-right:1px solid var(--bc);
+  flex-shrink:0;
+  height:var(--bot-h) !important;     /* locked — never grows */
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+
+/* Every direct child gets align-self:center so Elementor
+   cannot override the parent's align-items */
+.hs-bs-counter{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  align-self:center !important;       /* ← key Elementor override */
+  line-height:1;
+  flex-shrink:0;
+}
+.hs-bs-num-cur{
+  font-family:var(--bagind);
+  font-size:.9rem;font-weight:700;
+  color:var(--cream);line-height:1;
+  display:block !important;
+}
+.hs-bs-num-sep{
+  font-size:.38rem;color:var(--c40);
+  letter-spacing:.06em;margin-top:1px;
+  display:block !important;
+}
+.hs-bs-vdiv{
+  width:1px !important;
+  height:20px !important;             /* fixed — never stretches */
+  background:var(--bc);
+  flex-shrink:0;
+  align-self:center !important;       /* ← key Elementor override */
+  display:block !important;
+}
+.hs-bs-nav{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:2px;
+  align-items:center !important;
+  align-self:center !important;       /* ← key Elementor override */
+  flex-shrink:0;
+}
+.hs-bs-btn{
+  width:18px !important;
+  height:18px !important;
+  border-radius:var(--r-sm);
+  background:var(--c05) !important;
+  border:1px solid var(--bc) !important;
+  color:var(--c40);
+  font-size:.42rem;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  transition:all .2s;
+  cursor:pointer;
+  flex-shrink:0;
+  padding:0 !important;
+  margin:0 !important;
+  line-height:1;
+}
+.hs-bs-btn:hover {background:var(--teal) !important;border-color:var(--teal) !important;color:#fff}
+.hs-bs-btn:active{background:#fff !important;color:#111;border-color:#e5e7eb !important}
+
+/* ── Slide cards ───────────────────────────────────── */
+.hs-bs-cards{
+  display:flex !important;
+  align-items:stretch;
+  flex:1;
+  overflow-x:auto;overflow-y:hidden;
+  scrollbar-width:none;overscroll-behavior-x:contain;
+  height:var(--bot-h) !important;
+  box-sizing:border-box !important;
+}
+.hs-bs-cards::-webkit-scrollbar{display:none}
+
+.hs-bs-card{
+  position:relative;
+  display:flex !important;
+  align-items:center !important;
+  gap:8px;
+  padding:0 14px;
+  border-right:1px solid var(--bc);
+  flex-shrink:0;min-width:115px;
+  cursor:pointer;transition:background .22s;
+  box-sizing:border-box;
+}
+.hs-bs-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--teal);transform:scaleX(0);transform-origin:left;
+  transition:transform .3s var(--ease);
+}
+.hs-bs-card:hover          {background:var(--tgl2)}
+.hs-bs-card:hover::after,
+.hs-bs-card.on::after      {transform:scaleX(1)}
+.hs-bs-card.on             {background:rgba(14,154,170,.07)}
+.hs-bs-prog    {position:absolute;bottom:0;left:0;right:0;height:2px}
+.hs-bs-prog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--tealb))}
+.hs-bs-thumb{width:36px;height:26px;border-radius:var(--r-sm);overflow:hidden;flex-shrink:0;border:1.5px solid transparent;transition:border-color .2s}
+.hs-bs-card.on .hs-bs-thumb   {border-color:rgba(14,154,170,.5)}
+.hs-bs-card:hover .hs-bs-thumb{border-color:rgba(14,154,170,.32)}
+.hs-bs-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.hs-bs-info{display:flex;flex-direction:column;justify-content:center;gap:1px;min-width:0}
+.hs-bs-idx{font-size:.4rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);opacity:0;transition:opacity .2s;line-height:1}
+.hs-bs-card.on .hs-bs-idx,
+.hs-bs-card:hover .hs-bs-idx  {opacity:1}
+.hs-bs-name{font-family:var(--bagind);font-size:.78rem;color:var(--c40);white-space:nowrap;transition:color .2s;line-height:1.15}
+.hs-bs-card.on .hs-bs-name,
+.hs-bs-card:hover .hs-bs-name {color:var(--cream)}
+.hs-bs-tag{display:flex;align-items:center;gap:3px;font-size:.42rem;font-weight:500;color:var(--c40);transition:color .2s}
+.hs-bs-card.on .hs-bs-tag     {color:var(--teal)}
+.hs-bs-pip{width:4px;height:4px;border-radius:var(--r-sm);flex-shrink:0;transition:transform .25s}
+.hs-bs-card.on .hs-bs-pip,
+.hs-bs-card:hover .hs-bs-pip  {transform:rotate(45deg)}
+
+/* ── Map button ────────────────────────────────────── */
+.hs-map-btn{display:flex;align-items:center;padding:0 18px;border-left:1px solid var(--bc);flex-shrink:0;cursor:pointer;text-decoration:none!important;color:inherit}
+.hs-map-inner{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--tgl);border:1px solid rgba(14,154,170,.28);
+  border-radius:100px;padding:7px 14px 7px 7px;
+  transition:background .22s,border-color .22s;white-space:nowrap;
+}
+.hs-map-btn:hover .hs-map-inner{background:rgba(14,154,170,.22);border-color:rgba(14,154,170,.55)}
+.hs-map-marker{width:28px;height:28px;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center}
+.hs-map-marker svg{width:22px;height:22px;filter:drop-shadow(0 1px 3px rgba(14,154,170,.4));animation:hsMarkerBob 3s ease-in-out infinite}
+.hs-map-pulse{position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:8px;height:3px;background:rgba(14,154,170,.4);border-radius:50%;animation:hsMarkerPulse 2.4s ease-in-out infinite}
+@keyframes hsMarkerBob   {0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes hsMarkerPulse {0%,100%{transform:translateX(-50%) scale(1);opacity:.4}50%{transform:translateX(-50%) scale(1.7);opacity:.12}}
+.hs-map-txt  {display:flex;flex-direction:column;gap:1px}
+.hs-map-label{font-size:.62rem;font-weight:600;color:var(--cream);line-height:1}
+.hs-map-sub  {font-size:.46rem;font-weight:400;color:var(--teal);letter-spacing:.05em;line-height:1;margin-top:1px}
+.hs-map-arr  {font-size:.5rem;color:var(--teal);margin-left:2px;transition:transform .22s}
+.hs-map-btn:hover .hs-map-arr{transform:translateX(3px)}
+
+/* ── Animations ────────────────────────────────────── */
+@keyframes hsRiseUp{
+  from{opacity:0;transform:translateY(22px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+
+/* ── Responsive ────────────────────────────────────── */
+@media(max-width:1024px){
+  .hs-body{grid-template-columns:1fr}
+  .hs-right{display:none}
+  .hs-hl{font-size:clamp(2.6rem,7.5vw,5rem)}
+  .hs-sub{-webkit-line-clamp:4}
+  .hs-map-btn{display:none}
+}
+@media(max-width:768px){
+  :root{--bot-h:48px}
+  .hs-body{padding:1.5rem 1.2rem 1rem}
+  .hs-hl  {font-size:clamp(2.2rem,9vw,3.8rem)}
+  .hs-sub {font-size:.76rem;-webkit-line-clamp:3}
+  .hs-btn-p,.hs-btn-g{font-size:.74rem;padding:9px 18px}
+  .hs-bs-ctrl{padding:0 10px !important;gap:5px}
+  .hs-bs-card{padding:0 11px;min-width:100px;gap:7px}
+  .hs-bs-thumb{width:30px;height:22px}
+  .hs-bs-name{font-size:.72rem}
+}
+@media(max-width:480px){
+  :root{--bot-h:44px}
+  .hs-hl{font-size:clamp(1.9rem,10.5vw,3rem)}
+  .hs-stats{flex-wrap:wrap;gap:.3rem 0}
+  .hs-stat{min-width:50%}
+  .hs-stat:nth-child(3){border-left:none;padding-left:0}
+  .hs-sub{-webkit-line-clamp:2}
+  .hs-bs-thumb{display:none}
+  .hs-bs-card{padding:0 10px;min-width:82px}
+  .hs-bs-name{font-size:.68rem}
+  .hs-bs-ctrl{padding:0 8px !important;gap:4px}
+  .hs-bs-num-cur{font-size:.82rem}
+}
+@media(max-width:360px){
+  .hs-hl{font-size:clamp(1.7rem,12vw,2.6rem)}
+  .hs-bs-tag{display:none}
+}
+</style>
+
+<section class="herosection" id="hs-root">
+
+  <div class="hs-reel">
+    <div class="hs-rs on"><div class="hs-rs-bg" style="background-image:url('https://pixelceylontours.com/wp-content/uploads/2026/02/sigirija1.webp')"></div></div>
+    <div class="hs-rs">   <div class="hs-rs-bg" style="background-image:url('https://pixelceylontours.com/wp-content/uploads/2026/02/Sri_Lankan_Wildlife.webp')"></div></div>
+    <div class="hs-rs">   <div class="hs-rs-bg" style="background-image:url('https://pixelceylontours.com/wp-content/uploads/2026/02/Nuwara-Eliya-—-Te-Country.webp')"></div></div>
+    <div class="hs-rs">   <div class="hs-rs-bg" style="background-image:url('https://pixelceylontours.com/wp-content/uploads/2026/02/visit-sri-lanka.webp')"></div></div>
+    <div class="hs-rs">   <div class="hs-rs-bg" style="background-image:url('https://pixelceylontours.com/wp-content/uploads/2026/02/Temple-of-tooth.webp')"></div></div>
+    <div class="hs-rs">   <div class="hs-rs-bg" style="background-image:url('https://pixelceylontours.com/wp-content/uploads/2026/02/Nine-Arch.webp')"></div></div>
+    <div class="hs-rs">   <div class="hs-rs-bg" style="background-image:url('https://pixelceylontours.com/wp-content/uploads/2026/02/50e9e8f5-f1ca-4a08-9b7f-18b15c011582.webp')"></div></div>
+  </div>
+
+  <div class="hs-ov hs-ov-l"></div>
+  <div class="hs-ov hs-ov-b"></div>
+  <div class="hs-grain"></div>
+  <div class="hs-particles" id="hs-particles"></div>
+
+  <div class="hs-body">
+    <div class="hs-left">
+      <div class="hs-eyebrow">
+        <div class="hs-eyebrow-line"></div>
+        <span class="hs-eyebrow-txt">Discover Sri Lanka</span>
+        <div class="hs-eyebrow-pip"></div>
+      </div>
+      <h1 class="hs-hl" id="hs-hl">
+        <em>Timeless</em>
+        <strong>Island.</strong>
+        <span class="o">Infinite</span> Stories.
+      </h1>
+      <p class="hs-sub" id="hs-sub">
+        From ancient rock fortresses to emerald tea highlands, wild elephant plains to sun-drenched beaches — Pixel Ceylon crafts private journeys that go beyond the ordinary.
+      </p>
+      <div class="hs-stats">
+        <div class="hs-stat"><div class="hs-stat-n">15+</div><div class="hs-stat-l">Tour Packages</div></div>
+        <div class="hs-stat"><div class="hs-stat-n">5</div><div class="hs-stat-l">UNESCO Sites</div></div>
+        <div class="hs-stat"><div class="hs-stat-n">200+</div><div class="hs-stat-l">Happy Travellers</div></div>
+        <div class="hs-stat"><div class="hs-stat-n">100%</div><div class="hs-stat-l">Private &amp; Bespoke</div></div>
+      </div>
+      <div class="hs-ctas">
+        <a href="/tours"   class="hs-btn-p"><i class="fas fa-compass"></i> Explore All Tours</a>
+        <a href="/contact-us" class="hs-btn-g"><i class="fas fa-phone"></i> Plan My Trip</a>
+      </div>
+    </div>
+
+    <div class="hs-right">
+      <div class="hs-dest-card">
+        <div class="hs-dc-eye">Now Exploring</div>
+        <div class="hs-dc-name"  id="hs-dc-name">Sigiriya — The Lion Rock</div>
+        <div class="hs-dc-loc"   id="hs-dc-loc">
+          <i class="fas fa-map-pin"></i> Cultural Triangle &nbsp;·&nbsp;
+          <i class="fas fa-star" style="color:var(--amber);font-size:.56rem"></i> UNESCO
+        </div>
+        <div class="hs-dc-bars"  id="hs-dc-bars"></div>
+        <div class="hs-dc-chips" id="hs-dc-chips">
+          <span class="hs-dc-chip">Rock Fortress</span>
+          <span class="hs-dc-chip">Ancient Frescoes</span>
+          <span class="hs-dc-chip">200m Views</span>
+          <span class="hs-dc-chip o">Day Tour</span>
+        </div>
+      </div>
+      <div class="hs-mosaic" id="hs-mosaic"></div>
+      <div class="hs-trust-row">
+        <div class="hs-tr-avs" id="hs-tr-avs"></div>
+        <div class="hs-tr-txt">
+          <strong>200+ travellers</strong> loved Sri Lanka with us
+          <div class="hs-tr-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span>4.9 / 5.0</span>
+          </div>
+        </div>
+        <div class="hs-tr-pkgs">10+<span>Packages</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hs-bot-strip">
+    <div class="hs-bs-ctrl">
+      <div class="hs-bs-counter">
+        <div class="hs-bs-num-cur" id="hs-bs-num-cur">01</div>
+        <div class="hs-bs-num-sep">/ 07</div>
+      </div>
+      <div class="hs-bs-vdiv"></div>
+      <div class="hs-bs-nav">
+        <button class="hs-bs-btn" id="hs-bs-prev"><i class="fas fa-chevron-up"></i></button>
+        <button class="hs-bs-btn" id="hs-bs-next"><i class="fas fa-chevron-down"></i></button>
+      </div>
+    </div>
+    <div class="hs-bs-cards" id="hs-bs-cards"></div>
+    <a class="hs-map-btn" id="hs-map-btn" href="#map-section">
+      <div class="hs-map-inner">
+        <div class="hs-map-marker">
+          <svg viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C7.58 2 4 5.58 4 10C4 15.25 12 26 12 26C12 26 20 15.25 20 10C20 5.58 16.42 2 12 2Z" fill="#0e9aaa" opacity=".9"/>
+            <path d="M12 2C7.58 2 4 5.58 4 10C4 10 4 6 12 4C20 6 20 10 20 10C20 5.58 16.42 2 12 2Z" fill="white" opacity=".15"/>
+            <circle cx="12" cy="10" r="3.5" fill="white" opacity=".95"/>
+            <circle cx="12" cy="10" r="1.5" fill="#0e9aaa"/>
+          </svg>
+          <div class="hs-map-pulse"></div>
+        </div>
+        <div class="hs-map-txt">
+          <span class="hs-map-label">Explore on Live Map</span>
+          <span class="hs-map-sub">Interactive · All Destinations</span>
+        </div>
+        <i class="fas fa-arrow-right hs-map-arr"></i>
+      </div>
+    </a>
+  </div>
+
+</section>
+
+<script>
+(function(){
+
+  /* ── Elementor parent-chain fix ───────────────────── */
+  (function fixElParents(){
+    var el=document.getElementById('hs-root');
+    if(!el)return;
+    var node=el.parentElement;
+    var depth=0;
+    while(node&&node!==document.body&&depth<12){
+      var cs=window.getComputedStyle(node);
+      if(cs.overflow==='hidden'||cs.overflowX==='hidden'||cs.overflowY==='hidden'){
+        node.style.setProperty('overflow','visible','important');
+        node.style.setProperty('overflow-x','visible','important');
+        node.style.setProperty('overflow-y','visible','important');
+      }
+      if(node.classList.contains('elementor-widget-container')){
+        node.style.setProperty('height','auto','important');
+        node.style.setProperty('display','block','important');
+      }
+      node=node.parentElement;
+      depth++;
+    }
+  })();
+
+  /* ── JS align-self safety net ─────────────────────
+     In case Elementor injects inline styles AFTER CSS
+     parses, force align-self:center via JS on ctrl children.
+  ──────────────────────────────────────────────────── */
+  function fixCtrl(){
+    var targets=['.hs-bs-counter','.hs-bs-vdiv','.hs-bs-nav'];
+    targets.forEach(function(sel){
+      var el=document.querySelector(sel);
+      if(el){
+        el.style.setProperty('align-self','center','important');
+        el.style.setProperty('flex-shrink','0','important');
+      }
+    });
+    var btns=document.querySelectorAll('.hs-bs-btn');
+    btns.forEach(function(btn){
+      btn.style.setProperty('width','18px','important');
+      btn.style.setProperty('height','18px','important');
+      btn.style.setProperty('display','flex','important');
+      btn.style.setProperty('align-items','center','important');
+      btn.style.setProperty('justify-content','center','important');
+      btn.style.setProperty('padding','0','important');
+      btn.style.setProperty('margin','0','important');
+    });
+    var vdiv=document.querySelector('.hs-bs-vdiv');
+    if(vdiv){
+      vdiv.style.setProperty('width','1px','important');
+      vdiv.style.setProperty('height','20px','important');
+      vdiv.style.setProperty('display','block','important');
+    }
+  }
+  /* Run immediately and again after a short delay
+     to catch Elementor's late inline-style injection */
+  fixCtrl();
+  setTimeout(fixCtrl,300);
+  setTimeout(fixCtrl,800);
+
+  /* ── Data ─────────────────────────────────────────── */
+  var D=[
+    {thumb:'https://pixelceylontours.com/wp-content/uploads/2026/02/sigirija1.webp',hl:'<span class="o">Ancient</span><strong>Fortresses</strong><em>&amp; Sacred</em> Ruins.',sub:'Scale the 200-metre Lion Rock of Sigiriya, wander the sacred cities of Anuradhapura and Polonnaruwa — civilisations older than Rome waiting to be rediscovered.',name:'Sigiriya — The Lion Rock',loc:'<i class="fas fa-map-pin"></i> Cultural Triangle &nbsp;·&nbsp; <i class="fas fa-star" style="color:var(--amber);font-size:.56rem"></i> UNESCO',chips:['Rock Fortress','Ancient Frescoes','200m Panorama','<span class="hs-dc-chip o">UNESCO</span>'],tab:'Sigiriya',badge:'UNESCO',pip:'#0e9aaa'},
+    {thumb:'https://pixelceylontours.com/wp-content/uploads/2026/02/Sri_Lankan_Wildlife.webp',hl:'<strong>Wild</strong><em>Elephants</em> <span class="o"> &amp; Jungle</span> Safari.',sub:'Watch a hundred elephants bathe at Pinnawala, track leopards through Yala, and experience the Great Elephant Gathering at Minneriya — wildlife like nowhere on Earth.',name:'Pinnawala &amp; Minneriya',loc:'<i class="fas fa-map-pin"></i> Central &nbsp;·&nbsp; <i class="fas fa-paw" style="color:var(--tealb);font-size:.56rem"></i> Wildlife Sanctuary',chips:['River Bathing','Minneriya Safari','Yala Leopards','<span class="hs-dc-chip o">Wildlife</span>'],tab:'Elephants',badge:'Wildlife',pip:'#f5a623'},
+    {thumb:'https://pixelceylontours.com/wp-content/uploads/2026/02/Nuwara-Eliya-—-Te-Country.webp',hl:'<em>Misty</em><strong>Highlands</strong><span class="o"> &amp; Golden</span> Tea.',sub:"Breathe cool mountain air across Nuwara Eliya's emerald tea estates, tour a working Ceylon factory, taste freshly plucked single-origin tea, and ride the legendary hill train.",name:'Nuwara Eliya — Tea Country',loc:'<i class="fas fa-map-pin"></i> Central Highlands &nbsp;·&nbsp; 1,868m <i class="fas fa-leaf" style="color:var(--tealb);font-size:.56rem"></i>',chips:['Tea Estate Tour','Tea Tasting','Gregory Lake','<span class="hs-dc-chip o">1,868m</span>'],tab:'Tea Country',badge:'Highlands',pip:'#00b8a9'},
+    {thumb:'https://pixelceylontours.com/wp-content/uploads/2026/02/visit-sri-lanka.webp',hl:"<strong>Shores</strong> of <em>Paradise</em><span class=\"o\"> &amp; Ocean</span> Giants.",sub:"Sink into Mirissa's crescent sands, where blue whale tails break the horizon at sunrise and fresh seafood and golden sunsets make the perfect journey's end.",name:'Mirissa — South Coast Paradise',loc:'<i class="fas fa-map-pin"></i> Southern Coast &nbsp;·&nbsp; <i class="fas fa-water" style="color:var(--tealb);font-size:.56rem"></i> Blue Whale Season',chips:['Blue Whales','Crescent Beach','Sunset Seafood','<span class="hs-dc-chip o">Nov–Apr</span>'],tab:'Mirissa',badge:'Beach',pip:'#f5a623'},
+    {thumb:'https://pixelceylontours.com/wp-content/uploads/2026/02/Temple-of-tooth.webp',hl:'<em>Sacred</em><strong>Kandy</strong><span class="o">&amp; Living</span> Culture.',sub:'Stand inside the Temple of the Sacred Tooth Relic as drums echo through candlelit halls. Witness the evening puja, Kandyan dancing, and the cultural heartbeat of Sri Lanka.',name:'Kandy — Cultural Capital',loc:'<i class="fas fa-map-pin"></i> Central Province &nbsp;·&nbsp; <i class="fas fa-star" style="color:var(--amber);font-size:.56rem"></i> UNESCO',chips:['Tooth Temple','Evening Puja','Kandyan Dance','<span class="hs-dc-chip o">UNESCO</span>'],tab:'Kandy',badge:'UNESCO',pip:'#0e9aaa'},
+    {thumb:'https://pixelceylontours.com/wp-content/uploads/2026/02/Nine-Arch.webp',hl:"<strong>Ella</strong><em>Nine Arches</em><span class=\"o\"> &amp; Train</span> Dreams.",sub:"Photograph the iconic Nine Arches Bridge as a vintage train curves through jungle. Hike Little Adam's Peak for sweeping valley views, then sip coffee at a cliff-edge café.",name:'Ella — Highlands Gateway',loc:'<i class="fas fa-map-pin"></i> Uva Province &nbsp;·&nbsp; <i class="fas fa-train" style="color:var(--tealb);font-size:.56rem"></i> Scenic Railway',chips:['Nine Arches Bridge','Scenic Train',"Little Adam's Peak",'<span class="hs-dc-chip o">Highlands</span>'],tab:'Ella',badge:'Train',pip:'#00b8a9'},
+    {thumb:'https://pixelceylontours.com/wp-content/uploads/2026/02/50e9e8f5-f1ca-4a08-9b7f-18b15c011582.webp',hl:'<em>Yala</em><strong>Wilderness</strong><span class="o">&amp; Wild</span> Encounters.',sub:"Sri Lanka's premier national park holds the world's highest density of wild leopards. Golden-hour jeep drives through dry monsoon forest deliver encounters you'll never forget.",name:'Yala — Leopard Territory',loc:'<i class="fas fa-map-pin"></i> Southern Province &nbsp;·&nbsp; <i class="fas fa-paw" style="color:var(--tealb);font-size:.56rem"></i> World\'s Top Leopard Density',chips:['Wild Leopards','Jeep Safari','Crocodiles','<span class="hs-dc-chip o">Golden Hour</span>'],tab:'Yala Safari',badge:'Safari',pip:'#f5a623'}
+  ];
+
+  var mosaicEl=document.getElementById('hs-mosaic');
+  D.slice(0,4).forEach(function(d,i){
+    var el=document.createElement('div');
+    el.className='hs-mthumb'+(i===0?' on':'');
+    el.innerHTML='<img src="'+d.thumb+'" alt="'+d.tab+'" loading="lazy"><div class="hs-mthumb-ov"></div><div class="hs-mthumb-lbl">'+d.tab+'</div>';
+    el.addEventListener('click',function(){go(i);});
+    mosaicEl.appendChild(el);
+  });
+
+  var avCols=['#0e7a8a','#1a3560','#d98d0f','#0e9aaa','#2a4a7a'];
+  var avInits=['JT','MK','SP','RL','AW'];
+  var trAvs=document.getElementById('hs-tr-avs');
+  avInits.forEach(function(ini,i){
+    var el=document.createElement('div');
+    el.className='hs-tr-av';
+    el.style.background=avCols[i];
+    el.textContent=ini;
+    trAvs.appendChild(el);
+  });
+
+  var dcBarsEl=document.getElementById('hs-dc-bars');
+  D.forEach(function(_,i){
+    var bar=document.createElement('div');
+    bar.className='hs-dc-bar'+(i===0?' on':'');
+    var fill=document.createElement('div');
+    fill.className='hs-dc-bar-fill';
+    bar.appendChild(fill);
+    bar.addEventListener('click',function(){go(i);});
+    dcBarsEl.appendChild(bar);
+  });
+
+  var bsCardsEl=document.getElementById('hs-bs-cards');
+  D.forEach(function(d,i){
+    var el=document.createElement('div');
+    el.className='hs-bs-card'+(i===0?' on':'');
+    el.innerHTML='<div class="hs-bs-thumb"><img src="'+d.thumb+'" alt="'+d.tab+'" loading="lazy"></div><div class="hs-bs-info"><div class="hs-bs-idx">'+String(i+1).padStart(2,'0')+'</div><div class="hs-bs-name">'+d.tab+'</div><div class="hs-bs-tag"><div class="hs-bs-pip" style="background:'+d.pip+'"></div>'+d.badge+'</div></div><div class="hs-bs-prog"><div class="hs-bs-prog-fill" id="hs-bpf-'+i+'"></div></div>';
+    el.addEventListener('click',function(){go(i);});
+    bsCardsEl.appendChild(el);
+  });
+
+  var bgSlides=document.querySelectorAll('.hs-rs');
+  var hlEl=document.getElementById('hs-hl');
+  var subEl=document.getElementById('hs-sub');
+  var dcNameEl=document.getElementById('hs-dc-name');
+  var dcLocEl=document.getElementById('hs-dc-loc');
+  var dcChipsEl=document.getElementById('hs-dc-chips');
+  var bsNumCur=document.getElementById('hs-bs-num-cur');
+  var cur=0,timer=null;
+
+  function scrollCard(idx){
+    var cards=bsCardsEl.querySelectorAll('.hs-bs-card');
+    var card=cards[idx];if(!card)return;
+    var cl=bsCardsEl.scrollLeft,cw=bsCardsEl.clientWidth,ol=card.offsetLeft,ow=card.offsetWidth;
+    if(ol<cl)bsCardsEl.scrollLeft=ol-8;
+    else if(ol+ow>cl+cw)bsCardsEl.scrollLeft=ol+ow-cw+8;
+  }
+
+  function resetFills(active){
+    D.forEach(function(_,i){
+      var f=document.getElementById('hs-bpf-'+i);if(!f)return;
+      f.style.transition='none';f.style.width='0%';
+      if(i===active)requestAnimationFrame(function(){requestAnimationFrame(function(){
+        f.style.transition='width 6.5s linear';f.style.width='100%';
+      });});
+    });
+  }
+
+  function go(n){
+    var prev=cur;
+    cur=((n%D.length)+D.length)%D.length;
+    var d=D[cur];
+    bgSlides[prev].classList.remove('on');
+    bgSlides[cur].classList.add('on');
+    hlEl.style.cssText='opacity:0;transform:translateY(14px);transition:none';
+    subEl.style.cssText='opacity:0;transition:none';
+    setTimeout(function(){
+      hlEl.innerHTML=d.hl;
+      subEl.textContent=d.sub;
+      if(dcNameEl) dcNameEl.innerHTML=d.name;
+      if(dcLocEl)  dcLocEl.innerHTML=d.loc;
+      if(dcChipsEl)dcChipsEl.innerHTML=d.chips.map(function(c){return c.startsWith('<')?c:'<span class="hs-dc-chip">'+c+'</span>';}).join('');
+      requestAnimationFrame(function(){
+        hlEl.style.cssText='opacity:1;transform:translateY(0);transition:opacity .65s,transform .65s';
+        subEl.style.cssText='opacity:1;transition:opacity .65s .1s';
+      });
+    },180);
+    bsNumCur.textContent=String(cur+1).padStart(2,'0');
+    document.querySelectorAll('.hs-dc-bar').forEach(function(bar,i){
+      bar.classList.toggle('on',i===cur);
+      var f=bar.querySelector('.hs-dc-bar-fill');
+      f.style.transition='none';f.style.width='0%';
+      if(i===cur)requestAnimationFrame(function(){requestAnimationFrame(function(){
+        f.style.transition='width 6.5s linear';f.style.width='100%';
+      });});
+    });
+    document.querySelectorAll('.hs-bs-card').forEach(function(c,i){c.classList.toggle('on',i===cur);});
+    resetFills(cur);
+    scrollCard(cur);
+    document.querySelectorAll('.hs-mthumb').forEach(function(t,i){t.classList.toggle('on',i===cur&&cur<4);});
+    clearInterval(timer);
+    timer=setInterval(function(){go(cur+1);},6500);
+  }
+
+  document.getElementById('hs-bs-prev').addEventListener('click',function(){go(cur-1);});
+  document.getElementById('hs-bs-next').addEventListener('click',function(){go(cur+1);});
+  document.getElementById('hs-map-btn').addEventListener('click',function(e){
+    e.preventDefault();
+    var t=document.getElementById('map-section');
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
+  resetFills(0);
+  var initFill=dcBarsEl.querySelector('.hs-dc-bar-fill');
+  if(initFill)requestAnimationFrame(function(){requestAnimationFrame(function(){
+    initFill.style.transition='width 6.5s linear';initFill.style.width='100%';
+  });});
+  timer=setInterval(function(){go(cur+1);},6500);
+
+  var PC=['#0e9aaa','#0e7a8a','#f5a623','#00b8a9'];
+  var PX=[
+    {s:7,x:'6%',y:'14%',c:0,d:7.5,dl:0},{s:4,x:'10%',y:'45%',c:2,d:9,dl:1.4},
+    {s:9,x:'4%',y:'71%',c:1,d:8,dl:.7},{s:5,x:'91%',y:'11%',c:3,d:11,dl:2},
+    {s:8,x:'94%',y:'37%',c:2,d:7,dl:.4},{s:4,x:'88%',y:'63%',c:0,d:10,dl:1.1},
+    {s:6,x:'81%',y:'80%',c:1,d:9,dl:2.2},{s:4,x:'52%',y:'6%',c:3,d:12,dl:.9},
+    {s:5,x:'34%',y:'91%',c:0,d:8.5,dl:.5},{s:7,x:'70%',y:'20%',c:2,d:6.5,dl:1.7},
+    {s:3,x:'25%',y:'9%',c:1,d:9.5,dl:3},{s:5,x:'62%',y:'86%',c:0,d:7.8,dl:.3}
+  ];
+  var pWrap=document.getElementById('hs-particles');
+  PX.forEach(function(p){
+    var el=document.createElement('div');
+    el.className='hs-pp';
+    var op=p.s>6?.26:.14;
+    el.style.cssText='left:'+p.x+';top:'+p.y+';width:'+p.s+'px;height:'+p.s+'px;background:'+PC[p.c]+';--op:'+op+';opacity:'+op+';--d:'+p.d+'s;--dl:'+p.dl+'s;border-radius:2px';
+    pWrap.appendChild(el);
+  });
+})();
+</script>
+</section>
+</div>

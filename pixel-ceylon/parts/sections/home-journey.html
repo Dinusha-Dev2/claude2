@@ -1,0 +1,716 @@
+<div>
+<section class="journey">
+
+
+
+
+
+
+<style>
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html  { font-size: 16px; scroll-behavior: smooth; }
+body  { font-family: 'Poppins', sans-serif; background: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img   { display: block; max-width: 100%; }
+a     { text-decoration: none; color: inherit; }
+
+/* ════════════════════════════════════════
+   TOKENS
+════════════════════════════════════════ */
+.pcjv-section {
+  --navy:   #071527;
+  --teal:   #0e9aaa;
+  --tealb:  #12c8d8;
+  --teald:  #0b7d8c;
+  --amber:  #f5a623;
+  --cream:  #faf7f2;
+  --muted:  #5a6a7d;
+  --mutedl: #8a9aad;
+  --border: #e8ecf1;
+  --bag:    'Bagind', serif;
+  --pop:    'Poppins', sans-serif;
+  --ease:   cubic-bezier(.4,0,.2,1);
+  --spring: cubic-bezier(.34,1.56,.64,1);
+}
+
+/* ════════════════════════════════════════
+   SECTION SHELL
+════════════════════════════════════════ */
+.pcjv-section {
+  background: var(--cream);
+  position: relative;
+  overflow: hidden;
+  padding: clamp(5rem,9vw,9rem) 0 clamp(5rem,9vw,8rem);
+}
+
+/* Ambient glows */
+.pcjv-glow-a {
+  position: absolute; top: -6%; right: -6%;
+  width: 48vw; height: 48vw; max-width: 680px; max-height: 680px;
+  border-radius: 50%; pointer-events: none; z-index: 0;
+  background: radial-gradient(circle, rgba(14,154,170,.07) 0%, transparent 68%);
+}
+.pcjv-glow-b {
+  position: absolute; bottom: -4%; left: -4%;
+  width: 38vw; height: 38vw; max-width: 520px; max-height: 520px;
+  border-radius: 50%; pointer-events: none; z-index: 0;
+  background: radial-gradient(circle, rgba(245,166,35,.06) 0%, transparent 68%);
+}
+
+/* Dot texture */
+.pcjv-dots-bg {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: radial-gradient(circle, rgba(14,154,170,.045) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: .6;
+  mask-image: radial-gradient(ellipse 60% 70% at 100% 0%, black 0%, transparent 60%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 70% at 100% 0%, black 0%, transparent 60%);
+}
+
+/* Container */
+.pcjv-wrap {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 clamp(1.5rem,5vw,4.5rem);
+  position: relative; z-index: 1;
+}
+
+/* ════════════════════════════════════════
+   SECTION HEADER
+════════════════════════════════════════ */
+.pcjv-head {
+  text-align: center;
+  margin-bottom: clamp(3rem,5vw,5rem);
+}
+
+.pcjv-kicker {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--pop); font-size: .57rem; font-weight: 500;
+  letter-spacing: .26em; text-transform: uppercase; color: var(--teal);
+  margin-bottom: 1.1rem;
+}
+.pcjv-kicker::before {
+  content: ''; width: 22px; height: 1.5px;
+  background: currentColor; border-radius: 2px;
+}
+.pcjv-kicker-gem {
+  width: 6px; height: 6px; border-radius: 1px;
+  background: var(--amber); transform: rotate(45deg); flex-shrink: 0;
+  animation: pcjvSpin 8s linear infinite;
+}
+@keyframes pcjvSpin { to { transform: rotate(calc(45deg + 360deg)); } }
+
+.pcjv-title {
+  font-family: var(--bag);
+  font-size: clamp(2.4rem,4.5vw,5rem);
+  font-weight: 300;
+  line-height: .88;
+  color: var(--navy);
+  margin-bottom: 1rem;
+  letter-spacing: -.01em;
+}
+.pcjv-title-top {
+  display: block;
+  font-size: .22em;
+  font-family: var(--pop); font-weight: 300; letter-spacing: .02em;
+  color: var(--muted); margin-bottom: .3rem;
+}
+.pcjv-title-main  { display: block; }
+.pcjv-title-accent { color: var(--teal); position: relative; display: inline-block; }
+.pcjv-title-amp   { color: var(--amber); font-family: var(--bag); font-weight: 300; }
+
+.pcjv-subtitle {
+  font-family: var(--pop); font-size: .86rem; font-weight: 300;
+  color: var(--muted); line-height: 1.9;
+  max-width: 480px; margin: 0 auto;
+}
+
+/* ════════════════════════════════════════
+   MAIN LAYOUT
+════════════════════════════════════════ */
+.pcjv-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.28fr;
+  gap: clamp(3rem,6vw,6rem);
+  align-items: start;
+}
+
+/* ════════════════════════════════════════
+   LEFT — STEP LIST
+════════════════════════════════════════ */
+.pcjv-steplist {
+  display: flex; flex-direction: column;
+  position: sticky; top: 3rem;
+}
+
+.pcjv-step {
+  display: flex; gap: 1.2rem;
+  padding: 1.1rem 1rem 1.1rem .4rem;
+  cursor: pointer;
+  border-radius: 2px;
+  position: relative;
+  transition: background .22s;
+}
+.pcjv-step:hover        { background: rgba(14,154,170,.04); }
+.pcjv-step.pcjv-active  { background: rgba(14,154,170,.06); }
+
+/* Circle + connector */
+.pcjv-step-lhs {
+  display: flex; flex-direction: column; align-items: center;
+  flex-shrink: 0; width: 46px;
+}
+.pcjv-step-circle {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 2px solid var(--border); background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1; flex-shrink: 0;
+  transition: border-color .3s var(--ease), background .3s, transform .3s var(--spring), box-shadow .3s;
+}
+.pcjv-step-num {
+  font-family: var(--bag); font-size: 1.1rem; font-weight: 300;
+  color: var(--mutedl); transition: color .3s; line-height: 1;
+}
+.pcjv-step-tick {
+  position: absolute; top: -4px; right: -4px;
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid var(--cream);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .44rem; color: #fff;
+  opacity: 0; transform: scale(0);
+  transition: opacity .25s, transform .25s var(--spring);
+}
+.pcjv-step.pcjv-active .pcjv-step-tick { opacity: 1; transform: scale(1); }
+
+.pcjv-step-line {
+  flex: 1; width: 2px; border-radius: 2px;
+  background: var(--border); margin: 5px auto 0; min-height: 32px;
+  transition: background .35s;
+}
+.pcjv-step:last-child .pcjv-step-line { display: none; }
+.pcjv-step.pcjv-active .pcjv-step-line {
+  background: linear-gradient(to bottom, var(--teal) 0%, var(--border) 100%);
+}
+
+/* Active circle states */
+.pcjv-step.pcjv-active .pcjv-step-circle {
+  border-color: var(--teal); background: var(--teal);
+  transform: scale(1.1);
+  box-shadow: 0 0 0 5px rgba(14,154,170,.12);
+}
+.pcjv-step.pcjv-active .pcjv-step-num { color: #fff; }
+.pcjv-step:not(.pcjv-active):hover .pcjv-step-circle { border-color: var(--teal); transform: scale(1.05); }
+
+/* Step text */
+.pcjv-step-rhs { padding-top: 9px; flex: 1; }
+.pcjv-step-tag {
+  font-family: var(--pop); font-size: .52rem; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--mutedl);
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: .2rem; transition: color .25s;
+}
+.pcjv-step-tag::before {
+  content: ''; width: 10px; height: 1px;
+  background: currentColor; border-radius: 2px; transition: width .25s;
+}
+.pcjv-step.pcjv-active .pcjv-step-tag        { color: var(--teal); }
+.pcjv-step.pcjv-active .pcjv-step-tag::before { width: 18px; }
+
+.pcjv-step-h {
+  font-family: var(--bag); font-size: 1.4rem; font-weight: 300;
+  color: var(--navy); line-height: 1.05; margin-bottom: .3rem;
+  transition: color .25s;
+}
+.pcjv-step.pcjv-active .pcjv-step-h          { color: var(--teal); }
+.pcjv-step:not(.pcjv-active):hover .pcjv-step-h { color: var(--teal); }
+
+.pcjv-step-desc {
+  font-family: var(--pop); font-size: .74rem; font-weight: 300;
+  color: var(--muted); line-height: 1.72; max-width: 290px;
+  transition: color .2s;
+}
+.pcjv-step.pcjv-active .pcjv-step-desc { color: var(--navy); }
+
+/* ════════════════════════════════════════
+   RIGHT — VISUAL PANEL
+════════════════════════════════════════ */
+.pcjv-panel-wrap { position: sticky; top: 2rem; }
+
+.pcjv-panel {
+  position: relative; border-radius: 2px; overflow: hidden;
+  background: var(--navy);
+  min-height: 540px;
+  display: flex; flex-direction: column;
+  box-shadow: 0 24px 72px rgba(7,21,39,.18), 0 6px 20px rgba(7,21,39,.08);
+}
+
+/* Progress bar */
+.pcjv-prog-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: rgba(255,255,255,.07); z-index: 10;
+}
+.pcjv-prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--tealb));
+  border-radius: 0 2px 2px 0;
+  transition: width .55s var(--ease);
+}
+
+/* Step dots */
+.pcjv-panel-dots {
+  position: absolute; top: 1.4rem; right: 1.6rem;
+  display: flex; gap: .4rem; z-index: 10;
+}
+.pcjv-pdot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,.2); cursor: pointer;
+  transition: background .25s, transform .25s var(--spring);
+}
+.pcjv-pdot.pcjv-active { background: var(--teal); transform: scale(1.4); }
+
+/* Background image */
+.pcjv-panel-img {
+  position: absolute; inset: 0;
+  transition: opacity .5s var(--ease);
+}
+.pcjv-panel-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(.55) saturate(1.08);
+  transition: transform .7s var(--ease);
+}
+.pcjv-panel-img-ov {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(7,21,39,.98) 0%, rgba(7,21,39,.55) 42%, transparent 72%);
+}
+
+/* Watermark number */
+.pcjv-panel-wm {
+  font-family: var(--bag);
+  font-size: 7rem; font-weight: 300; line-height: 1; letter-spacing: -.04em;
+  color: rgba(255,255,255,.045);
+  position: absolute; top: 1rem; right: 1.8rem; z-index: 1;
+  pointer-events: none; user-select: none;
+  transition: color .4s;
+}
+
+/* Panel content body */
+.pcjv-panel-body {
+  position: relative; z-index: 2;
+  margin-top: auto; padding: 2.2rem 2.4rem 2.4rem;
+  transition: opacity .4s var(--ease), transform .4s var(--ease);
+}
+.pcjv-panel-body.pcjv-transit { opacity: 0; transform: translateY(12px); }
+
+/* Badge */
+.pcjv-panel-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  border-radius: 2px; padding: 5px 14px;
+  font-family: var(--pop); font-size: .6rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(8px);
+  margin-bottom: 1rem;
+}
+
+/* Panel title */
+.pcjv-panel-title {
+  font-family: var(--bag);
+  font-size: clamp(1.9rem,3vw,2.5rem); font-weight: 300;
+  color: #fff; line-height: .95; margin-bottom: .65rem;
+}
+
+/* Panel description */
+.pcjv-panel-desc {
+  font-family: var(--pop); font-size: .82rem; font-weight: 300;
+  color: rgba(240,236,226,.48); line-height: 1.84;
+  max-width: 420px; margin-bottom: 1.5rem;
+}
+
+/* Feature pills */
+.pcjv-feats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: .55rem; margin-bottom: 1.8rem;
+}
+.pcjv-feat {
+  display: flex; align-items: center; gap: .6rem;
+  background: rgba(255,255,255,.055);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 2px; padding: .6rem .85rem;
+  transition: background .2s, border-color .2s;
+}
+.pcjv-feat:hover { background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.12); }
+.pcjv-feat-ic {
+  width: 30px; height: 30px; border-radius: 2px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem;
+}
+.pcjv-feat-txt {
+  font-family: var(--pop); font-size: .7rem; font-weight: 400;
+  color: rgba(240,236,226,.68);
+}
+
+/* CTA row */
+.pcjv-panel-ctas { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; }
+.pcjv-panel-pri {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--teal); color: #fff;
+  font-family: var(--pop); font-size: .67rem; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: 12px 24px; border-radius: 2px;
+  box-shadow: 0 6px 20px rgba(14,154,170,.35);
+  transition: background .22s, transform .2s var(--spring), box-shadow .22s;
+  text-decoration: none !important;
+}
+.pcjv-panel-pri:hover {
+  background: var(--teald); transform: translateY(-2px);
+  color: #fff;
+  
+}
+.pcjv-panel-sec {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--pop); font-size: .7rem;
+  color: rgba(240,236,226,.38); transition: color .2s;
+}
+.pcjv-panel-sec:hover { color: rgba(240,236,226,.75); }
+
+/* Timer bar */
+.pcjv-timer-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2.5px; z-index: 10;
+}
+.pcjv-timer-fill { height: 100%; width: 0; background: rgba(245,166,35,.55); }
+.pcjv-timer-fill.pcjv-run { transition: width 4.5s linear; width: 100%; }
+
+/* ════════════════════════════════════════
+   REVEAL ANIMATIONS
+════════════════════════════════════════ */
+.pcjv-reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+.pcjv-reveal.pcjv-vis { opacity: 1; transform: none; }
+.pcjv-d1 { transition-delay: .08s; }
+.pcjv-d2 { transition-delay: .16s; }
+.pcjv-d3 { transition-delay: .24s; }
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media (max-width: 1020px) {
+  .pcjv-layout    { grid-template-columns: 1fr; }
+  .pcjv-steplist  { position: static; }
+  .pcjv-panel-wrap{ position: static; }
+  .pcjv-panel     { min-height: 420px; }
+}
+@media (max-width: 680px) {
+  .pcjv-wrap        { padding: 0 1.3rem; }
+  .pcjv-feats       { grid-template-columns: 1fr; }
+  .pcjv-panel-title { font-size: 1.75rem; }
+  .pcjv-panel-ctas  { flex-direction: column; align-items: flex-start; }
+}
+</style>
+
+<!-- ══════════════════════════════════════
+   JOURNEY SECTION
+══════════════════════════════════════ -->
+<section class="pcjv-section" id="pcjv-journey">
+  <div class="pcjv-glow-a"  aria-hidden="true"></div>
+  <div class="pcjv-glow-b"  aria-hidden="true"></div>
+  <div class="pcjv-dots-bg" aria-hidden="true"></div>
+
+  <div class="pcjv-wrap">
+
+    <!-- HEADER -->
+    <div class="pcjv-head pcjv-reveal">
+      <div class="pcjv-kicker">
+        <div class="pcjv-kicker-gem"></div>
+        Your Journey With Us
+      </div>
+      <h2 class="pcjv-title">
+        <span class="pcjv-title-top">From first message to farewell,</span>
+        <span class="pcjv-title-main">
+          Every Detail <span class="pcjv-title-accent">Handled</span>
+          <span class="pcjv-title-amp"> &</span><br>
+          Every Moment <span class="pcjv-title-accent">Crafted</span>
+        </span>
+      </h2>
+      <p class="pcjv-subtitle">We take care of every detail — from the very first message to your farewell at the airport. You just bring the sense of wonder.</p>
+    </div>
+
+    <!-- MAIN LAYOUT -->
+    <div class="pcjv-layout pcjv-reveal pcjv-d1">
+
+      <!-- LEFT: STEPS -->
+      <div class="pcjv-steplist" id="pcjvStepList">
+
+        <div class="pcjv-step pcjv-active" data-s="0" onclick="pcjvGo(0)">
+          <div class="pcjv-step-lhs">
+            <div class="pcjv-step-circle">
+              <span class="pcjv-step-num">01</span>
+              <div class="pcjv-step-tick" style="background:var(--teal)"><i class="fas fa-check"></i></div>
+            </div>
+            <div class="pcjv-step-line"></div>
+          </div>
+          <div class="pcjv-step-rhs">
+            <div class="pcjv-step-tag">The First Step</div>
+            <h3 class="pcjv-step-h">Tell Us Your Dream</h3>
+            <p class="pcjv-step-desc">A quick conversation by message or call. No forms, no commitments — just tell us what excites you.</p>
+          </div>
+        </div>
+
+        <div class="pcjv-step" data-s="1" onclick="pcjvGo(1)">
+          <div class="pcjv-step-lhs">
+            <div class="pcjv-step-circle">
+              <span class="pcjv-step-num">02</span>
+              <div class="pcjv-step-tick" style="background:var(--amber)"><i class="fas fa-pencil-alt"></i></div>
+            </div>
+            <div class="pcjv-step-line"></div>
+          </div>
+          <div class="pcjv-step-rhs">
+            <div class="pcjv-step-tag">Within 48 Hours</div>
+            <h3 class="pcjv-step-h">We Craft Your Itinerary</h3>
+            <p class="pcjv-step-desc">A bespoke day-by-day plan with hand-picked hotels, experiences and clear pricing — delivered free.</p>
+          </div>
+        </div>
+
+        <div class="pcjv-step" data-s="2" onclick="pcjvGo(2)">
+          <div class="pcjv-step-lhs">
+            <div class="pcjv-step-circle">
+              <span class="pcjv-step-num">03</span>
+              <div class="pcjv-step-tick" style="background:#1eb577"><i class="fas fa-check-double"></i></div>
+            </div>
+            <div class="pcjv-step-line"></div>
+          </div>
+          <div class="pcjv-step-rhs">
+            <div class="pcjv-step-tag">Make It Perfect</div>
+            <h3 class="pcjv-step-h">Refine &amp; Confirm</h3>
+            <p class="pcjv-step-desc">Adjust any element until it's exactly right. A small deposit secures everything — free changes always.</p>
+          </div>
+        </div>
+
+        <div class="pcjv-step" data-s="3" onclick="pcjvGo(3)">
+          <div class="pcjv-step-lhs">
+            <div class="pcjv-step-circle">
+              <span class="pcjv-step-num">04</span>
+              <div class="pcjv-step-tick" style="background:#b48cf5"><i class="fas fa-star"></i></div>
+            </div>
+            <div class="pcjv-step-line"></div>
+          </div>
+          <div class="pcjv-step-rhs">
+            <div class="pcjv-step-tag">The Journey Begins</div>
+            <h3 class="pcjv-step-h">Travel &amp; Be Amazed</h3>
+            <p class="pcjv-step-desc">Your private guide meets you at the airport. 24/7 support throughout. All you carry is curiosity.</p>
+          </div>
+        </div>
+
+      </div><!-- /steplist -->
+
+      <!-- RIGHT: VISUAL PANEL -->
+      <div class="pcjv-panel-wrap">
+        <div class="pcjv-panel" id="pcjvPanel">
+
+          <div class="pcjv-prog-bar">
+            <div class="pcjv-prog-fill" id="pcjvProg" style="width:25%"></div>
+          </div>
+
+          <div class="pcjv-panel-dots">
+            <div class="pcjv-pdot pcjv-active" onclick="pcjvGo(0)"></div>
+            <div class="pcjv-pdot" onclick="pcjvGo(1)"></div>
+            <div class="pcjv-pdot" onclick="pcjvGo(2)"></div>
+            <div class="pcjv-pdot" onclick="pcjvGo(3)"></div>
+          </div>
+
+          <div class="pcjv-panel-img" id="pcjvImgWrap">
+            <img id="pcjvImg" src="https://images.unsplash.com/photo-1583245177184-4ab342f14f0e?w=900&auto=format&fit=crop&q=80" alt="">
+            <div class="pcjv-panel-img-ov"></div>
+          </div>
+
+          <div class="pcjv-panel-wm" id="pcjvWm">01</div>
+
+          <div class="pcjv-panel-body" id="pcjvBody">
+            <span class="pcjv-panel-badge" id="pcjvBadge"
+              style="background:rgba(14,154,170,.2);color:#12c8d8;border-color:rgba(14,154,170,.28)">
+              <i class="fas fa-comment-dots"></i> The First Step
+            </span>
+            <h3 class="pcjv-panel-title" id="pcjvTitle">Tell Us<br>Your Dream</h3>
+            <p class="pcjv-panel-desc" id="pcjvDesc">Share your interests, travel style, dates and rough budget. A quick, friendly conversation — no forms, no pressure, no commitment.</p>
+            <div class="pcjv-feats" id="pcjvFeats">
+              <div class="pcjv-feat">
+                <div class="pcjv-feat-ic" style="background:rgba(14,154,170,.18);color:#0e9aaa"><i class="fas fa-comment"></i></div>
+                <span class="pcjv-feat-txt">Message or call us</span>
+              </div>
+              <div class="pcjv-feat">
+                <div class="pcjv-feat-ic" style="background:rgba(245,166,35,.18);color:#f5a623"><i class="fas fa-clock"></i></div>
+                <span class="pcjv-feat-txt">Reply within 4 hours</span>
+              </div>
+              <div class="pcjv-feat">
+                <div class="pcjv-feat-ic" style="background:rgba(30,181,119,.18);color:#1eb577"><i class="fas fa-lock-open"></i></div>
+                <span class="pcjv-feat-txt">No commitment at all</span>
+              </div>
+              <div class="pcjv-feat">
+                <div class="pcjv-feat-ic" style="background:rgba(180,140,245,.18);color:#b48cf5"><i class="fas fa-globe-asia"></i></div>
+                <span class="pcjv-feat-txt">Any travel dates</span>
+              </div>
+            </div>
+            <div class="pcjv-panel-ctas">
+              <a href="/contact-us" class="pcjv-panel-pri"><i class="fas fa-paper-plane"></i> Start Your Enquiry</a>
+              <span class="pcjv-panel-sec"><i class="fas fa-info-circle"></i> 100% free to enquire</span>
+            </div>
+          </div>
+
+          <div class="pcjv-timer-bar">
+            <div class="pcjv-timer-fill" id="pcjvTimer"></div>
+          </div>
+
+        </div>
+      </div><!-- /panel-wrap -->
+
+    </div><!-- /layout -->
+
+  </div><!-- /wrap -->
+</section>
+
+
+<script>
+/* ── STEP DATA ── */
+const pcjvSteps = [
+  {
+    img:      'https://images.unsplash.com/photo-1583245177184-4ab342f14f0e?w=900&auto=format&fit=crop&q=80',
+    badgeBg:  'rgba(14,154,170,.2)', badgeCol: '#12c8d8', badgeBdr: 'rgba(14,154,170,.28)',
+    badgeIco: 'fas fa-comment-dots', badgeLbl: 'The First Step',
+    wm: '01', title: 'Tell Us<br>Your Dream', progress: 25,
+    desc: 'Share your interests, travel style, dates and rough budget. A quick, friendly conversation — no forms, no pressure, no commitment.',
+    feats: [
+      { bg:'rgba(14,154,170,.18)', col:'#0e9aaa',  ico:'fas fa-comment',     txt:'Message or call us'   },
+      { bg:'rgba(245,166,35,.18)', col:'#f5a623',  ico:'fas fa-clock',       txt:'Reply within 4 hours' },
+      { bg:'rgba(30,181,119,.18)', col:'#1eb577',  ico:'fas fa-lock-open',   txt:'No commitment at all' },
+      { bg:'rgba(180,140,245,.18)',col:'#b48cf5',  ico:'fas fa-globe-asia',  txt:'Any travel dates'     },
+    ]
+  },
+  {
+    img:      'https://images.unsplash.com/photo-1580834894427-7d4b0f02f0a0?w=900&auto=format&fit=crop&q=80',
+    badgeBg:  'rgba(245,166,35,.2)', badgeCol: '#f5a623', badgeBdr: 'rgba(245,166,35,.28)',
+    badgeIco: 'fas fa-pencil-ruler', badgeLbl: 'Within 48 Hours',
+    wm: '02', title: 'We Craft<br>Your Itinerary', progress: 50,
+    desc: 'A bespoke day-by-day plan with hand-picked hotels, private experiences, transfers and clear all-inclusive pricing. Delivered free.',
+    feats: [
+      { bg:'rgba(245,166,35,.18)', col:'#f5a623',  ico:'fas fa-calendar-alt',txt:'Full day-by-day plan' },
+      { bg:'rgba(14,154,170,.18)', col:'#0e9aaa',  ico:'fas fa-hotel',       txt:'Hand-picked hotels'  },
+      { bg:'rgba(30,181,119,.18)', col:'#1eb577',  ico:'fas fa-tag',         txt:'All-inclusive pricing'},
+      { bg:'rgba(180,140,245,.18)',col:'#b48cf5',  ico:'fas fa-infinity',    txt:'Unlimited revisions'  },
+    ]
+  },
+  {
+    img:      'https://images.unsplash.com/photo-1608407695474-67e44efbc7ba?w=900&auto=format&fit=crop&q=80',
+    badgeBg:  'rgba(30,181,119,.2)', badgeCol: '#1eb577', badgeBdr: 'rgba(30,181,119,.28)',
+    badgeIco: 'fas fa-check-double', badgeLbl: 'Make It Perfect',
+    wm: '03', title: 'Refine<br>& Confirm', progress: 75,
+    desc: 'Adjust any element until it feels exactly right. Swap hotels, change experiences, shift dates — all free. Confirm with a small deposit.',
+    feats: [
+      { bg:'rgba(30,181,119,.18)', col:'#1eb577',  ico:'fas fa-edit',        txt:'Change anything freely'},
+      { bg:'rgba(14,154,170,.18)', col:'#0e9aaa',  ico:'fas fa-shield-alt',  txt:'Small deposit only'    },
+      { bg:'rgba(245,166,35,.18)', col:'#f5a623',  ico:'fas fa-undo',        txt:'Free cancellation'     },
+      { bg:'rgba(180,140,245,.18)',col:'#b48cf5',  ico:'fas fa-file-contract',txt:'Full booking docs'    },
+    ]
+  },
+  {
+    img:      'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=900&auto=format&fit=crop&q=80',
+    badgeBg:  'rgba(180,140,245,.2)', badgeCol: '#b48cf5', badgeBdr: 'rgba(180,140,245,.28)',
+    badgeIco: 'fas fa-star', badgeLbl: 'The Journey Begins',
+    wm: '04', title: 'Travel<br>& Be Amazed', progress: 100,
+    desc: 'Your private guide meets you on arrival. Every transfer, activity and check-in is handled. 24/7 support throughout. All you carry is wonder.',
+    feats: [
+      { bg:'rgba(180,140,245,.18)',col:'#b48cf5',  ico:'fas fa-user-tie',    txt:'Private guide meets you'},
+      { bg:'rgba(14,154,170,.18)', col:'#0e9aaa',  ico:'fas fa-headset',     txt:'24/7 on-tour support'   },
+      { bg:'rgba(30,181,119,.18)', col:'#1eb577',  ico:'fas fa-car',         txt:'All transfers handled'  },
+      { bg:'rgba(245,166,35,.18)', col:'#f5a623',  ico:'fas fa-camera',      txt:'Photographer tips'      },
+    ]
+  }
+];
+
+let pcjvCur  = 0;
+let pcjvAuto = null;
+
+function pcjvGo(idx) {
+  if (idx === pcjvCur) return;
+  pcjvCur = idx;
+  pcjvRender(idx);
+  pcjvResetAuto();
+}
+
+function pcjvRender(idx) {
+  const s = pcjvSteps[idx];
+
+  /* Steps & dots */
+  document.querySelectorAll('.pcjv-step').forEach((el, i) => el.classList.toggle('pcjv-active', i === idx));
+  document.querySelectorAll('.pcjv-pdot').forEach((d,  i) => d.classList.toggle('pcjv-active', i === idx));
+
+  /* Progress */
+  document.getElementById('pcjvProg').style.width = s.progress + '%';
+
+  /* Watermark */
+  document.getElementById('pcjvWm').textContent = s.wm;
+
+  /* Image crossfade */
+  const wrap = document.getElementById('pcjvImgWrap');
+  const img  = document.getElementById('pcjvImg');
+  wrap.style.opacity = '0';
+  wrap.style.transition = 'opacity .45s ease';
+  setTimeout(() => {
+    img.src    = s.img;
+    img.onload = () => { wrap.style.opacity = '1'; };
+  }, 220);
+
+  /* Body transition */
+  const body = document.getElementById('pcjvBody');
+  body.classList.add('pcjv-transit');
+  setTimeout(() => {
+    const badge = document.getElementById('pcjvBadge');
+    badge.style.background  = s.badgeBg;
+    badge.style.color       = s.badgeCol;
+    badge.style.borderColor = s.badgeBdr;
+    badge.innerHTML = `<i class="${s.badgeIco}"></i> ${s.badgeLbl}`;
+
+    document.getElementById('pcjvTitle').innerHTML  = s.title;
+    document.getElementById('pcjvDesc').textContent = s.desc;
+    document.getElementById('pcjvFeats').innerHTML  = s.feats.map(f => `
+      <div class="pcjv-feat">
+        <div class="pcjv-feat-ic" style="background:${f.bg};color:${f.col}"><i class="${f.ico}"></i></div>
+        <span class="pcjv-feat-txt">${f.txt}</span>
+      </div>`).join('');
+
+    body.classList.remove('pcjv-transit');
+  }, 280);
+
+  /* Timer */
+  const timer = document.getElementById('pcjvTimer');
+  timer.classList.remove('pcjv-run');
+  timer.style.width = '0%';
+  void timer.offsetWidth;
+  requestAnimationFrame(() => timer.classList.add('pcjv-run'));
+}
+
+function pcjvResetAuto() {
+  if (pcjvAuto) clearTimeout(pcjvAuto);
+  pcjvAuto = setTimeout(function loop() {
+    pcjvCur = (pcjvCur + 1) % pcjvSteps.length;
+    pcjvRender(pcjvCur);
+    pcjvAuto = setTimeout(loop, 4500);
+  }, 4500);
+}
+
+/* Pause on hover */
+[document.getElementById('pcjvPanel'), document.getElementById('pcjvStepList')].forEach(el => {
+  el.addEventListener('mouseenter', () => { if (pcjvAuto) { clearTimeout(pcjvAuto); pcjvAuto = null; } });
+  el.addEventListener('mouseleave', pcjvResetAuto);
+});
+
+/* Boot */
+pcjvResetAuto();
+
+/* Scroll reveal */
+const pcjvObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('pcjv-vis'); pcjvObs.unobserve(e.target); }
+  });
+}, { threshold: 0.06 });
+document.querySelectorAll('.pcjv-reveal').forEach(el => pcjvObs.observe(el));
+</script>
+
+</section>
+</div>

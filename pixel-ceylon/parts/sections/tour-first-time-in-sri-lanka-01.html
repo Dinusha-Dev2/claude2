@@ -1,0 +1,794 @@
+<section class="hero">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+@import url('https://fonts.cdnfonts.com/css/bagind');
+
+/* ── Elementor Reset ── */
+.elementor-widget-container,.elementor-widget-html,.elementor-widget,
+.elementor-column-wrap,.elementor-column,.elementor-row,
+.elementor-section,.elementor-top-section,.e-con,.e-con-inner {
+  padding:0!important;margin:0!important;
+  overflow:visible!important;max-width:100%!important;width:100%!important;
+}
+
+/* ── Tokens ── */
+:root {
+  --navy:    #0b1c2c;
+  --teal:    #0e9aaa;
+  --teal-2:  #22ccd0;
+  --orange:  #f5a623;
+  --orange-d:#d98e10;
+  --ease:    cubic-bezier(.4,0,.2,1);
+  --ease-b:  cubic-bezier(.34,1.56,.64,1);
+}
+
+html { scroll-behavior:smooth; }
+
+body {
+  font-family:'Poppins',sans-serif;
+  background:var(--navy);
+  color:#fff;
+  overflow-x:hidden;
+  margin:0;
+}
+
+img { display:block;width:100%;height:100%;object-fit:cover; }
+a   { text-decoration:none;color:inherit; }
+button { font-family:inherit;cursor:pointer;border:none;background:none; }
+
+/* ── Hero Shell ──
+   KEY FIX 1: min-height instead of fixed height so mobile
+   content can expand beyond viewport height.
+   height:auto lets the grid rows determine actual height.
+── */
+.hero {
+  position:relative;
+  width:100%;
+  /* Desktop: exactly viewport height via JS-set --hero-h.
+     Mobile: auto height so content expands freely. */
+  min-height:var(--hero-h,100svh);
+  height:auto;
+  display:grid;
+  grid-template-rows:1fr auto;
+  /* Clip overflow so background doesn't bleed out on desktop */
+  overflow:hidden;
+}
+
+/* ── Background Slides ──
+   FINAL FIX: hero-bg uses position:fixed scoped to hero,
+   achieved by making hero a containing block with
+   transform:translateZ(0) — then hero-bg fixed fills hero.
+   On mobile hero-bg height is also synced via JS.
+── */
+.hero-bg {
+  position:absolute;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+  overflow:hidden;
+}
+
+.slide {
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  opacity:0;
+  transition:opacity 1.6s var(--ease);
+}
+.slide.active { opacity:1; }
+.slide img {
+  width:100%;height:100%;
+  object-fit:cover;
+  transform:scale(1.07);
+  transition:transform 10s linear;
+}
+.slide.active img { transform:scale(1); }
+
+/* ── Overlay ──
+   KEY FIX 3: min-height:100% so the dark gradient covers
+   the full background including the expanded area.
+── */
+.hero-overlay {
+  position:absolute;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  z-index:1;
+  pointer-events:none;
+  background:
+    linear-gradient(110deg,rgba(11,28,44,.97) 0%,rgba(11,28,44,.82) 38%,rgba(11,28,44,.25) 65%,transparent 100%),
+    linear-gradient(to top,rgba(11,28,44,.98) 0%,rgba(11,28,44,.5) 30%,transparent 55%),
+    linear-gradient(to bottom,rgba(11,28,44,.6) 0%,transparent 20%);
+}
+
+/* ── Body Grid ── */
+.hero-body {
+  position:relative;z-index:10;
+  display:grid;
+  grid-template-columns:1fr 320px;
+  gap:clamp(1.2rem,2.5vw,2.5rem);
+  /* Desktop: top padding clears the 78px fixed nav + breathing room;
+     extra top weight pushes content to lower-centre of viewport */
+  padding:calc(78px + clamp(4rem,10vh,7rem)) clamp(1.4rem,3vw,2.8rem) clamp(2rem,4vh,3.5rem);
+  align-items:center;
+}
+
+/* ── Left Column ── */
+.hero-left { display:flex;flex-direction:column;gap:.55rem; }
+
+.hero-tag {
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid rgba(14,154,170,.42);border-radius:2px;
+  padding:4px 12px;font-size:.52rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--teal-2);background:rgba(14,154,170,.09);width:fit-content;
+}
+.hero-tag i { font-size:.62rem; }
+
+.hero-title {
+  font-family:'Bagind',Georgia,serif;
+  font-size:clamp(1.9rem,3.2vw,3.2rem);
+  font-weight:400;line-height:1.06;
+  letter-spacing:.01em;color:#fff;
+  margin:0;
+}
+.t-orange { color:var(--orange); }
+
+.hero-sub {
+  font-size:.74rem;font-weight:300;
+  color:rgba(255,255,255,.46);max-width:440px;line-height:1.75;
+  margin:0;
+}
+.hero-sub strong { color:rgba(255,255,255,.75);font-weight:500; }
+
+/* ── KPIs ── */
+.kpi-row { display:flex;gap:.4rem;flex-wrap:wrap; }
+
+.kpi {
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:2px;padding:.42rem .85rem;
+  backdrop-filter:blur(10px);
+  transition:background .22s,border-color .22s,transform .22s var(--ease-b);
+}
+.kpi:hover { background:rgba(14,154,170,.18);border-color:rgba(14,154,170,.3);transform:translateY(-2px); }
+
+.kpi-ico {
+  width:26px;height:26px;border-radius:7px;
+  background:rgba(14,154,170,.14);border:1px solid rgba(14,154,170,.22);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.6rem;color:var(--teal-2);flex-shrink:0;
+}
+.kpi-val { font-family:'Bagind',Georgia,serif;font-size:.96rem;color:#fff;line-height:1; }
+.kpi-lbl { font-size:.5rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.28); }
+
+/* ── Review Block ── */
+.review-block {
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:2px;padding:.7rem .95rem;
+  backdrop-filter:blur(16px);
+  display:flex;flex-direction:column;gap:.5rem;
+  max-width:460px;position:relative;overflow:hidden;
+}
+.review-block::before {
+  content:'';position:absolute;top:0;left:20%;right:20%;height:1px;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.2),transparent);
+}
+
+.review-top { display:flex;align-items:center;gap:.75rem; }
+
+.review-score-box {
+  display:flex;align-items:baseline;gap:3px;
+  background:rgba(14,154,170,.12);border:1px solid rgba(14,154,170,.2);
+  border-radius:8px;padding:.3rem .6rem;flex-shrink:0;
+}
+.review-score-num { font-family:'Bagind',Georgia,serif;font-size:1.3rem;color:#fff;line-height:1; }
+.review-score-max { font-size:.5rem;color:rgba(255,255,255,.35);font-weight:500;margin-bottom:1px; }
+
+.review-top-right  { display:flex;flex-direction:column;gap:3px; }
+.review-stars      { display:flex;gap:2px; }
+.review-stars i    { color:var(--orange);font-size:.65rem; }
+
+.review-meta-line  { display:flex;align-items:center;gap:.4rem; }
+.review-count      { font-size:.6rem;color:rgba(255,255,255,.55); }
+.review-count strong { color:rgba(255,255,255,.78); }
+.review-platforms  { font-size:.56rem;color:rgba(255,255,255,.28); }
+
+.review-divider    { height:1px;background:rgba(255,255,255,.07); }
+
+.review-quote-row  {
+  display:flex;align-items:flex-start;gap:.65rem;
+  transition:opacity .5s ease,transform .5s ease;
+}
+
+.rev-avatar {
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  border:1.5px solid rgba(255,255,255,.16);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.58rem;font-weight:700;margin-top:1px;
+}
+
+.rev-quote-body { flex:1;display:flex;flex-direction:column;gap:3px; }
+
+.rev-quote-text {
+  font-size:.68rem;font-style:italic;
+  color:rgba(255,255,255,.62);line-height:1.62;
+  position:relative;padding-left:.75rem;
+}
+.rev-quote-text::before {
+  content:'"';position:absolute;left:0;top:-.1rem;
+  font-family:'Bagind',Georgia,serif;
+  font-size:1.1rem;color:var(--teal-2);line-height:1;
+}
+
+.rev-byline { display:flex;align-items:center;gap:.4rem;flex-wrap:wrap; }
+.rev-name   { font-size:.63rem;font-weight:600;color:rgba(255,255,255,.8); }
+.rev-loc    { font-size:.58rem;color:rgba(255,255,255,.32); }
+.rev-flag   { font-size:.65rem; }
+
+.rev-verified {
+  display:flex;align-items:center;gap:3px;
+  background:rgba(74,222,128,.09);border:1px solid rgba(74,222,128,.2);
+  border-radius:100px;padding:1px 7px;
+  font-size:.49rem;font-weight:600;color:#4ade80;
+  flex-shrink:0;margin-top:1px;white-space:nowrap;
+}
+.rev-verified i { font-size:.5rem; }
+
+/* ── CTAs ── */
+.hero-btns { display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:40px; }
+
+.btn-primary {
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--orange),var(--orange-d));
+  color:#fff;font-size:.78rem;font-weight:600;
+  padding:11px 24px;border-radius:2px;
+  transition:transform .22s var(--ease-b);
+  position:relative;overflow:hidden;
+}
+.btn-primary::after {
+  content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.2),transparent);
+  transition:left .55s;
+}
+.btn-primary:hover::after { left:150%; }
+.btn-primary:hover { transform:translateY(-2px) scale(1.02);color:#fff; }
+
+.btn-ghost {
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);
+  color:#fff;font-size:.78rem;font-weight:500;
+  padding:10px 22px;border-radius:2px;backdrop-filter:blur(10px);
+  transition:background .22s,border-color .22s,transform .22s;
+}
+.btn-ghost:hover { background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.38);transform:translateY(-2px);color:#fff; }
+
+/* ── Right Column ── */
+.hero-right {
+  display:flex;flex-direction:column;gap:.65rem;
+  min-width:0;height:100%;justify-content:center;
+}
+
+/* ── Highlight Card ── */
+.hp-card {
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);
+  border-radius:2px;padding:.95rem;
+  backdrop-filter:blur(24px);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:.8rem;
+}
+.hp-card::before {
+  content:'';position:absolute;top:0;left:18%;right:18%;height:1px;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.26),transparent);
+}
+
+.hpc-head { display:flex;align-items:center;justify-content:space-between; }
+.hpc-label {
+  font-size:.54rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--teal-2);display:flex;align-items:center;gap:5px;
+}
+.hpc-badge {
+  background:rgba(245,166,35,.18);border:1px solid rgba(245,166,35,.38);
+  color:var(--orange);border-radius:100px;
+  font-size:.5rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;padding:2px 8px;white-space:nowrap;
+  transition:background .3s,border-color .3s,color .3s;
+}
+.hpc-badge.teal { background:rgba(14,154,170,.18);border-color:rgba(14,154,170,.38);color:var(--teal-2); }
+
+.hpc-photo {
+  width:100%;height:clamp(100px,15vh,120px);
+  border-radius:2px;overflow:hidden;position:relative;flex-shrink:0;
+}
+.hpc-photo img { transition:transform .7s var(--ease); }
+.hp-card:hover .hpc-photo img { transform:scale(1.06); }
+.hpc-photo-ov {
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(11,28,44,.55) 0%,transparent 52%);
+}
+
+.hpc-name  { font-family:'Bagind',Georgia,serif;font-size:1.05rem;color:#fff;line-height:1.2; }
+.hpc-desc  {
+  font-size:.63rem;color:rgba(255,255,255,.46);line-height:1.62;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+.hpc-chips { display:flex;flex-wrap:wrap;gap:.25rem; }
+.hpc-chip  {
+  background:rgba(14,154,170,.12);border:1px solid rgba(14,154,170,.2);
+  border-radius:100px;padding:2px 9px;
+  font-size:.56rem;font-weight:500;color:var(--teal-2);white-space:nowrap;
+}
+
+.hpc-dots  { display:flex;gap:4px; }
+.hpc-pb    {
+  flex:1;height:3px;border-radius:2px;
+  background:rgba(255,255,255,.12);cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.hpc-pb.active { background:rgba(14,154,170,.25); }
+.hpc-pb-fill   {
+  position:absolute;top:0;left:0;height:100%;width:0%;
+  background:linear-gradient(to right,var(--teal),var(--teal-2));border-radius:2px;
+}
+
+/* ── Card Nav ── */
+.card-nav {
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);
+  border-radius:2px;padding:.5rem .8rem;backdrop-filter:blur(14px);
+}
+
+.card-nav-arrows { display:flex;gap:.4rem; }
+.cnav-btn {
+  width:32px;height:32px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;color:rgba(255,255,255,.65);
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);
+  transition:background .22s,border-color .22s,color .22s,transform .2s var(--ease-b);
+}
+.cnav-btn:hover { background:var(--teal);border-color:var(--teal);color:#fff;transform:scale(1.08); }
+.cnav-btn:active { transform:scale(.95); }
+
+.card-nav-label {
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+  flex:1;padding:0 .5rem;min-width:0;
+}
+.cnl-name {
+  font-size:.6rem;font-weight:600;color:rgba(255,255,255,.72);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:80px;text-align:center;
+}
+.cnl-pos { font-size:.52rem;color:rgba(255,255,255,.28);letter-spacing:.06em; }
+
+.cnav-auto {
+  display:flex;align-items:center;gap:5px;font-size:.55rem;
+  color:rgba(255,255,255,.35);cursor:pointer;flex-shrink:0;
+  transition:color .2s;
+}
+.cnav-auto:hover { color:rgba(255,255,255,.6); }
+.cnav-auto-dot {
+  width:6px;height:6px;border-radius:50%;background:var(--teal-2);
+  box-shadow:0 0 0 0 rgba(34,204,208,.4);animation:autopulse 2s infinite;flex-shrink:0;
+}
+.cnav-auto-dot.paused { background:rgba(255,255,255,.22);animation:none;box-shadow:none; }
+
+@keyframes autopulse {
+  0%  { box-shadow:0 0 0 0   rgba(34,204,208,.45); }
+  70% { box-shadow:0 0 0 4px rgba(34,204,208,0);   }
+  100%{ box-shadow:0 0 0 0   rgba(34,204,208,0);   }
+}
+
+/* ── Scroll Hint ── */
+.scroll-hint {
+  position:relative;z-index:10;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  padding-bottom:.5rem;
+  color:rgba(255,255,255,.22);
+  font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;
+  animation:shint 2.5s ease-in-out infinite;
+  pointer-events:none;
+}
+.scroll-hint i { font-size:.68rem; }
+
+@keyframes shint {
+  0%,100% { opacity:.22;transform:translateY(0); }
+  50%     { opacity:.45;transform:translateY(4px); }
+}
+
+/* ── Ticker ── */
+.ticker {
+  position:relative;
+  z-index:15;
+  background:rgba(8,18,28,.88);
+  border-top:1px solid rgba(255,255,255,.06);
+  overflow:hidden;padding:.55rem 0;white-space:nowrap;
+  backdrop-filter:blur(20px);
+}
+.ticker::before,.ticker::after {
+  content:'';position:absolute;top:0;bottom:0;width:70px;z-index:2;pointer-events:none;
+}
+.ticker::before { left:0;background:linear-gradient(to right,rgba(8,18,28,1),transparent); }
+.ticker::after  { right:0;background:linear-gradient(to left,rgba(8,18,28,1),transparent); }
+
+.ticker-track { display:inline-flex;animation:tick 40s linear infinite; }
+@keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+.ticker-item {
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-size:.58rem;font-weight:500;letter-spacing:.11em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);padding:0 1.8rem;
+}
+.t-dot { width:3px;height:3px;border-radius:50%;background:var(--teal);flex-shrink:0; }
+.ticker-item.hi { color:rgba(255,255,255,.48); }
+.ticker-item.hi .t-dot { background:var(--orange); }
+
+/* ── Responsive ──
+   KEY FIX 4: padding-top clears the fixed nav bar (~78px).
+   Without this the tag + title hide behind the nav on mobile.
+── */
+@media (max-width:860px) {
+  .hero-body {
+    grid-template-columns:1fr;
+    /* Mobile: just nav clearance + small breathing room */
+    padding:calc(78px + 4.5rem) 1.4rem 1.4rem;
+  }
+  .hero-right { display:none; }
+  .hero-title { font-size:clamp(2rem,7vw,3rem); }
+}
+@media (max-width:560px) {
+  .hero-body {
+    padding-left:1.1rem;
+    padding-right:1.1rem;
+    padding-top:calc(72px + 4rem);
+  }
+  .hero-title { font-size:clamp(2rem,8.5vw,2.8rem); }
+  .hero-sub   { font-size:.74rem; }
+  .hero-btns  { flex-direction:column; }
+  .btn-primary,.btn-ghost { justify-content:center; }
+  .hero { min-height:100svh; }
+}
+</style>
+
+<section class="hero" id="hero">
+
+  <!-- Background Slides -->
+  <div class="hero-bg">
+    <div class="slide active"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Mirissa-Beach_processed.webp"        alt="Mirissa Beach"></div>
+    <div class="slide">       <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Yala-National-Park_processed.webp"    alt="Yala National Park"></div>
+    <div class="slide">       <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Ella-Nine-Arch-Bridge_processed.webp" alt="Ella Nine Arches Bridge"></div>
+    <div class="slide">       <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/temple-of-tooth_processed.webp"       alt="Temple of the Sacred Tooth"></div>
+    <div class="slide">       <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya_processed.webp"              alt="Sigiriya Rock Fortress"></div>
+  </div>
+
+  <div class="hero-overlay" aria-hidden="true"></div>
+
+  <!-- Body -->
+  <div class="hero-body">
+
+    <!-- LEFT -->
+    <div class="hero-left">
+
+      <div class="hero-tag">
+        <i class="fas fa-globe-asia"></i>
+        First Time in Sri Lanka &middot; 8D/7N
+      </div>
+
+      <h1 class="hero-title">
+        First Time<br>
+        in <span class="t-orange">Sri Lanka</span>
+      </h1>
+
+      <p class="hero-sub">
+        The perfect first introduction &mdash;
+        <strong>beaches, leopard safaris, misty highlands</strong>
+        and a legendary scenic train ride across emerald tea valleys.
+        Eight days. One unforgettable island.
+      </p>
+
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-ico"><i class="fas fa-calendar-alt"></i></div>
+          <div><div class="kpi-val">8</div><div class="kpi-lbl">Days</div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-ico"><i class="fas fa-paw"></i></div>
+          <div><div class="kpi-val">2</div><div class="kpi-lbl">Safaris</div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-ico"><i class="fas fa-umbrella-beach"></i></div>
+          <div><div class="kpi-val">3</div><div class="kpi-lbl">Beaches</div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-ico"><i class="fas fa-user-shield"></i></div>
+          <div><div class="kpi-val">100%</div><div class="kpi-lbl">Private</div></div>
+        </div>
+      </div>
+
+      <!-- Review Block -->
+      <div class="review-block">
+        <div class="review-top">
+          <div class="review-score-box">
+            <div class="review-score-num">4.9</div>
+            <div class="review-score-max">/5</div>
+          </div>
+          <div class="review-top-right">
+            <div class="review-stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="review-meta-line">
+              <span class="review-count"><strong>112 reviews</strong> &middot; Excellent</span>
+              <span class="review-platforms">&middot; Google &middot; TripAdvisor</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-divider"></div>
+        <div class="review-quote-row" id="review-quote-row">
+          <div class="rev-avatar" id="rev-avatar" style="background:linear-gradient(135deg,#1e5c6e,#0b3a52)">LB</div>
+          <div class="rev-quote-body">
+            <div class="rev-quote-text" id="rev-quote">
+              Perfect first trip &mdash; beaches, wildlife, temples and that train ride all in one week!
+            </div>
+            <div class="rev-byline">
+              <span class="rev-flag" id="rev-flag">&#127465;&#127466;</span>
+              <span class="rev-name" id="rev-name">Lars &amp; Bianca</span>
+              <span class="rev-loc"  id="rev-loc">&middot; Germany &middot; Feb 2026</span>
+            </div>
+          </div>
+          <div class="rev-verified"><i class="fas fa-circle-check"></i> Verified</div>
+        </div>
+      </div>
+
+      <div class="hero-btns">
+        <a href="#booking" class="btn-primary"><i class="fas fa-calendar-check"></i> Book This Tour</a>
+        <a href="#rms-map-section" class="btn-ghost"><i class="fas fa-map-marked-alt"></i> View Itinerary</a>
+      </div>
+
+    </div><!-- /hero-left -->
+
+    <!-- RIGHT (hidden on mobile) -->
+    <div class="hero-right">
+      <div class="hp-card">
+        <div class="hpc-head">
+          <div class="hpc-label"><i class="fas fa-star"></i> Featured Highlight</div>
+          <div class="hpc-badge" id="hpc-badge">BEACH</div>
+        </div>
+        <div class="hpc-photo">
+          <img id="hpc-img" src="https://pixelceylontours.com/wp-content/uploads/2026/03/Mirissa-Beach_processed.webp" alt="Mirissa Beach">
+          <div class="hpc-photo-ov"></div>
+        </div>
+        <div class="hpc-name"  id="hpc-name">Mirissa Beach &amp; Whale Watching</div>
+        <div class="hpc-desc"  id="hpc-desc"></div>
+        <div class="hpc-chips" id="hpc-chips"></div>
+        <div class="hpc-dots"  id="hpc-dots"></div>
+      </div>
+
+      <div class="card-nav">
+        <div class="card-nav-arrows">
+          <button class="cnav-btn" id="cn-prev"><i class="fas fa-chevron-left"></i></button>
+          <button class="cnav-btn" id="cn-next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="card-nav-label">
+          <div class="cnl-name" id="cnl-name"></div>
+          <div class="cnl-pos"  id="cnl-pos"></div>
+        </div>
+        <div class="cnav-auto" id="cnav-auto">
+          <div class="cnav-auto-dot" id="cnav-dot"></div>
+          <span id="cnav-lbl">Auto</span>
+        </div>
+      </div>
+    </div><!-- /hero-right -->
+
+  </div><!-- /hero-body -->
+
+  <div class="scroll-hint" aria-hidden="true">
+    <i class="fas fa-chevron-down"></i>
+    <span>Scroll</span>
+  </div>
+
+  <!-- Ticker -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+
+</section>
+
+<script>
+/* ── Viewport height fix ── */
+(function () {
+  var hero = document.getElementById('hero');
+  var heroBg = hero.querySelector('.hero-bg');
+  var heroOv = hero.querySelector('.hero-overlay');
+
+  function setH() {
+    if (window.innerWidth > 860) {
+      hero.style.setProperty('--hero-h', window.innerHeight + 'px');
+      if (heroBg) heroBg.style.height = '';
+      if (heroOv) heroOv.style.height = '';
+    } else {
+      hero.style.removeProperty('--hero-h');
+      syncBgHeight();
+    }
+  }
+
+  function syncBgHeight() {
+    requestAnimationFrame(function() {
+      var h = hero.scrollHeight;
+      if (h > 0) {
+        if (heroBg) heroBg.style.height = h + 'px';
+        if (heroOv) heroOv.style.height = h + 'px';
+      }
+    });
+  }
+
+  setH();
+  window.addEventListener('load', function() {
+    if (window.innerWidth <= 860) syncBgHeight();
+  });
+
+  requestAnimationFrame(function() {
+    syncBgHeight();
+    window.addEventListener('resize', function() {
+      setH();
+      syncBgHeight();
+    });
+    if (window.ResizeObserver) {
+      new ResizeObserver(syncBgHeight).observe(hero);
+    }
+  });
+})();
+
+/* ── Data ── */
+var SLIDES = [
+  { name:'Mirissa Beach & Whale Watching',  badge:'BEACH',     img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Mirissa-Beach_processed.webp',        desc:'Golden crescent bay fringed by coconut palms \u2014 and the best spot in Sri Lanka for blue whale watching (Nov\u2013April).',                                              chips:['\uD83C\uDFD6\uFE0F Days 1\u20132','\uD83D\uDC0B Whale Watch','\uD83C\uDF05 Sunset Beach']     },
+  { name:'Yala National Park Safari',       badge:'WILDLIFE',  img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Yala-National-Park_processed.webp',    desc:"Sri Lanka's most famous wildlife reserve \u2014 home to the world's highest density of wild leopards alongside elephants, sloth bears and crocodiles.",                  chips:['\uD83D\uDC06 Day 3','\uD83E\uDD81 Leopards','\uD83C\uDFDF Jeep Safari']                      },
+  { name:'Ella & Nine Arches Bridge',       badge:'HIGHLIGHT', img:'https://pixelceylontours.com/wp-content/uploads/2026/03/Ella-Nine-Arch-Bridge_processed.webp', desc:"Misty highland village with the iconic Nine Arches Bridge, Little Adam's Peak hike, and dramatic valley views at every turn.",                                            chips:['\uD83D\uDE9E Day 4','\uD83C\uDFD4\uFE0F Hiking','\uD83D\uDCF8 Nine Arches']                   },
+  { name:'Temple of the Sacred Tooth',      badge:'UNESCO',    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/temple-of-tooth_processed.webp',       desc:"Sri Lanka's holiest Buddhist shrine, set in the hill capital of Kandy. The candlelit evening puja ceremony is an unforgettable cultural experience.",                  chips:['\u26E9\uFE0F Day 5','\uD83D\uDD6F\uFE0F Evening Puja','\uD83D\uDC83 Kandyan Dance']           },
+  { name:'Sigiriya Rock Fortress',          badge:'UNESCO',    img:'https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya_processed.webp',              desc:'Rising 200m above the jungle \u2014 a 5th-century royal palace-fortress with ancient frescoes, the iconic lion paw gate, and symmetrical water gardens.',             chips:['\uD83C\uDFF0 Day 7','\uD83E\uDEA8 200m Climb','\uD83C\uDFA8 Frescoes']                        }
+];
+
+var REVIEWS = [
+  { quote:"Perfect first trip \u2014 beaches, wildlife, temples and that train ride all in one week!",              initials:"LB", name:"Lars & Bianca",    flag:"\uD83C\uDDE9\uD83C\uDDEA", loc:"Germany \u00B7 Feb 2026",      color:"linear-gradient(135deg,#1e5c6e,#0b3a52)" },
+  { quote:"Yala was incredible \u2014 we saw two leopards on the first morning. Completely surreal.",              initials:"SV", name:"Sophie & Vincent", flag:"\uD83C\uDDF3\uD83C\uDDF1", loc:"Netherlands \u00B7 Jan 2026",  color:"linear-gradient(135deg,#3b2f6e,#1a1040)" },
+  { quote:"The scenic train through the tea hills was the most beautiful journey of my life.",                     initials:"MA", name:"Marie & Antoine",  flag:"\uD83C\uDDEB\uD83C\uDDF7", loc:"France \u00B7 Dec 2025",       color:"linear-gradient(135deg,#6e3535,#3a1414)" },
+  { quote:"Mirissa whale watching at sunrise, then Sigiriya the same week \u2014 honestly unbeatable.",           initials:"JK", name:"Jonas Kaufmann",   flag:"\uD83C\uDDE6\uD83C\uDDF9", loc:"Austria \u00B7 Nov 2025",      color:"linear-gradient(135deg,#1a5c3a,#0b3020)" },
+  { quote:"Pixel Ceylon made everything effortless. Our guide knew every hidden spot. Highly recommend.",         initials:"EL", name:"Emma Lindgren",    flag:"\uD83C\uDDF8\uD83C\uDDEA", loc:"Sweden \u00B7 Oct 2025",       color:"linear-gradient(135deg,#4a3a1a,#2a1e08)" }
+];
+
+var TICKER_ITEMS = [
+  { label:'Mirissa Beach \u2014 South Coast',       hi:false },
+  { label:'Blue Whale Watching',                    hi:true  },
+  { label:'Galle UNESCO Fort',                      hi:false },
+  { label:'Yala Wild Leopard Safari',               hi:true  },
+  { label:'Ella Nine Arches Bridge',                hi:false },
+  { label:'Scenic Highland Train Ride',             hi:true  },
+  { label:'Kandy Sacred Tooth Temple',              hi:false },
+  { label:'Pinnawala Elephant Orphanage',           hi:true  },
+  { label:'Dambulla Cave Temple \u00B7 UNESCO',     hi:false },
+  { label:'Sigiriya Rock Fortress \u00B7 UNESCO',   hi:true  },
+  { label:'Minneriya Elephant Gathering',           hi:false },
+  { label:'Negombo Beach \u00B7 Departure',         hi:true  }
+];
+
+/* ── Ticker ── */
+var track = document.getElementById('ticker-track');
+track.innerHTML = TICKER_ITEMS.concat(TICKER_ITEMS)
+  .map(function(t){ return '<span class="ticker-item'+(t.hi?' hi':'')+'"><span class="t-dot"></span>'+t.label+'</span>'; })
+  .join('');
+
+/* ── Highlight card dots ── */
+var dotsEl = document.getElementById('hpc-dots');
+SLIDES.forEach(function(_, i){
+  var pb = document.createElement('div');
+  pb.className = 'hpc-pb' + (i === 0 ? ' active' : '');
+  pb.innerHTML = '<div class="hpc-pb-fill"></div>';
+  pb.addEventListener('click', function(){ goTo(i); });
+  dotsEl.appendChild(pb);
+});
+
+/* ── State ── */
+var idx = 0, ridx = 0, slideTimer = null, autoPaused = false;
+var bgSlides = document.querySelectorAll('.slide');
+
+function syncCard(i) {
+  var d = SLIDES[i];
+  document.getElementById('hpc-img').src           = d.img;
+  document.getElementById('hpc-name').textContent  = d.name;
+  document.getElementById('hpc-desc').textContent  = d.desc;
+  document.getElementById('hpc-badge').textContent = d.badge;
+  document.getElementById('hpc-badge').className   = 'hpc-badge' + (d.badge === 'UNESCO' ? '' : ' teal');
+  document.getElementById('hpc-chips').innerHTML   = d.chips.map(function(c){ return '<span class="hpc-chip">'+c+'</span>'; }).join('');
+  document.getElementById('cnl-name').textContent  = d.name;
+  document.getElementById('cnl-pos').textContent   = (i + 1) + ' of ' + SLIDES.length;
+
+  document.querySelectorAll('.hpc-pb').forEach(function(pb, j){
+    pb.classList.toggle('active', j === i);
+    var fill = pb.querySelector('.hpc-pb-fill');
+    fill.style.cssText = 'transition:none;width:0%';
+    if (j === i) requestAnimationFrame(function(){ fill.style.cssText = 'transition:width 5.8s linear;width:100%'; });
+  });
+}
+
+function goTo(n) {
+  bgSlides[idx].classList.remove('active');
+  idx = ((n % bgSlides.length) + bgSlides.length) % bgSlides.length;
+  bgSlides[idx].classList.add('active');
+  syncCard(idx);
+  if (!autoPaused) restartTimer();
+}
+
+function restartTimer() {
+  clearInterval(slideTimer);
+  slideTimer = setInterval(function(){ goTo(idx + 1); }, 6200);
+}
+
+document.getElementById('cn-prev').addEventListener('click', function(){ goTo(idx - 1); });
+document.getElementById('cn-next').addEventListener('click', function(){ goTo(idx + 1); });
+document.getElementById('cnav-auto').addEventListener('click', function(){
+  autoPaused = !autoPaused;
+  document.getElementById('cnav-dot').classList.toggle('paused', autoPaused);
+  document.getElementById('cnav-lbl').textContent = autoPaused ? 'Paused' : 'Auto';
+  autoPaused ? clearInterval(slideTimer) : restartTimer();
+});
+
+function syncReview(ri) {
+  var row = document.getElementById('review-quote-row');
+  row.style.cssText = 'opacity:0;transform:translateY(6px)';
+  setTimeout(function(){
+    var r = REVIEWS[ri];
+    document.getElementById('rev-quote').textContent  = r.quote;
+    document.getElementById('rev-avatar').textContent = r.initials;
+    document.getElementById('rev-avatar').style.background = r.color;
+    document.getElementById('rev-name').textContent   = r.name;
+    document.getElementById('rev-flag').textContent   = r.flag;
+    document.getElementById('rev-loc').textContent    = '\u00B7 ' + r.loc;
+    row.style.cssText = 'transition:opacity .45s ease,transform .45s ease;opacity:1;transform:translateY(0)';
+  }, 240);
+}
+
+/* ── Init ── */
+syncCard(0);
+syncReview(0);
+restartTimer();
+setInterval(function(){ ridx = (ridx + 1) % REVIEWS.length; syncReview(ridx); }, 5000);
+
+/* ── WhatsApp booking ── */
+var wpNumber = "94777273794";
+
+function getPackageName() {
+  var heroTag = document.querySelector('.hero-tag');
+  if (heroTag) {
+    return heroTag.textContent.trim()
+      .replace(/\s+/g, ' ')
+      .replace(/[\u00B7\u00B7]\s*/g, ' \u00B7 ')
+      .replace(/^[\s\u200B-\u200D\uFEFF\u00B7]+|[\s\u200B-\u200D\uFEFF\u00B7]+$/g, '');
+  }
+  return "First Time in Sri Lanka 8D/7N";
+}
+
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.btn-primary');
+  if (btn && btn.textContent.trim().indexOf('Book This Tour') !== -1) {
+    e.preventDefault();
+    var packageName = getPackageName();
+    var msg = 'Hi! I would like to book "' + packageName + '" tour package\nPackage URL: ' + window.location.href;
+    window.open('https://wa.me/' + wpNumber + '?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+  }
+});
+
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.bk-enq')) {
+    e.preventDefault();
+    var packageName = getPackageName();
+    var msg = 'Hi! I would like to know more details about "' + packageName + '"\nPackage URL: ' + window.location.href;
+    window.open('https://wa.me/' + wpNumber + '?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+  }
+});
+</script>
+</section>

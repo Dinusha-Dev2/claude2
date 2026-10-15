@@ -1,0 +1,274 @@
+<section class="Experiences">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/bagind" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+  --navy:       #0c1f2c;
+  --navy-mid:   #102536;
+  --navy-soft:  #163044;
+  --teal-d:     #1a6b7a;
+  --teal:       #1ab8b0;
+  --teal-pale:  rgba(26,184,176,.12);
+  --teal-glow:  rgba(26,184,176,.06);
+  --cream:      #f0ede4;
+  --cream-warm: #e8e3d8;
+  --orange:     #f4a100;
+  --orange-l:   #ffbf3c;
+  --orange-pale:rgba(244,161,0,.12);
+  --white:      #ffffff;
+  --ink:        #0c1f2c;
+  --muted:      rgba(12,31,44,.45);
+  --muted-lt:   rgba(240,237,228,.45);
+  --border:     rgba(12,31,44,.09);
+  --border-lt:  rgba(240,237,228,.1);
+  --serif:      'Bagind','Playfair Display',Georgia,serif;
+  --sans:       'Poppins',system-ui,sans-serif;
+  --mono:       'DM Mono','Courier New',monospace;
+  --ease:       cubic-bezier(.4,0,.2,1);
+  --spring:     cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: #fff; color: var(--ink); overflow-x: hidden; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img    { display: block; max-width: 100%; object-fit: cover; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+a      { text-decoration: none; color: inherit; }
+
+/* ── SECTION SHELL ── */
+.secthree {
+  position: relative;
+  overflow: hidden;
+  background: var(--white);
+}
+.secthree::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 5;
+  background: linear-gradient(90deg, transparent 0%, var(--orange) 35%, var(--teal) 70%, transparent 100%);
+}
+.secthree::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.inner { position: relative; z-index: 2; max-width: 1440px; margin: 0 auto; padding: 5rem 2.4rem; }
+
+/* ── BLOBS ── */
+.blob { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
+.b1 { top: -18%; left: -8%; width: 65vw; height: 65vw; max-width: 720px; max-height: 720px;
+      background: radial-gradient(circle, rgba(244,161,0,.04) 0%, transparent 65%); }
+.b2 { bottom: -12%; right: -6%; width: 52vw; height: 52vw; max-width: 600px; max-height: 600px;
+      background: radial-gradient(circle, rgba(26,184,176,.05) 0%, transparent 65%); }
+
+/* ── EYEBROW ── */
+.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.ey-line  { width: 32px; height: 1px; background: var(--orange); flex-shrink: 0; }
+.ey-txt   { font-family: var(--mono); font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--orange); font-weight: 500; }
+.ey-dot   { width: 5px; height: 5px; background: var(--teal); border-radius: 50%; flex-shrink: 0; }
+
+/* ── HEADING ── */
+.sec-h { font-family: var(--serif); font-size: clamp(2rem,3.6vw,3.8rem); font-weight: 400; line-height: 1.05; color: var(--ink); margin-bottom: .7rem; letter-spacing: -.01em; }
+.sec-h em  { font-style: normal !important; color: #0e9aaa !important; }
+.sec-sub   { font-size: .82rem; font-weight: 300; color: var(--muted); line-height: 1.9; max-width: 480px; }
+</style>
+
+<style>
+/* ── HIGHLIGHTS GRID ── */
+.hl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 3rem;
+}
+
+/* ── CARD BASE ── */
+.hl-card {
+  background: var(--white);
+  position: relative;
+  overflow: hidden;
+  transition: background .25s var(--ease), box-shadow .25s var(--ease);
+}
+.hl-card:hover .hl-img img { transform: scale(1.06); }
+.hl-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--teal-d), var(--teal));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .35s var(--ease); z-index: 3;
+}
+.hl-card:hover::before { transform: scaleX(1); }
+.hl-card.wide { grid-column: span 2; }
+
+/* ── IMAGE ── */
+.hl-img { height: 230px; overflow: hidden; position: relative; }
+.hl-card.wide .hl-img { height: 275px; }
+.hl-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .6s var(--ease);
+  filter: brightness(.78) saturate(1.1);
+}
+.hl-img::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 75px;
+  background: linear-gradient(transparent, var(--white)); transition: background .25s;
+}
+.hl-card:hover .hl-img::after { background: linear-gradient(transparent, rgba(26,184,176,.06)); }
+
+/* ── BADGE ── */
+.hl-badge {
+  position: absolute; top: .8rem; left: .8rem; z-index: 2;
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(12,31,44,.82); backdrop-filter: blur(8px);
+  border: 1px solid rgba(26,184,176,.3); border-radius: 2px;
+  padding: 4px 10px; font-family: var(--mono); font-size: .5rem; font-weight: 500; color: var(--cream);
+}
+.hl-badge i { color: var(--teal); font-size: .5rem; }
+
+/* ── BODY ── */
+.hl-body { padding: 1.2rem 1.4rem 1.5rem; }
+.hl-cat  { font-family: var(--mono); font-size: .52rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 4px; }
+.hl-name { font-family: var(--serif); font-size: 1.25rem; font-weight: 400; color: var(--ink); line-height: 1.1; margin-bottom: .5rem; }
+.hl-desc { font-size: .7rem; font-weight: 300; color: var(--muted); line-height: 1.75; margin-bottom: .85rem; }
+
+/* ── CHIPS ── */
+.hl-chips { display: flex; flex-wrap: wrap; gap: .22rem; }
+.hl-chip  {
+  background: var(--white); border: 1px solid var(--border); border-radius: 2px;
+  padding: 2px 9px; font-size: .56rem; color: var(--muted);
+  transition: background .2s, border-color .2s, color .2s;
+}
+.hl-card:hover .hl-chip {
+  background: rgba(26,184,176,.08);
+  border-color: rgba(26,184,176,.22);
+  color: var(--teal-d);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .hl-grid { grid-template-columns: 1fr 1fr; }
+  .hl-card.wide { grid-column: span 2; }
+}
+@media (max-width: 580px) {
+  .hl-grid { grid-template-columns: 1fr; }
+  .hl-card.wide { grid-column: 1; }
+}
+</style>
+
+<section class="secthree">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="inner">
+
+    <div class="eyebrow">
+      <div class="ey-line"></div>
+      <span class="ey-txt">Tour Highlights</span>
+      <div class="ey-dot"></div>
+    </div>
+    <h2 class="sec-h">Unforgettable <em>Experiences</em><br>Across Every Day</h2>
+    <p class="sec-sub">Carefully curated moments that define this journey — from spotting leopards at Yala to white-water rafting through jungle gorges and scaling a UNESCO rock fortress.</p>
+
+    <div class="hl-grid">
+
+      <!-- WIDE CARD — Three National Parks -->
+      <div class="hl-card wide">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/willpattu.webp" alt="Wildlife Safaris">
+          <div class="hl-badge"><i class="fas fa-paw"></i> 3 National Parks</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--orange)">Wildlife Safari</div>
+          <div class="hl-name">Three Epic National Park Safaris</div>
+          <div class="hl-desc">Track wild leopards at Yala — the world's highest-density leopard habitat — witness "The Gathering" at Minneriya where hundreds of wild elephants converge around an ancient tank, and explore Wilpattu's mysterious natural lakes where leopards and sloth bears roam the dry forest.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">Yala — Wild Leopards</span>
+            <span class="hl-chip">Minneriya — Elephant Gathering</span>
+            <span class="hl-chip">Wilpattu — Sloth Bears</span>
+            <span class="hl-chip">Jeep Safaris</span>
+            <span class="hl-chip">Crocodiles & Deer</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2 — Sigiriya Rock -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/02/sigirija1.webp" alt="Sigiriya Rock Fortress">
+          <div class="hl-badge"><i class="fas fa-award"></i> UNESCO</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--teal-d)">UNESCO Heritage</div>
+          <div class="hl-name">Sigiriya Rock Fortress</div>
+          <div class="hl-desc">Scale the 200m volcanic rock citadel — a 5th-century royal palace with extraordinary ancient frescoes, the iconic lion paw gate, and sweeping jungle panoramas.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">200m Rock Climb</span>
+            <span class="hl-chip">Lion Paw Gate</span>
+            <span class="hl-chip">Ancient Frescoes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3 — Adventure Activities -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/rafting.webp" alt="Adventure Activities">
+          <div class="hl-badge"><i class="fas fa-person-hiking"></i> Adventure</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--teal)">Adventure & Thrills</div>
+          <div class="hl-name">Rafting, Cycling &amp; Climbing</div>
+          <div class="hl-desc">White-water rafting on the Kelani River, mountain cycling through emerald tea estates at 1,868m, rock climbing at Little Adam's Peak, and traditional boat rides on Sigiriya Lake.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">White-Water Rafting</span>
+            <span class="hl-chip">Tea Estate Cycling</span>
+            <span class="hl-chip">Rock Climbing</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4 — Pinnawala Elephants -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/pinnawala_processed.webp" alt="Pinnawala Elephants">
+          <div class="hl-badge"><i class="fas fa-paw"></i> Wildlife</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--orange)">Wildlife Encounter</div>
+          <div class="hl-name">Pinnawala Elephant Orphanage</div>
+          <div class="hl-desc">Meet over 80 rescued elephants at Pinnawala — watch feeding sessions and the unforgettable river bathing show where a herd wades into the Maha Oya river twice daily.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">80+ Elephants</span>
+            <span class="hl-chip">River Bathing</span>
+            <span class="hl-chip">Baby Elephants</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 5 — Beach Stays -->
+      <div class="hl-card">
+        <div class="hl-img">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/negambo.webp" alt="Beach Stays">
+          <div class="hl-badge"><i class="fas fa-umbrella-beach"></i> Beaches</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-cat" style="color:var(--teal-d)">Coastal Stays</div>
+          <div class="hl-name">Start &amp; End at the Sea</div>
+          <div class="hl-desc">Arrive at Mirissa's golden southern crescent beach and close the adventure on Negombo's west coast — with optional boat rides on Dutch canals and farewell seafood just 20 minutes from the airport.</div>
+          <div class="hl-chips">
+            <span class="hl-chip">Mirissa Beach</span>
+            <span class="hl-chip">Negombo West Coast</span>
+            <span class="hl-chip">Dutch Canal Boats</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</section>

@@ -1,0 +1,968 @@
+<div>
+<section class="directors-section">
+
+
+
+
+
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+.directors-section{
+  /* ── Pixel Ceylon Brand Palette ── */
+  --navy:    #071527;
+  --navy2:   #0a1c2e;
+  --navy3:   #0d2238;
+  --teal:    #0e7d8c;
+  --tealb:   #12c8d8;
+  --tealc:   #0a6070;
+  --amber:   #f5a623;
+  --amberb:  #ffc04d;
+  --amberd:  #c97f0a;
+  --cream:   #faf7f2;
+  --cream2:  #ede8df;
+  --border:  rgba(18,200,216,.1);
+  --border2: rgba(255,255,255,.06);
+  --ease:    cubic-bezier(.4,0,.2,1);
+  --spring:  cubic-bezier(.34,1.56,.64,1);
+  --reveal:  cubic-bezier(.16,1,.3,1);
+  font-family:'Poppins',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Keyframes ── */
+@keyframes fadeUp   {from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:none}}
+@keyframes fadeLeft {from{opacity:0;transform:translateX(-32px)}to{opacity:1;transform:none}}
+@keyframes fadeRight{from{opacity:0;transform:translateX(32px)}to{opacity:1;transform:none}}
+@keyframes scaleIn  {from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
+@keyframes lineH    {from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes spin     {to{transform:rotate(405deg)}}
+@keyframes pip      {0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.5);opacity:1}}
+@keyframes orb      {0%{transform:translate(0,0)}33%{transform:translate(24px,-18px)}66%{transform:translate(-16px,14px)}100%{transform:translate(0,0)}}
+@keyframes barFlow  {0%{background-position:0% 50%}100%{background-position:200% 50%}}
+@keyframes shimmer  {0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes tickerX  {0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes scan     {from{transform:translateY(-100%)}to{transform:translateY(500%)}}
+@keyframes numUp    {from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes pixelIn  {from{opacity:0;transform:scale(0) rotate(45deg)}to{opacity:1;transform:scale(1) rotate(45deg)}}
+
+/* ══════════════════════════════
+   SECTION
+══════════════════════════════ */
+.ds{
+  background:var(--navy);
+  position:relative;overflow:hidden;
+}
+
+/* Deep space bg */
+.ds-space{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 75% 55% at 15% 8%,  rgba(18,200,216,.08) 0%,transparent 55%),
+    radial-gradient(ellipse 55% 45% at 85% 88%, rgba(14,125,140,.09) 0%,transparent 52%),
+    radial-gradient(ellipse 45% 55% at 52% 48%, rgba(245,166,35,.04) 0%,transparent 55%);
+  pointer-events:none;
+}
+.ds-orb{position:absolute;border-radius:50%;pointer-events:none;z-index:0}
+.ds-orb-1{
+  top:-20%;left:-10%;
+  width:clamp(460px,58vw,860px);height:clamp(460px,58vw,860px);
+  background:radial-gradient(circle,rgba(18,200,216,.09) 0%,transparent 58%);
+  animation:orb 22s ease-in-out infinite;
+}
+.ds-orb-2{
+  bottom:-20%;right:-8%;
+  width:clamp(360px,46vw,680px);height:clamp(360px,46vw,680px);
+  background:radial-gradient(circle,rgba(14,125,140,.08) 0%,transparent 58%);
+  animation:orb 28s 6s ease-in-out infinite reverse;
+}
+.ds-orb-3{
+  top:42%;left:50%;transform:translate(-50%,-50%);
+  width:clamp(220px,32vw,480px);height:clamp(220px,32vw,480px);
+  background:radial-gradient(circle,rgba(245,166,35,.055) 0%,transparent 58%);
+  animation:orb 20s 10s ease-in-out infinite;
+}
+/* Pixel grid bg */
+.ds-grid-bg{
+  position:absolute;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(18,200,216,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(18,200,216,.018) 1px,transparent 1px);
+  background-size:72px 72px;
+  pointer-events:none;
+}
+/* Pixel dots — brand motif */
+.ds-pixel-dots{
+  position:absolute;top:2.8rem;right:2.8rem;
+  display:grid;grid-template-columns:repeat(10,1fr);gap:7px;
+  opacity:.055;pointer-events:none;z-index:0;
+}
+.ds-pixel-dots span{width:4px;height:4px;border-radius:1px;display:block;background:var(--tealb)}
+.ds-pixel-dots span:nth-child(3n){background:var(--amber)}
+.ds-pixel-dots span:nth-child(7n){background:var(--teal)}
+
+/* ══════════════════════════════
+   HERO HEADER
+══════════════════════════════ */
+.ds-hero{
+  max-width:1380px;margin:0 auto;
+  padding:clamp(5.5rem,9vw,9.5rem) clamp(2rem,5vw,5rem) 0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(3rem,6vw,7rem);
+  align-items:end;
+  position:relative;z-index:1;
+}
+
+/* ── Left ── */
+.ds-hero-l{animation:fadeLeft .9s .05s var(--reveal) forwards;opacity:0}
+
+.ds-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.54rem;font-weight:600;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--tealb);margin-bottom:1.2rem;
+}
+.ds-eyebrow-bar{
+  width:26px;height:1.5px;
+  background:linear-gradient(90deg,var(--teal),var(--tealb));
+  border-radius:2px;
+}
+.ds-eyebrow-pix{
+  width:5px;height:5px;border-radius:1px;
+  background:var(--amber);transform:rotate(45deg);
+  animation:spin 8s linear infinite;
+}
+
+.ds-h1{
+  font-family:'Bagind',serif;
+  font-size:clamp(2.8rem,5.5vw,5rem);
+  font-weight:400;color:var(--cream);
+  line-height:.9;letter-spacing:-.01em;
+  margin-bottom:1.6rem;
+}
+.ds-h1 .w-teal  {color:var(--tealb); position:relative;display:inline-block; font-style:normal !important;}
+.ds-h1 .w-amber {color:var(--amber);  position:relative;display:inline-block; font-style:normal !important;}
+.ds-h1 .w-cream {color:var(--cream);  position:relative;display:inline-block}
+.ds-h1 .w-teal::after,
+.ds-h1 .w-amber::after{
+  content:'';position:absolute;bottom:-2px;left:0;
+  height:2px;width:0;border-radius:2px;
+  animation:lineH .9s 1.1s var(--ease) forwards;
+}
+.ds-h1 .w-teal::after {background:linear-gradient(90deg,var(--teal),var(--tealb))}
+.ds-h1 .w-amber::after{background:linear-gradient(90deg,var(--amberd),var(--amber))}
+
+.ds-hero-desc{
+  font-size:.86rem;font-weight:300;
+  color:rgba(250,247,242,.35);line-height:1.95;
+  max-width:400px;
+}
+
+/* ── Right mini-list ── */
+.ds-hero-r{
+  animation:fadeRight .9s .1s var(--reveal) forwards;opacity:0;
+  display:flex;flex-direction:column;gap:.9rem;
+  padding-bottom:2.5rem;
+}
+.ds-mini{
+  display:flex;align-items:center;gap:1.1rem;
+  padding:1rem 1.3rem;
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--border2);
+  border-radius:6px;
+  position:relative;overflow:hidden;
+  transition:background .3s,border-color .3s,transform .35s var(--ease);
+  cursor:default;
+}
+.ds-mini:hover{
+  background:rgba(18,200,216,.05);
+  border-color:rgba(18,200,216,.2);
+  transform:translateX(8px);
+}
+/* left accent strip */
+.ds-mini::before{
+  content:'';
+  position:absolute;top:0;left:0;bottom:0;width:3px;
+  background:var(--mc-col,var(--tealb));
+  border-radius:3px 0 0 3px;
+}
+.ds-mini:nth-child(1){--mc-col:var(--tealb)}
+.ds-mini:nth-child(2){--mc-col:var(--amber)}
+.ds-mini:nth-child(3){--mc-col:var(--teal)}
+
+.ds-mini-av{
+  width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;
+  border:2px solid rgba(255,255,255,.1);
+}
+.ds-mini-av img{width:100%;height:100%;object-fit:cover;object-position:top}
+.ds-mini-name{font-family:'Bagind',serif;font-size:.92rem;color:var(--cream);line-height:1.1}
+.ds-mini-role{font-size:.55rem;font-weight:300;color:rgba(250,247,242,.35);margin-top:.15rem}
+.ds-mini-n{
+  margin-left:auto;flex-shrink:0;
+  font-family:'Bagind',serif;font-size:2rem;
+  color:rgba(255,255,255,.055);line-height:1;
+}
+
+/* ══════════════════════════════
+   COLOUR DIVIDER
+══════════════════════════════ */
+.ds-divider{
+  max-width:1380px;margin:clamp(3rem,5vw,5rem) auto 0;
+  padding:0 clamp(2rem,5vw,5rem);
+  position:relative;z-index:1;
+}
+.ds-divider-line{
+  height:1px;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    var(--teal) 20%,
+    var(--tealb) 50%,
+    var(--amber) 80%,
+    transparent 100%
+  );
+}
+
+/* ══════════════════════════════
+   CARDS WRAP
+══════════════════════════════ */
+.ds-cards-wrap{
+  max-width:1380px;margin:0 auto;
+  padding:clamp(2.5rem,4vw,4.5rem) clamp(2rem,5vw,5rem) 0;
+  position:relative;z-index:1;
+}
+.ds-cards-header{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:2rem;
+  animation:fadeUp .7s .05s var(--reveal) forwards;opacity:0;
+}
+.ds-cards-header-txt{
+  font-size:.53rem;font-weight:600;letter-spacing:.28em;
+  text-transform:uppercase;color:rgba(250,247,242,.22);
+}
+.ds-cards-header-line{flex:1;height:1px;background:var(--border2)}
+.ds-cards-header-count{
+  font-size:.53rem;font-weight:500;
+  color:rgba(250,247,242,.18);letter-spacing:.1em;
+}
+
+.ds-cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:clamp(1.2rem,2vw,1.8rem);
+}
+
+/* ── Card ── */
+.ds-card{
+  position:relative;border-radius:6px;overflow:hidden;
+  background:var(--navy2);
+  border:1px solid var(--border2);
+  animation:scaleIn .88s var(--reveal) forwards;opacity:0;
+  transition:transform .45s var(--ease),box-shadow .45s,border-color .45s;
+}
+.ds-card:nth-child(1){animation-delay:.08s; --ca:var(--tealb);--cb:var(--teal); --cg:rgba(18,200,216,.35)}
+.ds-card:nth-child(2){animation-delay:.2s;  --ca:var(--amber);--cb:var(--amberd);--cg:rgba(245,166,35,.35)}
+.ds-card:nth-child(3){animation-delay:.32s; --ca:var(--teal); --cb:var(--tealc);--cg:rgba(14,125,140,.35)}
+
+.ds-card:hover{
+  transform:translateY(-14px);
+  border-color:rgba(18,200,216,.18);
+  box-shadow:
+    0 55px 100px rgba(0,0,0,.5),
+    0 18px 36px rgba(0,0,0,.28),
+    0 0 70px -18px var(--cg),
+    0 0 0 1px rgba(18,200,216,.1);
+}
+
+/* top animated bar */
+.ds-topbar{
+  height:3px;
+  background:linear-gradient(90deg,var(--cb),var(--ca),var(--cb));
+  background-size:200% 100%;
+  animation:barFlow 2.8s linear infinite;
+}
+
+/* ── Photo ── */
+.ds-photo{
+  position:relative;overflow:hidden;
+  aspect-ratio:4/5;
+}
+.ds-photo img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:top center;
+  filter:brightness(.72) contrast(1.1) saturate(.8);
+  transform:scale(1.05);
+  transition:filter .7s var(--ease),transform .7s var(--ease);
+}
+.ds-card:hover .ds-photo img{
+  filter:brightness(.88) contrast(1.05) saturate(1.08);
+  transform:scale(1);
+}
+.ds-photo-ov{
+  position:absolute;inset:0;z-index:1;
+  background:
+    linear-gradient(to top,var(--navy2) 0%,rgba(10,28,46,.6) 38%,transparent 68%),
+    linear-gradient(135deg,rgba(7,21,39,.15) 0%,transparent 50%);
+}
+/* accent glow */
+.ds-photo-glow{
+  position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);
+  width:80%;height:90px;border-radius:50%;z-index:2;
+  background:radial-gradient(ellipse,var(--ca) 0%,transparent 70%);
+  opacity:0;filter:blur(22px);
+  transition:opacity .5s;
+}
+.ds-card:hover .ds-photo-glow{opacity:.2}
+/* scan */
+.ds-scan{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:linear-gradient(to bottom,transparent,rgba(18,200,216,.04) 50%,transparent);
+  background-size:100% 30%;background-repeat:no-repeat;
+  transform:translateY(-100%);
+}
+.ds-card:hover .ds-scan{animation:scan .7s var(--ease) forwards}
+/* watermark */
+.ds-wm{
+  position:absolute;top:.9rem;right:1.1rem;z-index:4;
+  font-family:'Bagind',serif;font-size:6rem;
+  color:rgba(255,255,255,.04);line-height:1;
+  pointer-events:none;user-select:none;
+  transition:color .4s;
+}
+.ds-card:hover .ds-wm{color:rgba(255,255,255,.08)}
+/* badge */
+.ds-badge{
+  position:absolute;top:1.1rem;left:1.1rem;z-index:5;
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(7,21,39,.72);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(18,200,216,.15);
+  border-radius:100px;padding:5px 13px;
+  font-size:.5rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ca);
+}
+.ds-badge-pip{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--ca);box-shadow:0 0 8px var(--ca);
+  animation:pip 2s ease-in-out infinite;
+}
+/* name cap */
+.ds-cap{
+  position:absolute;bottom:0;left:0;right:0;z-index:5;
+  padding:3rem 1.6rem 1.6rem;
+  background:linear-gradient(to top,var(--navy2) 0%,transparent 100%);
+}
+.ds-cap-rule{
+  display:flex;align-items:center;gap:7px;margin-bottom:.55rem;
+}
+.ds-cap-line{
+  height:1.5px;width:0;
+  background:linear-gradient(90deg,var(--ca),rgba(255,255,255,.2));
+  border-radius:2px;
+  transition:width .5s .1s var(--ease);
+}
+.ds-card:hover .ds-cap-line{width:32px}
+.ds-cap-dot{
+  width:4px;height:4px;border-radius:1px;
+  background:var(--ca);transform:rotate(45deg);
+  opacity:0;transition:opacity .35s .25s;
+}
+.ds-card:hover .ds-cap-dot{opacity:1}
+.ds-cap-name{
+  font-family:'Bagind',serif;
+  font-size:clamp(1.15rem,1.75vw,1.48rem);
+  color:var(--cream);line-height:1.05;margin-bottom:.28rem;
+  transition:color .3s;
+}
+.ds-card:hover .ds-cap-name{color:var(--ca)}
+.ds-cap-role{
+  font-size:.58rem;font-weight:300;
+  color:rgba(250,247,242,.38);letter-spacing:.03em;
+  transition:color .3s;
+}
+.ds-card:hover .ds-cap-role{color:rgba(250,247,242,.62)}
+
+/* ── Card footer ── */
+.ds-card-foot{
+  padding:1.2rem 1.6rem;
+  border-top:1px solid rgba(255,255,255,.05);
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.ds-card-foot::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(18,200,216,.025),transparent);
+  background-size:200% 100%;background-position:-200% 0;
+  transition:background-position .6s;
+}
+.ds-card:hover .ds-card-foot::after{background-position:200% 0}
+.ds-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+.ds-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  border:1px solid rgba(255,255,255,.08);border-radius:100px;
+  padding:3px 10px;
+  font-size:.5rem;font-weight:500;color:rgba(250,247,242,.3);
+  transition:border-color .22s,color .22s,transform .22s var(--spring);
+}
+.ds-tag i{font-size:.44rem;color:var(--ca)}
+.ds-card:hover .ds-tag{border-color:rgba(18,200,216,.18);color:rgba(250,247,242,.55)}
+.ds-card:hover .ds-tag:hover{transform:translateY(-2px);color:var(--ca)}
+.ds-foot-num{
+  font-family:'Bagind',serif;font-size:2rem;
+  color:rgba(255,255,255,.055);line-height:1;flex-shrink:0;
+  transition:color .3s;
+}
+.ds-card:hover .ds-foot-num{color:rgba(255,255,255,.11)}
+
+/* ══════════════════════════════
+   TICKER
+══════════════════════════════ */
+.ds-ticker-wrap{
+  position:relative;z-index:1;
+  margin-top:clamp(3rem,5vw,5.5rem);
+  border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+  overflow:hidden;padding:.95rem 0;
+  background:rgba(18,200,216,.015);
+}
+.ds-ticker-track{
+  display:flex;width:max-content;
+  animation:tickerX 22s linear infinite;
+}
+.ds-ticker-item{
+  display:inline-flex;align-items:center;gap:.65rem;
+  padding:0 2.4rem;
+  font-size:.58rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(250,247,242,.2);white-space:nowrap;
+}
+.ds-ticker-item i{font-size:.52rem}
+.ds-ticker-item:nth-child(odd)  i{color:var(--tealb)}
+.ds-ticker-item:nth-child(even) i{color:var(--amber)}
+.ds-ticker-sep{color:rgba(255,255,255,.1);margin:0 .4rem}
+
+/* ══════════════════════════════
+   BOTTOM — Stats + CTA
+══════════════════════════════ */
+.ds-bottom{
+  max-width:1380px;margin:0 auto;
+  padding:clamp(4rem,6vw,7rem) clamp(2rem,5vw,5rem) clamp(5rem,8vw,9rem);
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+  gap:clamp(3rem,6vw,7rem);
+  align-items:start;
+  position:relative;z-index:1;
+}
+
+/* ══ FIXED STATS GRID ══ */
+.ds-stats-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2px;
+  border-radius:2px;overflow:hidden;
+  margin-bottom:2.2rem;
+  background:rgba(18,200,216,.08);
+  border:1px solid rgba(18,200,216,.14);
+}
+.ds-stat{
+  background:#0a1c2e;
+  padding:2rem 1.8rem;
+  position:relative;overflow:hidden;
+  transition:background .3s,transform .3s;
+  cursor:default;
+}
+.ds-stat:hover{background:#0d2238;transform:scale(1.01)}
+
+/* accent corner orb */
+.ds-stat::after{
+  content:'';
+  position:absolute;bottom:-20px;right:-20px;
+  width:90px;height:90px;border-radius:50%;
+  background:radial-gradient(circle,var(--sc) 0%,transparent 70%);
+  opacity:.18;pointer-events:none;
+}
+.ds-stat:nth-child(1){--sc:#12c8d8; border-bottom:1px solid rgba(18,200,216,.1); border-right:1px solid rgba(18,200,216,.1)}
+.ds-stat:nth-child(2){--sc:#f5a623; border-bottom:1px solid rgba(18,200,216,.1)}
+.ds-stat:nth-child(3){--sc:#0e9aaa; border-right:1px solid rgba(18,200,216,.1)}
+.ds-stat:nth-child(4){--sc:#fac96d}
+
+/* top accent line per cell */
+.ds-stat::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--sc);
+  opacity:.5;
+}
+
+/* number — fully solid, no clip */
+.ds-stat-n{
+  font-family:'Bagind',serif;
+  font-size:clamp(2.4rem,3.8vw,3.4rem);
+  line-height:1;
+  margin-bottom:.45rem;
+  font-weight:400;
+  /* solid colour per cell — always visible */
+}
+.ds-stat:nth-child(1) .ds-stat-n{ color:#12c8d8 }
+.ds-stat:nth-child(2) .ds-stat-n{ color:#f5a623 }
+.ds-stat:nth-child(3) .ds-stat-n{ color:#0ec4d4 }
+.ds-stat:nth-child(4) .ds-stat-n{ color:#faf7f2 }
+
+.ds-stat-l{
+  font-family:'Poppins',sans-serif;
+  font-size:.58rem;font-weight:400;
+  color:rgba(250,247,242,.38);
+  letter-spacing:.1em;text-transform:uppercase;
+}
+
+/* avatar stack */
+.ds-avatars{
+  display:flex;align-items:center;
+}
+.ds-av{
+  width:40px;height:40px;border-radius:50%;
+  border:2.5px solid var(--navy);overflow:hidden;
+  margin-right:-11px;
+  transition:transform .25s var(--spring),z-index .1s;
+}
+.ds-av:hover{transform:translateY(-4px) scale(1.12);z-index:10}
+.ds-av img{width:100%;height:100%;object-fit:cover;object-position:top}
+.ds-av-more{
+  width:40px;height:40px;border-radius:50%;
+  border:2.5px solid var(--navy);
+  background:rgba(18,200,216,.15);
+  display:flex;align-items:center;justify-content:center;
+  margin-left:4px;
+  font-size:.52rem;font-weight:700;color:var(--tealb);
+}
+.ds-av-text{
+  margin-left:1rem;
+  font-size:.7rem;font-weight:300;
+  color:rgba(250,247,242,.32);
+}
+.ds-av-text strong{font-weight:600;color:rgba(250,247,242,.62)}
+
+/* ── CTA right ── */
+.ds-cta-col{animation:fadeRight .85s .15s var(--reveal) forwards;opacity:0}
+
+.ds-cta-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.52rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:1.2rem;
+}
+.ds-cta-kicker i{font-size:.55rem}
+
+.ds-cta-h{
+  font-family:'Bagind',serif;
+  font-size:clamp(2rem,3.4vw,3rem);
+  color:var(--cream);line-height:.95;
+  margin-bottom:1.4rem;
+}
+.ds-cta-h .w-teal {color:var(--tealb)}
+.ds-cta-h .w-amber{color:var(--amber)}
+
+/* quote */
+.ds-cta-quote{
+  position:relative;
+  padding:1.4rem 1.6rem 1.4rem 1.9rem;
+  border-left:2px solid var(--teal);
+  border-radius:0 6px 6px 0;
+  background:linear-gradient(135deg,rgba(18,200,216,.07),rgba(18,200,216,.02));
+  margin-bottom:1.6rem;overflow:hidden;
+}
+.ds-cta-quote::before{
+  content:'\201C';
+  position:absolute;top:-1.8rem;left:.5rem;
+  font-family:'Bagind',serif;font-size:9rem;
+  color:rgba(18,200,216,.06);line-height:1;pointer-events:none;
+}
+.ds-cta-quote::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.02),transparent);
+  background-size:200% 100%;
+  animation:shimmer 5s 1s linear infinite;
+}
+.ds-cta-quote p{
+  font-family:'Bagind',serif;
+  font-size:clamp(.88rem,1.35vw,1.02rem);
+  font-style:italic;color:rgba(250,247,242,.72);
+  line-height:1.6;position:relative;z-index:1;margin-bottom:.6rem;
+}
+.ds-cta-quote-attr{
+  font-size:.55rem;font-weight:300;
+  color:rgba(250,247,242,.3);position:relative;z-index:1;
+}
+.ds-cta-quote-attr span{color:var(--tealb);font-weight:500}
+
+.ds-cta-p{
+  font-size:.82rem;font-weight:300;
+  color:rgba(250,247,242,.34);line-height:1.9;
+  margin-bottom:1.8rem;
+}
+.ds-cta-p strong{font-weight:500;color:rgba(250,247,242,.65)}
+
+/* chips */
+.ds-chips{
+  display:flex;flex-wrap:wrap;gap:.4rem;
+  margin-bottom:1.8rem;
+}
+.ds-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid rgba(18,200,216,.14);
+  border-radius:100px;padding:5px 13px;
+  font-size:.56rem;font-weight:500;
+  color:rgba(250,247,242,.35);
+  transition:border-color .22s,background .22s,color .22s,transform .22s var(--spring);
+}
+.ds-chip i{font-size:.5rem}
+.ds-chip:nth-child(odd)  i{color:var(--tealb)}
+.ds-chip:nth-child(even) i{color:var(--amber)}
+.ds-chip:hover{
+  border-color:var(--teal);
+  background:rgba(18,200,216,.07);
+  color:var(--tealb);
+  transform:translateY(-2px);
+}
+
+/* buttons */
+.ds-btns{display:flex;align-items:center;gap:.85rem;flex-wrap:wrap}
+
+.ds-btn-pri{
+  display:inline-flex;align-items:center;gap:9px;
+  background: var(--tealb);
+  font-size:.72rem;font-weight:700;
+  padding:14px 28px;border-radius:2px;
+  box-shadow:0 8px 26px rgba(18,200,216,.28),0 2px 8px rgba(18,200,216,.15);
+  transition:transform .25s,box-shadow .25s,filter .25s;
+  position:relative;overflow:hidden;
+  letter-spacing:.03em;
+}
+.ds-btn-pri::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.18),transparent);
+  opacity:0;transition:opacity .25s;
+}
+.ds-btn-pri:hover{
+  transform:translateY(-3px);
+  color: #fff;
+  filter:brightness(1.07);
+}
+.ds-btn-pri:hover::before{opacity:1}
+
+.ds-btn-sec{
+  display:inline-flex;align-items:center;gap:9px;
+  border:1.5px solid rgba(245,166,35,.3);
+ 
+  color:rgba(250,247,242,.55);
+  font-size:.72rem;font-weight:500;
+  padding:13px 24px;border-radius:2px;
+  transition:border-color .25s,background .25s,color .25s,transform .25s;
+}
+.ds-btn-sec:hover{
+  border-color:var(--amber);
+  background:rgba(245,166,35,.08);
+  color:var(--amber);
+  transform:translateY(-3px);
+}
+.ds-btn-pri i,.ds-btn-sec i{font-size:.66rem}
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+@media(max-width:1100px){
+  .ds-hero{grid-template-columns:1fr}
+  .ds-hero-r{display:none}
+  .ds-cards{grid-template-columns:1fr 1fr}
+  .ds-card:nth-child(3){grid-column:1/-1;max-width:460px;margin:0 auto;width:100%}
+  .ds-bottom{grid-template-columns:1fr}
+}
+@media(max-width:680px){
+  .ds-cards{grid-template-columns:1fr}
+  .ds-card:nth-child(3){grid-column:auto;max-width:none}
+  .ds-btns{flex-direction:column;align-items:stretch}
+  .ds-btn-pri,.ds-btn-sec{justify-content:center}
+}
+</style>
+
+<!-- ══════════════════════════════════════
+     PIXEL CEYLON — DIRECTORS SECTION
+══════════════════════════════════════ -->
+<section class="ds" id="directors">
+
+  <!-- BG layers -->
+  <div class="ds-space"       aria-hidden="true"></div>
+  <div class="ds-orb ds-orb-1" aria-hidden="true"></div>
+  <div class="ds-orb ds-orb-2" aria-hidden="true"></div>
+  <div class="ds-orb ds-orb-3" aria-hidden="true"></div>
+  <div class="ds-grid-bg"     aria-hidden="true"></div>
+  <div class="ds-pixel-dots" id="dsPxDots" aria-hidden="true"></div>
+
+  <!-- ══ HERO ══ -->
+  <div class="ds-hero">
+    <div class="ds-hero-l">
+      <div class="ds-eyebrow">
+        <div class="ds-eyebrow-bar"></div>
+        The People Behind Pixel Ceylon
+        <div class="ds-eyebrow-pix"></div>
+      </div>
+      <h2 class="ds-h1">
+        Three<br>
+        <em class="w-teal">Visionaries,</em><br>
+        One <em class="w-amber">Island</em><br>
+        Story.
+      </h2>
+      <p class="ds-hero-desc">
+        Meet the directors who built Pixel Ceylon Tours from the ground up — driven by a genuine love for Sri Lanka and a commitment to experiences that go far beyond the ordinary.
+      </p>
+    </div>
+    <div class="ds-hero-r">
+      <div class="ds-mini">
+        <div class="ds-mini-av">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/photo_converted.webp" alt="Sisira" onerror="this.src=https://pixelceylontours.com/wp-content/uploads/2026/03/photo_converted.webp'">
+        </div>
+        <div>
+          <div class="ds-mini-name">Sisira Perera</div>
+          <div class="ds-mini-role">Founder &amp;  Managing Director </div>
+        </div>
+        <div class="ds-mini-n">01</div>
+      </div>
+      <div class="ds-mini">
+        <div class="ds-mini-av">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Photo-1_converted.webp" alt="Dinali" onerror="this.src='https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120'">
+        </div>
+        <div>
+          <div class="ds-mini-name">Deshapriya Wanninayake</div>
+          <div class="ds-mini-role">Managing Director</div>
+        </div>
+        <div class="ds-mini-n">02</div>
+      </div>
+      <div class="ds-mini">
+        <div class="ds-mini-av">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Photo-2_converted.webp" alt=">Rohan Fernando" onerror="this.src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120'">
+        </div>
+        <div>
+          <div class="ds-mini-name">Asanka Herath</div>
+          <div class="ds-mini-role">Managing Director </div>
+        </div>
+        <div class="ds-mini-n">03</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="ds-divider"><div class="ds-divider-line"></div></div>
+
+  <!-- ══ CARDS ══ -->
+  <div class="ds-cards-wrap">
+    <div class="ds-cards-header">
+      <span class="ds-cards-header-txt">Our Directors</span>
+      <div class="ds-cards-header-line"></div>
+      <span class="ds-cards-header-count">03 Members</span>
+    </div>
+    <div class="ds-cards">
+
+      <!-- Card 1 — Tealb / Kasun -->
+      <div class="ds-card">
+        <div class="ds-topbar"></div>
+        <div class="ds-photo">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/photo_converted.webp"
+            alt="Sisira Perera" loading="lazy"
+            onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?w=700'">
+          <div class="ds-photo-ov"></div>
+          <div class="ds-photo-glow"></div>
+          <div class="ds-scan"></div>
+          <div class="ds-wm">01</div>
+          <div class="ds-badge"><div class="ds-badge-pip"></div>Founder</div>
+          <div class="ds-cap">
+            <div class="ds-cap-rule"><div class="ds-cap-line"></div><div class="ds-cap-dot"></div></div>
+            <div class="ds-cap-name">Sisira Perera</div>
+            <div class="ds-cap-role">Founder &amp;  Managing Director<br> 
+            Pixel Holding (Pvt) Ltd <br>
+
+Founder - Pixel Hair Studio <br>
+Founder - Pixel Ceylon Tours <br>
+
+MBA , Cardiff Metropolitan,UK | NDSM, SLIM</div>
+          </div>
+        </div>
+        <div class="ds-card-foot">
+          <div class="ds-tags">
+            <div class="ds-tag"><i class="fas fa-map-marked-alt"></i>Founder</div>
+            <div class="ds-tag"><i class="fas fa-language"></i>Pixel Ceylon </div>
+          </div>
+          <div class="ds-foot-num">01</div>
+        </div>
+      </div>
+
+      <!-- Card 2 — Amber / Dinali -->
+      <div class="ds-card">
+        <div class="ds-topbar"></div>
+        <div class="ds-photo">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Photo-1_converted.webp"
+            alt="Deshapriya Wanninayak" loading="lazy"
+            onerror="this.src='https://images.unsplash.com/photo-1580489944761-15a19d654956?w=700'">
+          <div class="ds-photo-ov"></div>
+          <div class="ds-photo-glow"></div>
+          <div class="ds-scan"></div>
+          <div class="ds-wm">02</div>
+          <div class="ds-badge"><div class="ds-badge-pip"></div>Director</div>
+          <div class="ds-cap">
+            <div class="ds-cap-rule"><div class="ds-cap-line"></div><div class="ds-cap-dot"></div></div>
+            <div class="ds-cap-name">Deshapriya Wanninayake</div>
+            <div class="ds-cap-role">Founder / Managing Derector  <br>
+Duminda Auto Parts (Pvt) Ltd <br>
+
+Bachelor of the Science of Engineering (B.Sc.Eng.) <br>
+Mechanical Engineer</div>
+          </div>
+        </div>
+        <div class="ds-card-foot">
+          <div class="ds-tags">
+            <div class="ds-tag"><i class="fas fa-cogs"></i>Director</div>
+            <div class="ds-tag"><i class="fas fa-language"></i>Pixel Ceylon</div>
+          </div>
+          <div class="ds-foot-num">02</div>
+        </div>
+      </div>
+
+      <!-- Card 3 — Teal / Rohan -->
+      <div class="ds-card">
+        <div class="ds-topbar"></div>
+        <div class="ds-photo">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Photo-2_converted.webp"
+            alt="Rohan Fernando" loading="lazy"
+            onerror="this.src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=700'">
+          <div class="ds-photo-ov"></div>
+          <div class="ds-photo-glow"></div>
+          <div class="ds-scan"></div>
+          <div class="ds-wm">03</div>
+          <div class="ds-badge"><div class="ds-badge-pip"></div>Director</div>
+          <div class="ds-cap">
+            <div class="ds-cap-rule"><div class="ds-cap-line"></div><div class="ds-cap-dot"></div></div>
+            <div class="ds-cap-name">Asanka Herath</div>
+            <div class="ds-cap-role">Founder / Managing Derector <br> 
+A D Gaming Solution (Pvt) Ltd
+<br>
+Bachelor of the Science of  Engineering (B.Sc.Eng.) <br>
+Ruhunu University, Sri Lankas</div>
+          </div>
+        </div>
+        <div class="ds-card-foot">
+          <div class="ds-tags">
+            <div class="ds-tag"><i class="fas fa-leaf"></i>Director</div>
+            <div class="ds-tag"><i class="fas fa-handshake"></i>Pixel Ceylon</div>
+          </div>
+          <div class="ds-foot-num">03</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ TICKER ══ -->
+  <div class="ds-ticker-wrap" aria-hidden="true">
+    <div class="ds-ticker-track" id="dsTicker"></div>
+  </div>
+
+  <!-- ══ BOTTOM ══ -->
+  <div class="ds-bottom">
+
+    <!-- Stats -->
+    <div class="ds-stats-col">
+      <div class="ds-stats-eyebrow">Team at a Glance</div>
+      <div class="ds-stats-grid">
+        <div class="ds-stat">
+          <div class="ds-stat-n">6+</div>
+          <div class="ds-stat-l">Years Experience</div>
+        </div>
+        <div class="ds-stat">
+          <div class="ds-stat-n">500+</div>
+          <div class="ds-stat-l">Guests Guided</div>
+        </div>
+        <div class="ds-stat">
+          <div class="ds-stat-n">98%</div>
+          <div class="ds-stat-l">Satisfaction Rate</div>
+        </div>
+        <div class="ds-stat">
+          <div class="ds-stat-n">32+</div>
+          <div class="ds-stat-l">Destinations</div>
+        </div>
+      </div>
+      <div class="ds-avatars">
+        <div class="ds-av"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80&facepad=4" alt="Kasun"></div>
+        <div class="ds-av"><img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=80&auto=format&fit=crop&q=80&facepad=4" alt="Dinali"></div>
+        <div class="ds-av"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&auto=format&fit=crop&q=80&facepad=4" alt="Rohan"></div>
+        <div class="ds-av-more">+4</div>
+        <div class="ds-av-text">Our <strong>full team</strong> of local experts</div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="ds-cta-col">
+      <div class="ds-cta-kicker"><i class="fas fa-paper-plane"></i>Start Your Journey</div>
+      <div class="ds-cta-h">
+        Your <span class="w-teal">Dream</span> Trip<br>
+        Starts With a<br>
+        <span class="w-amber">Conversation.</span>
+      </div>
+      <div class="ds-cta-quote">
+        <p>"We didn't build Pixel Ceylon to be the biggest — we built it to be the most honest. Every journey carries a piece of us inside it."</p>
+        <div class="ds-cta-quote-attr"><span>Kasun, Dinali &amp; Rohan</span> · Co-Directors, Pixel Ceylon Tours</div>
+      </div>
+      <p class="ds-cta-p">
+        Reach out directly — travel planning should be a <strong>personal conversation</strong>, not a booking form. Tell us your dream and we'll start building it today.
+      </p>
+      <div class="ds-chips">
+        <div class="ds-chip"><i class="fas fa-heart"></i>Genuine Hospitality</div>
+        <div class="ds-chip"><i class="fas fa-map-marked-alt"></i>Local Knowledge</div>
+        <div class="ds-chip"><i class="fas fa-leaf"></i>Responsible Tourism</div>
+        <div class="ds-chip"><i class="fas fa-shield-alt"></i>Safety First</div>
+      </div>
+      <div class="ds-btns">
+        <a href="/contact-us" class="ds-btn-pri">
+          <i class="fas fa-paper-plane"></i>Get in Touch
+        </a>
+        <a href="/tours" class="ds-btn-sec">
+          <i class="fas fa-suitcase"></i>Browse Tours
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+(function(){
+  /* Pixel dot grid */
+  const pd = document.getElementById('dsPxDots');
+  if(pd){ for(let i=0;i<70;i++){const s=document.createElement('span');pd.appendChild(s)} }
+
+  /* Ticker */
+  const items=[
+    {i:'fa-map-marked-alt',t:'Authentic Experiences'},
+    {i:'fa-heart',         t:'Genuine Hospitality'},
+    {i:'fa-leaf',          t:'Responsible Tourism'},
+    {i:'fa-shield-alt',    t:'Your Safety First'},
+    {i:'fa-star',          t:'No Compromises'},
+    {i:'fa-language',      t:'6 Languages Spoken'},
+    {i:'fa-users',         t:'800+ Happy Guests'},
+    {i:'fa-award',         t:'Certified Guides'},
+    {i:'fa-route',         t:'Private Tours Only'},
+    {i:'fa-clock',         t:'Est. 2019'},
+  ];
+  const track=document.getElementById('dsTicker');
+  if(track){
+    [...items,...items].forEach(({i,t})=>{
+      const el=document.createElement('span');
+      el.className='ds-ticker-item';
+      el.innerHTML=`<i class="fas ${i}"></i>${t}<span class="ds-ticker-sep">·</span>`;
+      track.appendChild(el);
+    });
+  }
+})();
+</script>
+</section>
+</div>

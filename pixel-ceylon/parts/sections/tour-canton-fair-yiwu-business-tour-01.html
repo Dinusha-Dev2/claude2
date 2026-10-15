@@ -1,0 +1,679 @@
+<section class="hero"> 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+@import url('https://fonts.cdnfonts.com/css/bagind');
+
+/* ── Elementor Reset ── */
+.elementor-widget-container,.elementor-widget-html,.elementor-widget,
+.elementor-column-wrap,.elementor-column,.elementor-row,
+.elementor-section,.elementor-top-section,.e-con,.e-con-inner {
+  padding:0!important;margin:0!important;
+  overflow:visible!important;max-width:100%!important;width:100%!important;
+}
+
+/* ── Tokens ── */
+:root {
+  --navy:    #0b1c2c;
+  --teal:    #0e9aaa;
+  --teal-2:  #22ccd0;
+  --orange:  #f5a623;
+  --orange-d:#d98e10;
+  --ease:    cubic-bezier(.4,0,.2,1);
+  --ease-b:  cubic-bezier(.34,1.56,.64,1);
+}
+
+html { scroll-behavior:smooth; }
+body { font-family:'Poppins',sans-serif; background:var(--navy); color:#fff; overflow-x:hidden; margin:0; }
+img  { display:block; width:100%; height:100%; object-fit:cover; }
+a    { text-decoration:none; color:inherit; }
+button { font-family:inherit; cursor:pointer; border:none; background:none; }
+
+/* ── Hero Shell ── */
+.hero {
+  position:relative; width:100%;
+  height:var(--hero-h,100vh); min-height:600px;
+  display:grid; grid-template-rows:1fr auto;
+}
+
+/* ── Background Slides ── */
+.hero-bg { position:absolute; inset:0; z-index:0; overflow:hidden; }
+.slide   { position:absolute; inset:0; opacity:0; transition:opacity 1.6s var(--ease); }
+.slide.active { opacity:1; }
+.slide img { transform:scale(1.07); transition:transform 10s linear; }
+.slide.active img { transform:scale(1); }
+
+/* ── Overlay ── */
+.hero-overlay {
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:
+    linear-gradient(110deg,rgba(11,28,44,.97) 0%,rgba(11,28,44,.82) 38%,rgba(11,28,44,.25) 65%,transparent 100%),
+    linear-gradient(to top,rgba(11,28,44,.98) 0%,rgba(11,28,44,.5) 30%,transparent 55%),
+    linear-gradient(to bottom,rgba(11,28,44,.6) 0%,transparent 20%);
+}
+
+/* ── Body Grid ── */
+.hero-body {
+  position:relative; z-index:10;
+  display:grid; grid-template-columns:1fr 320px;
+  gap:clamp(1.2rem,2.5vw,2.5rem);
+  padding:clamp(2rem,5vh,4rem) clamp(1.4rem,3vw,2.8rem) 1.2rem;
+  align-items:center;
+}
+
+/* ── Left Column ── */
+.hero-left { display:flex; flex-direction:column; gap:.65rem; }
+
+.hero-tag {
+  display:inline-flex; align-items:center; gap:6px;
+  border:1px solid rgba(14,154,170,.42); border-radius:2px;
+  padding:4px 13px; font-size:.56rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase;
+  color:var(--teal-2); background:rgba(14,154,170,.09); width:fit-content;
+}
+.hero-tag i { font-size:.62rem; }
+
+.hero-title {
+  font-family:'Bagind',Georgia,serif;
+  font-size:clamp(2rem,3.8vw,3.8rem);
+  font-weight:400; line-height:1.03;
+  letter-spacing:.01em; color:#fff; margin:0;
+}
+.t-orange { color:var(--orange); }
+
+.hero-sub {
+  font-size:.78rem; font-weight:300;
+  color:rgba(255,255,255,.46); max-width:460px; line-height:1.78; margin:0;
+}
+.hero-sub strong { color:rgba(255,255,255,.75); font-weight:500; }
+
+/* ── KPIs ── */
+.kpi-row { display:flex; gap:.4rem; flex-wrap:wrap; }
+.kpi {
+  display:flex; align-items:center; gap:7px;
+  background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1);
+  border-radius:2px; padding:.42rem .85rem;
+  backdrop-filter:blur(10px);
+  transition:background .22s,border-color .22s,transform .22s var(--ease-b);
+}
+.kpi:hover { background:rgba(14,154,170,.18); border-color:rgba(14,154,170,.3); transform:translateY(-2px); }
+.kpi-ico {
+  width:26px; height:26px; border-radius:7px;
+  background:rgba(14,154,170,.14); border:1px solid rgba(14,154,170,.22);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.6rem; color:var(--teal-2); flex-shrink:0;
+}
+.kpi-val { font-family:'Bagind',Georgia,serif; font-size:1.05rem; color:#fff; line-height:1; }
+.kpi-lbl { font-size:.5rem; font-weight:500; letter-spacing:.07em; text-transform:uppercase; color:rgba(255,255,255,.28); }
+
+/* ── Review Block ── */
+.review-block {
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+  border-radius:2px; padding:.75rem 1rem;
+  backdrop-filter:blur(16px);
+  display:flex; flex-direction:column; gap:.55rem;
+  max-width:490px; position:relative; overflow:hidden;
+}
+.review-block::before {
+  content:''; position:absolute; top:0; left:20%; right:20%; height:1px;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.2),transparent);
+}
+.review-top { display:flex; align-items:center; gap:.75rem; }
+.review-score-box {
+  display:flex; align-items:baseline; gap:3px;
+  background:rgba(14,154,170,.12); border:1px solid rgba(14,154,170,.2);
+  border-radius:8px; padding:.3rem .6rem; flex-shrink:0;
+}
+.review-score-num { font-family:'Bagind',Georgia,serif; font-size:1.3rem; color:#fff; line-height:1; }
+.review-score-max { font-size:.5rem; color:rgba(255,255,255,.35); font-weight:500; margin-bottom:1px; }
+.review-top-right { display:flex; flex-direction:column; gap:3px; }
+.review-stars     { display:flex; gap:2px; }
+.review-stars i   { color:var(--orange); font-size:.65rem; }
+.review-meta-line { display:flex; align-items:center; gap:.4rem; }
+.review-count     { font-size:.6rem; color:rgba(255,255,255,.55); }
+.review-count strong { color:rgba(255,255,255,.78); }
+.review-platforms { font-size:.56rem; color:rgba(255,255,255,.28); }
+.review-divider   { height:1px; background:rgba(255,255,255,.07); }
+.review-quote-row {
+  display:flex; align-items:flex-start; gap:.65rem;
+  transition:opacity .5s ease,transform .5s ease;
+}
+.rev-avatar {
+  width:30px; height:30px; border-radius:50%; flex-shrink:0;
+  border:1.5px solid rgba(255,255,255,.16);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.58rem; font-weight:700; margin-top:1px;
+}
+.rev-quote-body { flex:1; display:flex; flex-direction:column; gap:3px; }
+.rev-quote-text {
+  font-size:.68rem; font-style:italic;
+  color:rgba(255,255,255,.62); line-height:1.62;
+  position:relative; padding-left:.75rem;
+}
+.rev-quote-text::before {
+  content:'"'; position:absolute; left:0; top:-.1rem;
+  font-family:'Bagind',Georgia,serif;
+  font-size:1.1rem; color:var(--teal-2); line-height:1;
+}
+.rev-byline { display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; }
+.rev-name   { font-size:.63rem; font-weight:600; color:rgba(255,255,255,.8); }
+.rev-loc    { font-size:.58rem; color:rgba(255,255,255,.32); }
+.rev-flag   { font-size:.65rem; }
+.rev-verified {
+  display:flex; align-items:center; gap:3px;
+  background:rgba(74,222,128,.09); border:1px solid rgba(74,222,128,.2);
+  border-radius:100px; padding:1px 7px;
+  font-size:.49rem; font-weight:600; color:#4ade80;
+  flex-shrink:0; margin-top:1px; white-space:nowrap;
+}
+.rev-verified i { font-size:.5rem; }
+
+/* ── CTAs ── */
+.hero-btns { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:40px; }
+.btn-primary {
+  display:inline-flex; align-items:center; gap:8px;
+  background:linear-gradient(135deg,var(--orange),var(--orange-d));
+  color:#fff; font-size:.78rem; font-weight:600;
+  padding:11px 24px; border-radius:2px;
+  transition:transform .22s var(--ease-b);
+  position:relative; overflow:hidden;
+}
+.btn-primary::after {
+  content:''; position:absolute; top:0; left:-80%; width:50%; height:100%;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.2),transparent);
+  transition:left .55s;
+}
+.btn-primary:hover::after { left:150%; }
+.btn-primary:hover { transform:translateY(-2px) scale(1.02); color:#fff; }
+.btn-ghost {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2);
+  color:#fff; font-size:.78rem; font-weight:500;
+  padding:10px 22px; border-radius:2px; backdrop-filter:blur(10px);
+  transition:background .22s,border-color .22s,transform .22s;
+}
+.btn-ghost:hover { background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.38); transform:translateY(-2px); color:#fff; }
+
+/* ── Right Column ── */
+.hero-right { display:flex; flex-direction:column; gap:.65rem; min-width:0; height:100%; justify-content:center; }
+
+/* ── Highlight Card ── */
+.hp-card {
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.13);
+  border-radius:2px; padding:1.1rem;
+  backdrop-filter:blur(24px);
+  position:relative; overflow:hidden;
+  display:flex; flex-direction:column; gap:1rem;
+}
+.hp-card::before {
+  content:''; position:absolute; top:0; left:18%; right:18%; height:1px;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.26),transparent);
+}
+.hpc-head { display:flex; align-items:center; justify-content:space-between; }
+.hpc-label {
+  font-size:.54rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--teal-2); display:flex; align-items:center; gap:5px;
+}
+.hpc-badge {
+  background:rgba(245,166,35,.18); border:1px solid rgba(245,166,35,.38);
+  color:var(--orange); border-radius:100px;
+  font-size:.5rem; font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; padding:2px 8px; white-space:nowrap;
+  transition:background .3s,border-color .3s,color .3s;
+}
+.hpc-badge.teal { background:rgba(14,154,170,.18); border-color:rgba(14,154,170,.38); color:var(--teal-2); }
+.hpc-photo {
+  width:100%; height:clamp(100px,15vh,120px);
+  border-radius:2px; overflow:hidden; position:relative; flex-shrink:0;
+}
+.hpc-photo img { transition:transform .7s var(--ease); }
+.hp-card:hover .hpc-photo img { transform:scale(1.06); }
+.hpc-photo-ov {
+  position:absolute; inset:0;
+  background:linear-gradient(to top,rgba(11,28,44,.55) 0%,transparent 52%);
+}
+.hpc-name { font-family:'Bagind',Georgia,serif; font-size:1.05rem; color:#fff; line-height:1.2; }
+.hpc-desc {
+  font-size:.63rem; color:rgba(255,255,255,.46); line-height:1.62;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+.hpc-chips { display:flex; flex-wrap:wrap; gap:.25rem; }
+.hpc-chip  {
+  background:rgba(14,154,170,.12); border:1px solid rgba(14,154,170,.2);
+  border-radius:100px; padding:2px 9px;
+  font-size:.56rem; font-weight:500; color:var(--teal-2); white-space:nowrap;
+}
+.hpc-dots { display:flex; gap:4px; }
+.hpc-pb   {
+  flex:1; height:3px; border-radius:2px;
+  background:rgba(255,255,255,.12); cursor:pointer;
+  position:relative; overflow:hidden;
+}
+.hpc-pb.active { background:rgba(14,154,170,.25); }
+.hpc-pb-fill   {
+  position:absolute; top:0; left:0; height:100%; width:0%;
+  background:linear-gradient(to right,var(--teal),var(--teal-2)); border-radius:2px;
+}
+
+/* ── Card Nav ── */
+.card-nav {
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.11);
+  border-radius:2px; padding:.5rem .8rem; backdrop-filter:blur(14px);
+}
+.card-nav-arrows { display:flex; gap:.4rem; }
+.cnav-btn {
+  width:32px; height:32px; border-radius:5px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.68rem; color:rgba(255,255,255,.65);
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.13);
+  transition:background .22s,border-color .22s,color .22s,transform .2s var(--ease-b);
+}
+.cnav-btn:hover { background:var(--teal); border-color:var(--teal); color:#fff; transform:scale(1.08); }
+.cnav-btn:active { transform:scale(.95); }
+.card-nav-label {
+  display:flex; flex-direction:column; align-items:center; gap:1px;
+  flex:1; padding:0 .5rem; min-width:0;
+}
+.cnl-name {
+  font-size:.6rem; font-weight:600; color:rgba(255,255,255,.72);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  max-width:80px; text-align:center;
+}
+.cnl-pos { font-size:.52rem; color:rgba(255,255,255,.28); letter-spacing:.06em; }
+.cnav-auto {
+  display:flex; align-items:center; gap:5px; font-size:.55rem;
+  color:rgba(255,255,255,.35); cursor:pointer; flex-shrink:0; transition:color .2s;
+}
+.cnav-auto:hover { color:rgba(255,255,255,.6); }
+.cnav-auto-dot {
+  width:6px; height:6px; border-radius:50%; background:var(--teal-2);
+  box-shadow:0 0 0 0 rgba(34,204,208,.4); animation:autopulse 2s infinite; flex-shrink:0;
+}
+.cnav-auto-dot.paused { background:rgba(255,255,255,.22); animation:none; box-shadow:none; }
+@keyframes autopulse {
+  0%  { box-shadow:0 0 0 0   rgba(34,204,208,.45); }
+  70% { box-shadow:0 0 0 4px rgba(34,204,208,0);   }
+  100%{ box-shadow:0 0 0 0   rgba(34,204,208,0);   }
+}
+
+/* ── Scroll Hint ── */
+.scroll-hint {
+  position:relative; z-index:10;
+  display:flex; align-items:center; justify-content:center; gap:5px;
+  padding-bottom:.5rem;
+  color:rgba(255,255,255,.22);
+  font-size:.52rem; letter-spacing:.12em; text-transform:uppercase;
+  animation:shint 2.5s ease-in-out infinite; pointer-events:none;
+}
+.scroll-hint i { font-size:.68rem; }
+@keyframes shint {
+  0%,100% { opacity:.22; transform:translateY(0); }
+  50%     { opacity:.45; transform:translateY(4px); }
+}
+
+/* ── Ticker ── */
+.ticker {
+  position:absolute; bottom:0; left:0; right:0; z-index:15;
+  background:rgba(8,18,28,.88); border-top:1px solid rgba(255,255,255,.06);
+  overflow:hidden; padding:.55rem 0; white-space:nowrap;
+  backdrop-filter:blur(20px);
+}
+.ticker::before,.ticker::after {
+  content:''; position:absolute; top:0; bottom:0; width:70px; z-index:2; pointer-events:none;
+}
+.ticker::before { left:0;  background:linear-gradient(to right,rgba(8,18,28,1),transparent); }
+.ticker::after  { right:0; background:linear-gradient(to left, rgba(8,18,28,1),transparent); }
+.ticker-track { display:inline-flex; animation:tick 42s linear infinite; }
+@keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.ticker-item {
+  display:inline-flex; align-items:center; gap:.6rem;
+  font-size:.58rem; font-weight:500; letter-spacing:.11em; text-transform:uppercase;
+  color:rgba(255,255,255,.3); padding:0 1.8rem;
+}
+.t-dot { width:3px; height:3px; border-radius:50%; background:var(--teal); flex-shrink:0; }
+.ticker-item.hi { color:rgba(255,255,255,.48); }
+.ticker-item.hi .t-dot { background:var(--orange); }
+
+/* ── Responsive ── */
+@media (max-width:860px) {
+  .hero-body { grid-template-columns:1fr; }
+  .hero-right { display:none; }
+  .hero-title { font-size:clamp(2.2rem,7vw,3.2rem); }
+}
+@media (max-width:560px) {
+  .hero-body   { padding-left:1.1rem; padding-right:1.1rem; }
+  .hero-title  { font-size:clamp(2rem,8.5vw,2.8rem); }
+  .hero-sub    { font-size:.74rem; }
+  .hero-btns   { flex-direction:column; }
+  .btn-primary,.btn-ghost { justify-content:center; }
+  .hero { min-height:100svh; }
+}
+</style>
+
+<section class="hero" id="hero">
+
+  <!-- Background Slides — synced 1:1 with SLIDES array -->
+  <div class="hero-bg">
+    <div class="slide active"><img src="https://pixelceylontours.com/wp-content/uploads/2026/03/cantoon-fair.webp"      alt="Canton Fair Complex Guangzhou"></div>
+    <div class="slide">       <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/internationa-trade-city.webp"          alt="Yiwu International Trade City"></div>
+    <div class="slide">       <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/city-culcure-guahui-scaled.webp"           alt="Guangzhou City Skyline"></div>
+    <div class="slide">       <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/hiht-speed-trail.webp"    alt="China High-Speed Train"></div>
+    <div class="slide">       <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/fraid-forward.webp"       alt="Business Sourcing Suppliers"></div>
+  </div>
+
+  <div class="hero-overlay" aria-hidden="true"></div>
+
+  <!-- Body -->
+  <div class="hero-body">
+
+    <!-- LEFT -->
+    <div class="hero-left">
+      <br><br>
+
+      <div class="hero-tag">
+        <i class="fas fa-briefcase"></i>
+        Business Tour · 12D/11N
+      </div>
+
+      <h1 class="hero-title">
+        Canton Fair<br>
+        &amp; <span class="t-orange">Yiwu</span><br>
+        Business Tour
+      </h1>
+
+      <p class="hero-sub">
+        Source from the <strong>world's largest trade fair</strong> in Guangzhou,
+        then wholesale at <strong>Yiwu International Trade City</strong> — 75,000+ suppliers,
+        high-speed rail transfer, and full daily business support across 12 days.
+      </p>
+
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-ico"><i class="fas fa-calendar-alt"></i></div>
+          <div><div class="kpi-val">12</div><div class="kpi-lbl">Days</div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-ico"><i class="fas fa-store"></i></div>
+          <div><div class="kpi-val">75K+</div><div class="kpi-lbl">Suppliers</div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-ico"><i class="fas fa-train"></i></div>
+          <div><div class="kpi-val">2</div><div class="kpi-lbl">Cities</div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-ico"><i class="fas fa-concierge-bell"></i></div>
+          <div><div class="kpi-val">100%</div><div class="kpi-lbl">Supported</div></div>
+        </div>
+      </div>
+
+      <!-- Review Block -->
+      <div class="review-block">
+        <div class="review-top">
+          <div class="review-score-box">
+            <div class="review-score-num">4.9</div>
+            <div class="review-score-max">/5</div>
+          </div>
+          <div class="review-top-right">
+            <div class="review-stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="review-meta-line">
+              <span class="review-count"><strong>48 reviews</strong> · Excellent</span>
+              <span class="review-platforms">· Google · Trustpilot</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-divider"></div>
+        <div class="review-quote-row" id="review-quote-row">
+          <div class="rev-avatar" id="rev-avatar" style="background:linear-gradient(135deg,#1e5c6e,#0b3a52)">RK</div>
+          <div class="rev-quote-body">
+            <div class="rev-quote-text" id="rev-quote">
+              We sourced 14 new product lines at Canton Fair and closed bulk deals at Yiwu — all in one trip. The logistics support was flawless.
+            </div>
+            <div class="rev-byline">
+              <span class="rev-flag" id="rev-flag">🇱🇰</span>
+              <span class="rev-name" id="rev-name">Rajan &amp; Kumari</span>
+              <span class="rev-loc"  id="rev-loc">· Sri Lanka · April 2025</span>
+            </div>
+          </div>
+          <div class="rev-verified"><i class="fas fa-circle-check"></i> Verified</div>
+        </div>
+      </div>
+
+      <div class="hero-btns">
+        <a href="#booking"         class="btn-primary"><i class="fas fa-calendar-check"></i> Book This Tour</a>
+        <a href="#rms-map-section" class="btn-ghost"><i class="fas fa-map-marked-alt"></i> View Itinerary</a>
+      </div>
+
+    </div><!-- /hero-left -->
+
+    <!-- RIGHT -->
+    <div class="hero-right">
+      <div class="hp-card">
+        <div class="hpc-head">
+          <div class="hpc-label"><i class="fas fa-star"></i> Featured Highlight</div>
+          <div class="hpc-badge" id="hpc-badge">PHASE 1</div>
+        </div>
+        <div class="hpc-photo">
+          <img id="hpc-img" src="https://pixelceylontours.com/wp-content/uploads/2026/03/cantoon-fair2.webp" alt="Canton Fair Complex">
+          <div class="hpc-photo-ov"></div>
+        </div>
+        <div class="hpc-name"  id="hpc-name">Canton Fair — Guangzhou</div>
+        <div class="hpc-desc"  id="hpc-desc"></div>
+        <div class="hpc-chips" id="hpc-chips"></div>
+        <div class="hpc-dots"  id="hpc-dots"></div>
+      </div>
+
+      <div class="card-nav">
+        <div class="card-nav-arrows">
+          <button class="cnav-btn" id="cn-prev"><i class="fas fa-chevron-left"></i></button>
+          <button class="cnav-btn" id="cn-next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="card-nav-label">
+          <div class="cnl-name" id="cnl-name"></div>
+          <div class="cnl-pos"  id="cnl-pos"></div>
+        </div>
+        <div class="cnav-auto" id="cnav-auto">
+          <div class="cnav-auto-dot" id="cnav-dot"></div>
+          <span id="cnav-lbl">Auto</span>
+        </div>
+      </div>
+    </div><!-- /hero-right -->
+
+  </div><!-- /hero-body -->
+
+  <div class="scroll-hint" aria-hidden="true">
+    <i class="fas fa-chevron-down"></i>
+    <span>Scroll</span>
+  </div>
+
+  <!-- Ticker -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+
+</section>
+
+<script>
+(function () {
+
+/* ── Viewport height fix ── */
+const setH = () => document.getElementById('hero').style.setProperty('--hero-h', window.innerHeight + 'px');
+setH();
+window.addEventListener('resize', setH);
+
+/* ════════════════════════════════════
+   SLIDES — index synced 1:1 with .slide divs
+   0=Canton Fair, 1=Yiwu Trade City, 2=Guangzhou, 3=High-Speed Train, 4=Sourcing
+════════════════════════════════════ */
+const SLIDES = [
+  {
+    name:  'Canton Fair — Guangzhou',
+    badge: 'PHASE 1',
+    img:   'https://pixelceylontours.com/wp-content/uploads/2026/03/cantoon-fair.webp',
+    desc:  'World\'s largest trade fair — 4 full days at Phase 1 covering industrial products, electronics, hardware & machinery. Meet major exporters and factory reps face-to-face.',
+    chips: ['🏢 Days 2–5', '🔌 Electronics', '⚙️ Industrial']
+  },
+  {
+    name:  'Yiwu International Trade City',
+    badge: 'WHOLESALE',
+    img:   'https://pixelceylontours.com/wp-content/uploads/2026/03/internationa-trade-city.webp',
+    desc:  'The world\'s largest wholesale market — 75,000+ shops across 5 districts. Perfect for small-commodity sourcing with flexible MOQs, gifts, accessories and daily-use items.',
+    chips: ['🛒 Days 8–10', '🏬 75,000+ Shops', '📦 Flexible MOQ']
+  },
+  {
+    name:  'Guangzhou City & Culture',
+    badge: 'EXPLORE',
+    img:   'https://pixelceylontours.com/wp-content/uploads/2026/03/city-culcure-guahui-scaled.webp',
+    desc:  'Explore Chen Clan Ancestral Hall, Shangxiajiu Pedestrian Street and Beijing Road — cultural depth and local shopping between fair days in China\'s third-largest city.',
+    chips: ['🏙️ Day 6', '🕌 Chen Clan Hall', '🛍️ Pedestrian Street']
+  },
+  {
+    name:  'High-Speed Rail — Guangzhou to Yiwu',
+    badge: 'TRANSFER',
+    img:   'https://pixelceylontours.com/wp-content/uploads/2026/03/hiht-speed-trail.webp',
+    desc:  'Evening high-speed rail departure from Guangzhou South Station to Yiwu — approx. 6.5–7.5 hours — connecting China\'s two greatest sourcing destinations in one smooth journey.',
+    chips: ['🚄 Day 7', '⚡ 6.5–7.5 hrs', '🗺️ Guangzhou→Yiwu']
+  },
+  {
+    name:  'Business Support & Logistics',
+    badge: 'SUPPORT',
+    img:   'https://pixelceylontours.com/wp-content/uploads/2026/03/fraid-forward.webp',
+    desc:  'Daily hotel-to-fair transfers, freight forwarding consultations, interpreter assistance, supplier shortlisting and order management — full business support throughout.',
+    chips: ['📋 Full Trip', '🚍 Daily Transfer', '📦 Freight Help']
+  }
+];
+
+const REVIEWS = [
+  { quote: 'We sourced 14 new product lines at Canton Fair and closed bulk deals at Yiwu — all in one trip. The logistics support was flawless.',          initials: 'RK', name: 'Rajan & Kumari',     flag: '🇱🇰', loc: 'Sri Lanka · April 2025',    color: 'linear-gradient(135deg,#1e5c6e,#0b3a52)' },
+  { quote: 'The high-speed train connection between Guangzhou and Yiwu was seamless. Two cities, one trip — maximum sourcing value for our business.',      initials: 'FA', name: 'Faisal Al-Amin',    flag: '🇸🇦', loc: 'Saudi Arabia · Oct 2024',   color: 'linear-gradient(135deg,#3b2f6e,#1a1040)' },
+  { quote: 'Canton Fair Phase 1 gave us access to 50+ electronics factories. Pixel Ceylon organised everything — hotels, transport and even an interpreter.', initials: 'NP', name: 'Nimal Perera',      flag: '🇱🇰', loc: 'Sri Lanka · April 2024',    color: 'linear-gradient(135deg,#1a5c3a,#0b3020)' },
+  { quote: 'Yiwu exceeded every expectation. We placed orders for 8 product categories in 3 days. The daily transport to the market was perfectly arranged.', initials: 'MS', name: 'Mohamed Salim',    flag: '🇦🇪', loc: 'UAE · October 2024',        color: 'linear-gradient(135deg,#6e3535,#3a1414)' },
+  { quote: 'First time at Canton Fair and I didn\'t feel lost for a single moment. Our guide knew the complex perfectly. Already booked for next season!',    initials: 'DW', name: 'Dilshan Wickrama', flag: '🇱🇰', loc: 'Sri Lanka · Oct 2024',      color: 'linear-gradient(135deg,#4a3a1a,#2a1e08)' }
+];
+
+const TICKER_ITEMS = [
+  { label: 'Guangzhou Arrival · Baiyun Airport',    hi: false },
+  { label: 'Canton Fair Phase 1 — Day 1',           hi: true  },
+  { label: 'Supplier Meetings · Electronics',       hi: false },
+  { label: 'Canton Fair Phase 1 — Day 2',           hi: true  },
+  { label: 'Sample Checks · Price Negotiations',    hi: false },
+  { label: 'Canton Fair Phase 1 — Day 3',           hi: true  },
+  { label: 'Guangzhou City Tour · Chen Clan Hall',  hi: false },
+  { label: 'Logistics & Freight Consultation',      hi: true  },
+  { label: 'High-Speed Rail to Yiwu',               hi: false },
+  { label: 'Yiwu Trade City — Day 1',               hi: true  },
+  { label: 'Yiwu Trade City — Day 2',               hi: false },
+  { label: 'Yiwu Trade City — Day 3',               hi: true  },
+  { label: 'Freight Agent Meeting · Yiwu',          hi: false },
+  { label: 'Departure from Yiwu',                   hi: true  }
+];
+
+/* ── Ticker ── */
+const track = document.getElementById('ticker-track');
+track.innerHTML = [...TICKER_ITEMS, ...TICKER_ITEMS]
+  .map(t => `<span class="ticker-item${t.hi ? ' hi' : ''}"><span class="t-dot"></span>${t.label}</span>`)
+  .join('');
+
+/* ── Progress dots ── */
+const dotsEl = document.getElementById('hpc-dots');
+SLIDES.forEach((_, i) => {
+  const pb = document.createElement('div');
+  pb.className = 'hpc-pb' + (i === 0 ? ' active' : '');
+  pb.innerHTML = '<div class="hpc-pb-fill"></div>';
+  pb.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(pb);
+});
+
+/* ── State ── */
+let idx = 0, ridx = 0, slideTimer = null, autoPaused = false;
+const bgSlides = document.querySelectorAll('.slide');
+
+function syncCard(i) {
+  const d = SLIDES[i];
+  document.getElementById('hpc-img').src           = d.img;
+  document.getElementById('hpc-name').textContent  = d.name;
+  document.getElementById('hpc-desc').textContent  = d.desc;
+  document.getElementById('hpc-badge').textContent = d.badge;
+  document.getElementById('hpc-badge').className   = 'hpc-badge' + (d.badge === 'WHOLESALE' || d.badge === 'EXPLORE' || d.badge === 'SUPPORT' ? ' teal' : '');
+  document.getElementById('hpc-chips').innerHTML   = d.chips.map(c => `<span class="hpc-chip">${c}</span>`).join('');
+  document.getElementById('cnl-name').textContent  = d.name;
+  document.getElementById('cnl-pos').textContent   = `${i + 1} of ${SLIDES.length}`;
+
+  document.querySelectorAll('.hpc-pb').forEach((pb, j) => {
+    pb.classList.toggle('active', j === i);
+    const fill = pb.querySelector('.hpc-pb-fill');
+    fill.style.cssText = 'transition:none;width:0%';
+    if (j === i) requestAnimationFrame(() => { fill.style.cssText = 'transition:width 5.8s linear;width:100%'; });
+  });
+}
+
+function goTo(n) {
+  bgSlides[idx].classList.remove('active');
+  idx = ((n % bgSlides.length) + bgSlides.length) % bgSlides.length;
+  bgSlides[idx].classList.add('active');
+  syncCard(idx);
+  if (!autoPaused) restartTimer();
+}
+
+function restartTimer() {
+  clearInterval(slideTimer);
+  slideTimer = setInterval(() => goTo(idx + 1), 6200);
+}
+
+document.getElementById('cn-prev').addEventListener('click',  () => goTo(idx - 1));
+document.getElementById('cn-next').addEventListener('click',  () => goTo(idx + 1));
+document.getElementById('cnav-auto').addEventListener('click', () => {
+  autoPaused = !autoPaused;
+  document.getElementById('cnav-dot').classList.toggle('paused', autoPaused);
+  document.getElementById('cnav-lbl').textContent = autoPaused ? 'Paused' : 'Auto';
+  autoPaused ? clearInterval(slideTimer) : restartTimer();
+});
+
+function syncReview(ri) {
+  const row = document.getElementById('review-quote-row');
+  row.style.cssText = 'opacity:0;transform:translateY(6px)';
+  setTimeout(() => {
+    const r = REVIEWS[ri];
+    document.getElementById('rev-quote').textContent  = r.quote;
+    document.getElementById('rev-avatar').textContent = r.initials;
+    document.getElementById('rev-avatar').style.background = r.color;
+    document.getElementById('rev-name').textContent   = r.name;
+    document.getElementById('rev-flag').textContent   = r.flag;
+    document.getElementById('rev-loc').textContent    = '· ' + r.loc;
+    row.style.cssText = 'transition:opacity .45s ease,transform .45s ease;opacity:1;transform:translateY(0)';
+  }, 240);
+}
+
+/* ── Init ── */
+syncCard(0);
+syncReview(0);
+restartTimer();
+setInterval(() => { ridx = (ridx + 1) % REVIEWS.length; syncReview(ridx); }, 5000);
+
+/* ── WhatsApp handlers ── */
+const wpNumber = '94777273794';
+
+function getPackageName() {
+  const tag = document.querySelector('.hero-tag');
+  return tag ? tag.textContent.trim().replace(/\s+/g, ' ') : 'Canton Fair & Yiwu Business Tour 12D/11N';
+}
+
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest('.btn-primary');
+  if (btn && btn.textContent.includes('Book This Tour')) {
+    e.preventDefault();
+    const msg = 'Hi! I would like to book "' + getPackageName() + '" tour package\nPackage URL: ' + window.location.href;
+    window.open('https://wa.me/' + wpNumber + '?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+  }
+});
+
+})();
+</script>
+</section>

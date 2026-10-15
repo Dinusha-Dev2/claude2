@@ -1,0 +1,726 @@
+<div>
+<!-- ═══════════════════════════════════════════════════════════
+  PIXEL CEYLON — TESTIMONIALS SECTION
+  Fonts required: Bagind + Poppins + Font Awesome 6
+═══════════════════════════════════════════════════════════ -->
+<style>
+
+/* ── ROOT TOKENS ── */
+.rv-sec {
+  --rv-navy:    #071527;
+  --rv-teal:    #0e9aaa;
+  --rv-teal-d:  #0b7d8c;
+  --rv-teal-l:  #e8f7f9;
+  --rv-amber:   #f5a623;
+  --rv-cream:   #faf8f4;
+  --rv-muted:   #5a6a7d;
+  --rv-muted-l: #8a9aad;
+  --rv-border:  #e8ecf1;
+  --rv-border-d:#cdd5e0;
+  --rv-bagind:  'Bagind', serif;
+  --rv-pop:     'Poppins', sans-serif;
+}
+
+/* ── SECTION SHELL ── */
+.rv-sec {
+  background: #fff;
+  padding: clamp(5rem,8vw,8.5rem) 0 clamp(4rem,7vw,7.5rem);
+  font-family: var(--rv-pop);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow: hidden;
+}
+.rv-sec::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(14,154,170,.065) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+.rv-sec::after {
+  content: '';
+  position: absolute; top: -200px; left: -200px;
+  width: 700px; height: 700px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(14,154,170,.055) 0%, transparent 65%);
+  pointer-events: none;
+}
+.rv-sec-glow2 {
+  position: absolute; bottom: -160px; right: -160px;
+  width: 580px; height: 580px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,166,35,.042) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ── CONTAINER ── */
+.rv-wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem,4vw,3.5rem);
+  position: relative; z-index: 1;
+}
+
+/* ═══════════════════════════════════════
+   SECTION HEADER
+═══════════════════════════════════════ */
+.rv-head {
+  text-align: center;
+  margin-bottom: clamp(2.8rem,4.5vw,4.5rem);
+}
+
+.rv-kicker {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--rv-pop);
+  font-size: .58rem; font-weight: 600;
+  letter-spacing: .26em; text-transform: uppercase;
+  color: var(--rv-teal); margin-bottom: 1.2rem;
+}
+.rv-kicker::before {
+  content: ''; width: 26px; height: 1.5px;
+  background: currentColor; border-radius: 2px; flex-shrink: 0;
+}
+.rv-kicker-gem {
+  width: 6px; height: 6px; background: var(--rv-amber);
+  transform: rotate(45deg); flex-shrink: 0; border-radius: 1.5px;
+  animation: rv-gem-spin 6s linear infinite;
+}
+@keyframes rv-gem-spin { to { transform: rotate(calc(45deg + 360deg)); } }
+
+.rv-title {
+  font-family: var(--rv-bagind);
+  font-weight: 400; line-height: 1.0;
+  font-size: clamp(2.6rem,5vw,5rem);
+  color: var(--rv-navy);
+  margin-bottom: 0; letter-spacing: -.01em;
+}
+.rv-title-tl {
+  color: var(--rv-teal);
+  position: relative; display: inline-block;
+}
+
+.rv-head-rule {
+  display: flex; align-items: center; justify-content: center;
+  gap: .85rem; margin: 1.1rem auto .95rem; width: fit-content;
+}
+.rv-head-rule-line {
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rv-border-d));
+}
+.rv-head-rule-line.r { background: linear-gradient(90deg, var(--rv-border-d), transparent); }
+.rv-head-rule-diamond {
+  width: 7px; height: 7px; background: var(--rv-teal);
+  transform: rotate(45deg); border-radius: 1.5px; opacity: .55;
+}
+.rv-head-rule-dot { width: 4px; height: 4px; background: var(--rv-amber); border-radius: 50%; opacity: .7; }
+
+.rv-sub {
+  font-family: var(--rv-pop);
+  font-size: .84rem; font-weight: 300; color: var(--rv-muted);
+  line-height: 1.9; margin: 0 auto; max-width: 460px;
+}
+
+.rv-head-badges {
+  display: flex; align-items: center; justify-content: center;
+  gap: .55rem; flex-wrap: wrap; margin-top: 1.4rem;
+}
+.rv-head-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--rv-cream); border: 1px solid var(--rv-border);
+  border-radius: 100px; padding: 5px 14px 5px 10px;
+  font-family: var(--rv-pop); font-size: .6rem; font-weight: 500; color: var(--rv-muted);
+  transition: border-color .22s, background .22s, transform .2s;
+}
+.rv-head-badge:hover { border-color: rgba(14,154,170,.32); background: var(--rv-teal-l); transform: translateY(-2px); }
+.rv-head-badge-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* ═══════════════════════════════
+   SCORE BAR
+═══════════════════════════════ */
+.rv-score-bar {
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(2rem,5vw,5rem); flex-wrap: wrap;
+  background: var(--rv-cream); border: 1px solid var(--rv-border);
+  border-radius: 5px;
+  padding: clamp(1.6rem,2.5vw,2.2rem) clamp(1.8rem,4vw,3.5rem);
+  margin-bottom: clamp(1.8rem,3vw,2.8rem);
+}
+.rv-sb-main { text-align: center; }
+.rv-sb-num {
+  font-family: var(--rv-bagind);
+  font-size: clamp(3.8rem,5.5vw,5.2rem); font-weight: 400;
+  color: var(--rv-navy); line-height: 1;
+}
+.rv-sb-out { font-family: var(--rv-pop); font-size: .66rem; font-weight: 500; color: var(--rv-muted-l); margin-top: .2rem; }
+.rv-sb-stars { display: flex; gap: 3px; justify-content: center; margin-top: .45rem; }
+.rv-sb-stars i { font-size: .75rem; color: var(--rv-amber); }
+.rv-sb-ct { font-family: var(--rv-pop); font-size: .62rem; color: var(--rv-muted-l); margin-top: .25rem; }
+.rv-sb-sep { width: 1px; height: 70px; background: var(--rv-border-d); flex-shrink: 0; }
+@media (max-width: 800px) { .rv-sb-sep { display: none; } }
+.rv-sb-bars { display: flex; flex-direction: column; gap: .48rem; min-width: 200px; }
+.rv-sb-row  { display: flex; align-items: center; gap: .7rem; }
+.rv-sb-lbl  { font-family: var(--rv-pop); font-size: .6rem; font-weight: 600; color: var(--rv-muted); width: 24px; text-align: right; flex-shrink: 0; }
+.rv-sb-track { flex: 1; height: 6px; background: var(--rv-border-d); border-radius: 6px; overflow: hidden; }
+.rv-sb-fill { height: 100%; border-radius: 6px; background: var(--rv-amber); }
+.rv-sb-fill.low { background: #d0d8e4; }
+.rv-sb-ct2 { font-family: var(--rv-pop); font-size: .58rem; color: var(--rv-muted-l); width: 22px; flex-shrink: 0; }
+.rv-sb-stats { display: flex; flex-direction: column; gap: .65rem; }
+.rv-sb-sv { display: flex; align-items: center; gap: .75rem; }
+.rv-sb-sv-n { font-family: var(--rv-bagind); font-size: 1.5rem; color: var(--rv-navy); line-height: 1; min-width: 54px; }
+.rv-sb-sv-l { font-family: var(--rv-pop); font-size: .66rem; color: var(--rv-muted); line-height: 1.4; }
+@media (max-width: 1060px) { .rv-sb-stats { display: none; } }
+
+/* ═══════════════════════════════════════════════════════
+   PLATFORM TRUST BLOCK — real badge style
+═══════════════════════════════════════════════════════ */
+.rv-trust-block {
+  display: flex; align-items: stretch; justify-content: center;
+  gap: 0;
+  background: var(--rv-cream);
+  border: 1px solid var(--rv-border);
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: clamp(2.2rem,3.5vw,3.2rem);
+}
+
+/* Divider between platform cards */
+.rv-trust-sep {
+  width: 1px;
+  background: var(--rv-border);
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+/* Individual platform card */
+.rv-trust-card {
+  flex: 1;
+  display: flex; align-items: center;
+  gap: 1rem;
+  padding: clamp(1rem,2vw,1.4rem) clamp(1.2rem,2.5vw,2rem);
+  position: relative;
+  transition: background .22s;
+  min-width: 0;
+}
+.rv-trust-card:hover { background: #fff; }
+
+/* Platform logo circle */
+.rv-trust-logo {
+  width: 44px; height: 44px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 1.25rem;
+  border: 1px solid var(--rv-border);
+  transition: transform .22s, box-shadow .22s;
+}
+.rv-trust-card:hover .rv-trust-logo {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0,0,0,.1);
+}
+
+/* Text block */
+.rv-trust-info { flex: 1; min-width: 0; }
+.rv-trust-name {
+  font-family: var(--rv-pop); font-size: .7rem; font-weight: 600;
+  color: var(--rv-navy); display: flex; align-items: center; gap: 5px; margin-bottom: .22rem;
+}
+.rv-trust-verified {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: .48rem; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: #fff;
+  background: #2db87d; border-radius: 100px;
+  padding: 2px 6px; line-height: 1;
+}
+.rv-trust-verified i { font-size: .48rem; }
+
+/* Stars row */
+.rv-trust-stars {
+  display: flex; align-items: center; gap: 3px; margin-bottom: .18rem;
+}
+.rv-trust-stars i { font-size: .62rem; color: var(--rv-amber); }
+.rv-trust-stars .rv-ts-half { color: var(--rv-amber); }
+
+/* Score + count */
+.rv-trust-bottom {
+  display: flex; align-items: center; gap: .45rem;
+}
+.rv-trust-score {
+  font-family: var(--rv-bagind); font-size: 1.15rem;
+  color: var(--rv-navy); line-height: 1;
+}
+.rv-trust-count {
+  font-family: var(--rv-pop); font-size: .58rem;
+  color: var(--rv-muted-l); line-height: 1.3;
+}
+
+/* "also on" label on left */
+.rv-trust-label {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: .35rem;
+  padding: clamp(1rem,2vw,1.4rem) clamp(.8rem,1.5vw,1.2rem);
+  border-right: 1px solid var(--rv-border);
+  flex-shrink: 0;
+}
+.rv-trust-label-txt {
+  font-family: var(--rv-pop); font-size: .5rem; font-weight: 600;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--rv-muted-l); writing-mode: vertical-rl;
+  text-orientation: mixed; transform: rotate(180deg);
+}
+.rv-trust-label-dots { display: flex; flex-direction: column; gap: 4px; }
+.rv-trust-label-dot  { width: 5px; height: 5px; border-radius: 50%; opacity: .5; }
+
+@media (max-width: 860px) {
+  .rv-trust-block { flex-direction: column; }
+  .rv-trust-sep   { width: auto; height: 1px; }
+  .rv-trust-label { flex-direction: row; border-right: none; border-bottom: 1px solid var(--rv-border); padding: .85rem 1.2rem; }
+  .rv-trust-label-txt { writing-mode: horizontal-tb; transform: none; }
+  .rv-trust-label-dots { flex-direction: row; }
+}
+@media (max-width: 540px) {
+  .rv-trust-label { display: none; }
+  .rv-trust-card  { gap: .75rem; padding: .9rem 1rem; }
+  .rv-trust-logo  { width: 38px; height: 38px; font-size: 1.05rem; }
+}
+
+/* ═══════════════════════════════
+   CAROUSEL
+═══════════════════════════════ */
+.rv-carousel-outer {
+  position: relative;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%);
+  margin: 0 -.5rem;
+  padding: .6rem .5rem 1rem;
+  overflow: hidden;
+}
+.rv-track {
+  display: flex; gap: 24px;
+  transition: transform .52s cubic-bezier(.4,0,.2,1);
+  will-change: transform; width: max-content;
+}
+.rv-slide { flex-shrink: 0; width: var(--rv-card-w,380px); display: flex; }
+
+/* ═══════════════════════════════
+   REVIEW CARD — no shimmer bar
+═══════════════════════════════ */
+.rv-card {
+  background: #fff;
+  border: 1px solid var(--rv-border);
+  border-radius: 6px;
+  padding: clamp(1.5rem,2vw,2rem) clamp(1.4rem,2vw,1.9rem);
+  box-shadow: 0 2px 16px rgba(7,21,39,.05);
+  display: flex; flex-direction: column;
+  width: 100%; position: relative; overflow: hidden;
+  transition: transform .32s cubic-bezier(.4,0,.2,1),
+              box-shadow .32s, border-color .32s;
+}
+/* Card hover — lift + subtle border, NO shimmer bar */
+.rv-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 24px 56px rgba(7,21,39,.10);
+  
+}
+
+/* Watermark quote */
+.rv-card-wm {
+  position: absolute; top: .6rem; right: 1.1rem;
+  font-family: Georgia,serif; font-size: 7rem; line-height: 1;
+  color: rgba(14,154,170,.055); pointer-events: none; user-select: none;
+}
+
+/* Top row */
+.rv-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.rv-stars     { display: flex; gap: 2px; }
+.rv-stars i   { font-size: .7rem; color: var(--rv-amber); }
+.rv-flag      { font-size: 1.15rem; line-height: 1; }
+
+/* Quote */
+.rv-quote {
+  font-family: var(--rv-pop); font-size: .82rem; font-weight: 300;
+  color: var(--rv-navy); line-height: 1.85; font-style: italic;
+  flex: 1; margin-bottom: 1.1rem;
+}
+.rv-quote-mark {
+  font-family: var(--rv-bagind); font-style: normal;
+  font-size: 3.2rem; line-height: 0;
+  vertical-align: -.58em; color: var(--rv-teal); margin-right: .06em;
+}
+
+/* Tour tag */
+.rv-tour-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--rv-teal-l); border: 1px solid rgba(14,154,170,.18);
+  border-radius: 100px; padding: 4px 12px;
+  font-family: var(--rv-pop); font-size: .58rem; font-weight: 600; color: var(--rv-teal);
+  margin-bottom: 1.1rem; width: fit-content;
+}
+.rv-tour-tag i { font-size: .52rem; }
+
+/* Divider */
+.rv-div { height: 1px; background: var(--rv-border); margin-bottom: 1.1rem; }
+
+/* Author */
+.rv-author { display: flex; align-items: center; gap: .85rem; }
+.rv-av-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--rv-border); flex-shrink: 0; }
+.rv-av-ic  { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--rv-bagind); font-size: 1.05rem; color: #fff; }
+.rv-author-name { font-family: var(--rv-bagind); font-size: 1rem; font-weight: 400; color: var(--rv-navy); line-height: 1.2; }
+.rv-author-meta { font-family: var(--rv-pop); font-size: .6rem; color: var(--rv-muted-l); margin-top: 3px; display: flex; align-items: center; gap: 5px; }
+.rv-author-meta i { font-size: .58rem; }
+
+/* ═══════════════════════════════
+   NAV
+═══════════════════════════════ */
+.rv-nav { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: clamp(1.8rem,3vw,2.8rem); }
+.rv-dots { display: flex; gap: 6px; align-items: center; }
+.rv-dot {
+  width: 7px; height: 7px; border-radius: 4px;
+  background: var(--rv-border-d); border: none; padding: 0; cursor: pointer;
+  transition: width .35s cubic-bezier(.34,1.56,.64,1), background .28s;
+}
+.rv-arr {
+  width: 28px;                 /* make equal size */
+  height: 28px;
+  aspect-ratio: 1 / 1;         /* ensures perfect square */
+  
+  border-radius: 50%;          /* perfect circle */
+  border: 1.5px solid var(--rv-border-d);
+  background: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--rv-muted-l);
+  font-size: .8rem;
+  cursor: pointer;
+
+  padding: 0;                  /* remove extra space */
+  flex-shrink: 0;              /* prevents distortion */
+
+  transition: border-color .22s,
+              color .22s,
+              background .22s,
+              transform .2s;
+}
+.rv-arr:hover {
+  background: var(--rv-teal);
+  color: #fff;
+  border-color: var(--rv-teal);
+}
+.rv-arr:active { transform: scale(.92); color: #fff; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .rv-score-bar { flex-direction: column; align-items: center; gap: 1.6rem; }
+  .rv-sb-sep    { display: none; }
+  .rv-sb-bars   { min-width: 240px; }
+}
+@media (max-width: 540px) { .rv-dots { display: none; } }
+
+/* ── ENTRY ANIMATIONS ── */
+@keyframes rv-up { from { opacity:0; transform:translateY(26px); } to { opacity:1; transform:none; } }
+.rv-head           { animation: rv-up .8s .05s both; }
+.rv-score-bar      { animation: rv-up .8s .18s both; }
+.rv-trust-block    { animation: rv-up .8s .26s both; }
+.rv-carousel-outer { animation: rv-up .8s .34s both; }
+.rv-nav            { animation: rv-up .8s .42s both; }
+
+</style>
+
+
+<!-- ═══════════════════════════════════
+   TESTIMONIALS SECTION
+═══════════════════════════════════ -->
+<section class="rv-sec" id="testimonials">
+  <div class="rv-sec-glow2"></div>
+  <div class="rv-wrap">
+
+    <!-- ── HEAD ── -->
+    <div class="rv-head">
+      <div class="rv-kicker">
+        <span class="rv-kicker-gem"></span>
+        Traveller Reviews
+      </div>
+      <h2 class="rv-title">
+        What Our Guests <span class="rv-title-tl">Say</span><br>
+        About Their Journey
+      </h2>
+      <div class="rv-head-rule">
+        <div class="rv-head-rule-line"></div>
+        <div class="rv-head-rule-dot"></div>
+        <div class="rv-head-rule-diamond"></div>
+        <div class="rv-head-rule-dot"></div>
+        <div class="rv-head-rule-line r"></div>
+      </div>
+      <p class="rv-sub">Every word is real. Verified reviews from travellers who trusted us with their Sri Lanka adventure.</p>
+      <div class="rv-head-badges">
+        <div class="rv-head-badge"><div class="rv-head-badge-dot" style="background:#f5a623"></div>128 Verified Reviews</div>
+        <div class="rv-head-badge"><div class="rv-head-badge-dot" style="background:#0e9aaa"></div>100% Recommend</div>
+        <div class="rv-head-badge"><div class="rv-head-badge-dot" style="background:#2db87d"></div>4.9 Average Score</div>
+      </div>
+    </div>
+
+    <!-- ── SCORE BAR ── -->
+    <div class="rv-score-bar">
+      <div class="rv-sb-main">
+        <div class="rv-sb-num">4.9</div>
+        <div class="rv-sb-out">out of 5.0</div>
+        <div class="rv-sb-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="rv-sb-ct">128 verified reviews</div>
+      </div>
+      <div class="rv-sb-sep"></div>
+      <div class="rv-sb-bars">
+        <div class="rv-sb-row"><span class="rv-sb-lbl">5★</span><div class="rv-sb-track"><div class="rv-sb-fill" style="width:87%"></div></div><span class="rv-sb-ct2">111</span></div>
+        <div class="rv-sb-row"><span class="rv-sb-lbl">4★</span><div class="rv-sb-track"><div class="rv-sb-fill" style="width:10%"></div></div><span class="rv-sb-ct2">13</span></div>
+        <div class="rv-sb-row"><span class="rv-sb-lbl">3★</span><div class="rv-sb-track"><div class="rv-sb-fill low" style="width:3%"></div></div><span class="rv-sb-ct2">4</span></div>
+        <div class="rv-sb-row"><span class="rv-sb-lbl">2★</span><div class="rv-sb-track"><div class="rv-sb-fill low" style="width:0%"></div></div><span class="rv-sb-ct2">0</span></div>
+        <div class="rv-sb-row"><span class="rv-sb-lbl">1★</span><div class="rv-sb-track"><div class="rv-sb-fill low" style="width:0%"></div></div><span class="rv-sb-ct2">0</span></div>
+      </div>
+      <div class="rv-sb-sep"></div>
+      <div class="rv-sb-stats">
+        <div class="rv-sb-sv"><div class="rv-sb-sv-n">100%</div><div class="rv-sb-sv-l">Would recommend<br>to a friend</div></div>
+        <div class="rv-sb-sv"><div class="rv-sb-sv-n">98%</div><div class="rv-sb-sv-l">Booked again or<br>referred someone</div></div>
+        <div class="rv-sb-sv"><div class="rv-sb-sv-n">4.9</div><div class="rv-sb-sv-l">Average private<br>guide rating</div></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PLATFORM TRUST BLOCK — real badge style
+    ══════════════════════════════════════════ -->
+    <div class="rv-trust-block">
+
+      <!-- Side label -->
+      <div class="rv-trust-label">
+        <div class="rv-trust-label-dots">
+          <div class="rv-trust-label-dot" style="background:#4285f4"></div>
+          <div class="rv-trust-label-dot" style="background:#34e0a1"></div>
+          <div class="rv-trust-label-dot" style="background:#f5a623"></div>
+        </div>
+        <span class="rv-trust-label-txt">Verified on</span>
+      </div>
+
+      <!-- Google -->
+      <div class="rv-trust-card">
+        <div class="rv-trust-logo" style="background:#fff4f4">
+          <!-- Google G SVG -->
+          <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+        </div>
+        <div class="rv-trust-info">
+          <div class="rv-trust-name">
+            Google Reviews
+            <span class="rv-trust-verified"><i class="fas fa-check"></i> Verified</span>
+          </div>
+          <div class="rv-trust-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="rv-trust-bottom">
+            <span class="rv-trust-score">4.9</span>
+            <span class="rv-trust-count">Based on<br>64 reviews</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rv-trust-sep"></div>
+
+      <!-- TripAdvisor -->
+      <div class="rv-trust-card">
+        <div class="rv-trust-logo" style="background:#f0fdf8">
+          <svg width="800px" height="800px" viewBox="0 -96 512.2 512.2" id="Layer_2" xmlns="http://www.w3.org/2000/svg"><style>.st0{fill:#08808a}</style><path class="st0" d="M128.2 127.9C92.7 127.9 64 156.6 64 192c0 35.4 28.7 64.1 64.1 64.1 35.4 0 64.1-28.7 64.1-64.1.1-35.4-28.6-64.1-64-64.1zm0 110c-25.3 0-45.9-20.5-45.9-45.9s20.5-45.9 45.9-45.9S174 166.7 174 192s-20.5 45.9-45.8 45.9z"/><circle class="st0" cx="128.4" cy="191.9" r="31.9"/><path class="st0" d="M384.2 127.9c-35.4 0-64.1 28.7-64.1 64.1 0 35.4 28.7 64.1 64.1 64.1 35.4 0 64.1-28.7 64.1-64.1 0-35.4-28.7-64.1-64.1-64.1zm0 110c-25.3 0-45.9-20.5-45.9-45.9s20.5-45.9 45.9-45.9S430 166.7 430 192s-20.5 45.9-45.8 45.9z"/><circle class="st0" cx="384.4" cy="191.9" r="31.9"/><path class="st0" d="M474.4 101.2l37.7-37.4h-76.4C392.9 29 321.8 0 255.9 0c-66 0-136.5 29-179.3 63.8H0l37.7 37.4C14.4 124.4 0 156.5 0 192c0 70.8 57.4 128.2 128.2 128.2 32.5 0 62.2-12.1 84.8-32.1l43.4 31.9 42.9-31.2-.5-1.2c22.7 20.2 52.5 32.5 85.3 32.5 70.8 0 128.2-57.4 128.2-128.2-.1-35.4-14.6-67.5-37.9-90.7zM368 64.8c-60.7 7.6-108.3 57.6-111.9 119.5-3.7-62-51.4-112.1-112.3-119.5 30.6-22 69.6-32.8 112.1-32.8S337.4 42.8 368 64.8zM128.2 288.2C75 288.2 32 245.1 32 192s43.1-96.2 96.2-96.2 96.2 43.1 96.2 96.2c-.1 53.1-43.1 96.2-96.2 96.2zm256 0c-53.1 0-96.2-43.1-96.2-96.2s43.1-96.2 96.2-96.2 96.2 43.1 96.2 96.2c-.1 53.1-43.1 96.2-96.2 96.2z"/></svg>
+        </div>
+        <div class="rv-trust-info">
+          <div class="rv-trust-name">
+            TripAdvisor
+            <span class="rv-trust-verified" style="background:#34e0a1;color:#071527"><i class="fas fa-check"></i> Verified</span>
+          </div>
+          <div class="rv-trust-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="rv-trust-bottom">
+            <span class="rv-trust-score">5.0</span>
+            <span class="rv-trust-count">Based on<br>48 reviews</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rv-trust-sep"></div>
+
+      <!-- Airbnb -->
+      <div class="rv-trust-card">
+        <div class="rv-trust-logo" style="background:#fff5f2">
+          <svg xmlns="http://www.w3.org/2000/svg"
+aria-label="Airbnb" role="img"
+viewBox="0 0 512 512"><rect
+width="512" height="512"
+rx="15%"
+fill="#ff5a5f"/><path
+fill="none"
+stroke="#ffffff"
+stroke-width="23"
+d="M255 84c-29 0-41 24-41 24-36 66-68 133-101 203 0 0-26 51 15 84 57 45 110-22 127-39s48-56 48-100c0 0-1-44-48-44s-49 44-49 44c0 41 32 83 49 100 17 18 71 85 129 39 36-29 13-84 13-84-31-68-67-143-100-203 0 0-10-24-42-24z"/></svg>
+        </div>
+        <div class="rv-trust-info">
+          <div class="rv-trust-name">
+            Airbnb Experiences
+            <span class="rv-trust-verified" style="background:#FF5A5F"><i class="fas fa-check"></i> Verified</span>
+          </div>
+          <div class="rv-trust-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+          <div class="rv-trust-bottom">
+            <span class="rv-trust-score">4.98</span>
+            <span class="rv-trust-count">Based on<br>16 reviews</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /trust-block -->
+
+    <!-- ── CAROUSEL ── -->
+    <div class="rv-carousel-outer" id="rv-outer">
+      <div class="rv-track" id="rv-track"></div>
+    </div>
+
+    <!-- ── NAV ── -->
+    <div class="rv-nav">
+      <button class="rv-arr" id="rv-prev" aria-label="Previous"><i class="fas fa-arrow-left"></i></button>
+      <div class="rv-dots" id="rv-dots"></div>
+      <button class="rv-arr" id="rv-next" aria-label="Next"><i class="fas fa-arrow-right"></i></button>
+    </div>
+
+  </div>
+</section>
+
+
+<script>
+(function () {
+
+  const R = [
+    { stars:5, flag:'🇬🇧', quote:'As the train curved through the tea-covered hills, the morning mist parted to reveal the Nine Arches Bridge below us. I\'ve travelled forty countries — this was the most beautiful thing I\'ve ever seen.', tour:'Ancient Heritage · 10 Days', name:'Sarah K.', place:'London, UK · Jan 2026', ini:'SK', col:'#0e7a8a', pi:'fab fa-tripadvisor', pc:'#34e0a1' },
+    { stars:5, flag:'🇩🇪', quote:'We saw a leopard on the second morning at Yala. Our guide found elephant tracks at dawn. Then 200 elephants came to the water at sunset. I cried. Nothing can prepare you for it.', tour:'Wildlife Safari · 6 Days', name:'Markus & Lena K.', place:'Munich, Germany · Mar 2025', ini:'MK', col:'#0e7a8a', pi:'fab fa-tripadvisor', pc:'#34e0a1' },
+    { stars:5, flag:'🇦🇺', quote:'The tea factory, the train through the mist, Nine Arches at golden hour — and a guide who felt like a friend by day two. Pixel Ceylon did absolutely everything perfectly.', tour:'Hill Country Train · 4 Days', name:'James T.', place:'Sydney, Australia · Jan 2026', ini:'JT', col:'#0e7a8a', pi:'fab fa-tripadvisor', pc:'#34e0a1' },
+    { stars:5, flag:'🇬🇧', quote:'Sigiriya at 6 AM with nobody else at the summit — a guide who knew every stone, every story — was the single most memorable travel moment of my entire life.', tour:'Ancient Heritage · 10 Days', name:'Emma R.', place:'Edinburgh, UK · May 2025', ini:'ER', col:'#0e7a8a', pi:'fab fa-tripadvisor', pc:'#34e0a1' },
+    { stars:5, flag:'🇺🇸', quote:'The cooking class in a family home was the highlight of our whole trip. We learned recipes we still make today. An absolutely priceless, irreplaceable experience.', tour:'Cultural Triangle · 7 Days', name:'Rebecca & Tom L.', place:'New York, USA · Nov 2025', ini:'RL', col:'#c96a2a', pi:'fas fa-certificate', pc:'#f5a623' },
+    { stars:5, flag:'🇨🇭', quote:'We saw three blue whales within 20 minutes of leaving Mirissa harbour. Our guide\'s knowledge was incredible. An experience completely impossible to replicate anywhere else on Earth.', tour:'Coast & Whales · 5 Days', name:'Philippe H.', place:'Geneva, Switzerland · Feb 2026', ini:'PH', col:'#207a5c', pi:'fab fa-google', pc:'#4285f4' },
+    { stars:5, flag:'🇮🇳', quote:'We are well-travelled but Sri Lanka felt completely different — no rush, no crowds, just meaningful moments. Dambulla caves by early morning light was spiritually moving beyond words.', tour:'Heritage Circuit · 8 Days', name:'Rahul & Priya S.', place:'Mumbai, India · Dec 2025', ini:'RS', col:'#1a3560', pi:'fab fa-tripadvisor', pc:'#34e0a1' },
+    { stars:5, flag:'🇳🇱', quote:'The highland train from Ella to Kandy with mist rolling through the valleys — that image will never leave me. Pixel Ceylon upgraded our seats without being asked. Thoughtful, personal, perfect.', tour:'Tea Country & Highlands · 5 Days', name:'Sophie R.', place:'Amsterdam, Netherlands · Feb 2026', ini:'SR', col:'#2a4a7a', pi:'fab fa-google', pc:'#4285f4' },
+    { stars:5, flag:'🇨🇦', quote:'Booked just three weeks ahead and the team pulled together an incredible itinerary in 48 hours. Mirissa, Arugam Bay, sea turtles — every piece connected perfectly. Flawless from first email to farewell.', tour:'South Coast & Whales · 5 Days', name:'Charlotte & Tom B.', place:'Toronto, Canada · Jan 2026', ini:'CB', col:'#0e9aaa', pi:'fas fa-certificate', pc:'#f5a623' },
+    { stars:5, flag:'🇯🇵', quote:'The Ceylon tea tasting in Nuwara Eliya and the three-hour whale watch were pure magic. The team communicated with us so beautifully. We cried at the airport leaving. We will absolutely return.', tour:'Tea Country & Wildlife · 7 Days', name:'Yuki & Hana T.', place:'Tokyo, Japan · Jan 2026', ini:'YT', col:'#7a3d5a', pi:'fab fa-tripadvisor', pc:'#34e0a1' },
+  ];
+
+  const track   = document.getElementById('rv-track');
+  const outer   = document.getElementById('rv-outer');
+  const dotsEl  = document.getElementById('rv-dots');
+  const prevBtn = document.getElementById('rv-prev');
+  const nextBtn = document.getElementById('rv-next');
+  const GAP = 24;
+  let current = 0, perView = 3, autoTimer;
+
+  /* Build slides */
+  R.forEach(r => {
+    const slide = document.createElement('div');
+    slide.className = 'rv-slide';
+    const avHTML = r.av
+      ? `<img class="rv-av-img" src="${r.av}" alt="${r.name}" loading="lazy">`
+      : `<div class="rv-av-ic" style="background:${r.col}">${r.ini}</div>`;
+    slide.innerHTML = `
+      <div class="rv-card">
+        <div class="rv-card-wm">&ldquo;</div>
+        <div class="rv-card-top">
+          <div class="rv-stars">${Array(r.stars).fill('<i class="fas fa-star"></i>').join('')}</div>
+          <span class="rv-flag">${r.flag}</span>
+        </div>
+        <div class="rv-quote"><span class="rv-quote-mark">&ldquo;</span>${r.quote}</div>
+        <div class="rv-tour-tag"><i class="fas fa-route"></i>${r.tour}</div>
+        <div class="rv-div"></div>
+        <div class="rv-author">
+          ${avHTML}
+          <div>
+            <div class="rv-author-name">${r.name}</div>
+            <div class="rv-author-meta"><i class="${r.pi}" style="color:${r.pc}"></i>${r.place}</div>
+          </div>
+        </div>
+      </div>`;
+    track.appendChild(slide);
+  });
+
+  function getPerView() {
+    const w = window.innerWidth;
+    if (w <= 640)  return 1;
+    if (w <= 1020) return 2;
+    return 3;
+  }
+  function getSizes() {
+    const pv     = getPerView();
+    const outerW = outer.clientWidth;
+    const cardW  = (outerW - GAP * (pv - 1)) / pv;
+    const stepW  = cardW + GAP;
+    return { pv, cardW, stepW, maxPages: Math.ceil(R.length / pv), maxIdx: R.length - pv };
+  }
+  function applyWidths(cardW) {
+    document.querySelectorAll('.rv-slide').forEach(s => { s.style.width = cardW + 'px'; });
+    track.style.gap = GAP + 'px';
+  }
+  function render(animate = true) {
+    const { pv, cardW, stepW, maxIdx } = getSizes();
+    perView = pv;
+    if (current > maxIdx) current = maxIdx;
+    if (current < 0)      current = 0;
+    applyWidths(cardW);
+    track.style.transition = animate ? 'transform .52s cubic-bezier(.4,0,.2,1)' : 'none';
+    track.style.transform  = `translateX(-${current * stepW}px)`;
+    buildDots();
+  }
+  function buildDots() {
+    const { pv, maxPages } = getSizes();
+    const activePage = Math.min(Math.floor(current / pv), maxPages - 1);
+    dotsEl.innerHTML = '';
+    for (let i = 0; i < maxPages; i++) {
+      const d = document.createElement('button');
+      d.className = 'rv-dot' + (i === activePage ? ' on' : '');
+      d.setAttribute('aria-label', `Page ${i + 1}`);
+      d.addEventListener('click', () => { goToPage(i); resetAuto(); });
+      dotsEl.appendChild(d);
+    }
+  }
+  function goToPage(p) { current = Math.min(p * perView, R.length - perView); render(); }
+  function next() { const {pv,maxIdx}=getSizes(); current = current+pv>maxIdx ? 0 : current+pv; render(); }
+  function prev() { const {pv,maxIdx}=getSizes(); current = current-pv<0 ? maxIdx : current-pv; render(); }
+
+  prevBtn.addEventListener('click', () => { prev(); resetAuto(); });
+  nextBtn.addEventListener('click', () => { next(); resetAuto(); });
+
+  let tx = 0;
+  outer.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  outer.addEventListener('touchend', e => {
+    const dx = tx - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 48) { dx > 0 ? next() : prev(); resetAuto(); }
+  });
+
+  function startAuto() { autoTimer = setInterval(next, 5500); }
+  function stopAuto()  { clearInterval(autoTimer); }
+  function resetAuto() { stopAuto(); startAuto(); }
+  outer.addEventListener('mouseenter', stopAuto);
+  outer.addEventListener('mouseleave', startAuto);
+
+  let rsz;
+  window.addEventListener('resize', () => {
+    clearTimeout(rsz);
+    rsz = setTimeout(() => { current = 0; render(false); }, 100);
+  });
+
+  render(false);
+  startAuto();
+})();
+</script>
+</div>

@@ -1,0 +1,987 @@
+<section class="map">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/bagind" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<style>
+:root {
+  --ink:#0d1117; --canvas:#f7f6f5; --canvas-warm:#f7f6f5;
+  --gold:#c9953a; --gold-l:#e8b96a; --gold-pale:#fdf6e8;
+  --teal:#1a7a85; --teal-l:#2ba8b7; --teal-pale:rgba(26,122,133,0.12);
+  --jade:#2d8a5c; --coral:#d45f4a; --sky:#3580b8; --violet:#6b5fad;
+  --border-soft:rgba(13,17,23,0.08);
+  --serif:'Bagind','Playfair Display',Georgia,serif;
+  --sans:'Poppins',system-ui,sans-serif;
+  --mono:'DM Mono','Courier New',monospace;
+  --ease:cubic-bezier(.4,0,.2,1); --spring:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;background:#f7f6f5}
+img{display:block;max-width:100%;object-fit:cover}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+a{text-decoration:none;color:inherit}
+
+.rms{background:#f7f6f5!important;position:relative;overflow:hidden}
+.rms::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.028;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.rms-blob{position:absolute;pointer-events:none;border-radius:50%;z-index:0}
+.rms-b1{top:-20%;left:-10%;width:70vw;height:70vw;max-width:800px;max-height:800px;background:radial-gradient(circle,rgba(201,149,58,.06) 0%,transparent 65%)}
+.rms-b2{bottom:-15%;right:-8%;width:55vw;height:55vw;max-width:640px;max-height:640px;background:radial-gradient(circle,rgba(26,122,133,.06) 0%,transparent 65%)}
+.rms-inner{position:relative;z-index:2;max-width:1440px;margin:0 auto;padding:0 2.4rem}
+
+.rms-head{padding:4.5rem 0 2.4rem;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:end}
+.rms-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.rms-ey-line{width:32px;height:1px;background:var(--gold);flex-shrink:0}
+.rms-ey-txt{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.rms-ey-dot{width:5px;height:5px;background:var(--teal-l);border-radius:50%;flex-shrink:0;animation:dotPulse 3s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.rms-title{font-family:var(--serif);font-size:clamp(2.2rem,3.8vw,4rem);font-weight:400;line-height:1.05;color:var(--ink);letter-spacing:-.01em;margin-bottom:.75rem}
+.rms-title em{font-style:normal!important;color:#0e9aaa!important}
+.rms-title .rms-gold{color:#f4a100}
+.rms-desc{font-size:.82rem;font-weight:300;color:rgba(13,17,23,.5);line-height:1.9;max-width:460px}
+.rms-hpills{display:flex;flex-direction:column;gap:.5rem;align-items:flex-end}
+.rms-hpill{display:flex;align-items:center;gap:8px;background:white;border:1px solid var(--border-soft);border-radius:2px;padding:6px 14px 6px 8px;white-space:nowrap;transition:box-shadow .2s,transform .2s}
+.rms-hpill:hover{transform:translateX(-3px)}
+.rhp-ic{width:24px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0}
+.rhp-ic.gold{background:var(--gold-pale);color:var(--gold)}
+.rhp-ic.teal{background:var(--teal-pale);color:var(--teal)}
+.rhp-ic.jade{background:rgba(45,138,92,.1);color:var(--jade)}
+.rhp-ic.sky{background:rgba(53,128,184,.1);color:var(--sky)}
+.rhp-val{font-family:var(--serif);font-size:1.05rem;font-weight:400;color:var(--ink)}
+.rhp-lbl{font-size:.64rem;color:rgba(13,17,23,.44)}
+
+.rms-layout{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start;padding-bottom:3rem}
+
+.rms-panel{background:white;border:1px solid var(--border-soft);border-radius:5px;overflow:hidden;display:flex;flex-direction:column;position:sticky;top:1rem}
+.rmp-head{padding:1.2rem 1.3rem 1rem;border-bottom:1px solid var(--border-soft);background:linear-gradient(135deg,var(--gold-pale) 0%,white 100%)}
+.rmp-head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem}
+.rmp-title{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--ink)}
+.rmp-title-ic{width:28px;height:28px;border-radius:2px;background:var(--gold-pale);border:1px solid rgba(201,149,58,.2);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.65rem}
+.rmp-badge{background:var(--ink);color:white;font-family:var(--mono);font-size:.52rem;font-weight:500;letter-spacing:.05em;padding:3px 10px;border-radius:2px;white-space:nowrap}
+.rmp-sub{font-size:.6rem;color:rgba(13,17,23,.38);margin-top:2px}
+.rmp-progress{padding:.7rem 1.3rem .55rem;border-bottom:1px solid var(--border-soft)}
+.rmp-prog-bar{height:2px;background:var(--border-soft);border-radius:2px;overflow:hidden;margin-bottom:5px}
+.rmp-prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-l));border-radius:2px;transition:width .5s var(--ease)}
+.rmp-prog-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.49rem;color:rgba(13,17,23,.3)}
+.rmp-list{flex:1;overflow-y:auto;padding:8px;max-height:500px}
+.rmp-list::-webkit-scrollbar{width:3px}
+.rmp-list::-webkit-scrollbar-thumb{background:rgba(0,0,0,.08);border-radius:3px}
+.rmp-all{display:flex;align-items:center;gap:10px;padding:.6rem .8rem;border-radius:2px;cursor:pointer;border:1.5px solid transparent;transition:all .2s var(--ease);user-select:none;margin-bottom:4px}
+.rmp-all:hover{background:var(--canvas)}
+.rmp-all.on{background:var(--ink);border-color:var(--ink)}
+.rmp-all-ic{width:36px;height:36px;border-radius:2px;background:var(--canvas);border:1px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-size:.68rem;color:rgba(13,17,23,.5);flex-shrink:0;transition:all .2s}
+.rmp-all.on .rmp-all-ic{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15);color:white}
+.rmp-all-txt .rmp-nm{font-size:.72rem;font-weight:600;color:var(--ink);transition:color .2s}
+.rmp-all.on .rmp-all-txt .rmp-nm{color:white}
+.rmp-all-txt .rmp-sb{font-size:.58rem;color:rgba(13,17,23,.38);transition:color .2s}
+.rmp-all.on .rmp-all-txt .rmp-sb{color:rgba(255,255,255,.5)}
+.rmp-all-ct{margin-left:auto;font-family:var(--mono);font-size:.55rem;font-weight:500;background:var(--border-soft);border-radius:2px;padding:2px 8px;color:rgba(13,17,23,.4);transition:all .2s}
+.rmp-all.on .rmp-all-ct{background:rgba(255,255,255,.15);color:rgba(255,255,255,.7)}
+.rmp-div{height:1px;background:var(--border-soft);margin:5px 6px 8px}
+.rmp-group{font-family:var(--mono);font-size:.48rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(13,17,23,.28);padding:.15rem .8rem .3rem}
+.rmp-row{display:flex;align-items:center;gap:9px;padding:.55rem .75rem;border-radius:5px;cursor:pointer;border:1.5px solid transparent;transition:all .22s var(--ease);user-select:none;margin-bottom:2px;position:relative}
+.rmp-row:hover{background:var(--canvas)}
+.rmp-row.on{border-color:var(--rc,var(--gold));background:white}
+.rmp-num{width:34px;height:34px;border-radius:2px;background:var(--canvas);border:1.5px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:.9rem;font-weight:700;color:rgba(13,17,23,.35);flex-shrink:0;transition:all .25s var(--spring)}
+.rmp-row:hover .rmp-num{color:rgba(13,17,23,.7)}
+.rmp-row.on .rmp-num{color:white;border-color:transparent;background:var(--rc,var(--gold))}
+.rmp-info{flex:1;min-width:0}
+.rmp-nm{font-size:.7rem;font-weight:600;color:rgba(13,17,23,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;margin-bottom:2px;transition:color .2s}
+.rmp-row.on .rmp-nm{color:var(--ink)}
+.rmp-sb{font-size:.57rem;font-weight:400;color:rgba(13,17,23,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;transition:color .2s}
+.rmp-row.on .rmp-sb{color:var(--rc,var(--gold))}
+.rmp-ct{width:18px;height:18px;border-radius:50%;background:var(--border-soft);border:1px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.48rem;color:rgba(13,17,23,.3);flex-shrink:0;transition:all .2s}
+.rmp-row.on .rmp-ct{background:var(--rc,var(--gold));border-color:transparent;color:white}
+.rmp-swatch{width:3px;height:22px;border-radius:2px;flex-shrink:0;opacity:0;transition:opacity .2s}
+.rmp-row.on .rmp-swatch{opacity:1}
+.rmp-mob-lbl{font-size:.48rem;font-weight:600;color:rgba(13,17,23,.3);transition:color .2s;display:none}
+.rmp-legend{padding:.8rem 1.3rem .9rem;border-top:1px solid var(--border-soft);background:var(--canvas)}
+.rmp-legend-title{font-family:var(--mono);font-size:.48rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(13,17,23,.3);margin-bottom:.5rem}
+.rmp-legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:.28rem}
+.rml-item{display:flex;align-items:center;gap:6px}
+.rml-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.rml-lbl{font-size:.56rem;color:rgba(13,17,23,.42)}
+
+.rms-frame{position:relative;border-radius:5px;overflow:hidden;height:660px;border:1px solid var(--border-soft)}
+#rms-map{width:100%;height:100%}
+.rmo-pill{position:absolute;top:1rem;left:1rem;z-index:500;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.92);backdrop-filter:blur(20px) saturate(150%);border:1px solid var(--border-soft);border-radius:2px;padding:.38rem 1rem .38rem .65rem;pointer-events:none}
+.rmo-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;animation:livePulse 2.5s ease-in-out infinite}
+@keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(26,122,133,.5)}50%{box-shadow:0 0 0 6px rgba(26,122,133,0)}}
+.rmo-count{font-family:var(--serif);font-size:1.05rem;font-weight:400;color:var(--ink);line-height:1}
+.rmo-label{font-size:.56rem;color:rgba(13,17,23,.4)}
+.rmo-strip{position:absolute;bottom:1rem;left:1rem;z-index:500;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.92);backdrop-filter:blur(18px) saturate(150%);border:1px solid var(--border-soft);border-radius:2px;padding:.42rem 1rem;pointer-events:none;transition:opacity .3s}
+.rmo-strip-ic{color:var(--gold);font-size:.65rem;flex-shrink:0}
+.rmo-strip-txt{font-size:.66rem;font-weight:600;color:var(--ink)}
+.rmo-strip-sub{font-size:.56rem;color:rgba(13,17,23,.4);margin-left:4px}
+.rmo-hint{position:absolute;bottom:1rem;right:1rem;z-index:500;background:rgba(255,255,255,.7);backdrop-filter:blur(10px);border:1px solid var(--border-soft);border-radius:2px;padding:.32rem .7rem;display:flex;align-items:center;gap:5px;font-size:.54rem;color:rgba(13,17,23,.35);pointer-events:none}
+
+.leaflet-control-zoom{border:none!important;box-shadow:none!important;margin:.8rem!important}
+.leaflet-control-zoom a{background:rgba(255,255,255,.96)!important;border:1px solid var(--border-soft)!important;color:rgba(13,17,23,.5)!important;width:32px!important;height:32px!important;line-height:30px!important;font-size:.8rem!important;transition:all .2s!important}
+.leaflet-control-zoom a:hover{background:var(--gold-pale)!important;color:var(--gold)!important;border-color:rgba(201,149,58,.3)!important}
+.leaflet-control-zoom-in{border-radius:2px 2px 0 0!important}
+.leaflet-control-zoom-out{border-radius:0 0 2px 2px!important}
+.leaflet-control-attribution{background:rgba(255,255,255,.85)!important;color:rgba(13,17,23,.35)!important;font-size:.48rem!important}
+
+/* MULTI-STOP DETAIL CARD */
+.rms-detail{position:absolute;top:50%;right:1rem;z-index:700;width:330px;background:white;border:1px solid var(--border-soft);border-radius:2px;box-shadow:0 8px 40px rgba(0,0,0,.13),0 2px 10px rgba(0,0,0,.07);display:none;flex-direction:row;opacity:0;transform:translateY(-50%) translateX(8px) scale(.97);transition:opacity .26s var(--ease),transform .32s var(--spring);overflow:hidden;max-height:540px}
+.rms-detail.vis{display:flex;opacity:1;transform:translateY(-50%) translateX(0) scale(1)}
+.rms-detail.multi{width:330px}
+.rmd-x{position:absolute;top:.55rem;right:.55rem;z-index:30;width:24px;height:24px;border-radius:2px;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);border:none;color:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.55rem;transition:all .15s}
+.rmd-x:hover{background:rgba(0,0,0,.8)}
+.rmd-vtab-strip{width:34px;flex-shrink:0;order:-1;background:#f2f1f0;border-right:1px solid var(--border-soft);display:flex;flex-direction:column;align-items:center;padding:2.6rem 0 .5rem;gap:0}
+.rmd-vtab{width:100%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:.6rem 0 .55rem;border:none;background:transparent;transition:background .16s;position:relative;flex-shrink:0}
+.rmd-vtab:hover{background:rgba(0,0,0,.04)}
+.rmd-vtab.active{background:white}
+.rmd-vtab::after{content:'';position:absolute;right:0;top:22%;bottom:22%;width:2px;border-radius:2px 0 0 2px;background:var(--vtab-color,var(--gold));opacity:0;transition:opacity .18s}
+.rmd-vtab.active::after{opacity:1}
+.rmd-vtab-num{font-family:var(--mono);font-size:.48rem;font-weight:600;color:rgba(13,17,23,.2);line-height:1;transition:color .16s}
+.rmd-vtab.active .rmd-vtab-num{color:var(--vtab-color,var(--gold))}
+.rmd-vtab-dot{width:5px;height:5px;border-radius:50%;background:rgba(13,17,23,.14);transition:background .16s,transform .16s;flex-shrink:0}
+.rmd-vtab.active .rmd-vtab-dot{background:var(--vtab-color,var(--gold));transform:scale(1.25)}
+.rmd-vtab-lbl{font-family:var(--sans);font-size:.42rem;font-weight:600;color:rgba(13,17,23,.25);writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);white-space:nowrap;overflow:hidden;max-height:46px;text-overflow:ellipsis;transition:color .16s;letter-spacing:.04em;text-transform:uppercase}
+.rmd-vtab.active .rmd-vtab-lbl{color:rgba(13,17,23,.6)}
+.rmd-vtab-div{width:18px;height:1px;background:rgba(13,17,23,.07);flex-shrink:0;margin:.08rem 0}
+.rmd-content-area{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.rmd-slides-viewport{overflow:hidden;flex:1;min-height:0;position:relative}
+.rmd-slides-track{display:flex;height:100%;transition:transform .42s cubic-bezier(.4,0,.2,1);will-change:transform}
+.rmd-slide{min-width:100%;height:100%;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#2ba8b7 rgba(26,122,133,0.08)}
+.rmd-slide::-webkit-scrollbar{width:2px}
+.rmd-slide::-webkit-scrollbar-track{background:transparent}
+.rmd-slide::-webkit-scrollbar-thumb{background:#2ba8b7;border-radius:2px}
+.rmd-slide-img{position:relative;height:130px;flex-shrink:0;overflow:hidden}
+.rmd-slide-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.75) saturate(1.1);transition:transform .55s}
+.rms-detail:hover .rmd-slide-img img{transform:scale(1.04)}
+.rmd-slide-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,.25) 100%)}
+.rmd-region{position:absolute;bottom:.6rem;left:.7rem;z-index:2;background:rgba(0,0,0,.52);backdrop-filter:blur(8px);border-radius:20px;padding:2px 8px;font-size:.5rem;color:rgba(255,255,255,.85);display:flex;align-items:center;gap:4px}
+.rmd-region i{color:var(--gold);font-size:.46rem}
+.rmd-body{padding:.7rem .85rem .75rem;display:flex;flex-direction:column;gap:.4rem;cursor:grab;user-select:none}
+.rmd-body.dragging{cursor:grabbing}
+.rmd-cat{font-family:var(--mono);font-size:.49rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1px}
+.rmd-name{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--ink);line-height:1.15}
+.rmd-tagline{font-size:.61rem;font-weight:300;color:rgba(13,17,23,.55);line-height:1.6;border-left:2px solid var(--gold);background:var(--gold-pale);border-radius:0 2px 2px 0;padding:.38rem .65rem}
+.rmd-acts{display:flex;flex-direction:column;gap:.14rem}
+.rmd-act{display:flex;align-items:flex-start;gap:7px;padding:.26rem .5rem;background:var(--canvas);border-radius:2px;font-size:.59rem;color:rgba(13,17,23,.6);line-height:1.38;transition:background .15s}
+.rmd-act:hover{background:#f0efee}
+.rmd-act i{color:var(--teal);font-size:.52rem;flex-shrink:0;margin-top:2px}
+.rmd-facts{display:flex;flex-wrap:wrap;gap:.16rem}
+.rmd-fact{display:flex;align-items:center;gap:4px;background:white;border:1px solid var(--border-soft);border-radius:2px;padding:3px 7px;font-size:.56rem;color:rgba(13,17,23,.45)}
+.rmd-fact i{font-size:.5rem;color:var(--gold)}
+.rmd-fact strong{color:var(--ink);font-weight:600}
+.rmd-night{display:flex;align-items:center;gap:7px;background:var(--canvas-warm);border:1px solid rgba(201,149,58,.15);border-radius:2px;padding:.36rem .6rem}
+.rmd-night i{color:var(--gold);font-size:.62rem;flex-shrink:0}
+.rmd-night-txt{font-size:.58rem;color:rgba(13,17,23,.5);line-height:1.35}
+.rmd-night-txt strong{color:var(--gold);font-weight:600;display:block;font-size:.58rem;margin-bottom:1px}
+.rmd-chips{display:flex;flex-wrap:wrap;gap:.16rem}
+.rmd-chip{background:var(--canvas);border:1px solid var(--border-soft);border-radius:2px;padding:2px 7px;font-size:.52rem;color:rgba(13,17,23,.45)}
+.rmd-cta{display:flex;gap:.35rem;margin-top:.1rem}
+.rmd-main{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--ink);color:white;font-size:.65rem;font-weight:600;padding:9px 12px;border-radius:4px;cursor:pointer;transition:all .22s}
+.rmd-main:hover{background:var(--teal);transform:translateY(-1px);color:#fff!important}
+.rmd-save{width:34px;height:34px;border-radius:4px;flex-shrink:0;background:var(--canvas);border:1px solid var(--border-soft);color:rgba(13,17,23,.3);font-size:.7rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.rmd-save:hover{background:var(--gold-pale);border-color:rgba(201,149,58,.3);color:var(--gold)}
+.rmd-save.saved{background:var(--gold-pale);border-color:rgba(201,149,58,.4);color:var(--gold)}
+.rmd-stop-footer{display:flex;align-items:center;justify-content:space-between;padding:.36rem .82rem .38rem;background:#f2f1f0;border-top:1px solid var(--border-soft);flex-shrink:0}
+.rmd-stop-progress{display:flex;align-items:center;gap:6px;flex:1}
+.rmd-stop-prog-label{font-family:var(--mono);font-size:.45rem;font-weight:500;color:rgba(13,17,23,.3);white-space:nowrap;letter-spacing:.04em}
+.rmd-stop-prog-dots{display:flex;gap:3px;align-items:center}
+.rmd-stop-prog-dot{height:3px;border-radius:2px;background:rgba(13,17,23,.1);transition:all .26s var(--ease);cursor:pointer;width:14px}
+.rmd-stop-prog-dot.active{background:var(--dot-color,var(--gold));width:22px}
+.rmd-stop-nav{display:flex;gap:3px}
+.rmd-stop-nav-btn{width:22px;height:22px;border-radius:2px;background:white;border:1px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-size:.52rem;color:rgba(13,17,23,.35);cursor:pointer;transition:all .14s}
+.rmd-stop-nav-btn:hover{background:var(--ink);color:white;border-color:var(--ink)}
+.rmd-stop-nav-btn:disabled{opacity:.22;pointer-events:none}
+.rmd-single-img{position:relative;height:130px;flex-shrink:0;overflow:hidden}
+.rmd-single-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.75) saturate(1.1);transition:transform .55s var(--ease)}
+.rms-detail:hover .rmd-single-img img{transform:scale(1.04)}
+.rmd-single-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,.25) 100%)}
+.rmd-daybadge{position:absolute;top:.6rem;left:.7rem;z-index:2;display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.48);backdrop-filter:blur(8px);border-radius:20px;padding:3px 10px 3px 7px;font-family:var(--mono);font-size:.48rem;font-weight:500}
+.rmd-dbdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.rmd-dbnum{color:rgba(255,255,255,.85)}
+.rmd-single-body{padding:.7rem .85rem .75rem;display:flex;flex-direction:column;gap:.4rem;flex:1;min-height:0;overflow-y:auto;cursor:grab;user-select:none;scrollbar-width:thin;scrollbar-color:#2ba8b7 rgba(26,122,133,0.08)}
+.rmd-single-body::-webkit-scrollbar{width:2px}
+.rmd-single-body::-webkit-scrollbar-track{background:transparent}
+.rmd-single-body::-webkit-scrollbar-thumb{background:#2ba8b7}
+.rmd-single-body.dragging{cursor:grabbing}
+
+/* TOOLTIP */
+.rms-tt{position:fixed;z-index:9999;pointer-events:none;display:none;transform:translate(-50%,-100%) translateY(-16px);filter:drop-shadow(0 16px 40px rgba(0,0,0,.15))}
+.rmtt-card{width:210px;background:white;border:1px solid var(--border-soft);border-radius:5px;overflow:hidden}
+.rmtt-img{width:100%;height:105px;overflow:hidden;position:relative}
+.rmtt-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(1.1);display:block}
+.rmtt-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:35px;background:linear-gradient(transparent,rgba(255,255,255,.95))}
+.rmtt-body{padding:.6rem .85rem .72rem}
+.rmtt-row{display:flex;align-items:center;gap:5px;margin-bottom:.22rem}
+.rmtt-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.rmtt-cat{font-family:var(--mono);font-size:.5rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.rmtt-name{font-family:var(--serif);font-size:1.02rem;font-weight:400;color:var(--ink);line-height:1.14;margin-bottom:.14rem}
+.rmtt-hint{font-size:.6rem;font-weight:300;color:rgba(13,17,23,.5);line-height:1.46}
+.rmtt-arrow{width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid white;margin:0 auto;filter:drop-shadow(0 2px 2px rgba(0,0,0,.06))}
+
+/* STATS BAND */
+.rms-stats-band{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--border-soft);background:white}
+.rmsb{padding:1.6rem 1.2rem;display:flex;align-items:center;gap:.85rem;border-right:1px solid var(--border-soft);transition:background .2s;cursor:default}
+.rmsb:last-child{border-right:none}
+.rmsb:hover{background:var(--canvas)}
+.rmsb-ic{width:42px;height:42px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.rmsb-ic.gold{background:var(--gold-pale);color:var(--gold)}
+.rmsb-ic.teal{background:var(--teal-pale);color:var(--teal)}
+.rmsb-ic.jade{background:rgba(45,138,92,.1);color:var(--jade)}
+.rmsb-ic.sky{background:rgba(53,128,184,.1);color:var(--sky)}
+.rmsb-ic.violet{background:rgba(107,95,173,.1);color:var(--violet)}
+.rmsb-val{font-family:var(--serif);font-size:2.1rem;font-weight:400;color:var(--ink);line-height:1}
+.rmsb-lbl{font-size:.6rem;font-weight:300;color:rgba(13,17,23,.42);margin-top:3px;line-height:1.4}
+
+/* TICKER */
+.rms-ticker{overflow:hidden;padding:.65rem 0;background:var(--ink)}
+.rmt-track{display:flex;white-space:nowrap;animation:tickerRun 42s linear infinite}
+.rms-ticker:hover .rmt-track{animation-play-state:paused}
+@keyframes tickerRun{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.rmt-item{display:inline-flex;align-items:center;gap:.5rem;padding:0 2rem;font-size:.64rem;font-weight:500;color:rgba(255,255,255,.28);letter-spacing:.03em;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.rmt-item i{font-size:.58rem;color:var(--gold)}
+.rmt-item strong{font-weight:600;color:rgba(255,255,255,.65)}
+
+/* MARKERS */
+.rpin{position:relative;display:flex;align-items:flex-start;justify-content:center;cursor:pointer}
+.rpin-ring{position:absolute;border-radius:50%;top:0;left:50%;transform:translateX(-50%);animation:rpinPulse 2.8s ease-out infinite;pointer-events:none}
+@keyframes rpinPulse{0%{transform:translateX(-50%) scale(.85);opacity:.7}70%,100%{transform:translateX(-50%) scale(2.4);opacity:0}}
+.rpin-body{border-radius:50%;border:2.5px solid rgba(255,255,255,.96);display:flex;align-items:center;justify-content:center;position:relative;z-index:2;font-family:var(--sans);font-weight:700;color:white;transition:transform .22s var(--spring),box-shadow .22s;flex-shrink:0}
+.rpin-body:hover{transform:scale(1.22)}
+.rpin-lbl{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);background:white;border:1px solid var(--border-soft);border-radius:2px;padding:1px 6px;white-space:nowrap;font-family:var(--mono);font-size:.42rem;font-weight:500;color:rgba(13,17,23,.5);pointer-events:none;z-index:3}
+
+#rms-ov{display:none;position:fixed;inset:0;z-index:8999;background:rgba(13,17,23,.5);backdrop-filter:blur(4px)}
+@media(max-width:900px){#rms-ov.on{display:block}}
+
+/* RESPONSIVE */
+@media(max-width:1180px){.rms-stats-band{grid-template-columns:repeat(3,1fr)}.rms-layout{grid-template-columns:250px 1fr}}
+@media(max-width:860px){
+  .rms-layout{grid-template-columns:1fr;gap:10px}
+  .rms-panel{position:static;flex-direction:row;max-height:none;border-radius:5px;overflow-x:auto;overflow-y:hidden}
+  .rmp-head,.rmp-progress,.rmp-legend,.rmp-group,.rmp-div{display:none}
+  .rmp-list{display:flex;flex-direction:row;padding:.45rem .45rem;gap:.3rem;overflow-x:auto;overflow-y:hidden;max-height:none}
+  .rmp-list::-webkit-scrollbar{height:3px}
+  .rmp-all{flex-direction:column;text-align:center;gap:4px;padding:.48rem .55rem;min-width:64px;flex-shrink:0;border-radius:2px;margin-bottom:0}
+  .rmp-all-txt .rmp-nm{font-size:.6rem}
+  .rmp-all-txt .rmp-sb,.rmp-all-ct{display:none}
+  .rmp-all-ic{width:36px;height:36px;border-radius:2px}
+  .rmp-row{flex-direction:column;align-items:center;text-align:center;gap:4px;padding:.48rem .5rem;min-width:60px;border-radius:2px;flex-shrink:0;margin-bottom:0}
+  .rmp-info,.rmp-ct,.rmp-swatch{display:none}
+  .rmp-num{width:36px;height:36px;border-radius:2px}
+  .rmp-mob-lbl{display:block}
+  .rms-frame{height:510px;border-radius:5px}
+  .rms-head{grid-template-columns:1fr;padding-top:3.5rem}
+  .rms-hpills{display:none}
+  .rms-stats-band{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .rms-inner{padding:0 1.2rem}.rms-frame{height:420px}.rms-head{padding-top:3rem;padding-bottom:1.8rem}.rms-title{font-size:2.2rem}.rms-stats-band{grid-template-columns:1fr 1fr}
+  .rms-detail,.rms-detail.multi{width:calc(100% - 1.5rem);left:.75rem;right:.75rem;top:auto;bottom:0;transform:none;max-height:88vh;border-radius:2px 2px 0 0}
+  .rms-detail.vis{transform:none}
+  .rmsb{padding:1.1rem .9rem;gap:.65rem}.rmsb-ic{width:38px;height:38px}
+}
+@media(max-width:480px){.rms-stats-band{grid-template-columns:1fr}.rms-frame{height:360px}.rms-title{font-size:1.9rem}}
+
+@keyframes upFade{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.rms-head{animation:upFade .7s .05s both}
+.rms-layout{animation:upFade .7s .18s both}
+.rms-stats-band{animation:upFade .7s .3s both}
+.rms-ticker{animation:upFade .7s .4s both}
+</style>
+
+<section class="rms" id="rms-map-section">
+  <div class="rms-blob rms-b1"></div>
+  <div class="rms-blob rms-b2"></div>
+
+  <div class="rms-inner">
+    <div class="rms-head">
+      <div>
+        <div class="rms-eyebrow">
+          <div class="rms-ey-line"></div>
+          <span class="rms-ey-txt">07 Nights · 08 Days · Live Route Map</span>
+          <div class="rms-ey-dot"></div>
+        </div>
+        <h2 class="rms-title">
+          Adventure Explorer <em>Route</em><br>
+          <span class="rms-gold">Negombo to Mirissa</span>
+        </h2>
+        <p class="rms-desc">Select any day to zoom into that leg of the journey. Click any pin to reveal full details, activities, and overnight stay.</p>
+      </div>
+      <div class="rms-hpills">
+        <div class="rms-hpill">
+          <div class="rhp-ic jade"><i class="fas fa-water"></i></div>
+          <span class="rhp-val">1</span>
+          <span class="rhp-lbl">White Water Rafting — Kitulgala</span>
+        </div>
+        <div class="rms-hpill">
+          <div class="rhp-ic teal"><i class="fas fa-train"></i></div>
+          <span class="rhp-val">3hrs</span>
+          <span class="rhp-lbl">Scenic Train — Nanu Oya to Ella</span>
+        </div>
+        <div class="rms-hpill">
+          <div class="rhp-ic gold"><i class="fas fa-award"></i></div>
+          <span class="rhp-val">2</span>
+          <span class="rhp-lbl">UNESCO Sites — Sigiriya &amp; Galle</span>
+        </div>
+        <div class="rms-hpill">
+          <div class="rhp-ic sky"><i class="fas fa-umbrella-beach"></i></div>
+          <span class="rhp-val">2</span>
+          <span class="rhp-lbl">Beaches — Negombo &amp; Mirissa</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rms-layout">
+      <div class="rms-panel">
+        <div class="rmp-head">
+          <div class="rmp-head-row">
+            <div class="rmp-title">
+              <div class="rmp-title-ic"><i class="fas fa-route"></i></div>
+              Tour Itinerary
+            </div>
+            <div class="rmp-badge" id="rms-badge">All · 12</div>
+          </div>
+          <div class="rmp-sub">Click a day to filter the map</div>
+        </div>
+        <div class="rmp-progress">
+          <div class="rmp-prog-bar"><div class="rmp-prog-fill" id="rms-prog" style="width:100%"></div></div>
+          <div class="rmp-prog-labels"><span>Day 1</span><span>Day 8</span></div>
+        </div>
+        <div class="rmp-list" id="rms-list"></div>
+        <div class="rmp-legend">
+          <div class="rmp-legend-title">Category Legend</div>
+          <div class="rmp-legend-grid">
+            <div class="rml-item"><span class="rml-dot" style="background:#3580b8"></span><span class="rml-lbl">Coastal &amp; Beach</span></div>
+            <div class="rml-item"><span class="rml-dot" style="background:#2d8a5c"></span><span class="rml-lbl">Adventure Activity</span></div>
+            <div class="rml-item"><span class="rml-dot" style="background:#1a7a85"></span><span class="rml-lbl">Hill Country</span></div>
+            <div class="rml-item"><span class="rml-dot" style="background:#c9953a"></span><span class="rml-lbl">UNESCO Heritage</span></div>
+            <div class="rml-item"><span class="rml-dot" style="background:#6b5fad"></span><span class="rml-lbl">Culture &amp; Temple</span></div>
+            <div class="rml-item"><span class="rml-dot" style="background:#d45f4a"></span><span class="rml-lbl">En-Route Stop</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rms-frame" id="rms-frame">
+        <div id="rms-map"></div>
+        <div class="rmo-pill">
+          <div class="rmo-dot"></div>
+          <span class="rmo-count" id="rms-count">12</span>
+          <span class="rmo-label">&ensp;stops shown</span>
+        </div>
+        <div class="rmo-strip">
+          <i class="rmo-strip-ic fas fa-map-signs"></i>
+          <span class="rmo-strip-txt" id="rms-day-txt">Full 8-Day Route</span>
+          <span class="rmo-strip-sub" id="rms-day-sub">Negombo → Mirissa</span>
+        </div>
+        <div class="rmo-hint"><i class="fas fa-hand-pointer"></i>&ensp;Click any pin to explore</div>
+        <div class="rms-detail" id="rms-detail"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS BAND -->
+  <div class="rms-stats-band">
+    <div class="rmsb"><div class="rmsb-ic jade"><i class="fas fa-water"></i></div><div><div class="rmsb-val">7+</div><div class="rmsb-lbl">Adventure Activities</div></div></div>
+    <div class="rmsb"><div class="rmsb-ic teal"><i class="fas fa-train"></i></div><div><div class="rmsb-val">3hrs</div><div class="rmsb-lbl">Scenic highland train ride</div></div></div>
+    <div class="rmsb"><div class="rmsb-ic gold"><i class="fas fa-award"></i></div><div><div class="rmsb-val">2</div><div class="rmsb-lbl">UNESCO World Heritage Sites</div></div></div>
+    <div class="rmsb"><div class="rmsb-ic sky"><i class="fas fa-umbrella-beach"></i></div><div><div class="rmsb-val">2</div><div class="rmsb-lbl">Beach destinations</div></div></div>
+    <div class="rmsb"><div class="rmsb-ic violet"><i class="fas fa-moon"></i></div><div><div class="rmsb-val">7</div><div class="rmsb-lbl">Nights · 8 days</div></div></div>
+  </div>
+
+  <div class="rms-ticker"><div class="rmt-track" id="rms-ticker"></div></div>
+</section>
+
+<div class="rms-tt" id="rms-tt">
+  <div class="rmtt-card">
+    <div class="rmtt-img"><img id="rmtt-img" src="" alt=""></div>
+    <div class="rmtt-body">
+      <div class="rmtt-row"><div class="rmtt-dot" id="rmtt-dot"></div><span class="rmtt-cat" id="rmtt-cat"></span></div>
+      <div class="rmtt-name" id="rmtt-name"></div>
+      <div class="rmtt-hint" id="rmtt-hint"></div>
+    </div>
+  </div>
+  <div class="rmtt-arrow"></div>
+</div>
+<div id="rms-ov"></div>
+
+<script>
+(function () {
+
+/* ═══════════════════════════════════════════════════════
+   ROUTE DATA — Sri Lanka Adventure Explorer · 8D/7N
+   Negombo → Kitulgala → Nuwara Eliya → Ella →
+   Sigiriya → Kandy → Galle → Mirissa
+═══════════════════════════════════════════════════════ */
+const DAYS = [
+  {
+    n: 1, label: 'Arrival · Negombo Beach', sub: 'Airport Transfer · West Coast · Catamaran Sunset',
+    color: '#3580b8', night: 'Negombo',
+    stops: [{
+      id: 'negombo', name: 'Negombo Beach', lat: 7.2092, lng: 79.8380,
+      region: 'Western Province · 12 km from Bandaranaike Airport',
+      cat: 'Coastal & Beach', catColor: '#3580b8',
+      hint: 'Airport 12 km away · golden beachfront · catamaran sunset · Dutch canals',
+      tagline: 'Land at Bandaranaike International Airport and transfer to Negombo (20 min). Relax on the golden west coast beach, take an optional catamaran sunset cruise or lagoon boat ride through the Dutch colonial canals, and enjoy fresh seafood.',
+      img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/negambo-beach_processed.webp',
+      activities: [
+        { i: 'fa-plane-arrival', t: 'Airport meet & greet · 20 min transfer' },
+        { i: 'fa-umbrella-beach', t: 'Relax on Negombo\'s golden west coast beach' },
+        { i: 'fa-ship', t: 'Optional: catamaran sunset cruise' },
+        { i: 'fa-water', t: 'Dutch canal lagoon boat ride' },
+        { i: 'fa-utensils', t: 'Fresh seafood dinner · beachfront restaurants' }
+      ],
+      facts: [{ i: 'fa-plane', l: 'Airport', v: '20 min' }, { i: 'fa-road', l: 'Drive', v: '12 km' }, { i: 'fa-bed', l: 'Night', v: 'Negombo' }],
+      chips: ['West Coast Beach', 'Dutch Canals', 'Catamaran Sunset', 'Seafood'],
+      nightAt: 'Negombo'
+    }]
+  },
+  {
+    n: 2, label: 'Kitulgala — White Water Rafting', sub: 'Grade 2–3 Rapids · Canyoning · River Kwai Site',
+    color: '#2d8a5c', night: 'Kitulgala',
+    stops: [{
+      id: 'kitulgala', name: 'Kitulgala — White Water Rafting', lat: 6.9895, lng: 80.4149,
+      region: 'Sabaragamuwa Province · 3.5 hrs from Negombo',
+      cat: 'Adventure Activity', catColor: '#2d8a5c',
+      hint: 'Grade 2–3 Kelani River rapids · natural rock slides · canyoning · River Kwai film site',
+      tagline: 'Drive 3.5 hrs to Kitulgala — Sri Lanka\'s premier white water rafting destination. Grade 2–3 rapids on the Kelani River through lush rainforest, natural rock slides, optional canyoning in jungle streams, and visit the "Bridge on the River Kwai" filming location.',
+      img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/rafting.webp',
+      activities: [
+        { i: 'fa-water', t: 'White water rafting · Grade 2–3 · Kelani River' },
+        { i: 'fa-mountain', t: 'Natural rock slides in jungle streams' },
+        { i: 'fa-hiking', t: 'Optional canyoning in the rainforest' },
+        { i: 'fa-film', t: '"Bridge on the River Kwai" filming site visit' },
+        { i: 'fa-tree', t: 'Lush tropical rainforest scenery' }
+      ],
+      facts: [{ i: 'fa-water', l: 'Grades', v: '2–3 Rapids' }, { i: 'fa-road', l: 'Drive', v: '3.5 hrs' }, { i: 'fa-bed', l: 'Night', v: 'Kitulgala' }],
+      chips: ['Grade 2–3 Rapids', 'Rock Slides', 'Canyoning', 'Rainforest'],
+      nightAt: 'Kitulgala Adventure Camp'
+    }]
+  },
+  {
+    n: 3, label: 'Nuwara Eliya — Tea & Cycling', sub: 'Tea Estate Cycling · Tea Factory · St. Clair\'s Falls',
+    color: '#1a7a85', night: 'Nuwara Eliya',
+    stops: [
+      {
+        id: 'stclairs', name: 'St. Clair\'s Falls', lat: 6.9350, lng: 80.6600,
+        region: 'Central Province · En Route to Nuwara Eliya',
+        cat: 'En-Route Stop', catColor: '#d45f4a',
+        hint: 'Sri Lanka\'s widest waterfall · scenic drive stop · lush highland scenery',
+        tagline: 'Scenic 3-hour drive from Kitulgala through the highlands. Stop at the stunning St. Clair\'s Falls — often called the "Little Niagara" of Sri Lanka — a wide, double-cascade waterfall surrounded by mist and tea bushes.',
+        img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/St.-Clairs-Falls-and-Tea-Factory.webp',
+        activities: [
+          { i: 'fa-road', t: 'Scenic highland drive · 3 hrs' },
+          { i: 'fa-water', t: 'St. Clair\'s Falls — Sri Lanka\'s widest waterfall' },
+          { i: 'fa-camera', t: 'Photography stop · mist and cascades' }
+        ],
+        facts: [{ i: 'fa-road', l: 'From Kitulgala', v: '3 hrs' }, { i: 'fa-water', l: 'Stop', v: 'St. Clair\'s Falls' }],
+        chips: ['St. Clair\'s Falls', 'Highland Drive', 'Photography Stop'],
+        nightAt: 'Nuwara Eliya'
+      },
+      {
+        id: 'nuwaraeliya', name: 'Nuwara Eliya — Tea Estate Cycling', lat: 6.9497, lng: 80.7891,
+        region: 'Central Province · 1,868 m · "Little England"',
+        cat: 'Hill Country', catColor: '#1a7a85',
+        hint: 'Cycling through emerald tea estates · tea factory visit · cool 1,868 m altitude',
+        tagline: 'Arrive at Nuwara Eliya — "Little England" at 1,868 m. Enjoy a cycling ride through rolling tea estate rows with panoramic mountain views, then visit a working tea factory to see how Ceylon tea is processed. Cool evenings, colonial architecture.',
+        img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/tea-state-cycling.webp',
+        activities: [
+          { i: 'fa-bicycle', t: 'Cycling tour through tea plantation rows' },
+          { i: 'fa-industry', t: 'Tea factory guided visit & tasting' },
+          { i: 'fa-water', t: 'Gregory Lake walk · optional boat ride' },
+          { i: 'fa-city', t: 'Colonial era architecture & town centre' }
+        ],
+        facts: [{ i: 'fa-mountain', l: 'Altitude', v: '1,868 m' }, { i: 'fa-bicycle', l: 'Activity', v: 'Tea Cycling' }, { i: 'fa-mug-hot', l: 'Famous For', v: 'Ceylon Tea' }],
+        chips: ['Tea Estate Cycling', 'Tea Factory', 'Gregory Lake', 'Cool Climate'],
+        nightAt: 'Nuwara Eliya'
+      }
+    ]
+  },
+  {
+    n: 4, label: 'Scenic Train · Ella Trekking', sub: 'World\'s Most Scenic Train · Nine Arches · Little Adam\'s Peak',
+    color: '#1a7a85', night: 'Ella',
+    stops: [
+      {
+        id: 'scenictrain', name: 'Scenic Train — Nanu Oya to Ella', lat: 6.9200, lng: 80.8700,
+        region: 'Central Province → Uva Province · 3 hrs scenic journey',
+        cat: 'Hill Country', catColor: '#1a7a85',
+        hint: 'One of the world\'s most beautiful train journeys · emerald valleys · waterfalls',
+        tagline: 'Board the iconic train from Nanu Oya (Nuwara Eliya) to Ella — regularly voted one of the world\'s most beautiful rail journeys. Three hours of sweeping emerald tea valleys, misty mountain passes, and cascading waterfalls.',
+        img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/Nuwara-Eliya_processed.webp',
+        activities: [
+          { i: 'fa-train', t: 'Scenic train: Nanu Oya → Ella · ~3 hrs' },
+          { i: 'fa-mountain', t: 'Misty highland passes & valley panoramas' },
+          { i: 'fa-water', t: 'Waterfalls visible from train windows' }
+        ],
+        facts: [{ i: 'fa-train', l: 'Journey', v: '~3 hrs' }, { i: 'fa-route', l: 'Route', v: 'Nanu Oya→Ella' }],
+        chips: ['Scenic Train Ride', 'Tea Valley Views', 'Mountain Passes'],
+        nightAt: 'Ella'
+      },
+      {
+        id: 'ella', name: 'Ella — Nine Arches & Little Adam\'s Peak', lat: 6.8667, lng: 81.0466,
+        region: 'Uva Province · 1,041 m · Hill Village',
+        cat: 'Hill Country', catColor: '#1a7a85',
+        hint: 'Nine Arches Bridge · Little Adam\'s Peak summit hike · optional zipline',
+        tagline: 'Arrive in Ella — explore the iconic Nine Arches Bridge (trains at 9 AM & 3 PM), hike Little Adam\'s Peak for 360° valley panoramas, and optionally try the Ella zipline adventure. Cool misty evenings in this charming highland village.',
+        img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/Ella-Nine-Arch-Bridge_processed.webp',
+        activities: [
+          { i: 'fa-bridge', t: 'Nine Arches Bridge walk & photography' },
+          { i: 'fa-hiking', t: 'Little Adam\'s Peak summit — 360° panorama' },
+          { i: 'fa-wind', t: 'Optional zipline adventure in the valley' },
+          { i: 'fa-mug-hot', t: 'Tea café with misty mountain views' }
+        ],
+        facts: [{ i: 'fa-mountain', l: 'Altitude', v: '1,041 m' }, { i: 'fa-bridge', l: 'Icon', v: 'Nine Arches' }, { i: 'fa-bed', l: 'Night', v: 'Ella' }],
+        chips: ['Nine Arches Bridge', 'Little Adam\'s Peak', 'Zipline Option', 'Highland Village'],
+        nightAt: 'Ella'
+      }
+    ]
+  },
+  {
+    n: 5, label: 'Sigiriya Rock · Village Cycling', sub: 'UNESCO Fortress · 1,200 Steps · Habarana Village Ride',
+    color: '#c9953a', night: 'Sigiriya / Dambulla',
+    stops: [
+      {
+        id: 'sigiriya', name: 'Sigiriya Rock Fortress', lat: 7.9570, lng: 80.7603,
+        region: 'Cultural Triangle · Central Province · UNESCO WHS',
+        cat: 'UNESCO Heritage', catColor: '#c9953a',
+        hint: '5th-century rock fortress rising 200m · 1,200 steps · ancient frescoes · lion paw gate',
+        tagline: 'Drive 4.5 hrs from Ella to Sigiriya. Climb the UNESCO Rock Fortress — 1,200 ancient steps to a royal palace rising 200m above the jungle, with breathtaking panoramas, extraordinary ancient frescoes, and the iconic lion paw gate entrance.',
+        img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya_processed.webp',
+        activities: [
+          { i: 'fa-mountain', t: 'Sigiriya Rock climb · 1,200 steps · 2–3 hrs' },
+          { i: 'fa-image', t: 'Ancient frescoes (5th century AD)' },
+          { i: 'fa-paw', t: 'Lion Paw Gate entrance' },
+          { i: 'fa-tint', t: 'Symmetrical water gardens' }
+        ],
+        facts: [{ i: 'fa-mountain', l: 'Height', v: '200 m' }, { i: 'fa-road', l: 'Drive', v: '4.5 hrs' }, { i: 'fa-award', l: 'Status', v: 'UNESCO WHS' }],
+        chips: ['200m Rock Climb', '1,200 Steps', 'Ancient Frescoes', 'Lion Paw Gate'],
+        nightAt: 'Sigiriya / Dambulla'
+      },
+      {
+        id: 'habarana', name: 'Habarana Village Cycling', lat: 8.0000, lng: 80.7500,
+        region: 'North Central Province · Habarana Village',
+        cat: 'Adventure Activity', catColor: '#2d8a5c',
+        hint: 'Cycling through rice paddies · village life · local lunch · lake views',
+        tagline: 'Optional afternoon village cycling tour through Habarana — winding paths through lush rice paddies, village communities, local temples and tranquil lakes. Share an authentic Sri Lankan meal with a local family in a village home.',
+        img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya-village-cyling_processed.webp',
+        activities: [
+          { i: 'fa-bicycle', t: 'Village cycling · rice paddies & lakes' },
+          { i: 'fa-home', t: 'Visit local village homes & temples' },
+          { i: 'fa-utensils', t: 'Authentic Sri Lankan village lunch' },
+          { i: 'fa-water', t: 'Habarana lake panoramic views' }
+        ],
+        facts: [{ i: 'fa-bicycle', l: 'Activity', v: 'Village Cycling' }, { i: 'fa-clock', l: 'Duration', v: '2–3 hrs' }, { i: 'fa-bed', l: 'Night', v: 'Sigiriya' }],
+        chips: ['Village Cycling', 'Rice Paddies', 'Local Lunch', 'Lake Views'],
+        nightAt: 'Sigiriya / Dambulla'
+      }
+    ]
+  },
+  {
+    n: 6, label: 'Kandalama Lake · Kandy Temple', sub: 'Boat Ride · Temple of Tooth · Kandyan Dance',
+    color: '#6b5fad', night: 'Kandy',
+    stops: [
+      {
+        id: 'kandalama', name: 'Kandalama Lake Boat Ride', lat: 7.9150, lng: 80.7200,
+        region: 'North Central Province · Ancient Reservoir',
+        cat: 'Adventure Activity', catColor: '#2d8a5c',
+        hint: 'Morning boat ride · birdwatching · ancient reservoir · jungle reflections',
+        tagline: 'Morning boat ride on the ancient Kandalama Lake — one of Sri Lanka\'s oldest irrigation reservoirs. Bird watching from the water (painted storks, kingfishers, herons), serene jungle reflections, and a tranquil start before the drive to Kandy.',
+        img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya-boat.webp',
+        activities: [
+          { i: 'fa-ship', t: 'Morning boat ride · ancient reservoir' },
+          { i: 'fa-dove', t: 'Birdwatching · storks, kingfishers, herons' },
+          { i: 'fa-water', t: 'Jungle reflections in still water' },
+          { i: 'fa-road', t: 'Drive to Kandy · 2.5 hrs' }
+        ],
+        facts: [{ i: 'fa-ship', l: 'Activity', v: 'Boat Ride' }, { i: 'fa-dove', l: 'Wildlife', v: 'Birdwatching' }, { i: 'fa-road', l: 'To Kandy', v: '2.5 hrs' }],
+        chips: ['Kandalama Lake', 'Birdwatching', 'Ancient Reservoir', 'Boat Ride'],
+        nightAt: 'Kandy'
+      },
+      {
+        id: 'kandy', name: 'Kandy — Temple of the Tooth', lat: 7.2942, lng: 80.6418,
+        region: 'Kandy · Hill Capital · 500 m · UNESCO WHS',
+        cat: 'Culture · UNESCO', catColor: '#6b5fad',
+        hint: 'Sacred Tooth Relic · evening puja ceremony · Kandy Lake · cultural dance',
+        tagline: 'Arrive in Kandy — Sri Lanka\'s last royal capital. Visit the UNESCO-listed Temple of the Sacred Tooth Relic and witness the moving evening puja ceremony. Stroll Kandy Lake, and enjoy an optional Kandyan cultural dance show.',
+        img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/temple-of-tooth_processed.webp',
+        activities: [
+          { i: 'fa-pray', t: 'Temple of Sacred Tooth Relic · UNESCO WHS' },
+          { i: 'fa-fire', t: 'Evening puja ceremony · candlelit offering' },
+          { i: 'fa-water', t: 'Kandy Lake evening walk' },
+          { i: 'fa-theater-masks', t: 'Optional Kandyan cultural dance show' }
+        ],
+        facts: [{ i: 'fa-mountain', l: 'Altitude', v: '500 m' }, { i: 'fa-award', l: 'Status', v: 'UNESCO WHS' }, { i: 'fa-bed', l: 'Night', v: 'Kandy' }],
+        chips: ['Sacred Tooth Relic', 'Evening Puja', 'Kandy Lake', 'Cultural Dance'],
+        nightAt: 'Kandy'
+      }
+    ]
+  },
+  {
+    n: 7, label: 'Galle Fort · Mirissa Beach', sub: 'UNESCO Dutch Fort · Southern Expressway · Beach Arrival',
+    color: '#3580b8', night: 'Mirissa',
+    stops: [
+      {
+        id: 'galle', name: 'Galle Dutch Fort', lat: 6.0259, lng: 80.2168,
+        region: 'Southern Province · 5 hrs from Kandy · UNESCO WHS',
+        cat: 'UNESCO Heritage', catColor: '#c9953a',
+        hint: 'UNESCO Dutch colonial fort · cobblestone streets · bastions · boutiques',
+        tagline: 'Long scenic drive (5 hrs) from Kandy to the south coast via the expressway, stopping at Galle Fort — a UNESCO Dutch colonial fortification with charming cobblestone streets, lighthouse views, ocean bastions and boutique cafés.',
+        img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/Galle-Dutch-Fort_processed.webp',
+        activities: [
+          { i: 'fa-landmark', t: 'Galle Fort walls & Dutch bastions' },
+          { i: 'fa-coffee', t: 'Colonial boutiques & cafés' },
+          { i: 'fa-lightbulb', t: 'Lighthouse & ocean viewpoints' },
+          { i: 'fa-road', t: 'Continue to Mirissa · 35 km' }
+        ],
+        facts: [{ i: 'fa-road', l: 'From Kandy', v: '5 hrs' }, { i: 'fa-award', l: 'Status', v: 'UNESCO WHS' }],
+        chips: ['Dutch Fort', 'Cobblestone Streets', 'Lighthouse', 'UNESCO'],
+        nightAt: 'Mirissa'
+      },
+      {
+        id: 'mirissa', name: 'Mirissa Beach — Arrival', lat: 5.9483, lng: 80.4716,
+        region: 'Southern Province · Golden Crescent Bay',
+        cat: 'Coastal & Beach', catColor: '#3580b8',
+        hint: 'Golden crescent beach · palm-fringed coves · ocean swimming · sunset drinks',
+        tagline: 'Arrive at Mirissa — a beautiful golden crescent bay fringed by coconut palms on Sri Lanka\'s south coast. Evening swim, sunset cocktails at a beachfront bar, and a fresh seafood dinner. Tomorrow — whale watching at sunrise!',
+        img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/Mirissa-Beach_processed.webp',
+        activities: [
+          { i: 'fa-umbrella-beach', t: 'Evening swim at Mirissa beach' },
+          { i: 'fa-sun', t: 'Sunset cocktails · beachfront bars' },
+          { i: 'fa-utensils', t: 'Fresh seafood dinner' },
+          { i: 'fa-fish', t: 'Tomorrow: early morning whale watching!' }
+        ],
+        facts: [{ i: 'fa-road', l: 'From Galle', v: '35 km' }, { i: 'fa-umbrella-beach', t: 'Best For', v: 'Beaches & Whales' }, { i: 'fa-bed', l: 'Night', v: 'Mirissa' }],
+        chips: ['Golden Crescent Bay', 'Palm-fringed Beach', 'Seafood Dinner', 'Sunset Views'],
+        nightAt: 'Mirissa'
+      }
+    ]
+  },
+  {
+    n: 8, label: 'Whale Watching · Departure', sub: 'Blue Whales · Mirissa Beach · Airport Transfer',
+    color: '#3580b8', night: 'Departure',
+    stops: [{
+      id: 'mirissa-whale', name: 'Mirissa Whale Watching & Departure', lat: 5.9400, lng: 80.4600,
+      region: 'Southern Ocean · Best Nov–April · BIA 3.5 hrs',
+      cat: 'Coastal & Beach', catColor: '#3580b8',
+      hint: 'Sunrise blue whale watching · spinner dolphins · final beach morning · airport transfer',
+      tagline: 'Early morning whale watching tour (depart 6:30 AM) — one of the world\'s best spots for blue whales and spinner dolphins. Return for breakfast, relax on Mirissa beach, then transfer to Bandaranaike International Airport (3.5 hrs) for your evening flight home.',
+      img: 'https://pixelceylontours.com/wp-content/uploads/2026/03/Mirissa-whale-watch-1.webp',
+      activities: [
+        { i: 'fa-fish', t: 'Early morning blue whale watching · 3–4 hrs' },
+        { i: 'fa-dolphin', t: 'Spinner dolphins & sperm whales' },
+        { i: 'fa-umbrella-beach', t: 'Final beach morning · Mirissa' },
+        { i: 'fa-plane-departure', t: 'Airport transfer · 3.5 hrs to BIA' }
+      ],
+      facts: [{ i: 'fa-fish', l: 'Season', v: 'Nov–April' }, { i: 'fa-clock', l: 'Depart', v: '6:30 AM' }, { i: 'fa-plane', l: 'Airport', v: '3.5 hrs' }],
+      chips: ['Blue Whales', 'Spinner Dolphins', 'Sunrise Ocean', 'Adventure Finale'],
+      nightAt: 'Departure'
+    }]
+  }
+];
+
+const ALL_STOPS = DAYS.flatMap(d => d.stops.map(s => ({ ...s, dayN: d.n, dayLabel: d.label, dayColor: d.color })));
+
+function ready(cb) { if (typeof L !== 'undefined') cb(); else setTimeout(() => ready(cb), 90); }
+
+ready(function () {
+  const frame    = document.getElementById('rms-frame');
+  const detailEl = document.getElementById('rms-detail');
+  const ovEl     = document.getElementById('rms-ov');
+  const countEl  = document.getElementById('rms-count');
+  const dayTxt   = document.getElementById('rms-day-txt');
+  const daySub   = document.getElementById('rms-day-sub');
+  const badge    = document.getElementById('rms-badge');
+  const progFill = document.getElementById('rms-prog');
+  const isMob    = () => window.innerWidth <= 900;
+
+  /* Centre: covers west coast Negombo (7.2/79.8) to east Ella (6.8/81.0) */
+  const map = L.map('rms-map', { center: [7.2, 80.5], zoom: 7, zoomControl: true, scrollWheelZoom: false });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy;<a href="https://carto.com/">CARTO</a> &copy;<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    subdomains: 'abcd', maxZoom: 19
+  }).addTo(map);
+
+  const routeLL = ALL_STOPS.map(s => [s.lat, s.lng]);
+  L.polyline(routeLL, { color: 'rgba(201,149,58,.55)', weight: 2.5, dashArray: '7 5', lineCap: 'round' }).addTo(map);
+
+  function mkIcon(s) {
+    const c = s.dayColor, sz = 36, totalH = sz + 24;
+    return L.divIcon({
+      html: `<div class="rpin" style="width:${sz}px;height:${totalH}px">
+        <div class="rpin-ring" style="width:${sz}px;height:${sz}px;border:2.5px solid ${c}"></div>
+        <div class="rpin-body" style="width:${sz}px;height:${sz}px;background:${c};font-size:.68rem;box-shadow:0 4px 20px ${c}77">${s.dayN}</div>
+        <div class="rpin-lbl">Day ${s.dayN}</div>
+      </div>`,
+      className: '', iconSize: [sz, totalH], iconAnchor: [sz / 2, sz / 2], popupAnchor: [0, -(sz / 2 + 12)]
+    });
+  }
+
+  const ttEl = document.getElementById('rms-tt');
+  const ttImg = document.getElementById('rmtt-img');
+  const ttDot = document.getElementById('rmtt-dot');
+  const ttCat = document.getElementById('rmtt-cat');
+  const ttNm  = document.getElementById('rmtt-name');
+  const ttHi  = document.getElementById('rmtt-hint');
+  function showTT(s, e) { if (isMob()) return; ttImg.src = s.img; ttDot.style.background = s.catColor; ttCat.textContent = 'Day ' + s.dayN + ' · ' + s.cat; ttCat.style.color = s.catColor; ttNm.textContent = s.name; ttHi.textContent = s.hint; ttEl.style.display = 'block'; moveTT(e); }
+  function moveTT(e) { ttEl.style.left = e.clientX + 'px'; ttEl.style.top = e.clientY + 'px'; }
+  function hideTT()  { ttEl.style.display = 'none'; }
+
+  const saved = new Set();
+
+  function buildSlideHTML(s, idx, allStops) {
+    const acts  = s.activities.map(a => `<div class="rmd-act"><i class="fas ${a.i}"></i>${a.t}</div>`).join('');
+    const facts = s.facts.map(f => `<div class="rmd-fact"><i class="fas ${f.i}"></i><strong>${f.v}</strong>&ensp;${f.l}</div>`).join('');
+    const chips = s.chips.map(c => `<div class="rmd-chip">${c}</div>`).join('');
+    const sv    = saved.has(s.id);
+    const waMsg = encodeURIComponent('Hi! I would like to know more about the Adventure Explorer tour: ' + window.location.href);
+    return `
+      <div class="rmd-slide-img"><img src="${s.img}" alt="${s.name}" loading="lazy"><div class="rmd-region"><i class="fas fa-map-marker-alt"></i>${s.region}</div></div>
+      <div class="rmd-body" data-slide-idx="${idx}">
+        <div><div class="rmd-cat" style="color:${s.catColor}">${s.cat}</div><div class="rmd-name">${s.name}</div></div>
+        <div class="rmd-tagline">${s.tagline}</div>
+        <div class="rmd-acts">${acts}</div>
+        <div class="rmd-facts">${facts}</div>
+        <div class="rmd-night"><i class="fas fa-moon"></i><div class="rmd-night-txt"><strong>Overnight Stay</strong>${s.nightAt}</div></div>
+        <div class="rmd-chips">${chips}</div>
+        <div class="rmd-cta">
+          <a class="rmd-main" href="https://wa.me/94777273794?text=${waMsg}" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i>&ensp;Enquire About This Trip</a>
+          <button class="rmd-save ${sv ? 'saved' : ''}" id="rmd-save-${s.id}" onclick="rmsSave('${s.id}')"><i class="${sv ? 'fas' : 'far'} fa-heart"></i></button>
+        </div>
+      </div>`;
+  }
+
+  function buildMultiDetail(stops, day, initialIdx) {
+    const slides = stops.map((s, i) => `<div class="rmd-slide">${buildSlideHTML(s, i, stops)}</div>`).join('');
+    const vtabs  = stops.map((s, i) => {
+      const shortName = s.name.split(' — ')[0].split(' · ')[0].split(' ').slice(0, 2).join(' ');
+      return `<div class="rmd-vtab ${i === initialIdx ? 'active' : ''}" data-vtab="${i}" style="--vtab-color:${s.catColor}" onclick="rmsGoSlide(${i})">
+        <div class="rmd-vtab-num">${i + 1}</div>
+        <div class="rmd-vtab-dot"></div>
+        <div class="rmd-vtab-lbl">${shortName}</div>
+      </div>${i < stops.length - 1 ? '<div class="rmd-vtab-div"></div>' : ''}`;
+    }).join('');
+    return `
+      <button class="rmd-x" onclick="rmsClose()"><i class="fas fa-times"></i></button>
+      <div class="rmd-content-area">
+        <div class="rmd-slides-viewport">
+          <div class="rmd-slides-track" id="rmd-track" style="transform:translateX(-${initialIdx * 100}%)">${slides}</div>
+        </div>
+        <div class="rmd-stop-footer">
+          <div class="rmd-stop-progress">
+            <span class="rmd-stop-prog-label">Stop <span id="rmd-stop-cur">${initialIdx + 1}</span> / ${stops.length}</span>
+            <div class="rmd-stop-prog-dots" id="rmd-prog-dots">
+              ${stops.map((s, i) => `<div class="rmd-stop-prog-dot ${i === initialIdx ? 'active' : ''}" style="--dot-color:${s.catColor}" data-dot="${i}" onclick="rmsGoSlide(${i})"></div>`).join('')}
+            </div>
+          </div>
+          <div class="rmd-stop-nav">
+            <button class="rmd-stop-nav-btn" id="rmd-nav-prev" onclick="rmsNavStop(-1)" ${initialIdx === 0 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>
+            <button class="rmd-stop-nav-btn" id="rmd-nav-next" onclick="rmsNavStop(1)" ${initialIdx === stops.length - 1 ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="rmd-vtab-strip" id="rmd-vtab-strip">${vtabs}</div>`;
+  }
+
+  function buildSingleDetail(s) {
+    const acts  = s.activities.map(a => `<div class="rmd-act"><i class="fas ${a.i}"></i>${a.t}</div>`).join('');
+    const facts = s.facts.map(f => `<div class="rmd-fact"><i class="fas ${f.i}"></i><strong>${f.v}</strong>&ensp;${f.l}</div>`).join('');
+    const chips = s.chips.map(c => `<div class="rmd-chip">${c}</div>`).join('');
+    const sv    = saved.has(s.id);
+    const waMsg = encodeURIComponent('Hi! I would like to know more about the Adventure Explorer tour: ' + window.location.href);
+    return `
+      <button class="rmd-x" onclick="rmsClose()"><i class="fas fa-times"></i></button>
+      <div class="rmd-content-area">
+        <div class="rmd-single-img">
+          <img src="${s.img}" alt="${s.name}" loading="lazy">
+          <div class="rmd-daybadge"><div class="rmd-dbdot" style="background:${s.dayColor}"></div><span class="rmd-dbnum">Day ${s.dayN}</span></div>
+          <div class="rmd-region"><i class="fas fa-map-marker-alt"></i>${s.region}</div>
+        </div>
+        <div class="rmd-single-body" id="rmd-body-scroll">
+          <div><div class="rmd-cat" style="color:${s.catColor}">${s.cat}</div><div class="rmd-name">${s.name}</div></div>
+          <div class="rmd-tagline">${s.tagline}</div>
+          <div class="rmd-acts">${acts}</div>
+          <div class="rmd-facts">${facts}</div>
+          <div class="rmd-night"><i class="fas fa-moon"></i><div class="rmd-night-txt"><strong>Overnight Stay</strong>${s.nightAt}</div></div>
+          <div class="rmd-chips">${chips}</div>
+          <div class="rmd-cta">
+            <a class="rmd-main" href="https://wa.me/94777273794?text=${waMsg}" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i>&ensp;Enquire About This Trip</a>
+            <button class="rmd-save ${sv ? 'saved' : ''}" id="rmd-save-${s.id}" onclick="rmsSave('${s.id}')"><i class="${sv ? 'fas' : 'far'} fa-heart"></i></button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  window.rmsSave = function (id) {
+    saved.has(id) ? saved.delete(id) : saved.add(id);
+    const sv = saved.has(id);
+    const btn = document.getElementById('rmd-save-' + id);
+    if (btn) { btn.classList.toggle('saved', sv); btn.innerHTML = sv ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>'; }
+  };
+
+  let _multiStops = null, _currentSlide = 0;
+
+  window.rmsNavStop = function (dir) {
+    if (!_multiStops) return;
+    const next = _currentSlide + dir;
+    if (next < 0 || next >= _multiStops.length) return;
+    window.rmsGoSlide(next);
+  };
+
+  window.rmsGoSlide = function (idx) {
+    if (!_multiStops) return;
+    _currentSlide = idx;
+    const track = document.getElementById('rmd-track');
+    if (track) track.style.transform = `translateX(-${idx * 100}%)`;
+    detailEl.querySelectorAll('.rmd-vtab').forEach((t, i) => t.classList.toggle('active', i === idx));
+    detailEl.querySelectorAll('.rmd-stop-prog-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    const cur = document.getElementById('rmd-stop-cur');
+    if (cur) cur.textContent = idx + 1;
+    const prev = document.getElementById('rmd-nav-prev');
+    const next = document.getElementById('rmd-nav-next');
+    if (prev) prev.disabled = idx === 0;
+    if (next) next.disabled = idx === _multiStops.length - 1;
+    const slides = detailEl.querySelectorAll('.rmd-slide');
+    if (slides[idx]) slides[idx].scrollTop = 0;
+    map.panTo([_multiStops[idx].lat, _multiStops[idx].lng], { animate: true, duration: .5 });
+  };
+
+  let _openStopId = null;
+
+  function openDetail(s) {
+    hideTT();
+    const day     = DAYS.find(d => d.n === s.dayN);
+    const isMulti = day && day.stops.length > 1;
+    const initialIdx = isMulti ? day.stops.findIndex(ds => ds.id === s.id) : 0;
+    _openStopId  = s.id;
+    _multiStops  = isMulti ? day.stops.map(ds => ({ ...ds, dayN: day.n, dayLabel: day.label, dayColor: day.color })) : null;
+    _currentSlide = initialIdx;
+
+    detailEl.innerHTML = isMulti ? buildMultiDetail(_multiStops, day, initialIdx) : buildSingleDetail(s);
+    detailEl.classList.toggle('multi', isMulti);
+
+    function attachDragScroll(el) {
+      if (!el) return;
+      let isDown = false, startY = 0, scrollTop = 0;
+      el.addEventListener('mousedown', function (e) {
+        if (e.target.closest('a, button, input')) return;
+        isDown = true; startY = e.pageY; scrollTop = el.scrollTop;
+        el.classList.add('dragging'); e.preventDefault();
+      });
+      window.addEventListener('mousemove', function (e) { if (!isDown) return; el.scrollTop = scrollTop - (e.pageY - startY); });
+      window.addEventListener('mouseup',   function ()  { if (!isDown) return; isDown = false; el.classList.remove('dragging'); });
+    }
+
+    if (isMulti) detailEl.querySelectorAll('.rmd-slide').forEach(sl => attachDragScroll(sl));
+    else attachDragScroll(document.getElementById('rmd-body-scroll'));
+
+    if (isMob()) {
+      if (detailEl.parentElement !== document.body) document.body.appendChild(detailEl);
+      Object.assign(detailEl.style, { position: 'fixed', top: 'auto', right: '0', bottom: '0', left: '0', width: '100%', maxHeight: '88vh', overflowY: 'hidden', borderRadius: '2px 2px 0 0', zIndex: '9000', display: 'flex', opacity: '1', transform: 'translateY(100%)', transition: 'transform .42s cubic-bezier(.34,1.56,.64,1)' });
+      requestAnimationFrame(() => requestAnimationFrame(() => { detailEl.style.transform = 'translateY(0)'; }));
+      ovEl.classList.add('on'); document.body.style.overflow = 'hidden';
+    } else {
+      if (detailEl.parentElement !== frame) frame.appendChild(detailEl);
+      detailEl.removeAttribute('style');
+      detailEl.classList.add('vis');
+      map.panTo([s.lat, s.lng], { animate: true, duration: .6 });
+    }
+  }
+
+  window.rmsClose = function () {
+    _openStopId = null; _multiStops = null; _currentSlide = 0;
+    detailEl.classList.remove('vis', 'multi');
+    ovEl.classList.remove('on'); document.body.style.overflow = '';
+    detailEl.style.transform = 'translateY(100%)';
+    setTimeout(() => { detailEl.innerHTML = ''; detailEl.removeAttribute('style'); if (detailEl.parentElement !== frame) frame.appendChild(detailEl); }, 430);
+  };
+
+  const mMap = {};
+  ALL_STOPS.forEach(s => {
+    const m = L.marker([s.lat, s.lng], { icon: mkIcon(s), title: s.name });
+    m.on('mouseover', e => showTT(s, e.originalEvent));
+    m.on('mousemove', e => moveTT(e.originalEvent));
+    m.on('mouseout',  hideTT);
+    m.on('click',     () => openDetail(s));
+    m.addTo(map);
+    mMap[s.id] = { marker: m, stop: s };
+  });
+
+  let activeDay = 'all';
+  function applyDay(dayN) {
+    activeDay = dayN;
+    let cnt = 0;
+    ALL_STOPS.forEach(s => {
+      const { marker } = mMap[s.id];
+      const show = dayN === 'all' || s.dayN === dayN;
+      if (show) { if (!map.hasLayer(marker)) marker.addTo(map); cnt++; }
+      else      { if (map.hasLayer(marker)) map.removeLayer(marker); }
+    });
+    countEl.textContent = cnt;
+    const d = DAYS.find(x => x.n === dayN);
+    badge.textContent  = dayN === 'all' ? 'All · ' + ALL_STOPS.length : 'Day ' + dayN + ' · ' + (d ? d.stops.length : 0);
+    dayTxt.textContent = dayN === 'all' ? 'Full 8-Day Route' : 'Day ' + dayN + ' — ' + (d ? d.label : '');
+    daySub.textContent = dayN === 'all' ? 'Negombo → Mirissa' : (d ? d.sub : '');
+    progFill.style.width = dayN === 'all' ? '100%' : Math.round((dayN / 8) * 100) + '%';
+    if (dayN !== 'all' && d) {
+      const lats = d.stops.map(s => s.lat), lngs = d.stops.map(s => s.lng);
+      if (d.stops.length === 1) map.setView([d.stops[0].lat, d.stops[0].lng], 10, { animate: true, duration: .7 });
+      else map.fitBounds([[Math.min(...lats) - .4, Math.min(...lngs) - .5], [Math.max(...lats) + .4, Math.max(...lngs) + .5]], { animate: true, duration: .7, padding: [40, 40] });
+    } else {
+      map.flyTo([7.2, 80.5], 7, { animate: true, duration: .8 });
+    }
+  }
+
+  const listEl = document.getElementById('rms-list');
+  const allRow = document.createElement('div');
+  allRow.className = 'rmp-all on'; allRow.dataset.d = 'all';
+  allRow.innerHTML = `<div class="rmp-all-ic"><i class="fas fa-hiking"></i></div><div class="rmp-all-txt"><div class="rmp-nm">All Days</div><div class="rmp-sb">Complete 8-day adventure route</div></div><div class="rmp-all-ct">${ALL_STOPS.length}</div><span class="rmp-mob-lbl" style="display:none">All</span>`;
+  allRow.addEventListener('click', () => { listEl.querySelectorAll('.rmp-row, .rmp-all').forEach(r => r.classList.remove('on')); allRow.classList.add('on'); rmsClose(); applyDay('all'); });
+  listEl.appendChild(allRow);
+  const div = document.createElement('div'); div.className = 'rmp-div'; listEl.appendChild(div);
+  const grp = document.createElement('div'); grp.className = 'rmp-group'; grp.textContent = 'Daily Itinerary'; listEl.appendChild(grp);
+
+  DAYS.forEach(day => {
+    const row = document.createElement('div');
+    row.className = 'rmp-row'; row.dataset.d = day.n; row.style.setProperty('--rc', day.color);
+    row.innerHTML = `<div class="rmp-swatch" style="background:${day.color}"></div><div class="rmp-num">${day.n}</div><div class="rmp-info"><div class="rmp-nm">${day.label}</div><div class="rmp-sb">${day.sub}</div></div><div class="rmp-ct">${day.stops.length}</div><span class="rmp-mob-lbl">D${day.n}</span>`;
+    row.addEventListener('click', () => {
+      listEl.querySelectorAll('.rmp-row, .rmp-all').forEach(r => r.classList.remove('on'));
+      row.classList.add('on');
+      const firstStop = ALL_STOPS.find(s => s.dayN === day.n);
+      if (firstStop) openDetail(firstStop);
+      applyDay(day.n);
+    });
+    row.addEventListener('mouseenter', () => { if (!row.classList.contains('on')) row.querySelector('.rmp-num').style.borderColor = day.color + '44'; });
+    row.addEventListener('mouseleave', () => { if (!row.classList.contains('on')) row.querySelector('.rmp-num').style.borderColor = ''; });
+    listEl.appendChild(row);
+  });
+
+  /* TICKER */
+  const TICK = [
+    { i: 'fa-umbrella-beach', s: 'Negombo Beach',         t: 'West coast arrival · Dutch canals · catamaran sunset' },
+    { i: 'fa-water',          s: 'Kitulgala Rafting',      t: 'Grade 2–3 Kelani River rapids · rock slides · canyoning' },
+    { i: 'fa-water',          s: 'St. Clair\'s Falls',     t: 'Sri Lanka\'s widest waterfall · highland drive stop' },
+    { i: 'fa-bicycle',        s: 'Tea Estate Cycling',     t: 'Nuwara Eliya · emerald tea rows · factory visit · 1,868m' },
+    { i: 'fa-train',          s: 'Scenic Train',           t: 'Nanu Oya → Ella · 3 hrs through tea highlands' },
+    { i: 'fa-bridge',         s: 'Nine Arches · Ella',     t: 'Iconic viaduct · Little Adam\'s Peak hike · zipline' },
+    { i: 'fa-mountain',       s: 'Sigiriya Rock',          t: 'UNESCO · 1,200 steps · 200m · ancient frescoes' },
+    { i: 'fa-bicycle',        s: 'Village Cycling',        t: 'Habarana rice paddies · local lunch · lake views' },
+    { i: 'fa-ship',           s: 'Kandalama Boat Ride',    t: 'Ancient reservoir · birdwatching · jungle reflections' },
+    { i: 'fa-pray',           s: 'Kandy Temple',           t: 'Sacred Tooth Relic · UNESCO · evening puja ceremony' },
+    { i: 'fa-award',          s: 'Galle Fort',             t: 'UNESCO Dutch colonial fort · cobblestone · ocean bastions' },
+    { i: 'fa-fish',           s: 'Mirissa Whale Watching', t: 'Blue whales & dolphins at sunrise · adventure finale' },
+  ];
+  document.getElementById('rms-ticker').innerHTML =
+    [...TICK, ...TICK].map(t => `<div class="rmt-item"><i class="fas ${t.i}"></i><strong>${t.s}</strong>&ensp;${t.t}</div>`).join('');
+
+  frame.addEventListener('click',      () => map.scrollWheelZoom.enable());
+  frame.addEventListener('mouseleave', () => map.scrollWheelZoom.disable());
+  ovEl.addEventListener('click', rmsClose);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') rmsClose(); });
+  window.addEventListener('resize', () => { if (!isMob() && detailEl.parentElement === document.body) rmsClose(); });
+  setTimeout(() => map.invalidateSize(), 400);
+});
+
+})();
+</script>
+</section>

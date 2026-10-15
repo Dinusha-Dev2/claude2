@@ -1,0 +1,1785 @@
+<div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experiences — Pixel Ceylon Tours</title>
+
+
+
+
+
+<style>
+
+/* ─── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fff;
+  color: #071527;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; object-fit: cover; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* ─── Design Tokens ────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --navy:    #071527;
+  --navy2:   #0c1e30;
+  --teal:    #0e9aaa;
+  --teal-lt: #12c8d8;
+  --teal-dk: #0a7a85;
+  --teal-bg: rgba(14,154,170,.06);
+  --teal-bd: rgba(14,154,170,.14);
+  --amber:   #f5a623;
+  --amber-dk:#d9870c;
+
+  /* Text */
+  --ink:     #071527;
+  --muted:   #556070;
+  --subtle:  #8494a6;
+
+  /* Surface */
+  --white:   #ffffff;
+  --surface: #f8fafb;
+  --border:  #e4eaf1;
+  --border2: #eef2f7;
+
+  /* Category palette */
+  --wildlife:  #1eb577;
+  --culture:   #b48cf5;
+  --beach:     #12c8d8;
+  --adventure: #f5a623;
+  --food:      #e8784d;
+  --wellness:  #8bbf3c;
+  --scenic:    #0e9aaa;
+  --heritage:  #c9a227;
+
+  /* Easing */
+  --ease:   cubic-bezier(.4,0,.2,1);
+  --spring: cubic-bezier(.34,1.56,.64,1);
+  --reveal: cubic-bezier(.16,1,.3,1);
+
+  /* Layout */
+  --max:    1360px;
+  --gutter: clamp(1.5rem, 5vw, 4.5rem);
+  --radius: 2px;
+}
+
+/* ─── Keyframes ────────────────────────────────────────────── */
+@keyframes fadeUp   { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes heroZoom { 0% { transform: scale(1); } 100% { transform: scale(1.07); } }
+@keyframes spinDia  { to { transform: rotate(calc(45deg + 360deg)); } }
+@keyframes ticker   { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes bob      { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+@keyframes pulse    { 0%,100% { box-shadow: 0 0 0 0 rgba(245,166,35,.45); } 60% { box-shadow: 0 0 0 14px rgba(245,166,35,0); } }
+@keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.55); } 100% { transform: scale(1); } }
+@keyframes cardIn   { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+/* ─── Utility ──────────────────────────────────────────────── */
+.container { max-width: var(--max); margin: 0 auto; padding-inline: var(--gutter); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+/* ════════════════════════════════════════════════════════════
+   HERO
+   ════════════════════════════════════════════════════════════ */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 620px;
+  max-height: 960px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.hero__bg-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.8s ease-in-out;
+  animation: heroZoom 20s ease-in-out infinite alternate;
+}
+.hero__bg-slide.active { opacity: 1; }
+.hero__bg-slide img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(.76) saturate(1.5);
+}
+
+
+/* layered gradients */
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(7,21,39,.52) 0%, transparent 38%, rgba(7,21,39,.12) 65%),
+    linear-gradient(to right, rgba(7,21,39,.9) 0%, rgba(7,21,39,.4) 50%, transparent 100%);
+}
+
+/* subtle dot grid */
+.hero__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(18,200,216,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18,200,216,.04) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+/* ── Hero pixel decoration ── */
+.hero__pixels {
+  position: absolute;
+  top: 8rem;
+  right: clamp(2rem, 6vw, 6rem);
+  display: grid;
+  grid-template-columns: repeat(6, 8px);
+  gap: 4px;
+  opacity: .12;
+  pointer-events: none;
+}
+.hero__pixels span { display: block; width: 8px; height: 8px; border-radius: 1px; }
+
+/* ── Hero content ── */
+.hero__content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+  padding-bottom: clamp(5.5rem, 9vw, 9rem);
+}
+
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+  animation: fadeUp .7s var(--reveal) forwards;
+}
+.hero__eyebrow-line { width: 26px; height: 1.5px; background: var(--teal); flex-shrink: 0; }
+.hero__eyebrow-text {
+  font-size: .55rem;
+  font-weight: 700;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--teal-lt);
+}
+.hero__eyebrow-pip {
+  width: 5px; height: 5px;
+  border-radius: 1px;
+  background: var(--amber);
+  transform: rotate(45deg);
+  animation: spinDia 8s linear infinite;
+}
+
+.hero__heading {
+  font-family: 'Bagind', serif;
+  font-size: clamp(3rem, 6.5vw, 5.8rem);
+  font-weight: 400;
+  line-height: .86;
+  color: #fff;
+  margin-bottom: 1.1rem;
+  opacity: 0;
+  animation: fadeUp .85s .07s var(--reveal) forwards;
+}
+.hero__heading .accent { color: var(--amber); }
+.hero__heading .indent { display: block; padding-left: clamp(2rem, 5vw, 5rem); }
+
+.hero__sub {
+  font-size: clamp(.8rem, .95vw, .98rem);
+  font-weight: 300;
+  color: rgba(255,255,255,.52);
+  max-width: 420px;
+  line-height: 1.85;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp .85s .15s var(--reveal) forwards;
+}
+
+.hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp .85s .22s var(--reveal) forwards;
+}
+
+/* ── Buttons (shared) ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .74rem;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: var(--radius);
+  transition: background .25s, transform .25s, box-shadow .25s, color .25s, border-color .25s;
+}
+.btn i { font-size: .65rem; }
+.btn--primary {
+  background: var(--teal);
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(14,154,170,.4);
+}
+.btn--primary:hover { background: var(--teal-dk); transform: translateY(-3px); color: #fff; }
+.btn--ghost {
+  border: 1.5px solid rgba(255,255,255,.22);
+  color: rgba(255,255,255,.72);
+  font-weight: 500;
+}
+.btn--ghost:hover { border-color: var(--amber); background: rgba(245,166,35,.1); color: var(--amber); transform: translateY(-3px); }
+.btn--amber {
+  background: var(--amber);
+  color: var(--navy);
+  font-weight: 700;
+  box-shadow: 0 8px 28px rgba(245,166,35,.38);
+  animation: pulse 2.8s ease-in-out infinite;
+}
+.btn--amber:hover { background: var(--amber-dk); color: #fff; transform: translateY(-2px); }
+.btn--outline-light {
+  border: 1.5px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.62);
+  font-weight: 500;
+  font-size: .68rem;
+  padding: 11px 22px;
+}
+.btn--outline-light:hover { border-color: var(--teal-lt); background: rgba(18,200,216,.08); color: var(--teal-lt); transform: translateY(-2px); }
+
+/* ── Stat card ── */
+.hero__stats {
+  position: absolute;
+  right: clamp(1.5rem, 5vw, 5rem);
+  bottom: clamp(5rem, 9vw, 9rem);
+  z-index: 4;
+  background: rgba(7,21,39,.82);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.8rem;
+  min-width: 210px;
+  animation: bob 7s ease-in-out infinite;
+  box-shadow: 0 28px 70px rgba(0,0,0,.4);
+  overflow: hidden;
+}
+.hero__stats::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--teal-lt));
+}
+.hero__stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem 1.4rem; }
+.hero__stats-divider { grid-column: 1 / -1; height: 1px; background: rgba(255,255,255,.08); }
+.hero__stat-num {
+  font-family: 'Bagind', serif;
+  font-size: 1.55rem;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: .1rem;
+}
+.hero__stat-label {
+  font-size: .5rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+}
+
+
+.scroll-dot { width: 3px; height: 7px; border-radius: 2px; background: var(--teal-lt); animation: bob 1.8s ease-in-out infinite; }
+.scroll-label {
+  font-size: .5rem;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.28);
+}
+
+/* ════════════════════════════════════════════════════════════
+   TICKER
+   ════════════════════════════════════════════════════════════ */
+.ticker {
+  background: linear-gradient(90deg, var(--teal-dk), var(--teal), var(--teal-lt));
+  overflow: hidden;
+  padding: .55rem 0;
+}
+.ticker__track {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker 32s linear infinite;
+}
+.ticker__item {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  padding: 0 1.8rem;
+  font-size: .59rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.88);
+  flex-shrink: 0;
+}
+.ticker__item i { font-size: .6rem; color: rgba(255,255,255,.52); }
+.ticker__dot { width: 4px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.32); flex-shrink: 0; }
+
+/* ════════════════════════════════════════════════════════════
+   SECTION HEADER
+   ════════════════════════════════════════════════════════════ */
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding-block: clamp(3.5rem, 6vw, 6.5rem) clamp(1.5rem, 2.5vw, 2.5rem);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: .54rem;
+  font-weight: 700;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--teal);
+  background: var(--teal-bg);
+  border: 1px solid var(--teal-bd);
+  padding: 5px 14px;
+  border-radius: var(--radius);
+  margin-bottom: .75rem;
+}
+.kicker::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 1px;
+  background: var(--teal-lt);
+  flex-shrink: 0;
+}
+
+.section-heading {
+  font-family: 'Bagind', serif;
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  font-weight: 400;
+  color: var(--ink);
+  line-height: .92;
+  margin-bottom: .75rem;
+}
+.section-heading .accent { color: var(--teal); }
+
+.section-desc {
+  font-size: .83rem;
+  font-weight: 300;
+  color: var(--muted);
+  max-width: 390px;
+  line-height: 1.82;
+}
+
+.count-badge {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  background: linear-gradient(135deg, var(--teal), var(--teal-lt));
+  border-radius: var(--radius);
+  padding: 1.1rem 1.6rem;
+  box-shadow: 0 8px 28px rgba(14,154,170,.28);
+}
+.count-badge__num { font-family: 'Bagind', serif; font-size: 2.2rem; color: #fff; line-height: 1; }
+.count-badge__label {
+  font-size: .5rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.72);
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   FEATURED CARD
+   ════════════════════════════════════════════════════════════ */
+.featured-wrap { padding-block: clamp(1.5rem, 2.5vw, 2.5rem) clamp(1rem, 1.5vw, 1.5rem); }
+
+.featured-card {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border2);
+  min-height: 430px;
+  box-shadow: 0 20px 60px rgba(7,21,39,.09), 0 4px 16px rgba(7,21,39,.05);
+  transition: transform .38s var(--ease), box-shadow .38s;
+}
+.featured-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 36px 80px rgba(14,154,170,.14), 0 8px 24px rgba(7,21,39,.07);
+}
+
+.featured-card__image { position: relative; overflow: hidden; }
+.featured-card__image img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scale(1.06);
+  filter: brightness(.82) saturate(.9);
+  transition: transform 10s linear, filter .4s;
+}
+.featured-card:hover .featured-card__image img { transform: scale(1); filter: brightness(.9) saturate(1.05); }
+
+.featured-card__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent 55%, #fff 100%);
+}
+
+.featured-card__crown {
+  position: absolute;
+  top: 1.2rem; left: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--amber);
+  color: var(--navy);
+  border-radius: var(--radius);
+  padding: 5px 16px;
+  font-size: .57rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 20px rgba(245,166,35,.4);
+}
+.featured-card__crown i { font-size: .55rem; }
+
+.featured-card__region {
+  position: absolute;
+  bottom: 1.2rem; left: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(7,21,39,.72);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  padding: 5px 14px;
+  font-size: .54rem;
+  font-weight: 500;
+  color: rgba(255,255,255,.78);
+}
+.featured-card__region i { font-size: .52rem; color: var(--teal-lt); }
+
+/* ── Featured body ── */
+.featured-card__body {
+  background: #fff;
+  padding: 2.5rem 2.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.featured-card__body::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 18%; bottom: 18%;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--teal), var(--teal-lt));
+  border-radius: var(--radius);
+}
+
+.featured-card__cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: .54rem;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 1rem;
+}
+.featured-card__cat i { font-size: .58rem; }
+
+.featured-card__title {
+  font-family: 'Bagind', serif;
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  font-weight: 400;
+  color: var(--ink);
+  line-height: .92;
+  margin-bottom: .9rem;
+}
+
+.featured-card__desc {
+  font-size: .82rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.95;
+  margin-bottom: 1.4rem;
+  max-width: 350px;
+}
+
+.pill-group { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.5rem; }
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--teal-bg);
+  border: 1px solid var(--teal-bd);
+  border-radius: var(--radius);
+  padding: 4px 12px;
+  font-size: .57rem;
+  font-weight: 500;
+  color: var(--teal);
+}
+.pill i { font-size: .53rem; }
+
+/* ════════════════════════════════════════════════════════════
+   CARD GRID
+   ════════════════════════════════════════════════════════════ */
+.card-grid-wrap { padding-inline: var(--gutter); padding-block: clamp(.8rem, 1.5vw, 1.5rem); }
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+}
+
+/* ─── Experience Card ─── */
+.xp-card {
+  background: #fff;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .32s var(--ease), box-shadow .32s, border-color .32s;
+  box-shadow: 0 2px 12px rgba(7,21,39,.05);
+}
+.xp-card.is-hidden { display: none; }
+.xp-card.animate-in { animation: cardIn .6s var(--reveal) both; }
+
+.xp-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 56px rgba(14,154,170,.12), 0 6px 18px rgba(7,21,39,.06);
+  border-color: rgba(14,154,170,.28);
+}
+
+/* ── Card image zone ── */
+.xp-card__image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.xp-card__image img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scale(1.07);
+  filter: brightness(.84) saturate(.88);
+  transition: transform 7s linear, filter .4s;
+}
+.xp-card:hover .xp-card__image img { transform: scale(1); filter: brightness(.94) saturate(1.05); }
+
+.xp-card__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(7,21,39,.6) 0%, rgba(7,21,39,.1) 45%, transparent 100%);
+}
+
+.xp-card__cat-tag {
+  position: absolute;
+  top: .75rem; left: .75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--radius);
+  padding: 3px 10px;
+  font-size: .49rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #fff;
+  backdrop-filter: blur(10px);
+}
+
+.xp-card__duration {
+  position: absolute;
+  top: .75rem; right: .75rem;
+  background: rgba(7,21,39,.5);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  padding: 3px 10px;
+  font-size: .49rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.xp-card__save {
+  position: absolute;
+  bottom: .75rem; right: .75rem;
+  z-index: 2;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.18);
+  border: 1.5px solid rgba(255,255,255,.28);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .65rem;
+  color: rgba(255,255,255,.72);
+  transition: background .22s var(--spring), color .22s, transform .22s var(--spring), border-color .22s;
+  padding: 0;
+  line-height: 1;
+}
+.xp-card__save:hover { background: rgba(239,83,80,.24); border-color: rgba(239,83,80,.5); color: #ef5350; transform: scale(1.15); }
+.xp-card__save.is-saved { background: rgba(239,83,80,.26); border-color: rgba(239,83,80,.52); color: #ef5350; }
+.xp-card__save.pop i { animation: heartPop .32s var(--spring) both; }
+
+/* ── Card body ── */
+.xp-card__body { padding: 1.2rem 1.3rem 1.4rem; flex: 1; display: flex; flex-direction: column; }
+
+.xp-card__stripe { height: 3px; width: 36px; border-radius: var(--radius); margin-bottom: .75rem; flex-shrink: 0; }
+
+.xp-card__title {
+  font-family: 'Bagind', serif;
+  font-size: clamp(.98rem, 1.3vw, 1.12rem);
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.08;
+  margin-bottom: .45rem;
+  transition: color .22s;
+}
+.xp-card:hover .xp-card__title { color: var(--teal); }
+
+.xp-card__desc {
+  font-size: .68rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: .9rem;
+  flex: 1;
+}
+
+.xp-card__meta {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-wrap: wrap;
+  padding-bottom: .9rem;
+  border-bottom: 1px solid var(--border2);
+  margin-bottom: .9rem;
+}
+.xp-card__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .56rem;
+  color: var(--subtle);
+}
+.xp-card__meta-item i { font-size: .52rem; color: var(--teal); }
+
+.xp-card__footer { display: flex; align-items: center; justify-content: space-between; }
+
+.xp-card__link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .61rem;
+  font-weight: 600;
+  transition: gap .2s;
+}
+.xp-card:hover .xp-card__link { gap: 9px; }
+.xp-card__link i { font-size: .57rem; }
+
+.xp-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #f0f5ff;
+  border: 1px solid #dde8ff;
+  border-radius: var(--radius);
+  padding: 2px 10px;
+  font-size: .5rem;
+  color: var(--subtle);
+}
+.xp-card__badge i { font-size: .48rem; color: var(--amber); }
+
+/* ════════════════════════════════════════════════════════════
+   MID BANNER
+   ════════════════════════════════════════════════════════════ */
+.mid-banner {
+  position: relative;
+  overflow: hidden;
+  margin-block: 2rem;
+}
+.mid-banner__bg {
+  width: 100%;
+  height: clamp(280px, 35vw, 440px);
+  object-fit: cover;
+  filter: brightness(.4) saturate(.8);
+}
+.mid-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(7,21,39,.92) 0%, rgba(14,154,170,.18) 100%);
+}
+.mid-banner__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-inline: clamp(1.5rem, 5vw, 4rem);
+}
+.mid-banner__kicker {
+  font-size: .56rem;
+  font-weight: 700;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--teal-lt);
+  margin-bottom: .7rem;
+}
+.mid-banner__heading {
+  font-family: 'Bagind', serif;
+  font-size: clamp(1.8rem, 3.8vw, 3.5rem);
+  font-weight: 400;
+  color: #fff;
+  line-height: .92;
+  margin-bottom: 1.2rem;
+}
+.mid-banner__heading span { color: var(--amber); }
+
+/* ════════════════════════════════════════════════════════════
+   WIDE CARDS (2-col)
+   ════════════════════════════════════════════════════════════ */
+.wide-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  padding-bottom: 1.5rem;
+}
+
+.wide-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border2);
+  min-height: 240px;
+  box-shadow: 0 4px 24px rgba(7,21,39,.06);
+  transition: transform .32s var(--ease), box-shadow .32s;
+}
+.wide-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 50px rgba(14,154,170,.12), 0 4px 14px rgba(7,21,39,.06);
+}
+
+.wide-card__image { position: relative; overflow: hidden; }
+.wide-card__image img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scale(1.06);
+  transition: transform 8s linear;
+}
+.wide-card:hover .wide-card__image img { transform: scale(1); }
+
+.wide-card__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent 55%, #fff 100%);
+}
+
+.wide-card__body {
+  background: #fff;
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.wide-card__stripe { height: 3px; width: 30px; border-radius: var(--radius); margin-bottom: .7rem; }
+.wide-card__cat {
+  font-size: .51rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  margin-bottom: .5rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.wide-card__cat i { font-size: .52rem; }
+
+.wide-card__title {
+  font-family: 'Bagind', serif;
+  font-size: clamp(1rem, 1.7vw, 1.38rem);
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.02;
+  margin-bottom: .5rem;
+  transition: color .22s;
+}
+.wide-card:hover .wide-card__title { color: var(--teal); }
+
+.wide-card__desc {
+  font-size: .69rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: .9rem;
+}
+
+.wide-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .61rem;
+  font-weight: 600;
+  transition: gap .2s;
+}
+.wide-card:hover .wide-card__link { gap: 9px; }
+.wide-card__link i { font-size: .57rem; }
+
+/* ════════════════════════════════════════════════════════════
+   CTA SECTION
+   ════════════════════════════════════════════════════════════ */
+.cta-section { padding-block: clamp(1.5rem, 2.5vw, 2.5rem) clamp(5rem, 8vw, 8rem); }
+
+.cta-box {
+  background: var(--navy);
+  border-radius: var(--radius);
+  overflow: hidden;
+  padding: clamp(3rem, 5vw, 5rem) clamp(2.5rem, 5vw, 5rem);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 3rem;
+  position: relative;
+}
+.cta-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(18,200,216,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18,200,216,.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+}
+.cta-box::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--teal-lt), var(--amber));
+}
+
+.cta-glow {
+  position: absolute;
+  top: -25%; left: -8%;
+  width: 460px; height: 460px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14,154,170,.14) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-text { position: relative; z-index: 1; }
+.cta-text__heading {
+  font-family: 'Bagind', serif;
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  font-weight: 400;
+  color: #fff;
+  line-height: .92;
+  margin-bottom: .75rem;
+}
+.cta-text__heading span { color: var(--teal-lt); }
+
+.cta-text__desc {
+  font-size: .83rem;
+  font-weight: 300;
+  color: rgba(255,255,255,.42);
+  max-width: 400px;
+  line-height: 1.85;
+}
+
+.cta-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .7rem;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 1200px) { .card-grid { grid-template-columns: repeat(3, 1fr); } }
+
+@media (max-width: 960px) {
+  .featured-card { grid-template-columns: 1fr; }
+  .featured-card__image { height: 300px; }
+  .featured-card__fade { background: linear-gradient(to top, #fff 0%, transparent 65%); }
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+  .wide-grid { grid-template-columns: 1fr; }
+  .hero__stats { display: none; }
+  .cta-box { grid-template-columns: 1fr; }
+  .cta-actions { align-items: flex-start; }
+}
+
+@media (max-width: 640px) {
+  .card-grid { grid-template-columns: 1fr; }
+  .wide-card { grid-template-columns: 1fr; }
+  .wide-card__image { height: 190px; }
+  .wide-card__fade { background: linear-gradient(to top, #fff 0%, transparent 65%); }
+  .filter-search { display: none; }
+  .hero__heading .indent { padding-left: 0; }
+  .hero__actions { flex-direction: column; width: 100%; }
+  .hero__actions .btn { justify-content: center; }
+  .filter-bar__inner { gap: .3rem; }
+  .filter-btn { padding: 4px 11px; font-size: .55rem; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+ <div class="hero__bg">
+  <div class="hero__bg-slide active">
+    <img src="https://pixelceylontours.com/wp-content/uploads/2026/02/elephant.webp" alt="Sri Lanka elephants">
+  </div>
+  <div class="hero__bg-slide">
+    <img src="https://pixelceylontours.com/wp-content/uploads/2026/02/sigirija1.webp" alt="Sigiriya Rock Fortress">
+  </div>
+  <div class="hero__bg-slide">
+    <img src="https://pixelceylontours.com/wp-content/uploads/2026/02/Nine-Arch.webp" alt="Nine Arch Bridge Ella">
+  </div>
+  <div class="hero__bg-slide">
+    <img src="https://pixelceylontours.com/wp-content/uploads/2026/02/mirissa-beach-sri-lanka-1.webp" alt="Mirissa Beach">
+  </div>
+  <div class="hero__bg-slide">
+    <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Yala-National-Park_processed.webp" alt="Yala National Park">
+  </div>
+</div>
+
+  <div class="hero__overlay"></div>
+  <div class="hero__grid"></div>
+
+  <div class="hero__pixels" id="heroPx" aria-hidden="true"></div>
+
+  <div class="hero__stats" aria-label="Quick stats">
+    <div class="hero__stats-grid">
+      <div><div class="hero__stat-num">22+</div><div class="hero__stat-label">Experiences</div></div>
+      <div><div class="hero__stat-num">4.9★</div><div class="hero__stat-label">Avg Rating</div></div>
+      <div class="hero__stats-divider"></div>
+      <div><div class="hero__stat-num">100%</div><div class="hero__stat-label">Private</div></div>
+      <div><div class="hero__stat-num">32+</div><div class="hero__stat-label">Countries</div></div>
+    </div>
+  </div>
+
+  <div class="hero__content">
+    <div class="hero__eyebrow">
+      <div class="hero__eyebrow-line"></div>
+      <div class="hero__eyebrow-text">Things To Do In Sri Lanka</div>
+      <div class="hero__eyebrow-pip"></div>
+    </div>
+    <h1 class="hero__heading">
+      Live Sri Lanka.<br>
+      <span class="">Don't Just <span class="accent">Visit</span> It.</span>
+    </h1>
+    <p class="hero__sub">22 handpicked, deeply private experiences — from leopard safaris at dawn to cooking beside a village family.</p>
+    <div class="hero__actions">
+      <a href="/experiences" class="btn btn--primary"><i class="fas fa-compass"></i>Explore All Experiences</a>
+      <a href="/trip-planner" class="btn btn--ghost"><i class="fas fa-calendar-check"></i>Build My Custom Trip</a>
+    </div>
+  </div>
+
+  
+</section>
+
+<!-- ══════════ TICKER ══════════ -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track" id="tickerTrack">
+    <span class="ticker__item"><i class="fas fa-star"></i>4.9★ Rated on Google</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-user-shield"></i>100% Private Tours</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-paw"></i>Yala Leopard Safari</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-train"></i>Scenic Train Journey</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-umbrella-beach"></i>South Coast Beaches</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-spa"></i>Ayurvedic Wellness</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-mountain"></i>Ella Rock Sunrise</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-water"></i>Blue Whale Watching</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-utensils"></i>Cooking Classes</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-clock"></i>Free Itinerary in 48h</span><span class="ticker__dot"></span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker__item"><i class="fas fa-star"></i>4.9★ Rated on Google</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-user-shield"></i>100% Private Tours</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-paw"></i>Yala Leopard Safari</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-train"></i>Scenic Train Journey</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-umbrella-beach"></i>South Coast Beaches</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-spa"></i>Ayurvedic Wellness</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-mountain"></i>Ella Rock Sunrise</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-water"></i>Blue Whale Watching</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-utensils"></i>Cooking Classes</span><span class="ticker__dot"></span>
+    <span class="ticker__item"><i class="fas fa-clock"></i>Free Itinerary in 48h</span><span class="ticker__dot"></span>
+  </div>
+</div>
+
+<!-- ══════════ MAIN ══════════ -->
+<main id="experiences">
+
+  <!-- Section Header -->
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="kicker">Curated Experiences</div>
+        <h2 class="section-heading">Journey Beyond<br><span class="accent">Boundaries</span></h2>
+        <p class="section-desc">Each experience is available privately — no groups, no strangers. Just you, the island, and our expert local guides.</p>
+      </div>
+      <div class="count-badge">
+        <div class="count-badge__num" id="cntEl">22</div>
+        <div class="count-badge__label">Curated<br>Experiences</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Featured Card -->
+  <div class="container">
+    <div class="featured-wrap">
+      <div class="featured-card">
+        <div class="featured-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/02/sigirija1.webp" alt="Sigiriya Lion Rock at sunrise">
+          <div class="featured-card__fade"></div>
+          <div class="featured-card__crown"><i class="fas fa-crown"></i>Editor's Pick</div>
+          <div class="featured-card__region"><i class="fas fa-map-marker-alt"></i>Cultural Triangle · UNESCO World Heritage</div>
+        </div>
+        <div class="featured-card__body">
+          <div class="featured-card__cat"><i class="fas fa-sun"></i>Scenic · Heritage</div>
+          <h3 class="featured-card__title">Sigiriya Lion Rock<br>at Sunrise</h3>
+          <p class="featured-card__desc">Climb the 5th-century rock fortress before the crowds arrive. Watch golden light flood across the plains from 200 metres above.</p>
+          <div class="pill-group">
+            <div class="pill"><i class="fas fa-clock"></i>Half-day · 5–10 AM</div>
+            <div class="pill"><i class="fas fa-user-shield"></i>100% Private</div>
+            <div class="pill"><i class="fas fa-ticket-alt"></i>Tickets arranged</div>
+            <div class="pill"><i class="fas fa-binoculars"></i>Expert guide</div>
+          </div>
+          <a href="#contact" class="btn btn--primary" style="width:fit-content">
+            <i class="fas fa-calendar-check"></i>Add to My Itinerary <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid 1 -->
+  <div class="card-grid-wrap">
+    <div class="card-grid" id="grid1">
+
+      <div class="xp-card" data-cat="wildlife">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Yala-National-Park_processed.webp" alt="Yala Safari">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(30,181,119,.88)"><i class="fas fa-paw"></i>Wildlife</div>
+          <div class="xp-card__duration">4–5 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--wildlife)"></div>
+          <h3 class="xp-card__title">Yala Leopard Safari</h3>
+          <p class="xp-card__desc">The world's highest density of wild leopards. Track big cats, elephants, sloth bears and crocodiles in a private 4×4 with a specialist wildlife guide.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Southern Province</div>
+            <div class="xp-card__meta-item"><i class="fas fa-car-side"></i>Private jeep</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--wildlife)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-star"></i>Top rated</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="culture">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/kandyan-dance.webp" alt="Kandyan Dance">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(180,140,245,.88)"><i class="fas fa-music"></i>Culture</div>
+          <div class="xp-card__duration">1.5 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--culture)"></div>
+          <h3 class="xp-card__title">Kandyan Cultural Dance Show</h3>
+          <p class="xp-card__desc">Fire-walkers, acrobats and swirling dancers perform an electrifying evening show — one of Sri Lanka's most celebrated living traditions.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Kandy</div>
+            <div class="xp-card__meta-item"><i class="fas fa-moon"></i>Every evening</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--culture)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-star"></i>Must-see</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="wildlife">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/whale-watching.webp" alt="Blue Whale">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(14,154,170,.9)"><i class="fas fa-water"></i>Wildlife</div>
+          <div class="xp-card__duration">6–7 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--beach)"></div>
+          <h3 class="xp-card__title">Blue Whale Watching</h3>
+          <p class="xp-card__desc">Mirissa is one of the world's best spots for blue whales. Pre-dawn catamaran with high encounter rates — the largest creature on Earth.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Mirissa, South</div>
+            <div class="xp-card__meta-item"><i class="fas fa-calendar-alt"></i>Nov–Apr</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--beach)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-heart"></i>Bucket list</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="adventure">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Ella-Nine-Arch-Bridge_processed.webp" alt="Ella Rock Hike">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(245,166,35,.92)"><i class="fas fa-mountain"></i>Adventure</div>
+          <div class="xp-card__duration">5–6 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--adventure)"></div>
+          <h3 class="xp-card__title">Ella Rock Sunrise Hike</h3>
+          <p class="xp-card__desc">Set off before 4 AM and reach the summit as gold light floods the hill country — Nine Arches Bridge, mist-wrapped peaks and blue sky to the horizon.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Ella, Uva</div>
+            <div class="xp-card__meta-item"><i class="fas fa-sun"></i>Depart 4:30 AM</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--adventure)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-fire"></i>Challenging</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="scenic">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/nuwarad-eliya-scaled.webp" alt="Tea Plantation">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(14,154,170,.9)"><i class="fas fa-leaf"></i>Scenic</div>
+          <div class="xp-card__duration">3–4 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--scenic)"></div>
+          <h3 class="xp-card__title">Tea Plantation Walk &amp; Factory Tour</h3>
+          <p class="xp-card__desc">Walk emerald hillsides with a working tea picker, learn the full leaf-to-cup process, and finish with a multi-variety tasting in a historic factory.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Nuwara Eliya</div>
+            <div class="xp-card__meta-item"><i class="fas fa-mountain"></i>1,800m elev.</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--scenic)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-star"></i>Popular</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="food">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/cooking-class.webp" alt="Cooking Class">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(232,120,77,.92)"><i class="fas fa-utensils"></i>Food</div>
+          <div class="xp-card__duration">3 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--food)"></div>
+          <h3 class="xp-card__title">Sri Lankan Cooking Class</h3>
+          <p class="xp-card__desc">Cook a full spread beside a local family — coconut milk curries, tempering spices, string hoppers — and eat everything you make for lunch.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Colombo / Kandy</div>
+            <div class="xp-card__meta-item"><i class="fas fa-users"></i>Max 8 guests</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--food)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-star"></i>Fan fave</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="heritage">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Galle-Dutch-Fort_processed.webp" alt="Galle Fort">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(201,162,39,.92)"><i class="fas fa-scroll"></i>Heritage</div>
+          <div class="xp-card__duration">2–3 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--heritage)"></div>
+          <h3 class="xp-card__title">Galle Fort Heritage Walk</h3>
+          <p class="xp-card__desc">Walk the 17th-century Dutch ramparts, explore cobbled colonial lanes, hidden boutiques and the lighthouse as the Indian Ocean glows gold at sunset.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Galle, South</div>
+            <div class="xp-card__meta-item"><i class="fas fa-scroll"></i>UNESCO Site</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--heritage)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-star"></i>Iconic</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="scenic">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Ella-Nine-Arch-Bridge_processed.webp" alt="Nine Arches Bridge">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(14,154,170,.9)"><i class="fas fa-camera"></i>Scenic</div>
+          <div class="xp-card__duration">2 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--scenic)"></div>
+          <h3 class="xp-card__title">Nine Arches Bridge at Dawn</h3>
+          <p class="xp-card__desc">Sri Lanka's most photographed bridge emerging from mountain mist as the blue toy train crosses — perfectly timed with our local schedule knowledge.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Ella, Uva</div>
+            <div class="xp-card__meta-item"><i class="fas fa-train"></i>Train-timed</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--scenic)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-camera"></i>Insta-iconic</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="wellness">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/ayurweda.webp" alt="Ayurveda">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(139,191,60,.92)"><i class="fas fa-spa"></i>Wellness</div>
+          <div class="xp-card__duration">Half day</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--wellness)"></div>
+          <h3 class="xp-card__title">Ayurvedic Wellness Experience</h3>
+          <p class="xp-card__desc">A registered Ayurvedic physician consults, then an hour of warm herbal oil treatment in a rural retreat — deeply restoring, completely authentic.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Hill Country</div>
+            <div class="xp-card__meta-item"><i class="fas fa-certificate"></i>Certified docs</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--wellness)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-heart"></i>Rejuvenating</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="scenic">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Central-Highlands-of-Sri-Lanka_processed.webp" alt="Scenic Train">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(14,154,170,.9)"><i class="fas fa-train"></i>Scenic</div>
+          <div class="xp-card__duration">7 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--scenic)"></div>
+          <h3 class="xp-card__title">Kandy–Ella Scenic Train</h3>
+          <p class="xp-card__desc">Voted one of the world's most beautiful rail journeys. Sit in an open door as the train winds through waterfalls, tea estates and misty mountain tunnels.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Central Province</div>
+            <div class="xp-card__meta-item"><i class="fas fa-ticket-alt"></i>Pre-booked</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--scenic)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-globe"></i>World-class</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="adventure">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/rafting.webp" alt="Rafting">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(245,166,35,.92)"><i class="fas fa-water"></i>Adventure</div>
+          <div class="xp-card__duration">3 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--adventure)"></div>
+          <h3 class="xp-card__title">White-Water Rafting, Kithulgala</h3>
+          <p class="xp-card__desc">Crash through Grade 3–4 rapids on the Kelani River — the filming location of The Bridge on the River Kwai — surrounded by dense jungle and adrenaline.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Kithulgala</div>
+            <div class="xp-card__meta-item"><i class="fas fa-bolt"></i>Thrilling</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--adventure)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-bolt"></i>Adrenaline</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="food">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/street-food.webp" alt="Street Food Tour">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(232,120,77,.92)"><i class="fas fa-utensils"></i>Food</div>
+          <div class="xp-card__duration">4 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--food)"></div>
+          <h3 class="xp-card__title">Colombo Street Food &amp; Tuk-Tuk Tour</h3>
+          <p class="xp-card__desc">Zip through Pettah Market, eat hoppers at a famous local stall, spot street art in Colombo 7 and end with sunset cocktails on a rooftop terrace.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Colombo City</div>
+            <div class="xp-card__meta-item"><i class="fas fa-clock"></i>Afternoon + eve</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--food)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-star"></i>City fave</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /grid1 -->
+  </div>
+
+  <!-- Mid Banner -->
+  <div class="mid-banner">
+    <img class="mid-banner__bg" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1800&auto=format&fit=crop&q=80" alt="Sri Lanka south coast">
+    <div class="mid-banner__overlay"></div>
+    <div class="mid-banner__content">
+      <div class="mid-banner__kicker">100% Private · Zero Groups · Your Pace</div>
+      <h2 class="mid-banner__heading">Every Experience.<br><span>Just You &amp; Sri Lanka.</span></h2>
+      <a href="#contact" class="btn btn--amber"><i class="fas fa-paper-plane"></i>Build My Bespoke Itinerary</a>
+    </div>
+  </div>
+
+  <!-- Grid 2 -->
+  <div class="card-grid-wrap">
+    <div class="card-grid" id="grid2">
+
+      <div class="xp-card" data-cat="wildlife">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Sinharaja-Forest_processed.webp" alt="Sinharaja">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(30,181,119,.88)"><i class="fas fa-tree"></i>Wildlife</div>
+          <div class="xp-card__duration">Full day</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--wildlife)"></div>
+          <h3 class="xp-card__title">Sinharaja Rainforest Trek</h3>
+          <p class="xp-card__desc">Sri Lanka's last primary rainforest — endemic birds found nowhere on Earth. Trek triple canopy with specialist birding guides in a UNESCO biosphere reserve.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Sabaragamuwa</div>
+            <div class="xp-card__meta-item"><i class="fas fa-binoculars"></i>Birding paradise</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--wildlife)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-scroll"></i>UNESCO</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="beach">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/negambo-beach_processed.webp" alt="Beach Hopping">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(14,154,170,.9)"><i class="fas fa-umbrella-beach"></i>Beach</div>
+          <div class="xp-card__duration">Full day</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--beach)"></div>
+          <h3 class="xp-card__title">South Coast Beach Hopping</h3>
+          <p class="xp-card__desc">Rope-swings at Dalawella, jungle-fringed Jungle Beach, sea turtles at Rekawa — a full private day along the most beautiful coastline in the island.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Unawatuna–Tangalle</div>
+            <div class="xp-card__meta-item"><i class="fas fa-car"></i>Private vehicle</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--beach)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-water"></i>Sun &amp; sea</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="heritage">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/dambulla-cave-temple_processed.webp" alt="Dambulla Cave">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(201,162,39,.92)"><i class="fas fa-dharmachakra"></i>Heritage</div>
+          <div class="xp-card__duration">2–3 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--heritage)"></div>
+          <h3 class="xp-card__title">Dambulla Cave Temple</h3>
+          <p class="xp-card__desc">Five cave temples carved with 153 gilded Buddhas and 2,100 sq metres of ancient murals — a UNESCO site best experienced in rare silence.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Cultural Triangle</div>
+            <div class="xp-card__meta-item"><i class="fas fa-scroll"></i>UNESCO Site</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--heritage)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-pray"></i>Sacred</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="beach">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/cataraman-sunset.webp" alt="Catamaran Sunset">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(14,154,170,.9)"><i class="fas fa-ship"></i>Beach</div>
+          <div class="xp-card__duration">2–3 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--beach)"></div>
+          <h3 class="xp-card__title">Private Sunset Catamaran Cruise</h3>
+          <p class="xp-card__desc">Chartered for you alone — sundowners, dolphins playing at the bow and Sri Lanka's legendary Indian Ocean sunset turning sky amber, pink and violet.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Mirissa / Tangalle</div>
+            <div class="xp-card__meta-item"><i class="fas fa-user-shield"></i>Fully private</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--beach)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-heart"></i>Romantic</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="culture">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/temple-of-tooth_processed.webp" alt="Temple of the Tooth">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(180,140,245,.88)"><i class="fas fa-place-of-worship"></i>Culture</div>
+          <div class="xp-card__duration">2 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--culture)"></div>
+          <h3 class="xp-card__title">Temple of the Tooth Relic</h3>
+          <p class="xp-card__desc">Sri Lanka's most sacred Buddhist temple holds a relic of the Buddha himself. Visit during the puja ceremony as bells, drums and incense fill the gilded halls.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Kandy</div>
+            <div class="xp-card__meta-item"><i class="fas fa-scroll"></i>UNESCO Site</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--culture)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-pray"></i>Sacred</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="culture">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/sigiriya-village-cyling_processed.webp" alt="Village Cycling">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(180,140,245,.88)"><i class="fas fa-bicycle"></i>Culture</div>
+          <div class="xp-card__duration">4 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--culture)"></div>
+          <h3 class="xp-card__title">Village Life Cycling Tour</h3>
+          <p class="xp-card__desc">Pedal past paddy fields, meet a toddy tapper, share tea with a village family and visit a batik workshop — unhurried and deeply real Sri Lanka.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Kandy surrounds</div>
+            <div class="xp-card__meta-item"><i class="fas fa-bicycle"></i>Flat, easy</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--culture)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-leaf"></i>Authentic</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="adventure">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/piduruthalagala_converted-scaled.webp" alt="Pidurangala">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(245,166,35,.92)"><i class="fas fa-mountain"></i>Adventure</div>
+          <div class="xp-card__duration">3 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--adventure)"></div>
+          <h3 class="xp-card__title">Pidurangala Rock Climb</h3>
+          <p class="xp-card__desc">The secret alternative to Sigiriya — boulder scramble through a cave monastery to a summit with Lion Rock filling your entire field of view. No queues.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Sigiriya Area</div>
+            <div class="xp-card__meta-item"><i class="fas fa-exclamation-circle"></i>Moderate</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--adventure)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-gem"></i>Hidden gem</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="scenic">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/botnical-garden.webp" alt="Botanical Garden">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(14,154,170,.9)"><i class="fas fa-seedling"></i>Scenic</div>
+          <div class="xp-card__duration">2–3 hrs</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--scenic)"></div>
+          <h3 class="xp-card__title">Peradeniya Botanical Garden</h3>
+          <p class="xp-card__desc">147 acres of living wonder — 4,000+ plant species including a Java fig older than the British Empire, rare orchids, spices and a towering avenue of royal palms.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Kandy</div>
+            <div class="xp-card__meta-item"><i class="fas fa-leaf"></i>4,000+ species</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--scenic)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-tree"></i>Peaceful</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="wellness">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/meditatuion.webp" alt="Meditation">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(139,191,60,.92)"><i class="fas fa-om"></i>Wellness</div>
+          <div class="xp-card__duration">Full day</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--wellness)"></div>
+          <h3 class="xp-card__title">Mindfulness &amp; Meditation Retreat</h3>
+          <p class="xp-card__desc">A full-day guided retreat at a forest monastery — morning meditation, mindful walking, vegetarian lunch with monks, and a silent evening sitting by candlelight.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Kandy / Hill Country</div>
+            <div class="xp-card__meta-item"><i class="fas fa-moon"></i>Full day</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--wellness)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-peace"></i>Soulful</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="wildlife">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/willpattu.webp" alt="Wilpattu Safari">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(30,181,119,.88)"><i class="fas fa-paw"></i>Wildlife</div>
+          <div class="xp-card__duration">Full day</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--wildlife)"></div>
+          <h3 class="xp-card__title">Wilpattu Safari Experience</h3>
+          <p class="xp-card__desc">Sri Lanka's largest and least-crowded national park — wild elephants, leopards, 200+ birds in pristine, rarely-visited wilderness with no tourist rush.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Wilpattu, North</div>
+            <div class="xp-card__meta-item"><i class="fas fa-leaf"></i>Eco-responsible</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--wildlife)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-tree"></i>Off-path</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="food">
+        <div class="xp-card__image">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&auto=format&fit=crop&q=80" alt="Fine Dining">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(232,120,77,.92)"><i class="fas fa-wine-glass-alt"></i>Food</div>
+          <div class="xp-card__duration">Eve only</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--food)"></div>
+          <h3 class="xp-card__title">Private Chef Dinner Experience</h3>
+          <p class="xp-card__desc">A renowned local chef prepares a multi-course private dinner at a cliffside villa — pairing Sri Lankan fusion flavours with sunset views over the Indian Ocean.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Galle / Mirissa</div>
+            <div class="xp-card__meta-item"><i class="fas fa-star"></i>Chef's table</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--food)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-heart"></i>Luxury</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xp-card" data-cat="heritage">
+        <div class="xp-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/polonnaruwa_processed.webp" alt="Polonnaruwa">
+          <div class="xp-card__gradient"></div>
+          <div class="xp-card__cat-tag" style="background:rgba(201,162,39,.92)"><i class="fas fa-monument"></i>Heritage</div>
+          <div class="xp-card__duration">Full day</div>
+          <button class="xp-card__save" aria-label="Save experience"><i class="fas fa-heart"></i></button>
+        </div>
+        <div class="xp-card__body">
+          <div class="xp-card__stripe" style="background:var(--heritage)"></div>
+          <h3 class="xp-card__title">Polonnaruwa Ancient City by Bicycle</h3>
+          <p class="xp-card__desc">Cycle through the 12th-century royal capital — giant Buddha statues, moonstone staircases, royal bathhouses and a 1,000-year-old irrigation tank.</p>
+          <div class="xp-card__meta">
+            <div class="xp-card__meta-item"><i class="fas fa-map-marker-alt"></i>Cultural Triangle</div>
+            <div class="xp-card__meta-item"><i class="fas fa-scroll"></i>UNESCO Site</div>
+          </div>
+          <div class="xp-card__footer">
+            <a href="#contact" class="xp-card__link" style="color:var(--heritage)">Book Now <i class="fas fa-arrow-right"></i></a>
+            <div class="xp-card__badge"><i class="fas fa-bicycle"></i>Active</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /grid2 -->
+  </div>
+
+  <!-- Wide Cards -->
+  <div class="container">
+    <div class="wide-grid">
+      <div class="wide-card">
+        <div class="wide-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/Adams-Peak_processed.webp" alt="Adam's Peak">
+          <div class="wide-card__fade"></div>
+        </div>
+        <div class="wide-card__body">
+          <div class="wide-card__stripe" style="background:var(--amber)"></div>
+          <div class="wide-card__cat" style="color:var(--amber)"><i class="fas fa-moon"></i>Sacred Adventure</div>
+          <div class="wide-card__title">Adam's Peak Night Pilgrimage</div>
+          <p class="wide-card__desc">Climb 5,500 steps by lantern light alongside Buddhist, Hindu and Muslim pilgrims — and reach the sacred summit as sunrise casts the perfect triangular shadow across the mist below.</p>
+          <a href="#contact" class="wide-card__link" style="color:var(--amber)">Add to Trip <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="wide-card">
+        <div class="wide-card__image">
+          <img src="https://pixelceylontours.com/wp-content/uploads/2026/03/sewa-turtle.webp" alt="Sea Turtle">
+          <div class="wide-card__fade"></div>
+        </div>
+        <div class="wide-card__body">
+          <div class="wide-card__stripe" style="background:var(--wildlife)"></div>
+          <div class="wide-card__cat" style="color:var(--wildlife)"><i class="fas fa-paw"></i>Wildlife &amp; Conservation</div>
+          <div class="wide-card__title">Sea Turtle Nesting Night Watch</div>
+          <p class="wide-card__desc">Sit silently on Rekawa Beach with marine biologists as endangered leatherback and green turtles come ashore under the stars — ethical, intimate, life-changing.</p>
+          <a href="#contact" class="wide-card__link" style="color:var(--wildlife)">Add to Trip <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="container">
+    <div class="cta-section" id="contact">
+      <div class="cta-box">
+        <div class="cta-glow"></div>
+        <div class="cta-text">
+          <h2 class="cta-text__heading">Mix. Match. <span>Make It Yours.</span></h2>
+          <p class="cta-text__desc">Combine any experiences above into a fully private, day-by-day Sri Lanka itinerary. Tell us your dream — we build it in 48 hours, completely free.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="https://wa.me/94777273794" class="btn btn--amber"><i class="fab fa-whatsapp"></i>Start on WhatsApp</a>
+          <a href="mailto:info@pixelceylontours.com" class="btn btn--outline-light"><i class="fas fa-envelope"></i>Send an Email Instead</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+/* ── Hero background slideshow ── */
+(function(){
+  const slides = document.querySelectorAll('.hero__bg-slide');
+  let current = 0;
+  function next(){
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }
+  setInterval(next, 5000);
+})();
+
+
+/* ── Filter logic ── */
+(function () {
+  const btns   = document.querySelectorAll('.filter-btn');
+  const cards  = document.querySelectorAll('.xp-card');
+  const search = document.getElementById('srch');
+  const cntEl  = document.getElementById('cntEl');
+
+  let activeCat = 'all';
+  let searchVal = '';
+
+  function applyFilters() {
+    let visible = 0;
+    cards.forEach(card => {
+      const cat   = card.dataset.cat || '';
+      const title = card.querySelector('.xp-card__title')?.textContent.toLowerCase() || '';
+      const desc  = card.querySelector('.xp-card__desc')?.textContent.toLowerCase()  || '';
+      const catOk = activeCat === 'all' || cat === activeCat;
+      const srOk  = !searchVal || title.includes(searchVal) || desc.includes(searchVal);
+      const show  = catOk && srOk;
+      card.classList.toggle('is-hidden', !show);
+      if (show) visible++;
+    });
+    if (cntEl) cntEl.textContent = visible;
+  }
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      activeCat = btn.dataset.cat;
+      applyFilters();
+    });
+  });
+
+  if (search) {
+    search.addEventListener('input', () => {
+      searchVal = search.value.toLowerCase().trim();
+      applyFilters();
+    });
+  }
+}());
+
+/* ── Save / heart toggle ── */
+document.querySelectorAll('.xp-card__save').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('is-saved');
+    btn.classList.add('pop');
+    btn.addEventListener('animationend', () => btn.classList.remove('pop'), { once: true });
+  });
+});
+</script>
+</body>
+</html>
+</div>
