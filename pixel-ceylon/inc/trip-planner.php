@@ -1708,9 +1708,8 @@ add_shortcode('pixel_ceylon_trip_planner', function () {
         function initMap(){
           map = L.map(els.mapEl, {center:[7.87,80.65], zoom:7, zoomControl:false, scrollWheelZoom:false});
           L.control.zoom({position:'bottomright'}).addTo(map);
-          L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            attribution:'&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap contributors',
-            subdomains:'abcd',
+          L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution:'Tiles &copy; <a href="https://www.esri.com/">Esri</a>',
             maxZoom:19
           }).addTo(map);
 
