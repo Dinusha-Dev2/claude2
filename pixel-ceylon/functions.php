@@ -84,6 +84,26 @@ function pixel_ceylon_layout() {
 	);
 }
 
+// Pages built with Elementor carry its "Full Width" template, which Elementor
+// enforces through template_include. Pages with a theme layout use page.php.
+add_filter( 'template_include', function ( $template ) {
+	return pixel_ceylon_layout() ? get_theme_file_path( 'page.php' ) : $template;
+}, 100 );
+
+// Pages with a theme layout don't render Elementor content, so skip its assets.
+add_action( 'wp_enqueue_scripts', function () {
+	if ( ! pixel_ceylon_layout() ) {
+		return;
+	}
+	foreach ( array( wp_styles(), wp_scripts() ) as $deps ) {
+		foreach ( $deps->queue as $handle ) {
+			if ( preg_match( '/^(elementor|e-|pro-elements)/', $handle ) ) {
+				'WP_Styles' === get_class( $deps ) ? wp_dequeue_style( $handle ) : wp_dequeue_script( $handle );
+			}
+		}
+	}
+}, PHP_INT_MAX );
+
 /**
  * Print one section file from parts/sections/.
  *
