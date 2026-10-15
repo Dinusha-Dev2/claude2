@@ -140,21 +140,34 @@ a:where(:not(.wp-element-button)) { text-decoration: none; }
 	html * { transition-delay: 0s !important; transition-duration: 0s !important; }
 }
 
-/* Plain pages (posts, archives, 404) that have no hand-built section. */
+/* Plain pages (posts, archives, 404) that have no hand-built section. The site
+   header is transparent and made for the dark hero sections, so these pages
+   use the same navy background. */
+body.pct-plain {
+	background: #071527;
+}
+
 .pct-content {
 	box-sizing: border-box;
 	max-width: 860px;
+	min-height: 60vh;
 	margin: 0 auto;
-	padding: 160px 24px 96px;
+	padding: 180px 24px 120px;
 	font-family: 'Poppins', sans-serif;
 	line-height: 1.7;
-	color: #1a2433;
+	color: rgba(240, 236, 226, .78);
+}
+
+.pct-content h1,
+.pct-content h2 {
+	font-family: 'Cormorant Garamond', serif;
+	font-weight: 500;
+	line-height: 1.15;
+	color: #fff;
 }
 
 .pct-content h1 {
-	font-size: clamp(2rem, 4vw, 3rem);
-	line-height: 1.15;
-	color: #071527;
+	font-size: clamp(2.4rem, 5vw, 3.6rem);
 }
 
 .pct-content img {
@@ -163,7 +176,7 @@ a:where(:not(.wp-element-button)) { text-decoration: none; }
 }
 
 .pct-content a {
-	color: #0e8f9b;
+	color: #12c8d8;
 }
 
 .pct-button {

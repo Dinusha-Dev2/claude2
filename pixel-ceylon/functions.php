@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PIXEL_CEYLON_VERSION', '1.0.0' );
+define( 'PIXEL_CEYLON_VERSION', '1.0.1' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -36,6 +36,9 @@ add_action( 'wp_enqueue_scripts', function () {
 // Hook for the base layer in assets/css/base.css.
 add_filter( 'body_class', function ( $classes ) {
 	$classes[] = 'pct-body';
+	if ( ! pixel_ceylon_layout() ) {
+		$classes[] = 'pct-plain';
+	}
 	return $classes;
 } );
 
@@ -131,7 +134,8 @@ function pixel_ceylon_section( $name ) {
 add_action( 'wp_head', function () {
 	$layout = pixel_ceylon_layout();
 	if ( ! $layout ) {
-		return;
+		// Plain pages (posts, archives, 404) still show the shared header and footer.
+		$layout = array( 'header' => true, 'footer' => true, 'sections' => array() );
 	}
 
 	$sections = $layout['sections'];
