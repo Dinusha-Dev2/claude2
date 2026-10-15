@@ -1708,8 +1708,8 @@ add_shortcode('pixel_ceylon_trip_planner', function () {
         function initMap(){
           map = L.map(els.mapEl, {center:[7.87,80.65], zoom:7, zoomControl:false, scrollWheelZoom:false});
           L.control.zoom({position:'bottomright'}).addTo(map);
-          L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-            attribution:'Tiles &copy; <a href="https://www.esri.com/">Esri</a>',
+          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             maxZoom:19
           }).addTo(map);
 

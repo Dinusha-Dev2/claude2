@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PIXEL_CEYLON_VERSION', '1.0.1' );
+define( 'PIXEL_CEYLON_VERSION', '1.0.2' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
