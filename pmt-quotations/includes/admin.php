@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin: menus, assets and the overview strip on the documents list.
+ * Admin: menus, list pages and assets.
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -103,99 +103,7 @@ add_action( 'admin_enqueue_scripts', function () {
 	}
 } );
 
-/** Aggregate figures by currency, never mixing currencies. */
-function pq_stats() {
-	global $wpdb;
-	$rows = $wpdb->get_results( $wpdb->prepare(
-		"SELECT t.meta_value AS dtype, s.meta_value AS dstatus, c.meta_value AS cur, COUNT(*) AS n,
-		        SUM(CAST(tot.meta_value AS DECIMAL(20,4))) AS total, SUM(CAST(b.meta_value AS DECIMAL(20,4))) AS balance
-		 FROM {$wpdb->posts} p
-		 INNER JOIN {$wpdb->postmeta} t   ON t.post_id = p.ID   AND t.meta_key = '_pq_type'
-		 INNER JOIN {$wpdb->postmeta} s   ON s.post_id = p.ID   AND s.meta_key = '_pq_status'
-		 INNER JOIN {$wpdb->postmeta} c   ON c.post_id = p.ID   AND c.meta_key = '_pq_currency'
-		 INNER JOIN {$wpdb->postmeta} tot ON tot.post_id = p.ID AND tot.meta_key = '_pq_total'
-		 INNER JOIN {$wpdb->postmeta} b   ON b.post_id = p.ID   AND b.meta_key = '_pq_balance'
-		 WHERE p.post_type = %s AND p.post_status = 'publish'
-		 GROUP BY t.meta_value, s.meta_value, c.meta_value",
-		PQ_CPT
-	) );
-	$cards = array(
-		'open'     => array( 'label' => 'Open quotations', 'n' => 0, 'sums' => array() ),
-		'accepted' => array( 'label' => 'Accepted quotations', 'n' => 0, 'sums' => array() ),
-		'unpaid'   => array( 'label' => 'Awaiting payment', 'n' => 0, 'sums' => array() ),
-		'paid'     => array( 'label' => 'Paid invoices', 'n' => 0, 'sums' => array() ),
-		'deliver'  => array( 'label' => 'Out for delivery', 'n' => 0, 'sums' => array(), 'count_only' => true ),
-	);
-	foreach ( (array) $rows as $r ) {
-		$key = '';
-		$val = (float) $r->total;
-		if ( 'quotation' === $r->dtype && 'sent' === $r->dstatus ) { $key = 'open'; }
-		elseif ( 'quotation' === $r->dtype && 'accepted' === $r->dstatus ) { $key = 'accepted'; }
-		elseif ( pq_type_has_payments( $r->dtype ) && in_array( $r->dstatus, array( 'sent', 'partial' ), true ) ) { $key = 'unpaid'; $val = (float) $r->balance; }
-		elseif ( 'invoice' === $r->dtype && 'paid' === $r->dstatus ) { $key = 'paid'; }
-		elseif ( 'delivery' === $r->dtype && 'sent' === $r->dstatus ) { $key = 'deliver'; }
-		if ( '' === $key ) { continue; }
-		$cards[ $key ]['n'] += (int) $r->n;
-		$cards[ $key ]['sums'][ $r->cur ] = ( isset( $cards[ $key ]['sums'][ $r->cur ] ) ? $cards[ $key ]['sums'][ $r->cur ] : 0 ) + $val;
-	}
-	return $cards;
-}
-
-/** Cards for one type's list: count and value per status. */
-function pq_type_stats( $type ) {
-	global $wpdb;
-	$rows = $wpdb->get_results( $wpdb->prepare(
-		"SELECT s.meta_value AS dstatus, c.meta_value AS cur, COUNT(*) AS n,
-		        SUM(CAST(tot.meta_value AS DECIMAL(20,4))) AS total, SUM(CAST(b.meta_value AS DECIMAL(20,4))) AS balance
-		 FROM {$wpdb->posts} p
-		 INNER JOIN {$wpdb->postmeta} t   ON t.post_id = p.ID   AND t.meta_key = '_pq_type' AND t.meta_value = %s
-		 INNER JOIN {$wpdb->postmeta} s   ON s.post_id = p.ID   AND s.meta_key = '_pq_status'
-		 INNER JOIN {$wpdb->postmeta} c   ON c.post_id = p.ID   AND c.meta_key = '_pq_currency'
-		 INNER JOIN {$wpdb->postmeta} tot ON tot.post_id = p.ID AND tot.meta_key = '_pq_total'
-		 INNER JOIN {$wpdb->postmeta} b   ON b.post_id = p.ID   AND b.meta_key = '_pq_balance'
-		 WHERE p.post_type = %s AND p.post_status = 'publish'
-		 GROUP BY s.meta_value, c.meta_value",
-		$type, PQ_CPT
-	) );
-	$cards = array();
-	foreach ( pq_statuses( $type ) as $k => $label ) {
-		$cards[ $k ] = array( 'label' => $label, 'n' => 0, 'sums' => array(), 'count_only' => 'delivery' === $type );
-	}
-	foreach ( (array) $rows as $r ) {
-		if ( ! isset( $cards[ $r->dstatus ] ) ) { continue; }
-		// What is still owed matters for unpaid invoices; the full value for everything else.
-		$val = ( pq_type_has_payments( $type ) && in_array( $r->dstatus, array( 'sent', 'partial' ), true ) ) ? (float) $r->balance : (float) $r->total;
-		$cards[ $r->dstatus ]['n'] += (int) $r->n;
-		$cards[ $r->dstatus ]['sums'][ $r->cur ] = ( isset( $cards[ $r->dstatus ]['sums'][ $r->cur ] ) ? $cards[ $r->dstatus ]['sums'][ $r->cur ] : 0 ) + $val;
-	}
-	if ( pq_type_has_payments( $type ) ) {
-		foreach ( array( 'sent', 'partial' ) as $k ) { $cards[ $k ]['label'] .= ' (due)'; }
-	}
-	return $cards;
-}
-
-add_action( 'admin_notices', function () {
-	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-	if ( ! $screen || 'edit-' . PQ_CPT !== $screen->id || ! pq_can() ) { return; }
-	$lt = pq_list_type();
-	echo '<div class="pq-app pq-stats' . ( $lt ? ' pq-stats-type' : '' ) . '">';
-	foreach ( $lt ? pq_type_stats( $lt ) : pq_stats() as $card ) {
-		echo '<div class="pq-stat"><span class="pq-stat-label">' . esc_html( $card['label'] ) . '</span>';
-		if ( ! empty( $card['count_only'] ) ) {
-			echo '<strong' . ( $card['n'] ? '' : ' class="pq-zero"' ) . '>' . (int) $card['n'] . '</strong>';
-		} elseif ( $card['sums'] ) {
-			foreach ( $card['sums'] as $cur => $v ) { echo '<strong>' . esc_html( pq_money( $v, $cur ) ) . '</strong>'; }
-		} else {
-			echo '<strong class="pq-zero">0</strong>';
-		}
-		if ( empty( $card['count_only'] ) ) { echo '<span class="pq-stat-n">' . (int) $card['n'] . ' ' . ( 1 === (int) $card['n'] ? 'document' : 'documents' ) . '</span>'; }
-		elseif ( ! $lt ) { echo '<span class="pq-stat-n">delivery notes dispatched</span>'; }
-		echo '</div>';
-	}
-	echo '</div>';
-} );
-
-/* A type's list page is titled after it ("Tax invoices") and shows only its own counts. */
+/* A type's list page is titled after it ("Tax invoices"); the All / Published counts would mix types, so they are hidden. */
 add_action( 'load-edit.php', function () {
 	global $typenow, $wp_post_types;
 	if ( PQ_CPT !== $typenow || ! pq_list_type() || ! isset( $wp_post_types[ PQ_CPT ] ) ) { return; }
