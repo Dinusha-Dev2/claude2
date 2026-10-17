@@ -398,7 +398,6 @@ function pq_document_body( $doc, $s, $ctx = 'public' ) {
 	}
 	echo '</div><div class="pqd-doc"><h1>' . esc_html( $type_label ) . '</h1>';
 	echo '<div class="pqd-docno">' . esc_html( $L['number'] . ' ' . $doc['number'] ) . '</div>';
-	if ( '' !== $customer ) { echo '<div class="pqd-docno">' . esc_html( $customer ) . '</div>'; }
 	echo '</div></header></div>';
 	echo '</div>'; // #pqd-root
 	return ob_get_clean();
