@@ -43,17 +43,16 @@ function pq_document_css( $s ) {
 	$css .= '.pqd-stamp{display:inline-block;margin-top:6px;padding:1px 8px;border:1px solid var(--pq-ink);font-weight:700;font-size:.9em}';
 
 	// Continuation header (pages 2 onward).
-	$css .= '.pqd-chead{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:7px;margin-bottom:6px;border-bottom:1px solid #9a9a9a}';
-	$css .= '.pqd-chead img{display:block}.pqd-chead-name{font-weight:700;font-size:1.1em}';
-	$css .= '.pqd-chead-r{text-align:right;line-height:1.35}.pqd-chead-r strong{display:block}.pqd-chead-r span{color:var(--pq-muted)}';
+	$css .= '.pqd-chead{margin-bottom:10px}';
 
 	// Parties and summary: grey label bars, plain "Label: value" rows.
-	$css .= '.pqd-parties{display:grid;grid-template-columns:1.35fr 1fr;gap:0 32px;margin-top:14px;align-items:start}';
-	$css .= '.pqd-grp+.pqd-grp{margin-top:14px}';
+	$css .= '.pqd-parties{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:0 28px;margin-top:12px;align-items:start}';
+	$css .= '.pqd-grp+.pqd-grp{margin-top:10px}';
 	$css .= '.pqd-bar{margin:0;padding:2px 8px;background:var(--pq-bar);font-weight:700}.pqd-bar span{margin-left:6px;font-weight:400}';
-	$css .= '.pqd-kv{margin:4px 0 0;padding:0 8px;display:grid;grid-template-columns:108px 1fr;gap:1px 8px}.pqd-kv dt{white-space:nowrap}';
-	$css .= '.pqd-kv dt{color:var(--pq-muted)}.pqd-kv dd{margin:0}';
-	$css .= '.pqd-sum .pqd-kv{grid-template-columns:1fr auto}.pqd-sum .pqd-kv dd{text-align:right}';
+	// Label column only as wide as its longest label, values right beside it, lines close together.
+	$css .= '.pqd-kv{margin:3px 0 0;padding:0 8px;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:0 10px;line-height:1.3}.pqd-kv dt{white-space:nowrap}';
+	$css .= '.pqd-kv dt{color:var(--pq-muted)}.pqd-kv dd{margin:0;overflow-wrap:anywhere}';
+	$css .= '.pqd-sum .pqd-kv{grid-template-columns:max-content minmax(0,1fr)}.pqd-sum .pqd-kv dd{text-align:right}';
 	$css .= '.pqd-sum .is-strong{font-weight:700;color:var(--pq-ink)}.pqd-sum .is-first{margin-top:5px;padding-top:5px;border-top:1px solid var(--pq-line)}';
 
 	// Items.
@@ -174,7 +173,6 @@ function pq_document_body( $doc, $s, $ctx = 'public' ) {
 		foreach ( $doc['items'] as $it ) { if ( ! empty( $it['img_url'] ) ) { $show['images'] = true; break; } }
 	}
 	$logo     = $show['logo'] ? pq_logo_data( $s, $s['template']['logo_height'] ) : null;
-	$logo_sm  = $show['logo'] ? pq_logo_data( $s, 28 ) : null;
 	$customer = pq_customer_label( $cust );
 
 	ob_start();
@@ -233,8 +231,8 @@ function pq_document_body( $doc, $s, $ctx = 'public' ) {
 
 	/* Document details */
 	echo '<div class="pqd-grp pqd-sum"><p class="pqd-bar">' . esc_html( strtr( $L['summary_title'], array( '{type}' => $type_label ) ) ) . '</p><dl class="pqd-kv">';
-	echo $kv( $L['number'], esc_html( $doc['number'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput
-	echo $kv( $L['date'], esc_html( pq_fmt_date( $doc['issue_date'], $s ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+	echo $kv( strtr( $L['summary_number'], array( '{type}' => $type_label ) ), esc_html( $doc['number'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+	echo $kv( strtr( $L['summary_date'], array( '{type}' => $type_label ) ), esc_html( pq_fmt_date( $doc['issue_date'], $s ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 	if ( $show['expiry'] && $doc['expiry_date'] ) {
 		echo $kv( 'due' === pq_type_expiry( $type ) ? $L['due_date'] : $L['valid_until'], esc_html( pq_fmt_date( $doc['expiry_date'], $s ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 	}
@@ -259,6 +257,10 @@ function pq_document_body( $doc, $s, $ctx = 'public' ) {
 		if ( pq_type_has_payments( $type ) ) {
 			echo '<dt>' . esc_html( $L['paid'] ) . ':</dt><dd>' . $m( $c['paid'] ) . '</dd>';
 			echo '<dt class="is-strong">' . esc_html( $L['balance'] ) . ':</dt><dd class="is-strong">' . $m( $c['balance'] ) . '</dd>';
+		} elseif ( 'quotation' === $type ) {
+			// Nothing is paid against a quotation, so the whole amount is owing.
+			echo '<dt>' . esc_html( $L['paid'] ) . ':</dt><dd>' . $m( 0 ) . '</dd>';
+			echo '<dt class="is-strong">' . esc_html( $L['owing'] ) . ':</dt><dd class="is-strong">' . $m( $c['total'] ) . '</dd>';
 		}
 	}
 	echo '</dl></div></section>';
@@ -387,15 +389,17 @@ function pq_document_body( $doc, $s, $ctx = 'public' ) {
 	echo '</div>'; // .pqd-flow
 
 	/* Compact header repeated at the top of every page after the first */
-	echo '<div class="pqd-chead-src" hidden><div class="pqd-chead"><div>';
-	if ( $logo_sm ) {
-		echo '<img src="' . esc_url( $logo_sm['url'] ) . '" width="' . (int) $logo_sm['w'] . '" height="' . (int) $logo_sm['h'] . '" alt="' . esc_attr( $co['name'] ) . '">';
+	/* Header repeated at the top of every page after the first: same logo, same size */
+	echo '<div class="pqd-chead-src" hidden><header class="pqd-head pqd-chead"><div>';
+	if ( $logo ) {
+		echo '<img class="pqd-logo" src="' . esc_url( $logo['url'] ) . '" width="' . (int) $logo['w'] . '" height="' . (int) $logo['h'] . '" alt="' . esc_attr( $co['name'] ) . '">';
 	} else {
-		echo '<span class="pqd-chead-name">' . esc_html( $co['name'] ) . '</span>';
+		echo '<div class="pqd-brandname">' . esc_html( $co['name'] ) . '</div>';
 	}
-	echo '</div><div class="pqd-chead-r"><strong>' . esc_html( $title ) . '</strong>';
-	if ( '' !== $customer ) { echo '<span>' . esc_html( $customer ) . '</span>'; }
-	echo '</div></div></div>';
+	echo '</div><div class="pqd-doc"><h1>' . esc_html( $type_label ) . '</h1>';
+	echo '<div class="pqd-docno">' . esc_html( $L['number'] . ' ' . $doc['number'] ) . '</div>';
+	if ( '' !== $customer ) { echo '<div class="pqd-docno">' . esc_html( $customer ) . '</div>'; }
+	echo '</div></header></div>';
 	echo '</div>'; // #pqd-root
 	return ob_get_clean();
 }

@@ -1,7 +1,7 @@
 === PMT Quotations & Invoices ===
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 License: GPLv2 or later
 
 Quotations, proforma invoices, tax invoices and delivery notes for PMT Asia, with saved customers, a WooCommerce product picker, custom items with images, payment tracking and a customisable template.
@@ -16,6 +16,12 @@ Quotations, proforma invoices, tax invoices and delivery notes for PMT Asia, wit
 * Prices are not converted between currencies. Store prices are only filled in when the quote currency matches the store currency.
 
 == Changelog ==
+= 1.6.2 =
+* Tighter business and customer details: the label column is only as wide as its longest label and lines sit closer together.
+* Document summary reads "Quotation No.", "Quotation date" and so on (editable under Words used on the document). Quotations also show Paid and Owing.
+* Every page repeats the full header with the logo at the same size as page 1.
+* The two top columns can no longer push the summary past the page edge on devices with wider fonts.
+
 = 1.6.1 =
 * Every series counts on its own from its own saved documents: the next number is the highest saved number of that type plus one (QT-0002 after QT-0001, TXI-0002 after TXI-0001). Other types, and old PMT- or INV- numbers, never affect it.
 * A number is only used when a document is saved. "Create tax invoice", "Create delivery note", "Duplicate" and so on now open an unsaved draft; nothing is stored until you click Save, and the original is marked converted at that moment.
