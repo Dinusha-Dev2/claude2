@@ -85,13 +85,6 @@ function pq_document_css( $s ) {
 	$css .= '.pqd-bank b{display:block;margin-bottom:1px}.pqd-bank dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:0 10px}.pqd-bank dt{color:var(--pq-muted)}.pqd-bank dd{margin:0}';
 	$css .= '.pqd-sign{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:46px}.pqd-sign div{padding-top:6px;border-top:1px solid var(--pq-ink)}';
 	$css .= '.pqd-sign strong{display:block;font-weight:700}.pqd-sign span{display:block;margin-top:1px;color:var(--pq-muted);font-size:.9em}';
-	$css .= '.pqd-gal{margin-top:8px}.pqd-gal.is-first{margin-top:18px}.pqd-gal .pqd-bar{margin-bottom:8px}';
-	$css .= '.pqd-gal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}';
-	$css .= '.pqd-fig{margin:0;padding:8px;border:1px solid var(--pq-line);background:#fff}';
-	$css .= '.pqd-fig-img{height:48mm;display:flex;align-items:center;justify-content:center;overflow:hidden}';
-	$css .= '.pqd-fig-img img{display:block;max-width:100%;max-height:100%;object-fit:contain}';
-	$css .= '.pqd-fig figcaption{margin-top:6px;padding-top:5px;border-top:1px solid #eee;font-size:.86em;line-height:1.3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}';
-	$css .= '.pqd-fig figcaption span{display:block;color:var(--pq-muted)}';
 	$css .= '.pqd-foot{margin-top:14px;text-align:center;color:var(--pq-muted);font-size:.9em}';
 
 	// Public toolbar.
@@ -392,29 +385,6 @@ function pq_document_body( $doc, $s, $ctx = 'public' ) {
 			echo '<div><strong>' . esc_html( $who ) . '</strong><span>' . esc_html( $L['signature_hint'] ) . '</span></div>';
 		}
 		echo '</section>';
-	}
-
-	/* Product images: every item with a picture, larger, numbered like the item table.
-	   Each row of three is its own block, so pages break between rows and never through a picture. */
-	if ( $show['gallery'] ) {
-		$pics = array();
-		foreach ( $doc['items'] as $i => $it ) {
-			$u = ! empty( $it['img_large'] ) ? $it['img_large'] : ( isset( $it['img_url'] ) ? $it['img_url'] : '' );
-			if ( '' !== (string) $u ) { $pics[] = array( 'n' => $i + 1, 'url' => (string) $u, 'name' => $it['name'], 'sku' => $it['sku'] ); }
-		}
-		foreach ( array_chunk( $pics, 3 ) as $r => $row ) {
-			echo '<section class="pqd-gal' . ( 0 === $r ? ' is-first' : '' ) . '">';
-			if ( 0 === $r ) { echo '<p class="pqd-bar">' . esc_html( $L['gallery'] ) . '</p>'; }
-			echo '<div class="pqd-gal-grid">';
-			foreach ( $row as $p ) {
-				$src = 0 === strpos( $p['url'], 'data:image/svg+xml;base64,' ) ? esc_attr( $p['url'] ) : esc_url( $p['url'] );
-				echo '<figure class="pqd-fig"><div class="pqd-fig-img"><img src="' . $src . '" alt="' . esc_attr( $p['name'] ) . '"></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
-				echo '<figcaption><b>' . (int) $p['n'] . '.</b> ' . esc_html( $p['name'] );
-				if ( $show['sku'] && '' !== $p['sku'] ) { echo '<span>' . esc_html( $L['sku'] . ': ' . $p['sku'] ) . '</span>'; }
-				echo '</figcaption></figure>';
-			}
-			echo '</div></section>';
-		}
 	}
 	$foot = $show['footer'] ? trim( pq_footer_text( $doc, $s ) ) : '';
 	if ( '' !== $foot ) { echo '<footer class="pqd-foot">' . pq_lines( $foot ) . '</footer>'; }

@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       PMT Quotations & Invoices
  * Description:       Quotations, proforma invoices, tax invoices and delivery notes with saved customers, a store product picker, custom items with images, payment tracking and a fully customisable document template.
- * Version:           1.6.5
+ * Version:           1.6.4
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            eSupport Technology
@@ -12,7 +12,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'PQ_VERSION', '1.6.5' );
+define( 'PQ_VERSION', '1.6.4' );
 define( 'PQ_FILE', __FILE__ );
 define( 'PQ_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PQ_URL', plugin_dir_url( __FILE__ ) );

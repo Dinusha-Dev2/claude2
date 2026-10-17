@@ -129,7 +129,6 @@ function pq_display_fields() {
 		'banks'            => array( 'Bank details', 'end', null ),
 		'signature'        => array( 'Signature lines', 'end', null ),
 		'footer'           => array( 'Footer text', 'end', null ),
-		'gallery'          => array( 'Product images (large, at the end)', 'end', null ),
 	);
 }
 
@@ -159,9 +158,6 @@ function pq_display_factory() {
 	$out['quotation']['signature']    = 0;
 	$out['proforma']['signature']     = 0;
 	foreach ( array( 'prices', 'line_discount', 'amount_words', 'banks' ) as $k ) { $out['delivery'][ $k ] = 0; }
-	// Large product pictures help a customer choose; invoices and delivery notes are for records.
-	$out['invoice']['gallery']  = 0;
-	$out['delivery']['gallery'] = 0;
 	return $out;
 }
 
@@ -245,7 +241,6 @@ function pq_default_labels() {
 		'signature_delivered' => 'Delivered by',
 		'signature_received' => 'Received in good condition by',
 		'signature_hint'     => 'Name, signature and date',
-		'gallery'            => 'Product images',
 		'paid_stamp'         => 'Paid in full',
 	);
 }

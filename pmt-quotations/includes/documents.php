@@ -295,8 +295,6 @@ function pq_doc_prepare( $doc, $s = null ) {
 	$s = $s ? $s : pq_settings();
 	$doc['calc'] = pq_calculate( $doc, $s );
 	foreach ( $doc['items'] as $i => $it ) {
-		// A sharper copy for the large product images section.
-		$doc['items'][ $i ]['img_large'] = ! empty( $it['img_id'] ) ? (string) wp_get_attachment_image_url( (int) $it['img_id'], 'large' ) : '';
 		if ( isset( $it['img_url'] ) && '' !== $it['img_url'] ) { continue; }
 		$doc['items'][ $i ]['img_url'] = ! empty( $it['img_id'] ) ? (string) wp_get_attachment_image_url( (int) $it['img_id'], 'medium' ) : '';
 	}
