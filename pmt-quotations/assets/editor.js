@@ -353,7 +353,7 @@
 		var items = $('#pq-cust-results').data('items') || [];
 		var c = items[+$(this).attr('data-i')];
 		if (!c) { return; }
-		S.customer = { id: c.id, name: c.name, company: c.company, email: c.email, phone: c.phone, address: c.address, city: c.city, postcode: c.postcode, country: c.country, tax_no: c.tax_no, currency: c.currency || '' };
+		S.customer = { id: c.id, name: c.name, company: c.company, email: c.email, phone: c.phone, mobile: c.mobile || '', address: c.address, city: c.city, postcode: c.postcode, country: c.country, tax_no: c.tax_no, currency: c.currency || '' };
 		S.save_customer = true;
 		if (S.customer.currency && S.customer.currency !== S.currency && !hasMoney()) {
 			onCurrencyChange(S.customer.currency);

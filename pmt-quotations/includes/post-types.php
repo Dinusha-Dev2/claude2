@@ -249,6 +249,7 @@ add_action( 'manage_' . PQ_CUSTOMER . '_posts_custom_column', function ( $col, $
 		echo esc_html( $c['name'] );
 		if ( '' !== $c['email'] ) { echo '<br><a href="mailto:' . esc_attr( $c['email'] ) . '">' . esc_html( $c['email'] ) . '</a>'; }
 		if ( '' !== $c['phone'] ) { echo '<br>' . esc_html( $c['phone'] ); }
+		if ( '' !== $c['mobile'] ) { echo '<br>' . esc_html( $c['mobile'] ); }
 	} elseif ( 'pq_where' === $col ) {
 		echo esc_html( trim( $c['city'] . ( '' !== $c['city'] && '' !== $c['country'] ? ', ' : '' ) . $c['country'] ) );
 	} else {
@@ -279,7 +280,7 @@ function pq_customer_metabox( $post ) {
 	if ( ! $c ) { $c = pq_blank_customer(); }
 	wp_nonce_field( 'pq_customer_save', 'pq_customer_nonce' );
 	$rows = array(
-		'name' => 'Contact name', 'company' => 'Company', 'email' => 'Email', 'phone' => 'Phone',
+		'name' => 'Contact name', 'company' => 'Company', 'email' => 'Email', 'phone' => 'Phone', 'mobile' => 'Mobile',
 		'address' => 'Address', 'city' => 'City', 'postcode' => 'Postcode', 'country' => 'Country', 'tax_no' => 'Tax / TIN no.',
 		'currency' => 'Usually quoted in',
 	);
@@ -341,5 +342,5 @@ add_filter( 'posts_search', function ( $search, $q ) {
 	global $wpdb;
 	if ( ! is_admin() || ! $q->is_main_query() || PQ_CUSTOMER !== $q->get( 'post_type' ) || '' === $q->get( 's' ) ) { return $search; }
 	$like = '%' . $wpdb->esc_like( $q->get( 's' ) ) . '%';
-	return $wpdb->prepare( " AND ( {$wpdb->posts}.post_title LIKE %s OR EXISTS ( SELECT 1 FROM {$wpdb->postmeta} pm WHERE pm.post_id = {$wpdb->posts}.ID AND pm.meta_key IN ('_pq_c_name','_pq_c_company','_pq_c_email','_pq_c_phone') AND pm.meta_value LIKE %s ) ) ", $like, $like );
+	return $wpdb->prepare( " AND ( {$wpdb->posts}.post_title LIKE %s OR EXISTS ( SELECT 1 FROM {$wpdb->postmeta} pm WHERE pm.post_id = {$wpdb->posts}.ID AND pm.meta_key IN ('_pq_c_name','_pq_c_company','_pq_c_email','_pq_c_phone','_pq_c_mobile') AND pm.meta_value LIKE %s ) ) ", $like, $like );
 }, 10, 2 );

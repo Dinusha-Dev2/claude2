@@ -232,6 +232,7 @@ function pq_render_editor_page() {
 						<label>Company <input type="text" data-bind="customer.company"></label>
 						<label>Email <input type="email" data-bind="customer.email"></label>
 						<label>Phone <input type="text" data-bind="customer.phone"></label>
+						<label>Mobile <input type="text" data-bind="customer.mobile"></label>
 					</div>
 					<div class="pq-grid pq-g1">
 						<label>Address <textarea rows="2" data-bind="customer.address"></textarea></label>

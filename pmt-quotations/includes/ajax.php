@@ -168,7 +168,7 @@ add_action( 'wp_ajax_pq_customers', function () {
 	);
 	if ( '' !== $q ) {
 		$args['meta_query'] = array( 'relation' => 'OR' );
-		foreach ( array( 'name', 'company', 'email', 'phone' ) as $f ) {
+		foreach ( array( 'name', 'company', 'email', 'phone', 'mobile' ) as $f ) {
 			$args['meta_query'][] = array( 'key' => '_pq_c_' . $f, 'value' => $q, 'compare' => 'LIKE' );
 		}
 	}

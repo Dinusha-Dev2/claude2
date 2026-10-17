@@ -116,8 +116,9 @@ function pq_render_settings_page() {
 				pq_field_text( array( 'company', 'name' ), $s['company']['name'], 'Business name' );
 				pq_logo_picker( $s['company']['logo_id'] );
 				pq_field_area( array( 'company', 'address' ), $s['company']['address'], 'Address', 3 );
-				echo '<div class="pq-grid pq-g3">';
-				pq_field_text( array( 'company', 'phone' ), $s['company']['phone'], 'Phone', array( 'class' => 'widefat' ) );
+				echo '<div class="pq-grid pq-g2">';
+				pq_field_text( array( 'company', 'phone' ), $s['company']['phone'], 'Phone (Ph.)', array( 'class' => 'widefat', 'hint' => 'Landline. Separate several numbers with |' ) );
+				pq_field_text( array( 'company', 'mobile' ), $s['company']['mobile'], 'Mobile (Mob.)', array( 'class' => 'widefat', 'hint' => 'Printed on its own line under the phone.' ) );
 				pq_field_text( array( 'company', 'email' ), $s['company']['email'], 'Email', array( 'type' => 'email', 'class' => 'widefat' ) );
 				pq_field_text( array( 'company', 'website' ), $s['company']['website'], 'Website', array( 'type' => 'url', 'class' => 'widefat' ) );
 				echo '</div>';

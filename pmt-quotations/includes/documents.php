@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 /* ------------------------------------------------------------------ */
 
 function pq_customer_fields() {
-	return array( 'name', 'company', 'email', 'phone', 'address', 'city', 'postcode', 'country', 'tax_no', 'currency' );
+	return array( 'name', 'company', 'email', 'phone', 'mobile', 'address', 'city', 'postcode', 'country', 'tax_no', 'currency' );
 }
 
 function pq_blank_customer() {
@@ -24,6 +24,7 @@ function pq_clean_customer( $raw ) {
 	$c['company']  = pq_s_line( isset( $raw['company'] ) ? $raw['company'] : '', 160 );
 	$c['email']    = sanitize_email( isset( $raw['email'] ) ? $raw['email'] : '' );
 	$c['phone']    = pq_s_line( isset( $raw['phone'] ) ? $raw['phone'] : '', 60 );
+	$c['mobile']   = pq_s_line( isset( $raw['mobile'] ) ? $raw['mobile'] : '', 60 );
 	$c['address']  = pq_s_text( isset( $raw['address'] ) ? $raw['address'] : '', 400 );
 	$c['city']     = pq_s_line( isset( $raw['city'] ) ? $raw['city'] : '', 80 );
 	$c['postcode'] = pq_s_line( isset( $raw['postcode'] ) ? $raw['postcode'] : '', 20 );
@@ -36,7 +37,7 @@ function pq_clean_customer( $raw ) {
 }
 
 function pq_customer_has_data( $c ) {
-	return '' !== trim( $c['name'] . $c['company'] . $c['email'] . $c['phone'] );
+	return '' !== trim( $c['name'] . $c['company'] . $c['email'] . $c['phone'] . $c['mobile'] );
 }
 
 /** Load a saved customer by post ID. */

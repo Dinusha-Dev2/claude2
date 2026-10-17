@@ -16,6 +16,9 @@ function pq_maybe_upgrade() {
 	if ( '' !== $from && version_compare( $from, '1.6.1', '<' ) ) {
 		pq_upgrade_to_161();
 	}
+	if ( '' !== $from && version_compare( $from, '1.6.4', '<' ) ) {
+		pq_upgrade_to_164();
+	}
 	if ( PQ_VERSION !== $from ) {
 		update_option( 'pq_version', PQ_VERSION, false );
 	}
@@ -100,6 +103,21 @@ function pq_upgrade_to_161() {
 	if ( ! is_array( $raw ) || empty( $raw['numbering'] ) || ! is_array( $raw['numbering'] ) ) { return; }
 	foreach ( $raw['numbering'] as $type => $n ) {
 		if ( is_array( $n ) ) { $raw['numbering'][ $type ]['next'] = 1; }
+	}
+	update_option( 'pq_settings', $raw, false );
+	pq_settings( true );
+}
+
+/** 1.6.4: phone and mobile are separate lines. The original combined line is split; anything else keeps its phone and gets an empty mobile. */
+function pq_upgrade_to_164() {
+	$raw = get_option( 'pq_settings', array() );
+	if ( ! is_array( $raw ) || empty( $raw['company'] ) || ! is_array( $raw['company'] ) || isset( $raw['company']['mobile'] ) ) { return; }
+	$phone = isset( $raw['company']['phone'] ) ? (string) $raw['company']['phone'] : '';
+	if ( '+9607686927 | +94704149823 | +94372096118' === $phone ) {
+		$raw['company']['phone']  = '+94372096118';
+		$raw['company']['mobile'] = '+9607686927 | +94704149823';
+	} else {
+		$raw['company']['mobile'] = '';
 	}
 	update_option( 'pq_settings', $raw, false );
 	pq_settings( true );

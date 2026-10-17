@@ -203,6 +203,7 @@ function pq_document_body( $doc, $s, $ctx = 'public' ) {
 	}
 	if ( $show['company_contact'] ) {
 		if ( '' !== $co['phone'] ) { echo $kv( $L['phone'], esc_html( $co['phone'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+		if ( ! empty( $co['mobile'] ) ) { echo $kv( $L['mobile'], esc_html( $co['mobile'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
 		if ( '' !== $co['email'] ) { echo $kv( $L['email'], esc_html( $co['email'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
 		if ( '' !== $co['website'] ) { echo $kv( $L['web'], esc_html( preg_replace( '#^https?://#', '', untrailingslashit( $co['website'] ) ) ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
 	}
@@ -223,6 +224,7 @@ function pq_document_body( $doc, $s, $ctx = 'public' ) {
 	}
 	if ( $show['customer_contact'] ) {
 		if ( '' !== $cust['phone'] ) { echo $kv( $L['phone'], esc_html( $cust['phone'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
+		if ( ! empty( $cust['mobile'] ) ) { echo $kv( $L['mobile'], esc_html( $cust['mobile'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
 		if ( '' !== $cust['email'] ) { echo $kv( $L['email'], esc_html( $cust['email'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 	if ( $show['customer_tax'] && '' !== $cust['tax_no'] ) { echo $kv( $L['customer_tax'], esc_html( $cust['tax_no'] ) ); } // phpcs:ignore WordPress.Security.EscapeOutput
@@ -513,7 +515,8 @@ function pq_sample_doc( $s, $type = 'quotation' ) {
 		'name'    => 'Mr. Nuwan',
 		'company' => 'Fushifaru Resort',
 		'email'   => 'nuwan@example.com',
-		'phone'   => '+960 700 0000',
+		'phone'   => '+960 330 0000',
+		'mobile'  => '+960 700 0000',
 		'address' => 'M. Eyecare Building, Orchid Magu',
 		'city'    => 'Male',
 		'country' => 'Maldives',
