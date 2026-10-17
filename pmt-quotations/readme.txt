@@ -1,7 +1,7 @@
 === PMT Quotations & Invoices ===
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.6.4
+Stable tag: 1.6.5
 License: GPLv2 or later
 
 Quotations, proforma invoices, tax invoices and delivery notes for PMT Asia, with saved customers, a WooCommerce product picker, custom items with images, payment tracking and a customisable template.
@@ -16,6 +16,11 @@ Quotations, proforma invoices, tax invoices and delivery notes for PMT Asia, wit
 * Prices are not converted between currencies. Store prices are only filled in when the quote currency matches the store currency.
 
 == Changelog ==
+= 1.6.5 =
+* New "Product images" section at the end of the document: every item with a picture, shown large in rows of three, numbered like the item table, with name and SKU. Pages break between rows, never through a picture.
+* On by default for quotations and proforma invoices, off for tax invoices and delivery notes. Switch it per type in Settings > Show / hide, or per document under "Show on this document". The heading can be renamed under Words used on the document.
+* The footer note now sits at the very end of the document.
+
 = 1.6.4 =
 * Separate Mobile number for your business (Settings > Business) and for each customer, printed as its own "Mob." line under "Ph.".
 * The original combined phone line is split automatically: Ph. +94372096118, Mob. +9607686927 | +94704149823.
